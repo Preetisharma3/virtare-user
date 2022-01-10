@@ -19,9 +19,6 @@ class CreateDomains extends Migration
             $table->string('apiKey');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDeleted')->default(0);
-            $table->bigInteger('createdBy')->unsigned()->nullable();
-            $table->bigInteger('updatedBy')->unsigned()->nullable();
-            $table->bigInteger('deletedBy')->unsigned()->nullable();
             $table->timestamp('createdAt');
             $table->timestamp('updatedAt')->nullable();
             $table->timestamp('deletedAt')->nullable();
