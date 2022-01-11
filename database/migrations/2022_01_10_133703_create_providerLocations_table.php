@@ -20,9 +20,9 @@ class CreateProviderLocationsTable extends Migration
             $table->foreign('providerId')->references('id')->on('providers')->onUpdate('cascade')->onDelete('cascade');
             $table->string('zipCode',10);
             $table->biginteger('stateId')->unsigned();
-            $table->foreign('stateId')->references('id')->on('globalCodeCategories')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('stateId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->biginteger('cityId')->unsigned();
-            $table->foreign('cityId')->references('id')->on('globalCodeCategories')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('cityId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->text('locationAddress');
             $table->string('phoneNumber',20);
             $table->string('email',50);

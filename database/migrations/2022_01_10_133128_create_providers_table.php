@@ -18,11 +18,11 @@ class CreateProvidersTable extends Migration
             $table->string('name',50);
             $table->text('address');
             $table->biginteger('countryId')->unsigned();
-            $table->foreign('countryId')->references('id')->on('globalCodeCategories')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('countryId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->biginteger('stateId')->unsigned();
-            $table->foreign('stateId')->references('id')->on('globalCodeCategories')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('stateId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->biginteger('cityId')->unsigned();
-            $table->foreign('cityId')->references('id')->on('globalCodeCategories')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('cityId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
