@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateGlobalCodesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,13 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('globalCodes', function (Blueprint $table) {
             $table->id();
-            $table->string('udid');
-            $table->string('email',100)->unique();
-            $table->string('password');            
-            $table->timestamp('emailVerifiedAt')->nullable();
-            $table->boolean('emailVerify');
-            $table->bigInteger('roleId')->unsigned();
-            $table->foreign('roleId')->references('id')->on('roles')->onUpdate('cascade')->onDelete('cascade');
-            $table->rememberToken();
+            $table->bigInteger('globalCodeCategoryId')->unsigned();
+            $table->foreign('globalCodeCategoryId')->references('id')->on('globalCodeCategories')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('name',50);
+            $table->text('description');
+            $table->text('dataType');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
@@ -32,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->foreign('updatedBy')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('deletedBy')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+
             $table->timestamp('deletedAt')->nullable();
         });
     }
@@ -43,6 +41,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('global_codes');
     }
 }

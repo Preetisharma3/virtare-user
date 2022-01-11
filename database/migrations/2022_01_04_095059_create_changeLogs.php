@@ -22,8 +22,8 @@ class CreateChangeLogs extends Migration
             $table->string('ip');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDeleted')->default(0);
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt')->nullable();
+            $table->timestamps();
+
             $table->timestamp('deletedAt')->nullable();
         });
     }

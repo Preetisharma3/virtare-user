@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateProviderLocationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,20 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('providerLocations', function (Blueprint $table) {
             $table->id();
-            $table->string('udid');
-            $table->string('email',100)->unique();
-            $table->string('password');            
-            $table->timestamp('emailVerifiedAt')->nullable();
-            $table->boolean('emailVerify');
-            $table->bigInteger('roleId')->unsigned();
-            $table->foreign('roleId')->references('id')->on('roles')->onUpdate('cascade')->onDelete('cascade');
-            $table->rememberToken();
+            $table->string('locationName',50);
+            $table->bigInteger('providerId')->unsigned()->nullable();
+            $table->foreign('providerId')->references('id')->on('providers')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('zipCode',10);
+            $table->biginteger('stateId')->unsigned();
+            $table->foreign('stateId')->references('id')->on('globalCodeCategories')->onUpdate('cascade')->onDelete('cascade');
+            $table->biginteger('cityId')->unsigned();
+            $table->foreign('cityId')->references('id')->on('globalCodeCategories')->onUpdate('cascade')->onDelete('cascade');
+            $table->text('locationAddress');
+            $table->string('phoneNumber',20);
+            $table->string('email',50);
+            $table->text('websiteUrl');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
@@ -32,6 +36,7 @@ class CreateUsersTable extends Migration
             $table->foreign('updatedBy')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('deletedBy')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+
             $table->timestamp('deletedAt')->nullable();
         });
     }
@@ -43,6 +48,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('provider_locations');
     }
 }
