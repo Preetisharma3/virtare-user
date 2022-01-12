@@ -17,19 +17,20 @@ class CreatePatientsTable extends Migration
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
             $table->string('firstName',25);
-            $table->string('middleName',25);
-            $table->string('lastName',25);
+            $table->string('middleName',25)->nullable();
+            $table->string('lastName',25)->nullable();
             $table->date('dob');
             $table->bigInteger('genderId')->unsigned();
             $table->foreign('genderId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('languageId')->unsigned();
             $table->foreign('languageId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('otherLanguageId')->unsigned();
+            $table->bigInteger('otherLanguageId')->nullable()->unsigned();
             $table->foreign('otherLanguageId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('nickName',25);
-            $table->string('height',10);
-            $table->string('weight',10);
-            $table->string('email',100);
+            $table->string('nickName',25)->nullable();
+            $table->string('height',10)->nullable();
+            $table->string('weight',10)->nullable();
+            $table->bigInteger('userId')->unsigned();
+            $table->foreign('userId')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('phoneNumber',20);
             $table->bigInteger('contactTypeId')->unsigned();
             $table->foreign('contactTypeId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
@@ -40,6 +41,7 @@ class CreatePatientsTable extends Migration
             $table->foreign('countryId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->biginteger('stateId')->unsigned();
             $table->foreign('stateId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('city',50);
             $table->string('zipCode',10);
             $table->string('appartment',20);
             $table->string('address',200);

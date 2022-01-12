@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePatentMedicineRoutineTable extends Migration
+class CreatePatientMedicalHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,14 +14,11 @@ class CreatePatentMedicineRoutineTable extends Migration
      */
     public function up()
     {
-        Schema::create('patentMedicineRoutine', function (Blueprint $table) {
+        Schema::create('patientMedicalHistories', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('patientId')->unsigned();
             $table->foreign('patientId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('medicine',100);
-            $table->string('frequency',20);
-            $table->date('startDate');
-            $table->date('endDate');
+            $table->text('history');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
@@ -43,6 +40,6 @@ class CreatePatentMedicineRoutineTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('patent_medicine_routine');
+        Schema::dropIfExists('patient_medical_history');
     }
 }

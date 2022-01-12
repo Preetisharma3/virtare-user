@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
-use App\Services\GlobalCodeService;
+use App\Services\Api\GlobalCodeService;
 use App\Http\Requests\GlobalCode\GlobalCodeRequest;
 use Laravel\Lumen\Routing\Controller as BaseController;
 

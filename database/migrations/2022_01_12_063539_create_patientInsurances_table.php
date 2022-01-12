@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePatientFamilyMemberTable extends Migration
+class CreatePatientInsurancesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,22 +14,16 @@ class CreatePatientFamilyMemberTable extends Migration
      */
     public function up()
     {
-        Schema::create('patientFamilyMember', function (Blueprint $table) {
+        Schema::create('patientInsurances', function (Blueprint $table) {
             $table->id();
-            $table->string('fullName',30);
-            $table->string('email',50);
-            $table->string('phoneNumber',20);
-            $table->bigInteger('contactTypeId')->unsigned();
-            $table->foreign('contactTypeId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('contactTimeId')->unsigned();
-            $table->foreign('contactTimeId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('genderId')->unsigned();
-            $table->foreign('genderId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('relationId')->unsigned();
-            $table->foreign('relationId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('insuranceNumber',30);
+            $table->date('expirationDate');
             $table->bigInteger('patientId')->unsigned();
             $table->foreign('patientId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
-            $table->boolean('isPrimary')->nullable();
+            $table->bigInteger('insuranceNameId')->unsigned();
+            $table->foreign('insuranceNameId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
+            $table->bigInteger('insuranceTypeId')->unsigned();
+            $table->foreign('insuranceTypeId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
@@ -51,6 +45,6 @@ class CreatePatientFamilyMemberTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('patient_family_member');
+        Schema::dropIfExists('patient_insurance');
     }
 }

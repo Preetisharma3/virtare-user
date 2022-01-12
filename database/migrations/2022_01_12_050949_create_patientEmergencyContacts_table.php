@@ -17,7 +17,8 @@ class CreatePatientEmergencyContactsTable extends Migration
         Schema::create('patientEmergencyContacts', function (Blueprint $table) {
             $table->id();
             $table->string('fullName',30);
-            $table->string('email',50);
+            $table->bigInteger('userId')->unsigned();
+            $table->foreign('userId')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('phoneNumber',20);
             $table->bigInteger('contactTypeId')->unsigned();
             $table->foreign('contactTypeId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
@@ -25,11 +26,10 @@ class CreatePatientEmergencyContactsTable extends Migration
             $table->foreign('contactTimeId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('genderId')->unsigned();
             $table->foreign('genderId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('relationId')->unsigned();
-            $table->foreign('relationId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('patientId')->unsigned();
             $table->foreign('patientId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('isPrimary')->nullable();
+            $table->boolean('sameAsFamily')->nullable();
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();

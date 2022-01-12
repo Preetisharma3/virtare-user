@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePatientInsuranceTable extends Migration
+class CreateCarePlansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,16 +14,13 @@ class CreatePatientInsuranceTable extends Migration
      */
     public function up()
     {
-        Schema::create('patientInsurance', function (Blueprint $table) {
+        Schema::create('carePlans', function (Blueprint $table) {
             $table->id();
-            $table->string('insuranceNumber',30);
-            $table->date('expirationDate');
+            $table->longText('plan');
+            $table->bigInteger('staffId')->unsigned();
+            $table->foreign('staffId')->references('id')->on('careCoordinators')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('patientId')->unsigned();
             $table->foreign('patientId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('insuranceNameId')->unsigned();
-            $table->foreign('insuranceNameId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('insuranceTypeId')->unsigned();
-            $table->foreign('insuranceTypeId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
@@ -45,6 +42,6 @@ class CreatePatientInsuranceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('patient_insurance');
+        Schema::dropIfExists('care_plan');
     }
 }

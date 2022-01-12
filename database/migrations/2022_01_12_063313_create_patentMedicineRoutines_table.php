@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCarePlanTable extends Migration
+class CreatePatentMedicineRoutinesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,14 @@ class CreateCarePlanTable extends Migration
      */
     public function up()
     {
-        Schema::create('carePlan', function (Blueprint $table) {
+        Schema::create('patentMedicineRoutines', function (Blueprint $table) {
             $table->id();
-            $table->longText('plan');
-            $table->bigInteger('staffId')->unsigned();
-            $table->foreign('staffId')->references('id')->on('careCoordinators')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('patientId')->unsigned();
             $table->foreign('patientId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('medicine',100);
+            $table->string('frequency',20);
+            $table->date('startDate');
+            $table->date('endDate');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
@@ -42,6 +43,6 @@ class CreateCarePlanTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('care_plan');
+        Schema::dropIfExists('patent_medicine_routine');
     }
 }
