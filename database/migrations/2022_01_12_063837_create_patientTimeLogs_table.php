@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePatientProgramsTable extends Migration
+class CreatePatientTimeLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,16 +14,17 @@ class CreatePatientProgramsTable extends Migration
      */
     public function up()
     {
-        Schema::create('patient_programs', function (Blueprint $table) {
+        Schema::create('patientTimeLogs', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('programtId')->unsigned();
-            $table->foreign('programtId')->references('id')->on('programs')->onUpdate('cascade')->onDelete('cascade');
+            $table->bigInteger('categoryId')->unsigned();
+            $table->foreign('categoryId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
+            $table->bigInteger('loggedId')->unsigned();
+            $table->foreign('loggedId')->references('id')->on('careCoordinators')->onUpdate('cascade')->onDelete('cascade');
+            $table->bigInteger('performedId')->unsigned();
+            $table->foreign('performedId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('timeAmount',20);
             $table->bigInteger('patientId')->unsigned();
             $table->foreign('patientId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
-            $table->date('onboardingScheduleDate');
-            $table->date('startDate');
-            $table->date('endDate');
-            $table->date('dischargeDate');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
@@ -45,6 +46,6 @@ class CreatePatientProgramsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('patient_programs');
+        Schema::dropIfExists('patient_time_logs');
     }
 }

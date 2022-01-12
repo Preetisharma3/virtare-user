@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePatientPhysiciansTable extends Migration
+class CreateFlagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,11 @@ class CreatePatientPhysiciansTable extends Migration
      */
     public function up()
     {
-        Schema::create('patient_physicians', function (Blueprint $table) {
+        Schema::create('flags', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('StaffId')->unsigned();
-            $table->boolean('sameAsReferal')->nullable();
-            $table->bigInteger('patientId')->unsigned();
-            $table->foreign('patientId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
-            $table->boolean('isPrimary')->nullable();
+            $table->bigInteger('colorId')->unsigned();
+            $table->foreign('colorId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
+            $table->text('rules');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
@@ -42,6 +40,6 @@ class CreatePatientPhysiciansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('patient_physicians');
+        Schema::dropIfExists('flags');
     }
 }
