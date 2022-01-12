@@ -19,7 +19,6 @@ class CreateGlobalCodesTable extends Migration
             $table->foreign('globalCodeCategoryId')->references('id')->on('globalCodeCategories')->onUpdate('cascade')->onDelete('cascade');
             $table->string('name',50);
             $table->text('description');
-            $table->text('dataType');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
