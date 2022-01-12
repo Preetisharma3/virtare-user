@@ -13,20 +13,18 @@ class CreateChangeLogs extends Migration
      */
     public function up()
     {
-        Schema::create('change_logs', function (Blueprint $table) {
+        Schema::create('changeLogs', function (Blueprint $table) {
             $table->id();
             $table->string('table');
-            $table->bigInteger('table_id');
+            $table->bigInteger('tableId');
             $table->text('value');
             $table->enum('type',['created','updated','deleted','restored']);
             $table->string('ip');
+            $table->boolean('isActive')->default(1);
+            $table->boolean('isDeleted')->default(0);
             $table->timestamps();
-            $table->softDeletes();
-            $table->boolean('is_active')->nullable();
-            $table->boolean('is_delete')->nullable();
-            $table->bigInteger('created_by')->nullable();
-            $table->bigInteger('updated_by')->nullable();
-            $table->bigInteger('deleted_by')->nullable();
+
+            $table->timestamp('deletedAt')->nullable();
         });
     }
 
