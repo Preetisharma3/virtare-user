@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePatientsTable extends Migration
+class CreatePatientFamilyMembersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,21 +14,9 @@ class CreatePatientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('patients', function (Blueprint $table) {
+        Schema::create('patientFamilyMembers', function (Blueprint $table) {
             $table->id();
-            $table->string('firstName',25);
-            $table->string('middleName',25)->nullable();
-            $table->string('lastName',25)->nullable();
-            $table->date('dob');
-            $table->bigInteger('genderId')->unsigned();
-            $table->foreign('genderId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('languageId')->unsigned();
-            $table->foreign('languageId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('otherLanguageId')->nullable()->unsigned();
-            $table->foreign('otherLanguageId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('nickName',25)->nullable();
-            $table->string('height',10)->nullable();
-            $table->string('weight',10)->nullable();
+            $table->string('fullName',30);
             $table->bigInteger('userId')->unsigned();
             $table->foreign('userId')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('phoneNumber',20);
@@ -36,15 +24,13 @@ class CreatePatientsTable extends Migration
             $table->foreign('contactTypeId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('contactTimeId')->unsigned();
             $table->foreign('contactTimeId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('medicalRecordNumber',30);
-            $table->biginteger('countryId')->unsigned();
-            $table->foreign('countryId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->biginteger('stateId')->unsigned();
-            $table->foreign('stateId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('city',50);
-            $table->string('zipCode',10);
-            $table->string('appartment',20);
-            $table->string('address',200);
+            $table->bigInteger('genderId')->unsigned();
+            $table->foreign('genderId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
+            $table->bigInteger('relationId')->unsigned();
+            $table->foreign('relationId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
+            $table->bigInteger('patientId')->unsigned();
+            $table->foreign('patientId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
+            $table->boolean('isPrimary')->nullable();
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
@@ -66,6 +52,6 @@ class CreatePatientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('patients');
+        Schema::dropIfExists('patient_family_member');
     }
 }

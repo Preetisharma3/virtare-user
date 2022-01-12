@@ -84,9 +84,6 @@ class GlobalCodeCategorySeeder extends Seeder
             'name'=>'Device Type'
         ]);
         GlobalCodeCategory::create([
-            'name'=>'Cities'
-        ]);
-        GlobalCodeCategory::create([
             'name'=>'MessageCategory'
         ]);
         GlobalCodeCategory::create([

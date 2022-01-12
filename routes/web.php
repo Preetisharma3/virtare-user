@@ -27,13 +27,18 @@ $router->get('/linkstorage', function () use ($router) {
 });
 $router->post('login', 'Api\v1\AuthController@login');
 $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');
+$router->get('userProfile', 'Api\v1\UserController@userProfile');
+$router->post('logout', 'Api\v1\AuthController@logout');
 
-$router->group(['middleware' => 'auth:api'], function () use ($router) {
-    $router->get('userProfile', 'Api\v1\UserController@userProfile');
-    $router->post('logout', 'Api\v1\AuthController@logout');
+// $router->group(['middleware' => 'auth:api'], function () use ($router) {
+    
    
-});
+// });
 $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCategory');
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
 $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
+
+$router->post('patient', 'Api\v1\PatientController@createPatient');
+$router->post('patientCondition[/{id}]', 'Api\v1\PatientController@createPatientCondition');
+
