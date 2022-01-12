@@ -14,8 +14,7 @@ class Patient extends Model
     public $timestamps = false;
 	protected $table = 'patients';
     use HasFactory;
-	protected $guarded = [];
-    
+	protected $guarded = [];    
 
     public function globalCode()
     {
@@ -26,4 +25,5 @@ class Patient extends Model
     {
         return $this->hasOne(User::class,'id');
     }
+
 }
