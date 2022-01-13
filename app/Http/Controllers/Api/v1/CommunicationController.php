@@ -8,9 +8,9 @@ use App\Services\Api\CommunicationService;
 
 class CommunicationController extends Controller
 {
-    public function addCommunication(request $request)
+    public function addCommunication(request $request,$id)
     {
-        return (new CommunicationService)->addCommunication( $request);
+        return (new CommunicationService)->addCommunication( $request ,$id);
         
     }
 

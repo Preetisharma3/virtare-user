@@ -2,6 +2,7 @@
 
 namespace App\Services\Api;
 
+use App\Models\Staff\Staff;
 use Illuminate\Support\Facades\DB;
 use App\Models\Communication\Communication;
 use App\Models\Communication\CommunicationMessage;
@@ -12,9 +13,11 @@ use App\Transformers\Communication\CommunicationTransformer;
 class CommunicationService
 {
     //  create Communication
-    public function addCommunication($request){
+    public function addCommunication($request ,$id){
+
+        $staff = Staff::where('id',$id)->first();
         $input = [
-            'from'=>auth()->user()->email,
+            'from'=>$staff->email,
             'to'=>$request->to,
             'patientId'=>$request->patientId,
             'subject'=>$request->subject,

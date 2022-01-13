@@ -35,7 +35,7 @@ class StaffTransformer extends TransformerAbstract
     {
         return [
             'id'=>$data->id,
-			'staff'=>$data->firstName,
+			'staff'=>$data->firstName.' '.$data->lastName,
 		];
     }
 }
