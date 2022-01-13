@@ -19,7 +19,7 @@ class CreatePatientTimeLogsTable extends Migration
             $table->bigInteger('categoryId')->unsigned();
             $table->foreign('categoryId')->references('id')->on('globalCodes')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('loggedId')->unsigned();
-            $table->foreign('loggedId')->references('id')->on('careCoordinators')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('loggedId')->references('id')->on('staffs')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('performedId')->unsigned();
             $table->foreign('performedId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
             $table->string('timeAmount',20);

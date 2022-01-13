@@ -40,10 +40,17 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
 $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCategory');
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
-$router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
-$router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
+$router->put('globalCode/{id}', 'Api\v1\GlobalCodeController@updateGlobalCode');
+$router->delete('globalCode/{id}', 'Api\v1\GlobalCodeController@deleteGlobalCode');
 
 $router->post('patient', 'Api\v1\PatientController@createPatient');
-$router->post('patientCondition[/{id}]', 'Api\v1\PatientController@createPatientCondition');
+$router->get('patientList', 'Api\v1\PatientController@listPatient');
+$router->post('patientCondition/{id}', 'Api\v1\PatientController@createPatientCondition');
+$router->post('patientReferals/{id}', 'Api\v1\PatientController@createPatientReferals');
+$router->post('patientPhysician/{id}', 'Api\v1\PatientController@createPatientPhysician');
+$router->post('patientProgram/{id}', 'Api\v1\PatientController@createPatientProgram');
+$router->post('patientVital/{id}', 'Api\v1\PatientController@createPatientVital');
+
+
 
 $router->post('staff', 'Api\v1\StaffController@addStaff');

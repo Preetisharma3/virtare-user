@@ -12,7 +12,7 @@ class UserTransformer extends TransformerAbstract
 
 	protected $availableIncludes = [];
 
-	public function transform(User $user): array
+	public function transform($user): array
 	{
 		return [
 			'uuid' => $user->udid,
