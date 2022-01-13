@@ -29,21 +29,24 @@ $router->post('login', 'Api\v1\AuthController@login');
 $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');
 $router->get('userProfile', 'Api\v1\UserController@userProfile');
 $router->post('logout', 'Api\v1\AuthController@logout');
-
-
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
     $router->post('communication', 'Api\v1\CommunicationController@addCommunication');
     $router->get('communication', 'Api\v1\CommunicationController@getCommunication');
 });
-
 $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCategory');
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
 $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
-
 $router->post('patient', 'Api\v1\PatientController@createPatient');
 $router->post('patientCondition[/{id}]', 'Api\v1\PatientController@createPatientCondition');
-
 $router->post('staff', 'Api\v1\StaffController@addStaff');
+$router->post('callRecord', 'Api\v1\CommunicationController@addCallRecord');
+$router->get('inQueue','Api\v1\CommunicationController@inQueue');
+$router->get('goingOn','Api\v1\CommunicationController@goingOn');
+$router->get('completed','Api\v1\CommunicationController@completed');
+$router->get('staffCallCount','Api\v1\CommunicationController@callCountPerStaff');
+$router->get('futureAppointment', 'Api\v1\AppointmentController@futureAppointment');
+$router->get('newAppointment', 'Api\v1\AppointmentController@newAppointments');
+$router->get('todayAppointment', 'Api\v1\AppointmentController@todayAppointment');
