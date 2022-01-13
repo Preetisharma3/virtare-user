@@ -19,7 +19,7 @@ class StaffService
                 'email' => $request->email,
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // 'password'
                 'emailVerify' => 1,
-                'createdBy' => Auth::id()
+                'createdBy' => 1
             ];
             $data = User::create($user);
             $staff = [
@@ -32,7 +32,7 @@ class StaffService
                 'specializationId' => $request->specializationId,
                 'designationId' => $request->designationId,
                 'networkId' => $request->networkId,
-                'createdBy' => Auth::id()
+                'createdBy' => 1
             ];
             $newData = Staff::create($staff);
            return response()->json(['message' =>'Created Successfully'],200);

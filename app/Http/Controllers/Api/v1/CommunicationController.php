@@ -18,4 +18,22 @@ class CommunicationController extends Controller
         return (new CommunicationService)->getCommunication();
     }
 
+    public function addCallRecord(request $request){
+        return (new CommunicationService)->addCallRecord($request);
+    }
+    
+    public function inQueue(request $request){
+        return (new CommunicationService)->inQueue($request);
+    }
+    public function goingOn(request $request){
+        return (new CommunicationService)->goingOn($request);
+    }
+    public function completed(request $request){
+        return (new CommunicationService)->completed($request);
+    }
+
+    public function callCountPerStaff(request $request){
+        return (new CommunicationService)->callCountPerStaff($request);
+    }
+
 }
