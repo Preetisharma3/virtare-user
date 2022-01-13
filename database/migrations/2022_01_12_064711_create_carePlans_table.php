@@ -18,7 +18,7 @@ class CreateCarePlansTable extends Migration
             $table->id();
             $table->longText('plan');
             $table->bigInteger('staffId')->unsigned();
-            $table->foreign('staffId')->references('id')->on('careCoordinators')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('staffId')->references('id')->on('staffs')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('patientId')->unsigned();
             $table->foreign('patientId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('isActive')->default(1);

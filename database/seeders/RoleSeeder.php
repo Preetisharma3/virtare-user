@@ -40,6 +40,16 @@ class RoleSeeder extends Seeder
 
 
         ]);
+
+        Role::create([
+            'roles'=>'Patient',
+            'roleDescription'=>'Only Has the access of the Modules assigned by admin',
+            'roleType'=>'Patient',
+            'masterLogin'=>0
+
+
+
+        ]);
         
     }
 }

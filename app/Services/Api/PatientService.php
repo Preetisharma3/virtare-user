@@ -18,7 +18,7 @@ class PatientService
     {
         try {
             // Added Ptient details in User Table
-            $user = ['password' => Hash::make('password'), 'email' => $request->email, 'udid' => Str::random(10), 'emailVerify' => 1, 'createdBy' => 1];
+            $user = ['password' => Hash::make('password'), 'email' => $request->email, 'udid' => Str::random(10), 'emailVerify' => 1, 'createdBy' => 1,"roleId"=>4];
             $data = User::create($user);
 
             // Added  patient details in Patient Table
@@ -33,7 +33,7 @@ class PatientService
 
             //Added family in user Table
             $familyMemberUser = [
-                'password' => Hash::make('password'), 'udid' => Str::random(10), 'email' => $request->familyEmail, 'emailVerify' => 1, 'createdBy' => 1
+                'password' => Hash::make('password'), 'udid' => Str::random(10), 'email' => $request->familyEmail, 'emailVerify' => 1, 'createdBy' => 1,"roleId"=>4
             ];
             $fam = User::create($familyMemberUser);
 
@@ -45,7 +45,7 @@ class PatientService
             $familyData = PatientFamilyMember::create($familyMember);
 
             //Added emergency contact in user table
-            $emergencyContactUser = ['password' => Hash::make('password'), 'udid' => Str::random(10), 'email' => $request->emergencyEmail, 'emailVerify' => 1, 'createdBy' => 1,];
+            $emergencyContactUser = ['password' => Hash::make('password'), 'udid' => Str::random(10), 'email' => $request->emergencyEmail, 'emailVerify' => 1, 'createdBy' => 1,"roleId"=>4];
             $emer = User::create($emergencyContactUser);
 
             //Added emergency contact in PatientEmergencyContact table

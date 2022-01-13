@@ -17,7 +17,7 @@ class CreatePatientPhysiciansTable extends Migration
         Schema::create('patientPhysicians', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('staffId')->unsigned();
-            $table->foreign('staffId')->references('id')->on('careCoordinators')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('staffId')->references('id')->on('staffs')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('sameAsReferal')->nullable();
             $table->bigInteger('patientId')->unsigned();
             $table->foreign('patientId')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
