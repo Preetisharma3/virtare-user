@@ -32,9 +32,10 @@ $router->post('logout', 'Api\v1\AuthController@logout');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
-    $router->post('communication[/{id}]', 'Api\v1\CommunicationController@addCommunication');
-    $router->get('communication', 'Api\v1\CommunicationController@getCommunication');
+  
 });
+$router->post('communication[/{id}]', 'Api\v1\CommunicationController@addCommunication');
+$router->get('communication', 'Api\v1\CommunicationController@getCommunication');
 $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCategory');
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
