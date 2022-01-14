@@ -57,3 +57,4 @@ $router->post('patientReferals/{id}', 'Api\v1\PatientController@createPatientRef
 $router->post('patientPhysician/{id}', 'Api\v1\PatientController@createPatientPhysician');
 $router->post('patientProgram/{id}', 'Api\v1\PatientController@createPatientProgram');
 $router->post('patientVital/{id}', 'Api\v1\PatientController@createPatientVital');
+$router->post('patientInventory/{id}','Api\v1\PatientController@createPatientInventory');

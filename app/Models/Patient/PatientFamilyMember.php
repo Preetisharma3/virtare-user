@@ -20,11 +20,6 @@ class PatientFamilyMember extends Model
     protected $guarded = [];
 
 
-    public function globalCode()
-    {
-        return $this->hasOne(GlobalCode::class, 'id');
-    }
-
     public function user()
     {
         return $this->hasOne(User::class, 'id');

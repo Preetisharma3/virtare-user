@@ -44,5 +44,10 @@ class PatientController extends Controller
     return (new PatientService)->patientVitalCreate($request,$id);
   }
 
+  public function createPatientInventory(Request $request,$id)
+  {
+    return (new PatientService)->patientInventoryCreate($request,$id);
+  }
+
 
 }

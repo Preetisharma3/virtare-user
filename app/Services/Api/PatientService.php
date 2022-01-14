@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Patient\PatientProgram;
 use App\Models\Patient\PatientReferal;
 use App\Models\Patient\PatientCondition;
+use App\Models\Patient\PatientInventory;
 use App\Models\Patient\PatientPhysician;
 use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientEmergencyContact;
@@ -18,6 +19,7 @@ use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Patient\PatientProgramTransformer;
 use App\Transformers\Patient\PatientReferalTransformer;
 use App\Transformers\Patient\PatientConditionTransformer;
+use App\Transformers\Patient\PatientInventoryTransformer;
 use App\Transformers\Patient\PatientPhysicianTransformer;
 
 class PatientService
@@ -187,6 +189,25 @@ class PatientService
             $patient = PatientProgram::create($input);
             $getPatient = PatientProgram::where('id', $patient->id)->with('patient', 'program')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientProgramTransformer())->toArray();
+            $message = ['message' => 'created successfully'];
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function patientInventoryCreate($request, $id)
+    {
+        try {
+            $input = [
+                'inventoryId' => $request->inventory, 'patientId' => $id, 'deviceType' => $request->deviceType,
+                'modelNumber' => $request->modelNumber, 'serialNumber' => $request->serialNumber, 'createdBy' => 1,
+                'macAddress' => $request->macAddress, 'deviceTime' => $request->deviceTime, 'serverTime' => $request->serverTime
+            ];
+            $patient = PatientInventory::create($input);
+            $getPatient = PatientInventory::where('id', $patient->id)->with('patient', 'inventory', 'deviceType')->first();
+            $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
             return $endData;
