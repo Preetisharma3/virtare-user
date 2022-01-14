@@ -76,7 +76,18 @@ class PatientService
             PatientEmergencyContact::create($emergencyContact);
 
 
-            $getPatient = Patient::where('id', $newData->id)->with('user', 'family.user', 'emergency', 'globalCode')->first();
+            $getPatient = Patient::where('id', $newData->id)->with(
+                'user',
+                'family.user',
+                'emergency',
+                'gender',
+                'language',
+                'contactType',
+                'contactTime',
+                'state',
+                'country',
+                'otherLanguage'
+            )->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
@@ -114,7 +125,7 @@ class PatientService
             foreach ($conditions as $condition) {
                 $patient = PatientCondition::create(['conditionId' => $condition, 'patientId' => $id, 'createdBy' => 1]);
             }
-            $getPatient = PatientCondition::where('id', $patient->id)->with('patient', 'globalCode')->first();
+            $getPatient = PatientCondition::where('id', $patient->id)->with('patient', 'condition')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
@@ -132,7 +143,7 @@ class PatientService
                 'patientId' => $id, 'fax' => $request->fax, 'createdBy' => 1, 'phoneNumber' => $request->phoneNumber
             ];
             $patient = PatientReferal::create($input);
-            $getPatient = PatientReferal::where('id', $patient->id)->with('patient', 'globalCode')->first();
+            $getPatient = PatientReferal::where('id', $patient->id)->with('patient', 'designation')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
@@ -156,7 +167,7 @@ class PatientService
                 'name' => $request->name
             ];
             $patient = PatientPhysician::create($input);
-            $getPatient = PatientPhysician::where('id', $patient->id)->with('patient', 'globalCode', 'user')->first();
+            $getPatient = PatientPhysician::where('id', $patient->id)->with('patient', 'designation', 'user')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
@@ -174,7 +185,7 @@ class PatientService
                 'patientId' => $id, 'createdBy' => 1, 'isActive' => $request->status
             ];
             $patient = PatientProgram::create($input);
-            $getPatient = PatientProgram::where('id', $patient->id)->with('patient', 'globalCode')->first();
+            $getPatient = PatientProgram::where('id', $patient->id)->with('patient', 'program')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientProgramTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);

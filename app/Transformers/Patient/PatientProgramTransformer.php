@@ -15,7 +15,7 @@ class PatientProgramTransformer extends TransformerAbstract
 	{
 		return [
 			'id'=>$data->id,
-            'program'=>$data->globalCode->name,
+            'program'=>$data->program->type->name,
             'patientId'=>$data->patientId,
             'onboardingScheduleDate'=>$data->onboardingScheduleDate,
             'dischargeDate'=>$data->dischargeDate,

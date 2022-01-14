@@ -19,9 +19,9 @@ class PatientPhysician extends Model
     use HasFactory;
 	protected $guarded = [];
 
-    public function globalCode()
+    public function designation()
     {
-        return $this->hasOne(GlobalCode::class,'id');
+        return $this->hasOne(GlobalCode::class,'id','designationId');
     }
 
     public function patient()

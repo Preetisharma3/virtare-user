@@ -16,7 +16,7 @@ class PatientPhysicianTransformer extends TransformerAbstract
 		return [
 			'id'=>$data->id,
             'name'=>$data->name,
-            'designation'=>$data->globalCode->name,
+            'designation'=>$data->designation->name,
             'phoneNumber'=>$data->phoneNumber,
             'email'=>$data->user->email,
             'fax'=>$data->fax,

@@ -15,7 +15,7 @@ class PatientConditionTransformer extends TransformerAbstract
 	{
 		return [
 			'id'=>$data->id,
-            'condition'=>$data->globalCode->name,
+            'condition'=>$data->condition->name,
             'patientId'=>$data->patientId,
 		];
 	}

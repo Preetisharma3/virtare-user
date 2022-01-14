@@ -1,31 +1,30 @@
 <?php
 
-namespace App\Models\Patient;
+namespace App\Models\Program;
 
 use App\Models\Patient\Patient;
-use App\Models\Program\Program;
+use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PatientProgram extends Model
+class Program extends Model
 {
     use SoftDeletes;
     protected $softDelete = true;
     const DELETED_AT = 'deletedAt';
     public $timestamps = false;
-	protected $table = 'patientPrograms';
+	protected $table = 'programs';
     use HasFactory;
 	protected $guarded = [];
     
-    public function program()
+    public function type()
     {
-        return $this->hasOne(Program::class,'id','programtId');
+        return $this->hasOne(GlobalCode::class,'id','typeId');
     }
 
     public function patient()
     {
         return $this->belongsTo(Patient::class,'id');
     }
-
 }
