@@ -13,15 +13,29 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 
 	public function transform($data): array
 	{
-		return [
-			'id' => $data->id,
-			'fullName' => $data->fullName,
-			'gender' => $data->gender->name,
-			'phoneNumber' => $data->phoneNumber,
-			'contactType' => $data->contactType->name,
-			'contactTime' => $data->contactTime->name,
-			//'relation' => $data->relation->name,
-			'email' => $data->user->email,
-		];
+		if($data->relation){
+			return [
+				'id' => $data->id,
+				'fullName' => $data->fullName,
+				'gender' => $data->gender->name,
+				'phoneNumber' => $data->phoneNumber,
+				'contactType' => $data->contactType->name,
+				'contactTime' => $data->contactTime->name,
+				'relation' => $data->relation->name,
+				'email' => $data->user->email,
+			];
+		}
+		else{
+			return [
+				'id' => $data->id,
+				'fullName' => $data->fullName,
+				'gender' => $data->gender->name,
+				'phoneNumber' => $data->phoneNumber,
+				'contactType' => $data->contactType->name,
+				'contactTime' => $data->contactTime->name,
+				'email' => $data->user->email,
+			];
+		}
+		
 	}
 }

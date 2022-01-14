@@ -18,9 +18,9 @@ class PatientCondition extends Model
     use HasFactory;
 	protected $guarded = [];
     
-    public function globalCode()
+    public function condition()
     {
-        return $this->hasOne(GlobalCode::class,'id');
+        return $this->hasOne(GlobalCode::class,'id','conditionId');
     }
 
     public function patient()
