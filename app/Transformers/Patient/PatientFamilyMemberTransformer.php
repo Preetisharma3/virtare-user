@@ -19,7 +19,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'fullName' => $data->fullName,
 				'gender' => $data->gender->name,
 				'phoneNumber' => $data->phoneNumber,
-				'contactType' => $data->contactType->name,
+				//'contactType' => $data->contactType->name,
 				'contactTime' => $data->contactTime->name,
 				'relation' => $data->relation->name,
 				'email' => $data->user->email,
@@ -31,7 +31,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'fullName' => $data->fullName,
 				'gender' => $data->gender->name,
 				'phoneNumber' => $data->phoneNumber,
-				'contactType' => $data->contactType->name,
+				//'contactType' => $data->contactType->name,
 				'contactTime' => $data->contactTime->name,
 				'email' => $data->email,
 			];
