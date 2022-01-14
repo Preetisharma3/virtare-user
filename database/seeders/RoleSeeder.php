@@ -26,9 +26,6 @@ class RoleSeeder extends Seeder
             'roleDescription'=>'Has All the access of the Non admin section',
             'roleType'=>'Admin',
             'masterLogin'=>0
-
-
-
         ]);
 
         Role::create([
@@ -36,9 +33,20 @@ class RoleSeeder extends Seeder
             'roleDescription'=>'Only Has the access of the Modules assigned by admin',
             'roleType'=>'Staff',
             'masterLogin'=>0
+        ]);
 
+        Role::create([
+            'roles'=>'Patient',
+            'roleDescription'=>'Only Has the access of the Modules assigned by admin',
+            'roleType'=>'Patient',
+            'masterLogin'=>0
+        ]);
 
-
+        Role::create([
+            'roles'=>'Physician',
+            'roleDescription'=>'Only Has the access of the Modules assigned by admin',
+            'roleType'=>'Physician',
+            'masterLogin'=>0
         ]);
 
         Role::create([

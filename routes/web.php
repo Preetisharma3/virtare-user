@@ -38,6 +38,7 @@ $router->post('communication[/{id}]', 'Api\v1\CommunicationController@addCommuni
 $router->get('communication', 'Api\v1\CommunicationController@getCommunication');
 $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCategory');
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
+
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
 $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
 $router->post('patient', 'Api\v1\PatientController@createPatient');
@@ -51,3 +52,8 @@ $router->get('staffCallCount','Api\v1\CommunicationController@callCountPerStaff'
 $router->get('futureAppointment', 'Api\v1\AppointmentController@futureAppointment');
 $router->get('newAppointment', 'Api\v1\AppointmentController@newAppointments');
 $router->get('todayAppointment', 'Api\v1\AppointmentController@todayAppointment');
+$router->get('patientList', 'Api\v1\PatientController@listPatient');
+$router->post('patientReferals/{id}', 'Api\v1\PatientController@createPatientReferals');
+$router->post('patientPhysician/{id}', 'Api\v1\PatientController@createPatientPhysician');
+$router->post('patientProgram/{id}', 'Api\v1\PatientController@createPatientProgram');
+$router->post('patientVital/{id}', 'Api\v1\PatientController@createPatientVital');

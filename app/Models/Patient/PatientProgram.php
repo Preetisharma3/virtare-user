@@ -2,6 +2,8 @@
 
 namespace App\Models\Patient;
 
+use App\Models\Patient\Patient;
+use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,4 +18,14 @@ class PatientProgram extends Model
     use HasFactory;
 	protected $guarded = [];
     
+    public function globalCode()
+    {
+        return $this->hasOne(GlobalCode::class,'id');
+    }
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class,'id');
+    }
+
 }
