@@ -33,7 +33,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'phoneNumber' => $data->phoneNumber,
 				'contactType' => $data->contactType->name,
 				'contactTime' => $data->contactTime->name,
-				'email' => $data->user->email,
+				'email' => $data->email,
 			];
 		}
 		
