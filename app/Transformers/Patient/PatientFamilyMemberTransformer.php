@@ -16,10 +16,11 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 		if($data->relation){
 			return [
 				'id' => $data->id,
+				'patientId'=>$data->patientId,
 				'fullName' => $data->fullName,
 				'gender' => $data->gender->name,
 				'phoneNumber' => $data->phoneNumber,
-				//'contactType' => $data->contactType->name,
+				'contactType' => $data->contactTypeId,
 				'contactTime' => $data->contactTime->name,
 				'relation' => $data->relation->name,
 				'email' => $data->user->email,
@@ -28,10 +29,11 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 		else{
 			return [
 				'id' => $data->id,
+				'patientId'=>$data->patientId,
 				'fullName' => $data->fullName,
 				'gender' => $data->gender->name,
 				'phoneNumber' => $data->phoneNumber,
-				//'contactType' => $data->contactType->name,
+				'contactType' => $data->contactTypeId,
 				'contactTime' => $data->contactTime->name,
 				'email' => $data->email,
 			];

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Transformers\Patient;
+namespace App\Transformers\Inventory;
 
 use League\Fractal\TransformerAbstract;
-use App\Transformers\Inventory\InventoryTransformer;
 
-class PatientInventoryTransformer extends TransformerAbstract
+class InventoryTransformer extends TransformerAbstract
 {
     protected $defaultIncludes = [];
 
@@ -15,14 +14,10 @@ class PatientInventoryTransformer extends TransformerAbstract
     {
         return [
             'id' => $data->id,
-            'patientId' => $data->patientId,
             'deviceType' => $data->deviceTypes->name,
             'modelNumber' => $data->modelNumber,
             'serialNumber' => $data->serialNumber,
             'macAddress' => $data->macAddress,
-            'deviceTime' => $data->deviceTime,
-            'serverTime' => $data->serverTime,
-            'inventory' => fractal()->item($data->inventory)->transformWith(new InventoryTransformer())->toArray(),
         ];
     }
 }

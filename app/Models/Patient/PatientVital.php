@@ -2,6 +2,8 @@
 
 namespace App\Models\Patient;
 
+use App\Models\GlobalCode\GlobalCode;
+use App\Models\Vital\VitalField;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,4 +18,13 @@ class PatientVital extends Model
     use HasFactory;
 	protected $guarded = [];
     
+    public function vitalType()
+    {
+        return $this->belongsTo(GlobalCode::class,'vitalTypeId');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(VitalField::class,'typeId');
+    }
 }
