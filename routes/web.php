@@ -27,18 +27,14 @@ $router->get('/linkstorage', function () use ($router) {
 });
 $router->post('login', 'Api\v1\AuthController@login');
 $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');
-$router->get('userProfile', 'Api\v1\UserController@userProfile');
-$router->post('logout', 'Api\v1\AuthController@logout');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
-  
 });
 $router->post('communication[/{id}]', 'Api\v1\CommunicationController@addCommunication');
 $router->get('communication', 'Api\v1\CommunicationController@getCommunication');
 $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCategory');
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
-
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
 $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
 $router->post('patient', 'Api\v1\PatientController@createPatient');
@@ -62,3 +58,6 @@ $router->post('task','Api\v1\TaskController@addTask');
 $router->get('task','Api\v1\TaskController@listTask');
 $router->get('task/priority','Api\v1\TaskController@priorityTask');
 $router->get('task/status','Api\v1\TaskController@statusTask');
+$router->get('widget','Api\v1\WidgetController@getWidget');
+$router->put('widget/{id}','Api\v1\WidgetController@updateWidget');
+$router->get('widget/assign','Api\v1\WidgetController@getassignedWidget');
