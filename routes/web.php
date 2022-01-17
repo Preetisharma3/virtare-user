@@ -57,3 +57,8 @@ $router->post('patientReferals/{id}', 'Api\v1\PatientController@createPatientRef
 $router->post('patientPhysician/{id}', 'Api\v1\PatientController@createPatientPhysician');
 $router->post('patientProgram/{id}', 'Api\v1\PatientController@createPatientProgram');
 $router->post('patientVital/{id}', 'Api\v1\PatientController@createPatientVital');
+
+$router->post('module', 'Api\v1\ModuleController@createModule');
+$router->get('module', 'Api\v1\ModuleController@getModule');
+$router->post('screen', 'Api\v1\ScreenController@createScreen');
+$router->get('screen', 'Api\v1\ScreenController@getScreen');
