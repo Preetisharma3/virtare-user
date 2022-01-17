@@ -30,7 +30,7 @@ class PatientService
             // Added Ptient details in User Table
 
             $user = [
-                'password' => Hash::make('password'), 'email' => $request->email, 'udid' => Str::random(10),
+                'password' => Hash::make('password'), 'email' => $request['email'], 'udid' => Str::random(10),
                 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 4
             ];
             $data = User::create($user);
@@ -38,18 +38,18 @@ class PatientService
             // Added  patient details in Patient Table
             $patient = [
                 'firstName' => $request->firstName, 'middleName' => $request->middleName, 'lastName' => $request->lastName,
-                'dob' => $request->dob, 'genderId' => $request->gender, 'languageId' => $request->language, 'otherLanguageId' => $request->otherLanguage,
-                'nickName' => $request->nickName, 'userId' => $data->id, 'phoneNumber' => $request->phoneNumber, 'contactTypeId' => $request->contactType,
+                'dob' => $request->dob, 'genderId' => $request->gender, 'languageId' => $request->language, 'otherLanguageId' => json_encode($request->otherLanguage),
+                'nickName' => $request->nickName, 'userId' => $data->id, 'phoneNumber' => $request->phoneNumber, 'contactTypeId' => json_encode($request->contactType),
                 'contactTimeId' => $request->contactTime, 'medicalRecordNumber' => $request->medicalRecordNumber, 'countryId' => $request->country,
                 'stateId' => $request->state, 'city' => $request->city, 'zipCode' => $request->zipCode, 'appartment' => $request->appartment,
-                'address' => $request->address, 'createdBy' => $data->createdBy, 'height' => $request->height, 'weight' => $request->weight
+                'address' => $request->address, 'createdBy' => 1, 'height' => $request->height, 'weight' => $request->weight
             ];
             $newData = Patient::create($patient);
 
-            //Added family in user Table
+            // Added family in user Table
             $familyMemberUser = [
 
-                'password' => Hash::make('password'), 'udid' => Str::random(10), 'email' => $request->familyEmail,
+                'password' => Hash::make('password'), 'udid' => Str::random(10), 'email' => $request['familyEmail'],
                 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 4
 
             ];
@@ -57,23 +57,18 @@ class PatientService
 
             //Added Family in patientFamilyMember Table
             $familyMember = [
-                'fullName' => $request->fullName, 'phoneNumber' => $request->familyPhoneNumber, 'contactTypeId' => $request->familyContactType, 'contactTimeId' => $request->familyContactTime, 'genderId' => $request->familyGender,
-                'relationId' => $request->relation, 'patientId' => $newData->id, 'isPrimary' => $request->isPrimary, 'createdBy' => $newData->createdBy, 'userId' => $fam->id
+                'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'), 'contactTypeId' =>json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'), 'genderId' => $request->input('familyGender'),
+                'relationId' => $request->input('relation'), 'patientId' => $newData->id, 'createdBy' => 1, 'userId' => $fam->id
             ];
             $familyData = PatientFamilyMember::create($familyMember);
 
-            //Added emergency contact in user table
 
-            $emergencyContactUser = [
-                'password' => Hash::make('password'), 'udid' => Str::random(10),
-                'email' => $request->emergencyEmail, 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 4
-            ];
-
-            $emer = User::create($emergencyContactUser);
 
             //Added emergency contact in PatientEmergencyContact table
             $emergencyContact = [
-                'fullName' => $request->emergencyFullName, 'phoneNumber' => $request->emergencyPhoneNumber, 'contactTypeId' => $request->emergencyContactType, 'contactTimeId' => $request->emergencyContactTime, 'genderId' => $request->emergencyGender, 'patientId' => $newData->id, 'createdBy' => $familyData->createdBy, 'userId' => $emer->id
+                'fullName' => $request->emergencyFullName, 'phoneNumber' => $request->emergencyPhoneNumber, 'contactTypeId' => json_encode($request->emergencyContactType),
+                'contactTimeId' => $request->emergencyContactTime, 'genderId' => $request->emergencyGender, 'patientId' => $newData->id,
+                'createdBy' => 1, 'email' => $request->emergencyEmail, 'sameAsFamily' => $request->sameAsFamily
             ];
             PatientEmergencyContact::create($emergencyContact);
 
