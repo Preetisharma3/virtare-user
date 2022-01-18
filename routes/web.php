@@ -55,8 +55,8 @@ $router->post('patient/{id}/physician', 'Api\v1\PatientController@createPatientP
 $router->get('patient/{id}/physician[/{physicianId}]', 'Api\v1\PatientController@listPatientPhysician');
 $router->post('patient/{id}/program', 'Api\v1\PatientController@createPatientProgram');
 $router->get('patient/{id}/program[/{programId}]', 'Api\v1\PatientController@listPatientProgram');
-$router->post('patient/{id}/inventory','Api\v1\PatientController@createPatientInventory');
-$router->get('patient/{id}/inventory[/{inventoryId}]','Api\v1\PatientController@listPatientInventory');
+$router->post('patient/{id}/inventory', 'Api\v1\PatientController@createPatientInventory');
+$router->get('patient/{id}/inventory[/{inventoryId}]', 'Api\v1\PatientController@listPatientInventory');
 $router->post('patient/{id}/vital', 'Api\v1\PatientController@createPatientVital');
 $router->get('patient/{id}/vital[/{vitalId}]', 'Api\v1\PatientController@listPatientVital');
 $router->post('patient/{id}/medicalHistory', 'Api\v1\PatientController@createPatientMedicalHistory');
@@ -64,9 +64,10 @@ $router->get('patient/{id}/medicalHistory[/{medicalHistoryId}]', 'Api\v1\Patient
 $router->post('patient/{id}/medicalRoutine', 'Api\v1\PatientController@createPatientMedicalRoutine');
 $router->get('patient/{id}/medicalRoutine[/{medicalRoutineId}]', 'Api\v1\PatientController@listPatientMedicalRoutine');
 $router->post('patient/{id}/insurance', 'Api\v1\PatientController@createPatientInsurance');
+$router->get('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@listPatientInsurance');
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
-$router->get('call/status','Api\v1\CommunicationController@callStatus');
-$router->get('call/staff','Api\v1\CommunicationController@callCountPerStaff');
+$router->get('call/status', 'Api\v1\CommunicationController@callStatus');
+$router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
 $router->get('appointment/future', 'Api\v1\AppointmentController@futureAppointment');
 $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
 $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
