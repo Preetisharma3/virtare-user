@@ -27,8 +27,6 @@ $router->get('/linkstorage', function () use ($router) {
 });
 $router->post('login', 'Api\v1\AuthController@login');
 $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');
-$router->get('userProfile', 'Api\v1\UserController@userProfile');
-$router->post('logout', 'Api\v1\AuthController@logout');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
@@ -60,9 +58,7 @@ $router->post('patient/{id}/medicalRoutine', 'Api\v1\PatientController@createPat
 $router->get('patient/{id}/medicalRoutine', 'Api\v1\PatientController@listPatientMedicalRoutine');
 $router->post('patient/{id}/insurance', 'Api\v1\PatientController@createPatientInsurance');
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
-$router->get('call/inQueue','Api\v1\CommunicationController@inQueue');
-$router->get('call/goingOn','Api\v1\CommunicationController@goingOn');
-$router->get('call/completed','Api\v1\CommunicationController@completed');
+$router->get('call/status','Api\v1\CommunicationController@callStatus');
 $router->get('call/staff','Api\v1\CommunicationController@callCountPerStaff');
 $router->get('appointment/future', 'Api\v1\AppointmentController@futureAppointment');
 $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
@@ -71,5 +67,14 @@ $router->post('task','Api\v1\TaskController@addTask');
 $router->get('task','Api\v1\TaskController@listTask');
 $router->get('task/priority','Api\v1\TaskController@priorityTask');
 $router->get('task/status','Api\v1\TaskController@statusTask');
+$router->get('widget','Api\v1\WidgetController@getWidget');
+$router->put('widget/{id}','Api\v1\WidgetController@updateWidget');
+$router->get('widget/assign','Api\v1\WidgetController@getassignedWidget');
 $router->get('program','Api\v1\ProgramController@listProgram');
-
+$router->get('patient/total', 'Api\v1\DashboardController@patientCount');
+$router->get('patient/active', 'Api\v1\DashboardController@activePatients');
+$router->get('patient/inActive', 'Api\v1\DashboardController@inActivePatients');
+$router->get('patient/new', 'Api\v1\DashboardController@newPatients');
+$router->get('patient/abnormal', 'Api\v1\DashboardController@abnormalPatients');
+$router->get('patient/critical', 'Api\v1\DashboardController@criticalPatients');
+$router->get('patient/condition', 'Api\v1\DashboardController@patientCondition');
