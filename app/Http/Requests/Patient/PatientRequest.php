@@ -22,7 +22,9 @@ class PatientRequest extends FormRequest
     public function messages()
     {
         return [
+            'email.required' => 'Patient Email must be required',
             'email.unique' => 'Patient Email must be unique',
+            'familyEmail.required' => 'Family Member Email must be required',
             'familyEmail.unique' => 'Family Member Email must be unique'
         ];
     }
