@@ -16,9 +16,9 @@ class PatientController extends Controller
     return (new PatientService)->patientCreate($request);
   }
 
-  public function listPatient(Request $request,$id=null)
+  public function listPatient(Request $request, $id = null)
   {
-    return (new PatientService)->patientList($request,$id);
+    return (new PatientService)->patientList($request, $id);
   }
 
   public function createPatientCondition(Request $request, $id)
@@ -26,9 +26,9 @@ class PatientController extends Controller
     return (new PatientService)->patientConditionCreate($request, $id);
   }
 
-  public function listPatientCondition(Request $request, $id,$conditionId=null)
+  public function listPatientCondition(Request $request, $id, $conditionId = null)
   {
-    return (new PatientService)->patientConditionList($request, $id,$conditionId);
+    return (new PatientService)->patientConditionList($request, $id, $conditionId);
   }
 
   public function createPatientReferals(Request $request, $id)
@@ -36,9 +36,9 @@ class PatientController extends Controller
     return (new PatientService)->patientReferalsCreate($request, $id);
   }
 
-  public function listPatientReferals(Request $request, $id,$referalsId=null)
+  public function listPatientReferals(Request $request, $id, $referalsId = null)
   {
-    return (new PatientService)->patientReferalsList($request, $id,$referalsId);
+    return (new PatientService)->patientReferalsList($request, $id, $referalsId);
   }
 
   public function createPatientPhysician(PatientPhysicianRequest $request, $id)
@@ -46,9 +46,9 @@ class PatientController extends Controller
     return (new PatientService)->patientPhysicianCreate($request, $id);
   }
 
-  public function listPatientPhysician(Request $request, $id,$physicianId=null)
+  public function listPatientPhysician(Request $request, $id, $physicianId = null)
   {
-    return (new PatientService)->patientPhysicianList($request, $id,$physicianId);
+    return (new PatientService)->patientPhysicianList($request, $id, $physicianId);
   }
 
   public function createPatientProgram(Request $request, $id)
@@ -56,19 +56,19 @@ class PatientController extends Controller
     return (new PatientService)->patientProgramCreate($request, $id);
   }
 
-  public function listPatientProgram(Request $request, $id,$programId=null)
+  public function listPatientProgram(Request $request, $id, $programId = null)
   {
-    return (new PatientService)->patientProgramList($request, $id,$programId);
+    return (new PatientService)->patientProgramList($request, $id, $programId);
   }
 
-  public function createPatientInventory(Request $request,$id)
+  public function createPatientInventory(Request $request, $id)
   {
-    return (new PatientService)->patientInventoryCreate($request,$id);
+    return (new PatientService)->patientInventoryCreate($request, $id);
   }
 
-  public function listPatientInventory(Request $request,$id,$inventoryId=null)
+  public function listPatientInventory(Request $request, $id, $inventoryId = null)
   {
-    return (new PatientService)->patientInventoryList($request,$id,$inventoryId);
+    return (new PatientService)->patientInventoryList($request, $id, $inventoryId);
   }
 
   public function createPatientVital(Request $request, $id)
@@ -76,9 +76,9 @@ class PatientController extends Controller
     return (new PatientService)->patientVitalCreate($request, $id);
   }
 
-  public function listPatientVital(Request $request, $id,$vitalId=null)
+  public function listPatientVital(Request $request, $id, $vitalId = null)
   {
-    return (new PatientService)->patientVitalList($request, $id,$vitalId);
+    return (new PatientService)->patientVitalList($request, $id, $vitalId);
   }
 
   public function createPatientMedicalHistory(Request $request, $id)
@@ -86,9 +86,9 @@ class PatientController extends Controller
     return (new PatientService)->patientMedicalHistoryCreate($request, $id);
   }
 
-  public function listPatientMedicalHistory(Request $request, $id,$medicalHistoryId=null)
+  public function listPatientMedicalHistory(Request $request, $id, $medicalHistoryId = null)
   {
-    return (new PatientService)->patientMedicalHistoryList($request, $id,$medicalHistoryId);
+    return (new PatientService)->patientMedicalHistoryList($request, $id, $medicalHistoryId);
   }
 
   public function createPatientMedicalRoutine(Request $request, $id)
@@ -96,9 +96,9 @@ class PatientController extends Controller
     return (new PatientService)->patientMedicalRoutineCreate($request, $id);
   }
 
-  public function listPatientMedicalRoutine(Request $request, $id,$medicalRoutineId=null)
+  public function listPatientMedicalRoutine(Request $request, $id, $medicalRoutineId = null)
   {
-    return (new PatientService)->patientMedicalRoutineList($request, $id,$medicalRoutineId);
+    return (new PatientService)->patientMedicalRoutineList($request, $id, $medicalRoutineId);
   }
 
   public function createPatientInsurance(Request $request, $id)
@@ -106,5 +106,8 @@ class PatientController extends Controller
     return (new PatientService)->patientInsuranceCreate($request, $id);
   }
 
-
+  public function listPatientInsurance(Request $request, $id, $insuranceId = null)
+  {
+    return (new PatientService)->patientInsuranceList($request, $id, $insuranceId);
+  }
 }
