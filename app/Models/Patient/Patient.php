@@ -3,6 +3,7 @@
 namespace App\Models\Patient;
 
 use App\Models\User\User;
+use App\Models\Patient\PatientVital;
 use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Patient\PatientFamilyMember;
@@ -69,4 +70,17 @@ class Patient extends Model
     {
         return $this->hasOne(PatientEmergencyContact::class, 'patientId');
     }
+
+    public function vitals()
+	{
+		return $this->belongsTo(PatientVital::class, 'id','patientId');
+	}
+
+    public function conditions()
+	{
+		return $this->belongsTo(PatientCondition::class, 'id','patientId');
+	}
+
+
+
 }

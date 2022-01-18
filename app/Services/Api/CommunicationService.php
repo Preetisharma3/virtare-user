@@ -8,6 +8,7 @@ use App\Models\Communication\Communication;
 use App\Models\Communication\CommunicationMessage;
 use App\Models\Communication\CommunicationCallRecord;
 use App\Transformers\Communication\CallRecordTransformer;
+use App\Transformers\Communication\CallStatusTransformer;
 use App\Transformers\Communication\CommunicationTransformer;
 
 class CommunicationService
@@ -53,21 +54,11 @@ class CommunicationService
     }
 
     //Call Status API's
-    public function inQueue(){
-        $data = CommunicationCallRecord::where('callStatusId',47)->count();
-        return response()->json(['In Queue'=>$data],200);
+    public function callStatus(){
+        $data =CommunicationCallRecord::with('status')->select('callStatusId', DB::raw('count(*) as count'))->groupBy('callStatusId')->get();
+        return fractal()->collection($data)->transformWith(new CallStatusTransformer())->toArray(); 
     }
 
-    public function goingOn(){
-        $data = CommunicationCallRecord::where('callStatusId',48)->count();
-        return response()->json(['Going on'=>$data],200);
-    }
-
-    public function completed(){
-        $data = CommunicationCallRecord::where('callStatusId',49)->count();
-        return response()->json(['Completed'=>$data],200);
-    }
-    
     // calls Per Staff API
     public function callCountPerStaff(){
        $data =CommunicationCallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->get();
