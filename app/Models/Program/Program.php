@@ -23,8 +23,4 @@ class Program extends Model
         return $this->hasOne(GlobalCode::class,'id','typeId');
     }
 
-    public function patient()
-    {
-        return $this->belongsTo(Patient::class,'id');
-    }
 }
