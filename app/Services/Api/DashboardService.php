@@ -3,12 +3,15 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use App\Models\Patient\PatientCondition;
+use App\Transformers\Staff\StaffNetworkTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
 use App\Transformers\Communication\CallStatusTransformer;
 use App\Transformers\Patient\PatientConditionTransformer;
+use App\Transformers\Staff\StaffSpecializationTransformer;
 use App\Transformers\Patient\PatientConditionCountTransformer;
 
 class DashboardService
@@ -110,9 +113,19 @@ class DashboardService
 
     public function patientCondition(){
         $data =PatientCondition::with('condition')->select('conditionId', DB::raw('count(*) as count'))->groupBy('conditionId')->get();
-        // return $data;
         return fractal()->collection($data)->transformWith(new PatientConditionCountTransformer())->toArray(); 
     }
+
+    public function staffNetwork(){
+        $data =Staff::with('network')->select('networkId', DB::raw('count(*) as count'))->groupBy('networkId')->get();
+        return fractal()->collection($data)->transformWith(new StaffNetworkTransformer())->toArray(); 
+    }
+
+    public function staffSpecialization(){
+        $data =Staff::with('specialization')->select('specializationId', DB::raw('count(*) as count'))->groupBy('specializationId')->get();
+        return fractal()->collection($data)->transformWith(new StaffSpecializationTransformer())->toArray(); 
+    }
+
     
 
 }

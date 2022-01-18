@@ -79,3 +79,5 @@ $router->get('widget','Api\v1\WidgetController@getWidget');
 $router->put('widget/{id}','Api\v1\WidgetController@updateWidget');
 $router->get('widget/assign','Api\v1\WidgetController@getassignedWidget');
 $router->get('program','Api\v1\ProgramController@listProgram');
+$router->get('staff/network','Api\v1\DashboardController@staffNetwork');
+$router->get('staff/specialization','Api\v1\DashboardController@staffSpecialization');
