@@ -2,6 +2,7 @@
 
 namespace App\Models\Communication;
 
+use App\Models\GlobalCode\GlobalCode;
 use App\Models\Staff\Staff;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,5 +21,9 @@ class CommunicationCallRecord extends Model
     public function staff()
     {
         return $this->hasOne(Staff::class,'id','staffId');
+    }
+
+    public function status(){
+        return $this->belongsTo(GlobalCode::class,'callStatusId');
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Transformers\GlobalCode;
+namespace App\Transformers\Communication;
 
 use League\Fractal\TransformerAbstract;
+use App\Transformers\Staff\StaffTransformer;
 
 
-class GlobalCodeTransformer extends TransformerAbstract
+class CallStatusTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -33,11 +34,8 @@ class GlobalCodeTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id'=>$data->udid,
-            'globalCodeCategoryId'=>$data->globalCodeCategory->udid,
-            'globalCodeCategory'=>$data->globalCodeCategory->name,
-			'name'=>$data->name,
-            'description'=>$data->description
+          'text'=> $data->status->name,
+          'count'=>$data->count
 		];
     }
 }
