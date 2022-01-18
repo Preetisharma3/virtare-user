@@ -2,11 +2,12 @@
 
 namespace App\Models\Patient;
 
+use App\Models\Patient\Patient;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PatientMedicalHistories extends Model
+class PatientMedicalHistory extends Model
 {
     use SoftDeletes;
     protected $softDelete = true;
@@ -15,5 +16,11 @@ class PatientMedicalHistories extends Model
 	protected $table = 'patientMedicalHistories';
     use HasFactory;
 	protected $guarded = [];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'id');
+    }
+
     
 }

@@ -1,30 +1,31 @@
 <?php
 
-namespace App\Models\Patient;
+namespace App\Models\Vital;
 
 use App\Models\Patient\Patient;
-use App\Models\GlobalCode\GlobalCode;
+use App\Models\Patient\PatientVital;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PatientCondition extends Model
+class VitalField extends Model
 {
     use SoftDeletes;
     protected $softDelete = true;
     const DELETED_AT = 'deletedAt';
     public $timestamps = false;
-	protected $table = 'patientConditions';
+	protected $table = 'vitalFields';
     use HasFactory;
 	protected $guarded = [];
     
-    public function condition()
-    {
-        return $this->hasOne(GlobalCode::class,'id','conditionId');
-    }
-
     public function patient()
     {
-        return $this->hasMany(Patient::class,'id','patientId');
+        return $this->belongsTo(Patient::class,'id');
     }
+    public function vital()
+    {
+        return $this->belongsTo(PatientVital::class,'id','typeId');
+    }
+
+
 }

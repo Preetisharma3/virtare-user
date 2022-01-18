@@ -15,23 +15,22 @@ class PatientInventory extends Model
     protected $softDelete = true;
     const DELETED_AT = 'deletedAt';
     public $timestamps = false;
-	protected $table = 'patientInventories';
+    protected $table = 'patientInventories';
     use HasFactory;
-	protected $guarded = [];
+    protected $guarded = [];
 
     public function inventory()
     {
-        return $this->belongsTo(Inventory::class, 'id','inventoryId');
+        return $this->belongsTo(Inventory::class, 'id');
     }
 
-    public function deviceType()
+    public function deviceTypes()
     {
-        return $this->hasOne(GlobalCode::class, 'id','deviceType');
+        return $this->hasOne(GlobalCode::class, 'id', 'deviceType');
     }
 
     public function patient()
     {
-        return $this->belongsTo(Patient::class, 'id');
+        return $this->belongsTo(Patient::class, 'patientId');
     }
-    
 }
