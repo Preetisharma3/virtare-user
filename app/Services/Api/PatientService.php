@@ -17,6 +17,7 @@ use App\Models\Patient\PatientInventory;
 use App\Models\Patient\PatientPhysician;
 use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientMedicalHistory;
+use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
 use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Patient\PatientVitalTransformer;
@@ -27,6 +28,7 @@ use App\Transformers\Patient\PatientConditionTransformer;
 use App\Transformers\Patient\PatientInventoryTransformer;
 use App\Transformers\Patient\PatientPhysicianTransformer;
 use App\Transformers\Patient\PatientVitalFieldTransformer;
+use App\Transformers\Patient\PatientMedicalRoutineTransformer;
 
 class PatientService
 {
@@ -36,7 +38,7 @@ class PatientService
         try {
             // Added Ptient details in User Table
             $user = [
-                'password' => Hash::make('password'), 'email' => $request['email'], 'udid' => Str::random(10),
+                'password' => Hash::make('password'), 'email' => $request->email, 'udid' => Str::random(10),
                 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 4
             ];
             $data = User::create($user);
@@ -100,22 +102,39 @@ class PatientService
 
 
     // Patient Listing
-    public function patientList($request)
+    public function patientList($request,$id)
     {
         try {
-            $getPatient = Patient::with(
-                'user',
-                'family.user',
-                'emergency',
-                'gender',
-                'language',
-                'contactType',
-                'contactTime',
-                'state',
-                'country',
-                'otherLanguage'
-            )->get();
-            return fractal()->collection($getPatient)->transformWith(new PatientTransformer())->toArray();
+            if($id){
+                $getPatient = Patient::where('id',$id)->with(
+                    'user',
+                    'family.user',
+                    'emergency',
+                    'gender',
+                    'language',
+                    'contactType',
+                    'contactTime',
+                    'state',
+                    'country',
+                    'otherLanguage'
+                )->first();
+                return fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
+            }else{
+                $getPatient = Patient::with(
+                    'user',
+                    'family.user',
+                    'emergency',
+                    'gender',
+                    'language',
+                    'contactType',
+                    'contactTime',
+                    'state',
+                    'country',
+                    'otherLanguage'
+                )->get();
+                return fractal()->collection($getPatient)->transformWith(new PatientTransformer())->toArray();
+            }
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -343,7 +362,7 @@ class PatientService
             ];
             $patient = PatientMedicalHistory::create($input);
             DB::commit();
-            $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient', 'globalCode')->first();
+            $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
@@ -361,6 +380,58 @@ class PatientService
             $getPatient = PatientMedicalHistory::where('patientId', $id)->with('patient')->get();
             return fractal()->collection($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
         } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function patientMedicalRoutineCreate($request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $input = [
+                'medicine' => $request->medicine, 'frequency' => $request->frequency,  'createdBy' => 1,
+                'startDate'=>$request->startDate,'endDate'=>$request->endDate,'patientId'=>$id
+            ];
+            $patient = PatientMedicalRoutine::create($input);
+            DB::commit();
+            $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient')->first();
+            $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
+            $message = ['message' => 'created successfully'];
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function patientMedicalRoutineList($request, $id)
+    {
+        try {
+            $getPatient = PatientMedicalRoutine::where('patientId', $id)->with('patient')->get();
+            return fractal()->collection($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function patientInsuranceCreate($request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $input = [
+                'medicine' => $request->medicine, 'frequency' => $request->frequency,  'createdBy' => 1,
+                'startDate'=>$request->startDate,'endDate'=>$request->endDate,'patientId'=>$id
+            ];
+            $patient = PatientMedicalRoutine::create($input);
+            DB::commit();
+            $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient')->first();
+            $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
+            $message = ['message' => 'created successfully'];
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }

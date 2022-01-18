@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Api\PatientService;
 use App\Http\Requests\Patient\PatientRequest;
+use App\Http\Requests\Patient\PatientPhysicianRequest;
 
 class PatientController extends Controller
 {
@@ -15,9 +16,9 @@ class PatientController extends Controller
     return (new PatientService)->patientCreate($request);
   }
 
-  public function listPatient(Request $request)
+  public function listPatient(Request $request,$id=null)
   {
-    return (new PatientService)->patientList($request);
+    return (new PatientService)->patientList($request,$id);
   }
 
   public function createPatientCondition(Request $request, $id)
@@ -40,7 +41,7 @@ class PatientController extends Controller
     return (new PatientService)->patientReferalsList($request, $id);
   }
 
-  public function createPatientPhysician(Request $request, $id)
+  public function createPatientPhysician(PatientPhysicianRequest $request, $id)
   {
     return (new PatientService)->patientPhysicianCreate($request, $id);
   }
@@ -80,9 +81,29 @@ class PatientController extends Controller
     return (new PatientService)->patientVitalList($request, $id);
   }
 
+  public function createPatientMedicalHistory(Request $request, $id)
+  {
+    return (new PatientService)->patientMedicalHistoryCreate($request, $id);
+  }
+
   public function listPatientMedicalHistory(Request $request, $id)
   {
     return (new PatientService)->patientMedicalHistoryList($request, $id);
+  }
+
+  public function createPatientMedicalRoutine(Request $request, $id)
+  {
+    return (new PatientService)->patientMedicalRoutineCreate($request, $id);
+  }
+
+  public function listPatientMedicalRoutine(Request $request, $id)
+  {
+    return (new PatientService)->patientMedicalRoutineList($request, $id);
+  }
+
+  public function createPatientInsurance(Request $request, $id)
+  {
+    return (new PatientService)->patientInsuranceCreate($request, $id);
   }
 
 

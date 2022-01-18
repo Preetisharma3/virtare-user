@@ -16,6 +16,7 @@ class CreateGlobalCodesTable extends Migration
     {
         Schema::create('globalCodes', function (Blueprint $table) {
             $table->id();
+            $table->string('udid');
             $table->bigInteger('globalCodeCategoryId')->unsigned();
             $table->foreign('globalCodeCategoryId')->references('id')->on('globalCodeCategories')->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
