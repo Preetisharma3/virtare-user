@@ -42,6 +42,16 @@ $router->get('patient[/{id}]', 'Api\v1\PatientController@listPatient');
 $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientCondition');
 $router->get('patient/{id}/condition', 'Api\v1\PatientController@listPatientCondition');
 $router->post('staff', 'Api\v1\StaffController@addStaff');
+
+$router->get('patient', 'Api\v1\PatientController@listPatient');
+$router->get('patient/total', 'Api\v1\DashboardController@patientCount');
+$router->get('patient/active', 'Api\v1\DashboardController@activePatients');
+$router->get('patient/inActive', 'Api\v1\DashboardController@inActivePatients');
+$router->get('patient/new', 'Api\v1\DashboardController@newPatients');
+$router->get('patient/abnormal', 'Api\v1\DashboardController@abnormalPatients');
+$router->get('patient/critical', 'Api\v1\DashboardController@criticalPatients');
+$router->get('patient/condition', 'Api\v1\DashboardController@patientCondition');
+
 $router->post('patient/{id}/referals', 'Api\v1\PatientController@createPatientReferals');
 $router->get('patient/{id}/referals', 'Api\v1\PatientController@listPatientReferals');
 $router->post('patient/{id}/physician', 'Api\v1\PatientController@createPatientPhysician');
@@ -71,10 +81,3 @@ $router->get('widget','Api\v1\WidgetController@getWidget');
 $router->put('widget/{id}','Api\v1\WidgetController@updateWidget');
 $router->get('widget/assign','Api\v1\WidgetController@getassignedWidget');
 $router->get('program','Api\v1\ProgramController@listProgram');
-$router->get('patient/total', 'Api\v1\DashboardController@patientCount');
-$router->get('patient/active', 'Api\v1\DashboardController@activePatients');
-$router->get('patient/inActive', 'Api\v1\DashboardController@inActivePatients');
-$router->get('patient/new', 'Api\v1\DashboardController@newPatients');
-$router->get('patient/abnormal', 'Api\v1\DashboardController@abnormalPatients');
-$router->get('patient/critical', 'Api\v1\DashboardController@criticalPatients');
-$router->get('patient/condition', 'Api\v1\DashboardController@patientCondition');
