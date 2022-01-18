@@ -17,7 +17,7 @@ class DashboardService
     {
         try {
             $count = Patient::count();
-            $text = "Total Patients";
+            $text = "totalPatients";
             $data = [
                 "count" => $count,
                 "text" => $text
@@ -33,7 +33,7 @@ class DashboardService
     {
         try {
             $count = Patient::where('isActive', 1)->count();
-            $text = "Active Patients";
+            $text = "activePatients";
             $data = [
                 "count" => $count,
                 "text" => $text
@@ -48,7 +48,7 @@ class DashboardService
     {
         try {
             $count = Patient::where('isActive', 0)->count();
-            $text = "Inactive Patients";
+            $text = "inactivePatients";
             $data = [
                 "count" => $count,
                 "text" => $text
@@ -63,7 +63,7 @@ class DashboardService
     {
         try {
             $count = Patient::whereDoesntHave('vitals')->count();
-            $text = "New Patients";
+            $text = "newPatients";
             $data = [
                 "count" => $count,
                 "text" => $text
@@ -80,7 +80,7 @@ class DashboardService
             $count = Patient::whereHas('conditions', function ($query) {
                 $query->where('conditionId', 79);
             })->count();
-            $text = "Abnormal Patients";
+            $text = "abnormalPatients";
             $data = [
                 "count" => $count,
                 "text" => $text
@@ -97,7 +97,7 @@ class DashboardService
             $count = Patient::whereHas('conditions', function ($query) {
                 $query->where('conditionId',80);
             })->count();
-            $text = "Critical Patients";
+            $text = "criticalPatients";
             $data = [
                 "count" => $count,
                 "text" => $text

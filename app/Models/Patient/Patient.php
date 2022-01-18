@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Patient\PatientFamilyMember;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Patient\PatientEmergencyContact;
+use App\Models\Vital\VitalField;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Patient extends Model
@@ -73,7 +74,7 @@ class Patient extends Model
 
     public function vitals()
 	{
-		return $this->belongsTo(PatientVital::class, 'id','patientId');
+		return $this->belongsTo(VitalField::class, 'id','patientId');
 	}
 
     public function conditions()
