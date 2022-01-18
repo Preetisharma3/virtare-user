@@ -30,4 +30,7 @@ class CommunicationController extends Controller
         return (new CommunicationService)->callCountPerStaff($request);
     }
 
+    public function messageType(){
+        return (new CommunicationService)->messageType();
+    }
 }

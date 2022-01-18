@@ -41,6 +41,10 @@ class Communication extends Model
     {
         return $this->hasOne(GlobalCode::class,'id','messageCategoryId');
     }
+
+    public function type(){
+        return $this->belongsTo(GlobalCode::class, 'messageTypeId');
+    }
     
 
 }
