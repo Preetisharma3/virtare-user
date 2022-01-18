@@ -14,7 +14,10 @@ class WidgetUpdateTransformer extends TransformerAbstract
     public function transform($data)
     {
         return [
-           $data
+           'title'=>$data->title,
+           'rows'=>$data->rows,
+           'columns'=>$data->columns,
+           'canNotViewModifyOrDelete'=>$data->canNotViewModifyOrDelete ? 'true' : 'false',
         ];
     }
 }
