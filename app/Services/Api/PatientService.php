@@ -38,7 +38,7 @@ class PatientService
         try {
             // Added Ptient details in User Table
             $user = [
-                'password' => Hash::make('password'), 'email' => $request['email'], 'udid' => Str::random(10),
+                'password' => Hash::make('password'), 'email' => $request->email, 'udid' => Str::random(10),
                 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 4
             ];
             $data = User::create($user);
@@ -411,6 +411,27 @@ class PatientService
             $getPatient = PatientMedicalRoutine::where('patientId', $id)->with('patient')->get();
             return fractal()->collection($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
         } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function patientInsuranceCreate($request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $input = [
+                'medicine' => $request->medicine, 'frequency' => $request->frequency,  'createdBy' => 1,
+                'startDate'=>$request->startDate,'endDate'=>$request->endDate,'patientId'=>$id
+            ];
+            $patient = PatientMedicalRoutine::create($input);
+            DB::commit();
+            $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient')->first();
+            $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
+            $message = ['message' => 'created successfully'];
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }

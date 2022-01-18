@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Api\PatientService;
 use App\Http\Requests\Patient\PatientRequest;
+use App\Http\Requests\Patient\PatientPhysicianRequest;
 
 class PatientController extends Controller
 {
@@ -40,7 +41,7 @@ class PatientController extends Controller
     return (new PatientService)->patientReferalsList($request, $id);
   }
 
-  public function createPatientPhysician(Request $request, $id)
+  public function createPatientPhysician(PatientPhysicianRequest $request, $id)
   {
     return (new PatientService)->patientPhysicianCreate($request, $id);
   }
@@ -98,6 +99,11 @@ class PatientController extends Controller
   public function listPatientMedicalRoutine(Request $request, $id)
   {
     return (new PatientService)->patientMedicalRoutineList($request, $id);
+  }
+
+  public function createPatientInsurance(Request $request, $id)
+  {
+    return (new PatientService)->patientInsuranceCreate($request, $id);
   }
 
 

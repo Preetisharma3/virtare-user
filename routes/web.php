@@ -58,6 +58,7 @@ $router->post('patient/{id}/medicalHistory', 'Api\v1\PatientController@createPat
 $router->get('patient/{id}/medicalHistory', 'Api\v1\PatientController@listPatientMedicalHistory');
 $router->post('patient/{id}/medicalRoutine', 'Api\v1\PatientController@createPatientMedicalRoutine');
 $router->get('patient/{id}/medicalRoutine', 'Api\v1\PatientController@listPatientMedicalRoutine');
+$router->post('patient/{id}/insurance', 'Api\v1\PatientController@createPatientInsurance');
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
 $router->get('call/inQueue','Api\v1\CommunicationController@inQueue');
 $router->get('call/goingOn','Api\v1\CommunicationController@goingOn');
