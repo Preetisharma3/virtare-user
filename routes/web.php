@@ -49,7 +49,6 @@ $router->get('patient[/{id}]', 'Api\v1\PatientController@listPatient');
 $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientCondition');
 $router->get('patient/{id}/condition[/{conditionId}]', 'Api\v1\PatientController@listPatientCondition');
 $router->post('staff', 'Api\v1\StaffController@addStaff');
-$router->get('patient', 'Api\v1\PatientController@listPatient');
 $router->post('patient/{id}/referals', 'Api\v1\PatientController@createPatientReferals');
 $router->get('patient/{id}/referals[/{referalsId}]', 'Api\v1\PatientController@listPatientReferals');
 $router->post('patient/{id}/physician', 'Api\v1\PatientController@createPatientPhysician');
