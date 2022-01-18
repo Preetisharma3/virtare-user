@@ -32,7 +32,6 @@ $router->post('logout', 'Api\v1\AuthController@logout');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
-  
 });
 $router->post('communication[/{id}]', 'Api\v1\CommunicationController@addCommunication');
 $router->get('communication', 'Api\v1\CommunicationController@getCommunication');
@@ -41,10 +40,10 @@ $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
 $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
 $router->post('patient', 'Api\v1\PatientController@createPatient');
+$router->get('patient[/{id}]', 'Api\v1\PatientController@listPatient');
 $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientCondition');
 $router->get('patient/{id}/condition', 'Api\v1\PatientController@listPatientCondition');
 $router->post('staff', 'Api\v1\StaffController@addStaff');
-$router->get('patient', 'Api\v1\PatientController@listPatient');
 $router->post('patient/{id}/referals', 'Api\v1\PatientController@createPatientReferals');
 $router->get('patient/{id}/referals', 'Api\v1\PatientController@listPatientReferals');
 $router->post('patient/{id}/physician', 'Api\v1\PatientController@createPatientPhysician');
@@ -57,6 +56,8 @@ $router->post('patient/{id}/vital', 'Api\v1\PatientController@createPatientVital
 $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
 $router->post('patient/{id}/medicalHistory', 'Api\v1\PatientController@createPatientMedicalHistory');
 $router->get('patient/{id}/medicalHistory', 'Api\v1\PatientController@listPatientMedicalHistory');
+$router->post('patient/{id}/medicalRoutine', 'Api\v1\PatientController@createPatientMedicalRoutine');
+$router->get('patient/{id}/medicalRoutine', 'Api\v1\PatientController@listPatientMedicalRoutine');
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
 $router->get('call/inQueue','Api\v1\CommunicationController@inQueue');
 $router->get('call/goingOn','Api\v1\CommunicationController@goingOn');
