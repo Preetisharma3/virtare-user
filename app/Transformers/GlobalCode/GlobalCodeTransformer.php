@@ -33,7 +33,8 @@ class GlobalCodeTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id'=>$data->id,
+            'id'=>$data->udid,
+            'globalCodeCategoryId'=>$data->globalCodeCategory->udid,
             'globalCodeCategory'=>$data->globalCodeCategory->name,
 			'name'=>$data->name,
             'description'=>$data->description

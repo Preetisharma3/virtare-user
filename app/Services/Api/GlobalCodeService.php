@@ -3,7 +3,7 @@
 namespace App\Services\Api;
 
 use Exception;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use App\Models\GlobalCode\GlobalCode;
 use App\Models\GlobalCode\GlobalCodeCategory;
 use App\Transformers\GlobalCode\GlobalCodeTransformer;
@@ -25,9 +25,9 @@ class GlobalCodeService
      public function globalCodeCreate($request)
      {
           try {
-               $merge = $request->merge(['globalCodeCategoryId' => $request->globalCodeCategory, 'createdBy' => 1]);
+               $merge = $request->merge(['globalCodeCategoryId' => $request->globalCodeCategory, 'createdBy' => 1,'udid'=>Str::uuid()->toString()]);
                $global = GlobalCode::create($merge->only([
-                    'globalCodeCategoryId', 'name', 'description', 'createdBy', 'isActive'
+                    'globalCodeCategoryId', 'name', 'description', 'createdBy', 'isActive','udid'
                ]));
                $data = GlobalCode::whereHas('globalCodeCategory',function($q) use($global){
                     $q->where('id',$global->globalCodeCategoryId);
