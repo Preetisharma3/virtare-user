@@ -14,8 +14,8 @@ class AddControllerToActionsTable extends Migration
     public function up()
     {
         Schema::table('actions', function (Blueprint $table) {
-            $table->string('controller')->after('screenId');         
-            $table->string('function')->after('screenId'); 
+            $table->string('controller')->nullable()->after('name');         
+            $table->string('function')->nullable()->after('name'); 
         });
     }
 

@@ -19,7 +19,6 @@ class CreateActionsTable extends Migration
             $table->bigInteger('screenId')->unsigned()->nullable();
             $table->foreign('screenId')->references('id')->on('screens')->onUpdate('cascade')->onDelete('cascade');
             $table->string('name',100);   
-                    
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
