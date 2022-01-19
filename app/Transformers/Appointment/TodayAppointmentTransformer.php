@@ -18,7 +18,7 @@ class TodayAppointmentTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id'=>$data->id,
+            'key'=>$data->id,
             'patient_name'=>$data->patient->full_name,
             'date_time' => $data->date .' '.$data->time->start_time,
             'appointment_with'=>$data->coordinator->first_name.' '.$data->coordinator->last_name,
