@@ -1,0 +1,228 @@
+
+{
+    "screens" : [
+
+        {
+            "moduleId" : 1,
+            "name" : "Roles & Permissions List"
+        },
+
+        {
+            "moduleId" : 2,
+            "name" : "Global Codes List"
+        },
+
+        {
+            "moduleId" : 3,
+            "name" : "CPT Codes List"
+        },
+
+
+        {
+            "moduleId" : 5,
+            "name" : "Programs List"
+        },
+
+        {
+            "moduleId" : 6,
+            "name" : "Providers List"
+        },
+
+        {
+            "moduleId" : 6,
+            "name" : "Provider Summary"
+        },
+
+        {
+            "moduleId" : 7,
+            "name" : "Download Report"
+        },
+
+        {
+            "moduleId" : 8,
+            "name" : "Care Coordinators List"
+        },
+
+        {
+            "moduleId" : 8,
+            "name" : "Care Coordinator Summary"
+        },
+
+        {
+            "moduleId" : 9,
+            "name" : "Patients List"
+        },
+
+        {
+            "moduleId" : 9,
+            "name" : "Patient Summary"
+        },
+
+        {
+            "moduleId" : 11,
+            "name" : "Communications Dashboard View"
+        },
+
+        {
+            "moduleId" : 11,
+            "name" : "Communications List View"
+        },
+
+        {
+            "moduleId" : 12,
+            "name" : "Appointment Calendar"
+        },
+
+        {
+            "moduleId" : 13,
+            "name" : "Tasks Dashboard View"
+        },
+
+        {
+            "moduleId" : 13,
+            "name" : "Tasks List View"
+        },
+
+        {
+            "moduleId" : 14,
+            "name" : "General parameters"
+        },
+
+        {
+            "moduleId" : 15,
+            "name" : "Audit Time Log"
+        },
+         
+        {
+               "moduleId" : 18, 
+               "name" : "LogIn"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "HomeScreen"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "CareTeam"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Staff Coordinator Profile"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Appointment"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "VitalsHistory"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Dashboard"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Add Vitals"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "SetUp new Device"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Settings"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Contact Us"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "StaffProfile"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "FamilyMemberProfile"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Text US"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Request Call"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Email"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "FamilyDashboard"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "FamilyLogInUserProfile"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "PatientLogInProfile"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "EditProfile"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "ImageAction Modal"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Footer"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Header"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "ProfileSelectScreen"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "FamilyLogInEditProfile"
+        },
+
+        {
+            "moduleId" : 18,
+            "name" : "Family Drawer"
+        }
+        
+
+    ]
+}

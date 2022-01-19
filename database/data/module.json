@@ -1,0 +1,73 @@
+{
+    "modules": [
+        
+        {
+            "name": "roles and permissions",
+            "description": "This module is use to give rolls and permission to the users"
+        },
+        {
+            "name": "global codes",
+            "description": "All the values of keys in global codes are stored."
+        },
+        {
+            "name": "cpt codes",
+            "description": "CPT codes are the billing codes defined by the American Medical Association"
+        },
+        {
+            "name": "documents",
+            "description": "Documents like id-proof, clinical proof etc are stored"
+        },
+        {
+            "name": "programs",
+            "description": "Programs that a particular provider will provide to its patients."
+        },
+        {
+            "name": "providers",
+            "description": "Providers are the facilities that will be using the SAAS based platform that the virtare health  is providing."
+        },
+        {
+            "name": "reports",
+            "description": "Different types of reports will be  For Example AuditLog, timeLogs, staffReports, patientReports."
+        },
+        {
+            "name": "staff",
+            "description": "Staff of virtare health or staff of provider  we can diffrentiate between them with network which is a global code category"
+        },
+        {
+            "name": "patients",
+            "description": "Patients demographics that are enrolling under providers to treatment."
+        },
+        {
+            "name": "time-track",
+            "description": "Keeps the track spend by physician on patient monitoring."
+        },
+        {
+            "name": "communications",
+            "description": "Contains the information about all the commmunications"
+        },
+        {
+            "name": "appointments",
+            "description": "It includes details of all the appointments of the staffs."
+        },
+        {
+            "name": "tasks",
+            "description": "Tasks assigned to staff members."
+        },
+        {
+            "name": "general parameters",
+            "description": "general parameters includes all the vitals parameters groups with normal range vitals"
+        },
+        {
+            "name": "audit logs",
+            "description": "Audit log keeps the records of Staff and patient time with each other spend during appointment"
+        },
+        {
+            "name": "triggers",
+            "description": "It stores all triggers after every action performed"
+        },
+        {
+            "name": "mobile",
+            "description": "This is mobile module where all screen and action performed."
+        }
+    ]
+}
