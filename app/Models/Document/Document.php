@@ -2,6 +2,7 @@
 
 namespace App\Models\Document;
 
+use App\Models\Tag\Tag;
 use App\Models\User\User;
 use App\Models\Patient\Patient;
 use App\Models\GlobalCode\GlobalCode;
@@ -27,5 +28,10 @@ class Document extends Model
     public function user()
     {
         return $this->belongsTo(User::class,'referanceId');
+    }
+
+    public function tag()
+    {
+        return $this->hasMany(Tag::class, 'documentId');
     }
 }

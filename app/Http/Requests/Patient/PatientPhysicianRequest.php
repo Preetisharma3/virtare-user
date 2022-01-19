@@ -22,6 +22,7 @@ class PatientPhysicianRequest extends FormRequest
     {
         return [
             'email.unique' => 'Patient Email must be unique',
+            'email.required' => 'Patient Email must be required',
         ];
     }
 

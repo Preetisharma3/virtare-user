@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Transformers\Document;
+namespace App\Transformers\File;
 
 use League\Fractal\TransformerAbstract;
-use App\Transformers\Tag\TagTransformer;
 use App\Transformers\GlobalCode\GlobalCodeTransformer;
 
 
-class DocumentTransformer extends TransformerAbstract
+class FileTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -35,12 +34,8 @@ class DocumentTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id'=>$data->id,
-			'name'=>$data->name,
-            'type'=>$data->documentType->name,
-            'patient'=>$data->referanceId,
-            'document'=>$data->filePath,
-            'tags'=>fractal()->collection($data->tag)->transformWith(new TagTransformer())->toArray()
+            'URL'=>$data['URL'],
+            'path' =>$data['path'],
 		];
     }
 }
