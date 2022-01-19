@@ -26,4 +26,14 @@ class Staff extends Model
 	{
 		return $this->belongsTo(GlobalCode::class, 'specializationId');
 	}
+
+	public function designation()
+	{
+		return $this->belongsTo(GlobalCode::class, 'designationId');
+	}
+
+	public function gender()
+	{
+		return $this->belongsTo(GlobalCode::class, 'genderId');
+	}
 }

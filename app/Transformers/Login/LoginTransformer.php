@@ -2,7 +2,6 @@
 
 namespace App\Transformers\Login;
 
-use App\Models\User;
 use App\Transformers\User\UserTransformer;
 use League\Fractal\TransformerAbstract;
 
@@ -12,7 +11,7 @@ class LoginTransformer extends TransformerAbstract
 
 	protected $availableIncludes = [];
 
-	public function transform($data): array
+	public function transform($data)
 	{
 		return [
 			'token' => $data['token'],
