@@ -17,8 +17,10 @@ class AppointmentTransformer extends TransformerAbstract
         return [
             'key'=>$data->id,
             'startDateTime' => $data->startDate.' - '.$data->startTime,
-            'patient'=>$data->patient->firstName.' '.$data->patient->lastName,
-            'staff'=>$data->staff->firstName.' '.$data->staff->lastName,
+            'startTime' => $data->startTime,
+            'startDate' => $data->startDate,
+            'patient'=>ucfirst($data->patient->firstName).' '.ucfirst($data->patient->lastName),
+            'staff'=>ucfirst($data->staff->firstName).' '.ucfirst($data->staff->lastName),
             'appointmentType'=>$data->appointmentType->name,
             'duration'=>$data->duration->name
         ];
