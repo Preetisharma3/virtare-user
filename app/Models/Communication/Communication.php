@@ -37,6 +37,8 @@ class Communication extends Model
         return $this->hasOne(Patient::class,'id','patientId');
     }
 
+  
+
     public function globalCode()
     {
         return $this->hasOne(GlobalCode::class,'id','messageCategoryId');
