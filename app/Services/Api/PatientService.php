@@ -33,13 +33,15 @@ use App\Transformers\Patient\PatientMedicalRoutineTransformer;
 
 class PatientService
 {
+    // Add Patient
     public function patientCreate($request)
     {
         DB::beginTransaction();
         try {
+            $udid = Str::uuid()->toString();
             // Added Ptient details in User Table
             $user = [
-                'password' => Hash::make('password'), 'email' => $request->input('email'), 'udid' => Str::random(10),
+                'password' => Hash::make('password'), 'email' => $request->input('email'),'udid' => $udid,
                 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 4
             ];
             $data = User::create($user);
@@ -47,18 +49,18 @@ class PatientService
             // Added  patient details in Patient Table
             $patient = [
                 'firstName' => $request->input('firstName'), 'middleName' => $request->input('middleName'), 'lastName' => $request->input('lastName'),
-                'dob' => $request->input('dob'), 'genderId' => $request->input('gender'), 'languageId' => $request->input('language'), 'otherLanguageId' => json_encode($request->input('otherLanguage')),
+                'dob' => $request->input('dateOfBirth'), 'genderId' => $request->input('gender'), 'languageId' => $request->input('language'), 'otherLanguageId' => json_encode($request->input('otherLanguage')),
                 'nickName' => $request->input('nickName'), 'userId' => $data->id, 'phoneNumber' => $request->input('phoneNumber'), 'contactTypeId' => json_encode($request->input('contactType')),
                 'contactTimeId' => $request->input('contactTime'), 'medicalRecordNumber' => $request->input('medicalRecordNumber'), 'countryId' => $request->input('country'),
                 'stateId' => $request->input('state'), 'city' => $request->input('city'), 'zipCode' => $request->input('zipCode'), 'appartment' => $request->input('appartment'),
-                'address' => $request->input('address'), 'createdBy' => 1, 'height' => $request->input('height'), 'weight' => $request->input('weight')
+                'address' => $request->input('address'), 'createdBy' => 1, 'height' => $request->input('height'), 'weight' => $request->input('weight'),'udid' => $udid
             ];
             $newData = Patient::create($patient);
 
             // Added family in user Table
             $familyMemberUser = [
 
-                'password' => Hash::make('password'), 'udid' => Str::random(10), 'email' => $request->input('familyEmail'),
+                'password' => Hash::make('password'), 'udid' => $udid, 'email' => $request->input('familyEmail'),
                 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 4
             ];
             $fam = User::create($familyMemberUser);
@@ -67,7 +69,8 @@ class PatientService
             $familyMember = [
                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
-                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id, 'createdBy' => 1, 'userId' => $fam->id
+                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
+                 'createdBy' => 1, 'userId' => $fam->id,'udid' => $udid
             ];
             $familyData = PatientFamilyMember::create($familyMember);
 
@@ -75,7 +78,7 @@ class PatientService
             $emergencyContact = [
                 'fullName' => $request->input('emergencyFullName'), 'phoneNumber' => $request->input('emergencyPhoneNumber'), 'contactTypeId' => json_encode($request->input('emergencyContactType')),
                 'contactTimeId' => $request->input('emergencyContactTime'), 'genderId' => $request->input('emergencyGender'), 'patientId' => $newData->id,
-                'createdBy' => 1, 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily')
+                'createdBy' => 1, 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily'),'udid' => $udid
             ];
             PatientEmergencyContact::create($emergencyContact);
             DB::commit();
@@ -146,9 +149,10 @@ class PatientService
     {
         DB::beginTransaction();
         try {
+            $udid = Str::uuid()->toString();
             $conditions = $request->input('condition');
             foreach ($conditions as $condition) {
-                $patient = PatientCondition::create(['conditionId' => $condition, 'patientId' => $id, 'createdBy' => 1]);
+                $patient = PatientCondition::create(['conditionId' => $condition, 'patientId' => $id, 'createdBy' => 1,'udid' => $udid]);
             }
             DB::commit();
             $getPatient = PatientCondition::where('patientId', $id)->with('patient', 'condition')->get();
@@ -183,9 +187,10 @@ class PatientService
     {
         DB::beginTransaction();
         try {
+            $udid = Str::uuid()->toString();
             $input = [
                 'name' => $request->input('name'), 'designationId' => $request->input('designation'), 'email' => $request->input('email'),
-                'patientId' => $id, 'fax' => $request->input('fax'), 'createdBy' => 1, 'phoneNumber' => $request->input('phoneNumber')
+                'patientId' => $id, 'fax' => $request->input('fax'), 'createdBy' => 1, 'phoneNumber' => $request->input('phoneNumber'),'udid' => $udid
             ];
             $patient = PatientReferal::create($input);
             DB::commit();
@@ -221,9 +226,10 @@ class PatientService
     {
         DB::beginTransaction();
         try {
+            $udid = Str::uuid()->toString();
             $user = [
                 'password' => Hash::make('password'), 'udid' => Str::random(10),
-                'email' => $request->input('email'), 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 5
+                'email' => $request->input('email'), 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 5,'udid' => $udid
             ];
             $userData = User::create($user);
             $input = [
@@ -265,9 +271,10 @@ class PatientService
     {
         DB::beginTransaction();
         try {
+            $udid = Str::uuid()->toString();
             $input = [
                 'programtId' => $request->input('program'), 'onboardingScheduleDate' => $request->input('onboardingScheduleDate'), 'dischargeDate' => $request->input('dischargeDate'),
-                'patientId' => $id, 'createdBy' => 1, 'isActive' => $request->input('status')
+                'patientId' => $id, 'createdBy' => 1, 'isActive' => $request->input('status'),'udid' => $udid
             ];
             $patient = PatientProgram::create($input);
             DB::commit();
@@ -303,10 +310,11 @@ class PatientService
     {
         DB::beginTransaction();
         try {
+            $udid = Str::uuid()->toString();
             $input = [
                 'inventoryId' => $request->input('inventory'), 'patientId' => $id, 'deviceType' => $request->input('deviceType'),
                 'modelNumber' => $request->input('modelNumber'), 'serialNumber' => $request->input('serialNumber'), 'createdBy' => 1,
-                'macAddress' => $request->input('macAddress'), 'deviceTime' => $request->input('deviceTime'), 'serverTime' => $request->input('serverTime')
+                'macAddress' => $request->input('macAddress'), 'deviceTime' => $request->input('deviceTime'), 'serverTime' => $request->input('serverTime'),'udid' => $udid
             ];
             $patient = PatientInventory::create($input);
             DB::commit();
@@ -387,8 +395,9 @@ class PatientService
     {
         DB::beginTransaction();
         try {
+            $udid = Str::uuid()->toString();
             $input = [
-                'history' => $request->input('history'), 'patientId' => $id,  'createdBy' => 1,
+                'history' => $request->input('history'), 'patientId' => $id,  'createdBy' => 1,'udid' => $udid
             ];
             $patient = PatientMedicalHistory::create($input);
             DB::commit();
@@ -423,14 +432,15 @@ class PatientService
     {
         DB::beginTransaction();
         try {
+            $udid = Str::uuid()->toString();
             $input = [
                 'medicine' => $request->input('medicine'), 'frequency' => $request->input('frequency'),  'createdBy' => 1,
-                'startDate' => $request->input('startDate'), 'endDate' => $request->input('endDate'), 'patientId' => $id
+                'startDate' => $request->input('startDate'), 'endDate' => $request->input('endDate'), 'patientId' => $id,'udid' => $udid
             ];
             $patient = PatientMedicalRoutine::create($input);
             DB::commit();
-            $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient')->first();
-            $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
+            $userdata = PatientMedicalRoutine::where('id', $patient->id)->with('patient')->first();
+            return fractal()->item($userdata)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
             return $endData;

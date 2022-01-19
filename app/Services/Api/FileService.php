@@ -5,7 +5,6 @@ namespace App\Services\Api;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Transformers\File\FileTransformer;
 
@@ -15,7 +14,7 @@ class FileService
     {
         DB::beginTransaction();
         try {
-            $file = Storage::disk('local')->put('public' . "/" . date("Y") . "/" . date("m"), $request->input('file'));
+            $file = Storage::disk('local')->put('public' . "/" . date("Y") . "/" . date("m"), $request->file);
             $data = [
                 "URL" => URL::asset('storage/app/' . $file),
                 "path" => "storage/app/" . $file,
@@ -29,7 +28,7 @@ class FileService
     }
 
     public function fileDelete($request)
-    {dd($request->url);
+    {
         try {
             if ($request->url) {
                 $url = str_replace(URL::to('/') . '/', '', $request->url);
