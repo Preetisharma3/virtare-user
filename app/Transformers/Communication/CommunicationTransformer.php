@@ -36,11 +36,11 @@ class CommunicationTransformer extends TransformerAbstract
     {
         return [
             'id'=>$data->id,
-            'type'=>'message',
+            'type'=>$data->type->name,
 			'patient'=>$data->patient->firstName,
             'category'=>$data->globalCode->name,
             'sentTo'=>$data->to,
-            'status'=>$data->isActive,
+            'status'=>$data->isActive ? 'completed' : 'pending',
             'staff'=> fractal()->collection($data->staff)->transformWith(new StaffTransformer())->toArray(),
             'createdAt'=>date('M j, Y - h:i A', strtotime($data->createdAt)),
 		];
