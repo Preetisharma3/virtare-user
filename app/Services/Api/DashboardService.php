@@ -3,20 +3,21 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Helper;
 use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
+use App\Models\Appointment\Appointment;
 use App\Models\Patient\PatientCondition;
 use App\Transformers\Staff\StaffNetworkTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
-use App\Transformers\Communication\CallStatusTransformer;
-use App\Transformers\Patient\PatientConditionTransformer;
+use App\Transformers\Dashboard\CountPerMonthTransformer;
 use App\Transformers\Staff\StaffSpecializationTransformer;
 use App\Transformers\Patient\PatientConditionCountTransformer;
 
 class DashboardService
 {
-   public function count($request)
+    public function count($request)
     {
         try {
             $count = Patient::count();
@@ -98,7 +99,7 @@ class DashboardService
     {
         try {
             $count = Patient::whereHas('conditions', function ($query) {
-                $query->where('conditionId',80);
+                $query->where('conditionId', 80);
             })->count();
             $text = "criticalPatients";
             $data = [
@@ -111,21 +112,34 @@ class DashboardService
         }
     }
 
-    public function patientCondition(){
-        $data =PatientCondition::with('condition')->select('conditionId', DB::raw('count(*) as count'))->groupBy('conditionId')->get();
-        return fractal()->collection($data)->transformWith(new PatientConditionCountTransformer())->toArray(); 
+    public function patientCondition()
+    {
+        $data = PatientCondition::with('condition')->select('conditionId', DB::raw('count(*) as count'))->groupBy('conditionId')->get();
+        return fractal()->collection($data)->transformWith(new PatientConditionCountTransformer())->toArray();
     }
 
-    public function staffNetwork(){
-        $data =Staff::with('network')->select('networkId', DB::raw('count(*) as count'))->groupBy('networkId')->get();
-        return fractal()->collection($data)->transformWith(new StaffNetworkTransformer())->toArray(); 
+    public function staffNetwork()
+    {
+        $data = Staff::with('network')->select('networkId', DB::raw('count(*) as count'))->groupBy('networkId')->get();
+        return fractal()->collection($data)->transformWith(new StaffNetworkTransformer())->toArray();
     }
 
-    public function staffSpecialization(){
-        $data =Staff::with('specialization')->select('specializationId', DB::raw('count(*) as count'))->groupBy('specializationId')->get();
-        return fractal()->collection($data)->transformWith(new StaffSpecializationTransformer())->toArray(); 
+    public function staffSpecialization()
+    {
+        $data = Staff::with('specialization')->select('specializationId', DB::raw('count(*) as count'))->groupBy('specializationId')->get();
+        return fractal()->collection($data)->transformWith(new StaffSpecializationTransformer())->toArray();
     }
 
-    
+    public function patientCountMonthly()
+    {
+        $data = Patient::select(DB::raw('count(*) as count'), DB::raw("DATE_FORMAT(createdAt, '%M') month"),  DB::raw('YEAR(createdAt) year'))->groupby('year', 'month')->get();
+        $patientData = Helper::dateGroup($data, 'year');
+        return fractal()->collection($patientData)->transformWith(new CountPerMonthTransformer())->toArray();
+    }
 
+    public function appointmentCountMonthly(){
+        $data = Appointment::select(DB::raw('count(*) as count'), DB::raw("DATE_FORMAT(startTime, '%M') month"),  DB::raw('YEAR(startTime) year'))->groupby('year', 'month')->get();
+        $appointmentData = Helper::dateGroup($data, 'year');
+        return fractal()->collection($appointmentData)->transformWith(new CountPerMonthTransformer())->toArray();
+    }
 }

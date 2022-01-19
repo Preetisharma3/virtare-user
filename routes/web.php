@@ -80,3 +80,5 @@ $router->get('widget/assign','Api\v1\WidgetController@getassignedWidget');
 $router->get('program','Api\v1\ProgramController@listProgram');
 $router->get('staff/network','Api\v1\DashboardController@staffNetwork');
 $router->get('staff/specialization','Api\v1\DashboardController@staffSpecialization');
+$router->get('count/patient','Api\v1\DashboardController@patientCountMonthly');
+$router->get('count/appointment','Api\v1\DashboardController@appointmentCountMonthly');
