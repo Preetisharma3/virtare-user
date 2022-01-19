@@ -52,4 +52,14 @@ class DashboardController extends Controller
     {
         return (new DashboardService)->staffSpecialization();
     }
+
+    public function patientCountMonthly()
+    {
+        return (new DashboardService)->patientCountMonthly();
+    }
+
+    public function appointmentCountMonthly()
+    {
+        return (new DashboardService)->appointmentCountMonthly();
+    }
 }

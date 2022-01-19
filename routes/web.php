@@ -86,3 +86,6 @@ $router->post('document', 'Api\v1\DocumentController@createDocument');
 $router->get('document[/{id}]', 'Api\v1\DocumentController@listDocument');
 $router->post('file', 'Api\v1\FileController@createFile');
 $router->delete('file', 'Api\v1\FileController@deleteFile');
+$router->get('count/patient','Api\v1\DashboardController@patientCountMonthly');
+$router->get('count/appointment','Api\v1\DashboardController@appointmentCountMonthly');
+

@@ -18,15 +18,15 @@ class Helper
     {
         $res =  $data->groupBy(function ($result, $key) use ($date_field) {
             $dt = Carbon::parse($result->{$date_field});
-            return $dt->format('M d, Y');
+            return $result->{$date_field};
         });
-        $vitalData = array();
+        $patientData = array();
         foreach ($res as $key => $value) {
-            $vital = array();
-            $vital['date'] = $key;
-            $vital['value'] = $value;
-            array_push($vitalData, $vital);
+            $patient = array();
+            $patient['year'] = $key;
+            $patient['data'] = $value;
+            array_push($patientData, $patient);
         }
-        return $vitalData;
+        return $patientData;
     }
 }
