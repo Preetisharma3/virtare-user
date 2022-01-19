@@ -13,4 +13,9 @@ class UserController extends Controller
   {
     return (new UserService)->userProfile($request);
   }
+
+  public function profile(Request $request)
+  {
+    return (new UserService)->profile($request);
+  }
 }

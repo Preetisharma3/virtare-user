@@ -26,7 +26,7 @@ class AuthController extends Controller
   public function login(request $request)
   {
     if ($token = $this->jwt->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
-      $user = User::where('email', $request->email)->with('roles')->firstOrFail();
+      $user = User::where('email', $request->email)->with('roles','staff')->firstOrFail();
       if ($user['roles']->roles == $request->role) {
         User::where('id', Auth::id())->update([
           "updatedBy" => Auth::id()
@@ -35,7 +35,7 @@ class AuthController extends Controller
           'token' => $token,
           'user' => $user
         );
-        return fractal()->item($data)->transformWith(new LoginTransformer)->toArray();
+        return fractal()->item($data)->transformWith(new LoginTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
       } else {
         return response()->json(['message' => trans('messages.unauthenticated')], 401);
       }
