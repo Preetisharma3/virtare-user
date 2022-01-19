@@ -17,6 +17,7 @@ class AppointmentTransformer extends TransformerAbstract
         return [
             'startTime' => $data->startTime,
             'startDate' => $data->startDate,
+            'startDateTime' => $data->startDate.'-'.$data->startDateTime,
             'patient'=>$data->patient->firstName.' '.$data->patient->lastName,
             'staff'=>$data->staff->firstName.' '.$data->staff->lastName,
             'appointmentType'=>$data->appointmentType->name,
