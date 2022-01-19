@@ -4,7 +4,7 @@ namespace App\Http\Requests\Patient;
 
 use Urameshibr\Requests\FormRequest;
 
-class PatientPhysicianRequest extends FormRequest
+class PatientConditionRequest extends FormRequest
 {
     public function authorize()
     {
@@ -14,15 +14,14 @@ class PatientPhysicianRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|unique:users,email',
+            'condition' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'email.unique' => 'Patient Email must be unique',
-            'email.required' => 'Patient Email must be required',
+            'condition.required' => 'Condition must be required',
         ];
     }
 }
