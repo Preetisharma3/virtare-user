@@ -81,3 +81,7 @@ $router->get('widget/assign','Api\v1\WidgetController@getassignedWidget');
 $router->get('program','Api\v1\ProgramController@listProgram');
 $router->get('staff/network','Api\v1\DashboardController@staffNetwork');
 $router->get('staff/specialization','Api\v1\DashboardController@staffSpecialization');
+$router->post('document', 'Api\v1\DocumentController@createDocument');
+$router->get('document[/{id}]', 'Api\v1\DocumentController@listDocument');
+$router->post('file', 'Api\v1\FileController@createFile');
+$router->delete('file', 'Api\v1\FileController@deleteFile');

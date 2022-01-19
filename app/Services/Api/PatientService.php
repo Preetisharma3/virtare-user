@@ -7,6 +7,7 @@ use App\Models\User\User;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use App\Models\Vital\VitalField;
+use App\Models\Document\Document;
 use Illuminate\Support\Facades\DB;
 use App\Models\Patient\PatientVital;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +22,7 @@ use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
 use App\Transformers\Patient\PatientTransformer;
+use App\Transformers\Document\DocumentTransformer;
 use App\Transformers\Patient\PatientVitalTransformer;
 use App\Transformers\Patient\PatientMedicalTransformer;
 use App\Transformers\Patient\PatientProgramTransformer;
@@ -465,8 +467,8 @@ class PatientService
             $insurance = $request->input('insurance');
             foreach ($insurance as $value) {
                 $input = [
-                    'medicine' => $value['medicine'], 'frequency' => $value['frequency'],  'createdBy' => 1,
-                    'startDate' => $value['startDate'], 'endDate' => $value['endDate'], 'patientId' => $id, 'udid' => $udid
+                    'insuranceNumber' => $value['insuranceNumber'], 'expirationDate' => $value['expirationDate'],  'createdBy' => 1,
+                    'insuranceNameId' => $value['insuranceName'], 'insuranceTypeId' => $value['insuranceType'], 'patientId' => $id, 'udid' => $udid
                 ];
                 $patient = PatientInsurance::create($input);
             }
@@ -486,14 +488,17 @@ class PatientService
     {
         try {
             if ($medicalRoutineId) {
-                $getPatient = PatientMedicalRoutine::where('id', $medicalRoutineId)->with('patient')->first();
+                $getPatient = PatientInsurance::where('id', $medicalRoutineId)->with('patient', 'insuranceName', 'insuranceType')->first();
                 return fractal()->item($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
             } else {
-                $getPatient = PatientMedicalRoutine::where('patientId', $id)->with('patient')->get();
+                $getPatient = PatientInsurance::where('patientId', $id)->with('patient', 'insuranceName', 'insuranceType')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
+
+    
+    
 }
