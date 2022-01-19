@@ -7,7 +7,6 @@ use App\Models\User\User;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use App\Models\Vital\VitalField;
-use App\Models\Document\Document;
 use Illuminate\Support\Facades\DB;
 use App\Models\Patient\PatientVital;
 use Illuminate\Support\Facades\Hash;
@@ -22,8 +21,6 @@ use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
 use App\Transformers\Patient\PatientTransformer;
-use App\Transformers\Document\DocumentTransformer;
-use App\Transformers\Patient\PatientVitalTransformer;
 use App\Transformers\Patient\PatientMedicalTransformer;
 use App\Transformers\Patient\PatientProgramTransformer;
 use App\Transformers\Patient\PatientReferalTransformer;
@@ -307,13 +304,13 @@ class PatientService
         DB::beginTransaction();
         try {
             $input = [
-                'inventoryId' => '1', 'patientId' => $id, 'deviceType' => $request->input('deviceType'),
+                'inventoryId' => $request->input('inventory'), 'patientId' => $id, 'deviceType' => $request->input('deviceType'),
                 'modelNumber' => $request->input('modelNumber'), 'serialNumber' => $request->input('serialNumber'), 'createdBy' => 1,
                 'macAddress' => $request->input('macAddress'), 'deviceTime' => $request->input('deviceTime'), 'serverTime' => $request->input('serverTime')
             ];
             $patient = PatientInventory::create($input);
             DB::commit();
-            $getPatient = PatientInventory::where('id', $patient->id)->with('patient', 'inventory', 'deviceType')->first();
+            $getPatient = PatientInventory::where('id', $patient->id)->with('patient', 'inventory', 'deviceTypes')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
@@ -459,6 +456,7 @@ class PatientService
         }
     }
 
+    // Add Patient Insurance
     public function patientInsuranceCreate($request, $id)
     {
         DB::beginTransaction();
@@ -484,6 +482,7 @@ class PatientService
         }
     }
 
+    // List Patient Insurance
     public function patientInsuranceList($request, $id, $medicalRoutineId)
     {
         try {
@@ -498,7 +497,4 @@ class PatientService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
-
-    
-    
 }

@@ -8,12 +8,12 @@ use App\Http\Controllers\Controller;
 
 class FileController extends Controller
 {
-    public function createFile(request $request)
+    public function createFile(Request $request)
     {
         return (new FileService)->fileCreate( $request);
     }
 
-    public function deleteDocument(request $request)
+    public function deleteFile(Request $request)
     {
         return (new FileService)->fileDelete($request);
     }
