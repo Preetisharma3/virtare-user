@@ -110,4 +110,6 @@ class PatientController extends Controller
   {
     return (new PatientService)->patientInsuranceList($request, $id, $insuranceId);
   }
+
+  
 }
