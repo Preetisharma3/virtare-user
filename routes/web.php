@@ -32,6 +32,9 @@ $router->post('logout', 'Api\v1\AuthController@logout');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
+
+    $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
+    $router->get('getScreenAction', 'Api\v1\ScreenActionController@getScreenAction');
   
 });
 $router->post('communication[/{id}]', 'Api\v1\CommunicationController@addCommunication');
