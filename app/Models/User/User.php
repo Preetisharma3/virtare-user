@@ -2,8 +2,10 @@
 
 namespace App\Models\User;
 
+use Carbon\Carbon;
 use App\Models\Role\Role;
 use App\Models\Staff\Staff;
+use App\Models\Patient\Patient;
 use Illuminate\Auth\Authenticatable;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +36,12 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
         'password',
     ];
 
+
+    public function initials(): string
+	{
+		return substr($this->firstName, 0, 1);
+	}
+
     public function roles()
 	{
 		return $this->belongsTo(Role::class, 'roleId');
@@ -43,6 +51,12 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
 	{
 		return $this->belongsTo(Staff::class,'id','userId');
 	}
+
+    public function patient()
+	{
+		return $this->belongsTo(Patient::class,'id','userId');
+	}
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -52,4 +66,10 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
     {
         return [];
     }
+
+    public function getAgeAttribute($dateOfBirth)
+	{
+		return Carbon::parse($dateOfBirth)->age;
+	}
+
 }
