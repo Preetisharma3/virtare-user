@@ -3,7 +3,6 @@
 namespace App\Transformers\Login;
 
 use League\Fractal\TransformerAbstract;
-use App\Transformers\User\UserTransformer;
 use App\Transformers\User\UserPatientTransformer;
 
 class LoginPatientTransformer extends TransformerAbstract
