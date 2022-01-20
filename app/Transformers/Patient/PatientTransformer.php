@@ -4,6 +4,8 @@ namespace App\Transformers\Patient;
 
 use League\Fractal\TransformerAbstract;
 use App\Transformers\User\UserTransformer;
+use App\Transformers\Patient\PatientFlagTransformer;
+use App\Transformers\Patient\PatientVitalFieldTransformer;
 use App\Transformers\Patient\PatientFamilyMemberTransformer;
 
 class PatientTransformer extends TransformerAbstract
@@ -22,7 +24,7 @@ class PatientTransformer extends TransformerAbstract
             'dob' => $data->dob,
             'gender' => $data->gender->name,
             'language' => $data->language->name,
-           'otherLanguage' => $data->otherLanguageId,
+            'otherLanguage' => $data->otherLanguageId,
             'nickName' => $data->nickName,
             'height' => $data->height,
             'weight' => $data->weight,
@@ -36,8 +38,14 @@ class PatientTransformer extends TransformerAbstract
             'appartment' => $data->weight,
             'address' => $data->address,
             'email' => $data->user->email,
+            'isActive' => $data->isActive,
+            'nonCompliance'=>'N/A',
+            'lastReadingDate'=>'N/A',
+            'lastMessageSent'=>'N/A',
             'patientFamilyMember' => fractal()->item($data->family)->transformWith(new PatientFamilyMemberTransformer())->toArray(),
             'emergencyContact' => fractal()->item($data->emergency)->transformWith(new PatientFamilyMemberTransformer())->toArray(),
+            'patientVitals' => fractal()->collection($data->vitals)->transformWith(new PatientVitalFieldTransformer())->toArray(),
+            'patientFlags' => fractal()->collection($data->flags)->transformWith(new PatientFlagTransformer())->toArray(),
         ];
     }
 }

@@ -49,7 +49,7 @@ class PatientService
             // Added  patient details in Patient Table
             $patient = [
                 'firstName' => $request->input('firstName'), 'middleName' => $request->input('middleName'), 'lastName' => $request->input('lastName'),
-                'dob' => $request->input('dateOfBirth'), 'genderId' => $request->input('gender'), 'languageId' => $request->input('language'), 'otherLanguageId' => json_encode($request->input('otherLanguage')),
+                'dob' => $request->input('dob'), 'genderId' => $request->input('gender'), 'languageId' => $request->input('language'), 'otherLanguageId' => json_encode($request->input('otherLanguage')),
                 'nickName' => $request->input('nickName'), 'userId' => $data->id, 'phoneNumber' => $request->input('phoneNumber'), 'contactTypeId' => json_encode($request->input('contactType')),
                 'contactTimeId' => $request->input('contactTime'), 'medicalRecordNumber' => $request->input('medicalRecordNumber'), 'countryId' => $request->input('country'),
                 'stateId' => $request->input('state'), 'city' => $request->input('city'), 'zipCode' => $request->input('zipCode'), 'appartment' => $request->input('appartment'),
@@ -93,7 +93,9 @@ class PatientService
                 'contactTime',
                 'state',
                 'country',
-                'otherLanguage'
+                'otherLanguage',
+                'vitals.vital',
+                'flags.flag'
             )->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
             $message = ['message' => 'created successfully'];
@@ -121,7 +123,9 @@ class PatientService
                     'contactTime',
                     'state',
                     'country',
-                    'otherLanguage'
+                    'otherLanguage',
+                    'vitals.vital',
+                    'flags.flag'
                 )->first();
                 return fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
             } else {
@@ -135,7 +139,9 @@ class PatientService
                     'contactTime',
                     'state',
                     'country',
-                    'otherLanguage'
+                    'otherLanguage',
+                    'vitals.vital',
+                    'flags.flag'
                 )->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientTransformer())->toArray();
             }
@@ -235,7 +241,7 @@ class PatientService
             $input = [
                 'sameAsReferal' => $request->input('sameAsAbove'), 'patientId' => $id, 'fax' => $request->input('fax'),
                 'createdBy' => 1, 'phoneNumber' => $request->input('phoneNumber'), 'userId' => $userData->id, 'designationId' => $request->input('designation'),
-                'name' => $request->input('name')
+                'name' => $request->input('name'),'udid' => $udid
             ];
             $patient = PatientPhysician::create($input);
             DB::commit();
@@ -363,8 +369,8 @@ class PatientService
                 $patient = PatientVital::create($inputs);
             }
             DB::commit();
-            $getPatient = VitalField::where('patientId', $id)->with('vital')->first();
-            $userdata = fractal()->item($getPatient)->transformWith(new PatientVitalFieldTransformer())->toArray();
+            $getPatient = VitalField::where('patientId', $id)->with('vital')->get();
+            $userdata = fractal()->collection($getPatient)->transformWith(new PatientVitalFieldTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
             return $endData;
@@ -439,8 +445,8 @@ class PatientService
             ];
             $patient = PatientMedicalRoutine::create($input);
             DB::commit();
-            $userdata = PatientMedicalRoutine::where('id', $patient->id)->with('patient')->first();
-            return fractal()->item($userdata)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
+            $getPatient = PatientMedicalRoutine::where('id', $patient->id)->with('patient')->first();
+            $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
             return $endData;

@@ -17,8 +17,7 @@ class PatientReferalRequest extends FormRequest
             'name' => 'required',
             'designation' => 'required',
             'phoneNumber' => 'required',
-            'email' => 'required',
-            'fax' => 'required',
+            'email' => 'required|unique:patientPhysicians,email',
         ];
     }
 
@@ -29,7 +28,7 @@ class PatientReferalRequest extends FormRequest
             'designation.required' => 'Designation must be required',
             'phoneNumber.required' => 'Phone Number must be required',
             'email.required' => 'Email must be required',
-            'fax.required' => 'Fax must be required',
+            'email.unique' => 'Email must be unique',
         ];
     }
 }

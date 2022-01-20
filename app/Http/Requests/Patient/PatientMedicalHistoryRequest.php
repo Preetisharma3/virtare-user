@@ -4,7 +4,7 @@ namespace App\Http\Requests\Patient;
 
 use Urameshibr\Requests\FormRequest;
 
-class PatientConditionRequest extends FormRequest
+class PatientMedicalHistoryRequest extends FormRequest
 {
     public function authorize()
     {

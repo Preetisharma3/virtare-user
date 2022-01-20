@@ -6,7 +6,15 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Api\PatientService;
 use App\Http\Requests\Patient\PatientRequest;
+use App\Http\Requests\Patient\PatientVitalRequest;
+use App\Http\Requests\Patient\PatientProgramRequest;
+use App\Http\Requests\Patient\PatientReferalRequest;
+use App\Http\Requests\Patient\PatientConditionRequest;
+use App\Http\Requests\Patient\PatientInsuranceRequest;
+use App\Http\Requests\Patient\PatientInventoryRequest;
 use App\Http\Requests\Patient\PatientPhysicianRequest;
+use App\Http\Requests\Patient\PatientMedicalHistoryRequest;
+use App\Http\Requests\Patient\PatientMedicalRoutineRequest;
 
 class PatientController extends Controller
 {
@@ -21,7 +29,7 @@ class PatientController extends Controller
     return (new PatientService)->patientList($request, $id);
   }
 
-  public function createPatientCondition(Request $request, $id)
+  public function createPatientCondition(PatientConditionRequest $request, $id)
   {
     return (new PatientService)->patientConditionCreate($request, $id);
   }
@@ -31,7 +39,7 @@ class PatientController extends Controller
     return (new PatientService)->patientConditionList($request, $id, $conditionId);
   }
 
-  public function createPatientReferals(Request $request, $id)
+  public function createPatientReferals(PatientReferalRequest $request, $id)
   {
     return (new PatientService)->patientReferalsCreate($request, $id);
   }
@@ -51,7 +59,7 @@ class PatientController extends Controller
     return (new PatientService)->patientPhysicianList($request, $id, $physicianId);
   }
 
-  public function createPatientProgram(Request $request, $id)
+  public function createPatientProgram(PatientProgramRequest $request, $id)
   {
     return (new PatientService)->patientProgramCreate($request, $id);
   }
@@ -61,7 +69,7 @@ class PatientController extends Controller
     return (new PatientService)->patientProgramList($request, $id, $programId);
   }
 
-  public function createPatientInventory(Request $request, $id)
+  public function createPatientInventory(PatientInventoryRequest $request, $id)
   {
     return (new PatientService)->patientInventoryCreate($request, $id);
   }
@@ -81,7 +89,7 @@ class PatientController extends Controller
     return (new PatientService)->patientVitalList($request, $id, $vitalId);
   }
 
-  public function createPatientMedicalHistory(Request $request, $id)
+  public function createPatientMedicalHistory(PatientMedicalHistoryRequest $request, $id)
   {
     return (new PatientService)->patientMedicalHistoryCreate($request, $id);
   }
@@ -91,7 +99,7 @@ class PatientController extends Controller
     return (new PatientService)->patientMedicalHistoryList($request, $id, $medicalHistoryId);
   }
 
-  public function createPatientMedicalRoutine(Request $request, $id)
+  public function createPatientMedicalRoutine(PatientMedicalRoutineRequest $request, $id)
   {
     return (new PatientService)->patientMedicalRoutineCreate($request, $id);
   }
