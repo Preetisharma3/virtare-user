@@ -16,7 +16,7 @@ class PatientVitalFieldTransformer extends TransformerAbstract
 			'id'=>$data->id,
             'patientId'=>$data->patientId,
 			'patientVitalId'=>$data->vital->id,
-            'name'=>$data->name,
+             'name'=>$data->name,
 			'vitalType'=>$data->vital->vitalType->name,
 			'value'=>$data->vital->value
 		];
