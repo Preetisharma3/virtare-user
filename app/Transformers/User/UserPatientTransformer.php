@@ -4,6 +4,8 @@ namespace App\Transformers\User;
 
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Role\RoleTransformer;
+use Illuminate\Support\Facades\URL;
+
 class UserPatientTransformer extends TransformerAbstract
 {
 
@@ -26,8 +28,8 @@ class UserPatientTransformer extends TransformerAbstract
 		return [
 			'id'=>$user->id,
 			'uuid' => $user->udid,
-			'initials' => $user->initials(),
-			'name'=>$user->patient->firstName.' '.$user->patient->lastName,
+			'initials' => ucfirst($user->patient->initials()),
+			'name'=>ucfirst($user->patient->firstName).' '.ucfirst($user->patient->lastName),
 			'username' => $user->email,
 			'email' => $user->email,
 			'nickname' => $user->patient->nickName,
@@ -37,7 +39,7 @@ class UserPatientTransformer extends TransformerAbstract
 			'height' => $user->patient->height,
 			'contactNo' => $user->patient->phoneNumber,
 			'house_no' => $user->patient->appartment,
-			'profile_photo' => (!empty($user->profile_photo))&&(!is_null($user->profile_photo)) ? \URL::to('/').'/'.$user->profile_photo : "",
+			'profile_photo' => (!empty($user->profile_photo))&&(!is_null($user->profile_photo)) ? URL::to('/').'/'.$user->profile_photo : "",
 			'city' => $user->patient->city,
 			'state' => $user->patient->state->name,
 			'country' => $user->patient->country->name,

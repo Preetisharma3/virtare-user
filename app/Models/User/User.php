@@ -37,11 +37,7 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
     ];
 
 
-    public function initials(): string
-	{
-		return substr($this->firstName, 0, 1);
-	}
-
+  
     public function roles()
 	{
 		return $this->belongsTo(Role::class, 'roleId');
