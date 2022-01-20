@@ -36,10 +36,10 @@ class AuthController extends Controller
           'token' => $token,
           'user' => $user
         );
-        if($user['roles']->roles == 'SuperAdmin'){
-        return fractal()->item($data)->transformWith(new LoginTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
-        }elseif($user['roles']->roles == 'Patient'){
+        if($user['roles']->roles == 'Patient'){
           return fractal()->item($data)->transformWith(new LoginPatientTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+        }else{
+          return fractal()->item($data)->transformWith(new LoginTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
         }
       } else {
         return response()->json(['message' => trans('messages.unauthenticated')], 401);

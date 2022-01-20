@@ -3,6 +3,7 @@
 namespace App\Models\Staff;
 
 use App\Models\GlobalCode\GlobalCode;
+use App\Models\Role\Role;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,5 +36,10 @@ class Staff extends Model
 	public function gender()
 	{
 		return $this->belongsTo(GlobalCode::class, 'genderId');
+	}
+
+	public function roles()
+	{
+		return $this->belongsTo(Role::class, 'roleId');
 	}
 }
