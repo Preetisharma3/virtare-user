@@ -7,6 +7,7 @@ use App\Helper;
 use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
+use App\Models\Patient\PatientFlag;
 use App\Models\Appointment\Appointment;
 use App\Models\Patient\PatientCondition;
 use App\Transformers\Staff\StaffNetworkTransformer;
@@ -114,7 +115,7 @@ class DashboardService
 
     public function patientCondition()
     {
-        $data = PatientCondition::with('condition')->select('conditionId', DB::raw('count(*) as count'))->groupBy('conditionId')->get();
+        $data = PatientFlag::with('flags')->select('flagId', DB::raw('count(*) as count'))->groupBy('flagId')->get();
         return fractal()->collection($data)->transformWith(new PatientConditionCountTransformer())->toArray();
     }
 
