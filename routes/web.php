@@ -34,6 +34,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('logout', 'Api\v1\AuthController@logout');
     $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
     $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
+    $router->get('team', 'Api\v1\TeamController@all');
+    $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
 });
 $router->get('communication/type', 'Api\v1\CommunicationController@messageType');
 $router->post('communication[/{id}]', 'Api\v1\CommunicationController@addCommunication');
@@ -54,6 +56,7 @@ $router->get('patient[/{id}]', 'Api\v1\PatientController@listPatient');
 $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientCondition');
 $router->get('patient/{id}/condition[/{conditionId}]', 'Api\v1\PatientController@listPatientCondition');
 $router->post('staff', 'Api\v1\StaffController@addStaff');
+$router->get('staff', 'Api\v1\StaffController@listStaff');
 $router->post('patient/{id}/referals', 'Api\v1\PatientController@createPatientReferals');
 $router->get('patient/{id}/referals[/{referalsId}]', 'Api\v1\PatientController@listPatientReferals');
 $router->post('patient/{id}/physician', 'Api\v1\PatientController@createPatientPhysician');

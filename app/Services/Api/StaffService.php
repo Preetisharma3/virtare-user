@@ -8,6 +8,9 @@ use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\User\UserTransformer;
+use App\Transformers\Staff\StaffTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+
 
 class StaffService
 {
@@ -23,6 +26,7 @@ class StaffService
             ];
             $data = User::create($user);
             $staff = [
+                'udid' =>Str::random(10),
                 'userId'=>$data->id,
                 'email' => $data->email,
                 'firstName' => $request->firstName,
@@ -32,6 +36,7 @@ class StaffService
                 'specializationId' => $request->specializationId,
                 'designationId' => $request->designationId,
                 'networkId' => $request->networkId,
+                'providerId'=>$request->providerId,
                 'createdBy' => 1
             ];
             $newData = Staff::create($staff);
@@ -39,5 +44,10 @@ class StaffService
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
+    }
+
+    public function listStaff($request){
+        $data = Staff::with('roles')->paginate(5);
+        return fractal()->collection($data)->transformWith(new StaffTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 }
