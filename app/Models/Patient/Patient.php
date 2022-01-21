@@ -5,7 +5,6 @@ namespace App\Models\Patient;
 use App\Models\User\User;
 use App\Models\Vital\VitalField;
 use App\Models\Patient\PatientFlag;
-use App\Models\Patient\PatientVital;
 use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Patient\PatientFamilyMember;

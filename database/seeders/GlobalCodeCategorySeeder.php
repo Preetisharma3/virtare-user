@@ -134,5 +134,8 @@ class GlobalCodeCategorySeeder extends Seeder
         GlobalCodeCategory::create([
             'name'=>'entity Type'
         ]);
+        GlobalCodeCategory::create([
+            'name'=>'Timeline'
+        ]);
     }
 }

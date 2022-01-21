@@ -198,6 +198,7 @@ class PatientService
                 'name' => $request->input('name'), 'designationId' => $request->input('designation'), 'email' => $request->input('email'),
                 'patientId' => $id, 'fax' => $request->input('fax'), 'createdBy' => 1, 'phoneNumber' => $request->input('phoneNumber'),'udid' => $udid
             ];
+            
             $patient = PatientReferal::create($input);
             DB::commit();
             $getPatient = PatientReferal::where('id', $patient->id)->with('patient', 'designation')->first();
@@ -513,4 +514,7 @@ class PatientService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
+
+
+    
 }
