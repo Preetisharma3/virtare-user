@@ -20,7 +20,6 @@ class AppointmentService
     {
         $input = [
             'udid' => Str::random(10),
-            'providerLocationId' => $request->providerLocationId,
             'appointmentTypeId' => $request->appointmentTypeId,
             'startDate' => $request->startDate,
             'startTime' => $request->startTime,
@@ -48,12 +47,7 @@ class AppointmentService
 
     public function appointmentList($request)
     {
-        $providerLocationId = $request->providerLocationId;
-        if(auth()->user()->roleId == 4){
-        $data = Appointment::where([['patientId', auth()->user()->patient->id ], ['providerLocationId', $providerLocationId]])->where('startDate', '>=', Carbon::now()->toDateString())->orderBy('startDate')->get();
-        }else{
-            $data = Appointment::where([['staffId',auth()->user()->staff->id],['providerLocationId', $providerLocationId]])->where('startDate', '>=', Carbon::now()->toDateString())->orderBy('startDate')->get();
-        }
+        $data = Appointment::where('patientId', auth()->user()->patient->id)->where('startDate', '>=', Carbon::now()->toDateString())->orderBy('startDate')->get();
         $results = Helper::dateGroup($data, 'startDate');
         return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
     }
