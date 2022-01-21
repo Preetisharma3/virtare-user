@@ -14,7 +14,7 @@ class PatientConditionCountTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-            'text'=>$data->condition->name,
+            'text'=>$data->flags->name,
             'count'=>$data['count'],
 		];
 	}
