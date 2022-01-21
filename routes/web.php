@@ -91,16 +91,10 @@ $router->delete('file', 'Api\v1\FileController@deleteFile');
 $router->get('count/patient','Api\v1\DashboardController@patientCountMonthly');
 $router->get('count/appointment','Api\v1\DashboardController@appointmentCountMonthly');
 $router->put('profile','Api\v1\UserController@profile');
+$router->get('field[/{id}]','Api\v1\VitalController@listVitalTypeField');
 
 
-// Procedures
-$router->get('getPatient/{id}', function($id){
-    $ids=$id;
-    $getPost = DB::select(
-        'CALL getPatients('.$ids.')'
-     );
-     dd($getPost);
-     return fractal()->collection($getPost)->transformWith(new PatientTransformer())->toArray();
-});
+
+
 
 
