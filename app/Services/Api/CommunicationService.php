@@ -11,6 +11,7 @@ use App\Transformers\Communication\CallRecordTransformer;
 use App\Transformers\Communication\CallStatusTransformer;
 use App\Transformers\Communication\MessageTypeTransformer;
 use App\Transformers\Communication\CommunicationTransformer;
+use App\Transformers\Communication\CommunicationProcedureTransformer;
 
 class CommunicationService
 {
@@ -23,7 +24,7 @@ class CommunicationService
             'from' => $staff->email,
             'to' => $request->to,
             'patientId' => $request->patientId,
-            'messageTypeId'=>$request->messageTypeId,
+            'messageTypeId' => $request->messageTypeId,
             'subject' => $request->subject,
             'priorityId' => $request->priorityId,
             'messageCategoryId' => $request->messageCategoryId,
@@ -76,5 +77,14 @@ class CommunicationService
     {
         $data = Communication::with('type')->select('messageTypeId', DB::raw('count(*) as count'))->groupBy('messageTypeId')->get();
         return fractal()->collection($data)->transformWith(new MessageTypeTransformer())->toArray();
+    }
+
+    public function communicationProcedure($request)
+    {
+        $postId = $request->providerId;
+        $data = DB::select(
+            'CALL getCommunicationsByProviderId(' . $postId . ')'
+        );
+        return fractal()->collection($data)->transformWith(new CommunicationProcedureTransformer())->toArray();
     }
 }

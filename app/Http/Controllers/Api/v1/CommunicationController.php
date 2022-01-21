@@ -33,4 +33,8 @@ class CommunicationController extends Controller
     public function messageType(){
         return (new CommunicationService)->messageType();
     }
+
+    public function communicationProcedure(request $request){
+        return (new CommunicationService)->communicationProcedure($request);
+    }
 }
