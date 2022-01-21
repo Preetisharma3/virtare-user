@@ -6,8 +6,8 @@ use App\Models\Staff\Staff;
 use App\Models\Patient\PatientPhysician;
 use App\Models\Patient\PatientFamilyMember;
 use App\Transformers\Staff\StaffTransformer;
-use App\Http\Transformers\IlluminatePaginatorAdapter;
 use App\Transformers\Patient\PatientPhysicianTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\Patient\PatientFamilyMemberTransformer;
 
 

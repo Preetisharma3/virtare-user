@@ -9,7 +9,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\User\UserTransformer;
 use App\Transformers\Staff\StaffTransformer;
-use App\Http\Transformers\IlluminatePaginatorAdapter;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+
 
 class StaffService
 {
