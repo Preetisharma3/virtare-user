@@ -23,6 +23,7 @@ class StaffService
             ];
             $data = User::create($user);
             $staff = [
+                'udid' =>Str::random(10),
                 'userId'=>$data->id,
                 'email' => $data->email,
                 'firstName' => $request->firstName,
@@ -32,6 +33,7 @@ class StaffService
                 'specializationId' => $request->specializationId,
                 'designationId' => $request->designationId,
                 'networkId' => $request->networkId,
+                'providerId'=>$request->providerId,
                 'createdBy' => 1
             ];
             $newData = Staff::create($staff);
