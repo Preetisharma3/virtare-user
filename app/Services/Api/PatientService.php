@@ -21,6 +21,7 @@ use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
 use App\Transformers\Patient\PatientTransformer;
+use App\Transformers\Patient\PatientVitalTransformer;
 use App\Transformers\Patient\PatientMedicalTransformer;
 use App\Transformers\Patient\PatientProgramTransformer;
 use App\Transformers\Patient\PatientReferalTransformer;
@@ -94,7 +95,6 @@ class PatientService
                 'state',
                 'country',
                 'otherLanguage',
-                'vitals.vital',
                 'flags.flag'
             )->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
@@ -124,7 +124,6 @@ class PatientService
                     'state',
                     'country',
                     'otherLanguage',
-                    'vitals.vital',
                     'flags.flag'
                 )->first();
                 return fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
@@ -140,7 +139,6 @@ class PatientService
                     'state',
                     'country',
                     'otherLanguage',
-                    'vitals.vital',
                     'flags.flag'
                 )->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientTransformer())->toArray();
@@ -360,18 +358,15 @@ class PatientService
             $udid = Str::uuid()->toString();
             $vitalData = $request->input('vital');
             foreach ($vitalData as $vital) {
-                $vitals = [
-                    'patientId' => $id, 'createdBy' => 1, 'udid' => $udid, 'name' => $vital['name']
-                ];
-                $vitalField = VitalField::create($vitals);
+               
                 $inputs = [
-                    'vitalTypeId' => $vital['vitalType'], 'typeId' => $vitalField->id, 'createdBy' => 1, 'udid' => $udid, 'value' => $vital['value']
+                    'vitalTypeId' => $vital['vitalType'], 'typeId' => $vital['name'], 'createdBy' => 1, 'udid' => $udid, 'value' => $vital['value']
                 ];
                 $patient = PatientVital::create($inputs);
             }
             DB::commit();
             $getPatient = VitalField::where('patientId', $id)->with('vital')->get();
-            $userdata = fractal()->collection($getPatient)->transformWith(new PatientVitalFieldTransformer())->toArray();
+            $userdata = fractal()->collection($getPatient)->transformWith(new PatientVitalTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
             return $endData;
@@ -387,10 +382,10 @@ class PatientService
         try {
             if ($vitalId) {
                 $getPatient = VitalField::where('patientId', $id)->with('vital')->first();
-                return fractal()->item($getPatient)->transformWith(new PatientVitalFieldTransformer())->toArray();
+                return fractal()->item($getPatient)->transformWith(new PatientVitalTransformer())->toArray();
             } else {
                 $getPatient = VitalField::where('patientId', $id)->with('vital')->get();
-                return fractal()->collection($getPatient)->transformWith(new PatientVitalFieldTransformer())->toArray();
+                return fractal()->collection($getPatient)->transformWith(new PatientVitalTransformer())->toArray();
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
