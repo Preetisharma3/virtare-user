@@ -25,7 +25,7 @@ class PatientVital extends Model
 
     public function type()
     {
-        return $this->belongsTo(VitalField::class,'typeId');
+        return $this->belongsTo(VitalField::class,'id');
     }
 
     public function patient()
