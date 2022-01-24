@@ -5,7 +5,6 @@ namespace App\Services\Api;
 use App\Models\Widget\Widget;
 use App\Transformers\Widget\WidgetTransformer;
 use App\Models\Dashboard\DashboardWidgetByRole;
-use App\Transformers\Widget\StaffWidgetTransformer;
 use App\Transformers\Widget\WidgetUpdateTransformer;
 use App\Transformers\Widget\AssignedWidgetTransformer;
 
