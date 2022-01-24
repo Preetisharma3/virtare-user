@@ -28,6 +28,7 @@ class CommunicationService
             'priorityId' => $request->priorityId,
             'messageCategoryId' => $request->messageCategoryId,
             'createdBy' => 1,
+            'entityType'=>$request->entityType
         ];
         $data = Communication::create($input);
         CommunicationMessage::create([
