@@ -7,7 +7,7 @@ use App\Transformers\Staff\StaffTransformer;
 use App\Transformers\GlobalCode\GlobalCodeTransformer;
 
 
-class CommunicationTransformer extends TransformerAbstract
+class CommunicationCountTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -34,14 +34,12 @@ class CommunicationTransformer extends TransformerAbstract
      */
     public function transform($data): array
     {
+        
         return [
-            'id'=>$data->id,
-            'from'=>$data->staff->firstName,
-            'type'=>$data->type->name,
-			'to'=>$data->patient->firstName,
-            'category'=>$data->globalCode->name,
-            'priority'=>$data->priority->name,
-            'createdAt'=>date('M j, Y - h:i A', strtotime($data->createdAt)),
+            'text'=>$data['text'],
+            'count'=>$data['count'],
+            'backgroundColor'=> $data['backgroundColor'],
+            'textColor'=>$data['textColor']
 		];
     }
 }
