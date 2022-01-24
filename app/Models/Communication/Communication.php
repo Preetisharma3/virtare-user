@@ -34,7 +34,7 @@ class Communication extends Model
 
     public function patient()
     {
-        return $this->hasOne(Patient::class,'id','patientId');
+        return $this->hasOne(Patient::class,'id');
     }
 
   
@@ -44,8 +44,13 @@ class Communication extends Model
         return $this->hasOne(GlobalCode::class,'id','messageCategoryId');
     }
 
+    public function priority()
+    {
+        return $this->hasOne(GlobalCode::class,'id','priorityId');
+    }
+
     public function type(){
-        return $this->belongsTo(GlobalCode::class, 'messageTypeId');
+        return $this->hasOne(GlobalCode::class,'id', 'messageTypeId');
     }
     
 

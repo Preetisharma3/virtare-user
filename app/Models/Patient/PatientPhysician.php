@@ -2,6 +2,7 @@
 
 namespace App\Models\Patient;
 
+use Carbon\Carbon;
 use App\Models\User\User;
 use App\Models\Patient\Patient;
 use App\Models\GlobalCode\GlobalCode;
@@ -34,4 +35,8 @@ class PatientPhysician extends Model
         return $this->hasOne(User::class,'id','userId');
     }
     
+    public function getAgeAttribute($dateOfBirth)
+	{
+		return Carbon::parse($dateOfBirth)->age;
+	}
 }

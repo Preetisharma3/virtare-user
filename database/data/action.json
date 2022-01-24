@@ -1,0 +1,1971 @@
+
+{
+    "actions" : [
+
+        {
+            "screenId": 1,
+            "name": "Add Role",
+            "controller": "RollController",
+            "function": ""
+        },
+
+        {
+            "screenId" : 1,
+            "name" : "Edit Role",
+            "controller" : "RollController",
+            "function" : ""
+        },
+
+        {
+            "screenId" : 1,
+            "name" : "Delete Role",
+            "controller" : "RollController",
+            "function" : ""
+        },
+
+        {
+            "screenId" : 1,
+            "name" : "Active/Inactive Role",
+            "controller" : "RollController",
+            "function" : ""
+        },
+
+        {
+            "screenId" : 1,
+            "name" : "Export Roles",
+            "controller" : "RollController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 2,
+            "name" : "Add Global Codes",
+            "controller" : "GlobalCodeController",
+            "function" : "createGlobalCode"
+        },
+
+        {
+
+            "screenId" : 2,
+            "name" : "Update Global Codes",
+            "controller" : "GlobalCodeController",
+            "function" : "updateGlobalCode"
+        },
+
+        {
+
+            "screenId" : 2,
+            "name" : "Delete Global Codes",
+            "controller" : "GlobalCodeController",
+            "function" : "deleteGlobalCode"
+        },
+
+        {
+
+            "screenId" : 3,
+            "name" : "Add CPT Code",
+            "controller" : "CPTCodeController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 3,
+            "name" : "Edit CPT Code",
+            "controller" : "CPTCodeController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 3,
+            "name" : "Delete CPT Code",
+            "controller" : "CPTCodeController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 3,
+            "name" : "Active/Inactive CPT Code",
+            "controller" : "CPTCodeController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 3,
+            "name" : "Export CPT Code",
+            "controller" : "CPTCodeController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 3,
+            "name" : "Search CPT Codes",
+            "controller" : "CPTCodeController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 4,
+            "name" : "Add Program",
+            "controller" : "ProgramController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 4,
+            "name" : "Edit Program",
+            "controller" : "ProgramController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 4,
+            "name" : "Delete Program",
+            "controller" : "ProgramController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 4,
+            "name" : "Active/Inactive Program",
+            "controller" : "ProgramController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 4,
+            "name" : "Export Program",
+            "controller" : "ProgramController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 4,
+            "name" : "Search Program",
+            "controller" : "ProgramController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 5,
+            "name" : "Search Providers",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 5,
+            "name" : "Add Provider",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 5,
+            "name" : "Edit Provider",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 5,
+            "name" : "Delete Provider",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 5,
+            "name" : "Active/Inactive Provider",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 5,
+            "name" : "Export Provider",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 5,
+            "name" : "Provider Appointments List",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 5,
+            "name" : "Provider Patients List",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 5,
+            "name" : "Provider Permissions List",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 5,
+            "name" : "Provider Documents List",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 6,
+            "name" : "Provider Locations List",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 6,
+            "name" : "Add Provider Location",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 6,
+            "name" : "Edit Provider Location",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 6,
+            "name" : "Delete Provider Location",
+            "controller" : "ProviderController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 7,
+            "name" : "Search Report",
+            "controller" : "ReportController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 7,
+            "name" : "Download Report",
+            "controller" : "ReportController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 8,
+            "name" : "Add Care Coordinator",
+            "controller" : "CareCoordinatorController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 8,
+            "name" : "Edit Care Coordinator",
+            "controller" : "CareCoordinatorController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 8,
+            "name" : "Delete Care Coordinator",
+            "controller" : "CareCoordinatorController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 8,
+            "name" : "View Care Coordinator",
+            "controller" : "CareCoordinatorController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 8,
+            "name" : "Export Care Coordinators",
+            "controller" : "CareCoordinatorController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Care Coordinator Appointments List",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Care Coordinator Patients List",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Care Coordinator Permissions List",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Care Coordinator Documents List",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Care Coordinator Contacts List",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Add Care Coordinator Contact",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Edit Care Coordinator Contact",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Delete Care Coordinator Contact",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Care Coordinator Availability List",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Add Care Coordinator Availability",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Edit Care Coordinator Availability",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Delete Care Coordinator Availability",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Care Coordinator Roles List",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Add Care Coordinator Role",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Edit Care Coordinator Role",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Delete Care Coordinator Role",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Care Coordinator Documents List",
+            "controller" : "",
+            "function" : ""
+
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Add Care Coordinator Document",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Edit Care Coordinator Document",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 9,
+            "name" : "Delete Care Coordinator Document",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Add Patient",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Edit Patient",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Delete Patient",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "View Patient",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Export Patients",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Add Patient Demographics",
+            "controller" : "PatientController",
+            "function" : "createPatient"
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Add Patient Conditions",
+            "controller" : "PatientController",
+            "function" : "createPatientCondition"
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Add Patient Programs",
+            "controller" : "PatientController",
+            "function" : "createPatientProgram"
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Edit Patient Program",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Add Patient Device",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Active/Inactive Patient Device",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Delete Patient Device",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Add Patient Parameters",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Add Patient Medical History",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Edit Patient Medical History",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Delete Patient Medical History",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Add Patient Medication",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Edit Patient Medication",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Delete Patient Medication",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Add Patient Insurance",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Add Patient Document",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Edit Patient Document",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 10,
+            "name" : "Delete Patient Document",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Patient Notifications List",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Patient Visits List",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Patient Notes List",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Patient Appointments List",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Patient Documents List",
+            "controller" : "PatientController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Add Patient Time Tracked",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Add Appointment",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Add Vital Summary",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Add Vitals",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "View Vitals",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Add Notes",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Patient Notes Detail",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Patient Document Detail",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Patient Time Logs Detail",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Edit Patient Time Logs",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Delete Patient Time Logs",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Patient Device Detail",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Edit Patient Device",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Add Documents",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Add Care Team",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Add TimeLogs",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 11,
+            "name" : "Add Devices",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 12,
+            "name" : "Start Call",
+            "controller" : "CommunicationController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 12,
+            "name" : "End Call",
+            "controller" : "CommunicationController",
+            "function" : ""
+        },
+
+
+        {
+
+            "screenId" : 12,
+            "name" : "Send Message",
+            "controller" : "CommunicationController",
+            "function" : ""
+        },
+
+
+        {
+
+            "screenId" : 12,
+            "name" : "Export Communications",
+            "controller" : "CommunicationController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 12,
+            "name" : "Add Notes",
+            "controller" : "CommunicationController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 14,
+            "name" : "Add Appointment",
+            "controller" : "AppointmentController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 15,
+            "name" : "Add Task",
+            "controller" : "TaskController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 15,
+            "name" : "Filter Tasks",
+            "controller" : "TaskController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 15,
+            "name" : "Edit Task",
+            "controller" : "TaskController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 15,
+            "name" : "Delete Task",
+            "controller" : "TaskController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 15,
+            "name" : "Active/Inactive Task",
+            "controller" : "TaskController",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 15,
+            "name" : "Export Tasks",
+            "controller" : "TaskController",
+            "function" : ""
+        },
+
+        {
+            "screenId": 20,
+            "name": "Family member",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 20,
+            "name": "Patient",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 20,
+            "name": "PatLogIn as Care Teamient",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 21,
+            "name": "Care Team",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 21,
+            "name": "VitalHistory",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 21,
+            "name": "Dashboard",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 21,
+            "name": "Add Vitals",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 21,
+            "name": "Messagees",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 21,
+            "name": "Set Up Devices",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 21,
+            "name": "Settings",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 21,
+            "name": "FAQ",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 21,
+            "name": "Share",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 21,
+            "name": "Contact Us",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 21,
+            "name": "ScrollButton",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 22,
+            "name": "Staff:Messages",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 22,
+            "name": "Staff:Video Call",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 22,
+            "name": "Staff:Profile",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 22,
+            "name": "Staff_coordinator:Appointments",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 22,
+            "name": "Staff_coordinator:Messages",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 22,
+            "name": "Staff_coordinator:Profile",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 22,
+            "name": "client_coordinator:Messages",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 22,
+            "name": "client_coordinator:Call",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 22,
+            "name": "client_coordinator:Profile",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 22,
+            "name": "Add Family Member",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 23,
+            "name": "Message",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 23,
+            "name": "Email",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 23,
+            "name": "Request Appointment",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 23,
+            "name": "Notes Section",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 24,
+            "name": "select appointment Date",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 24,
+            "name": "select timing slot",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 24,
+            "name": "request now",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 24,
+            "name": "month dropdown section",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 24,
+            "name": "Confirm",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 24,
+            "name": "Cancel",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 24,
+            "name": "ValidationAlert",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 25,
+            "name": "GoogleFit_Steps",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 25,
+            "name": "GoogleFit_Distance",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 25,
+            "name": "GoogleFit_Calories",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 25,
+            "name": "FitBit_Steps",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 25,
+            "name": "FitBit_HearRate",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 25,
+            "name": "FitBit_Calories",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 25,
+            "name": "FitBit_Floors",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 25,
+            "name": "AppleHealth_HeartRate",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 25,
+            "name": "AppleHealth_Steps",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 25,
+            "name": "AppleHealth_Hydration",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 25,
+            "name": "AppleHealth_Sleep",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Viats-Oxygen",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Viats-Bp",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Vital Glucose",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "View All",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Vital Button",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Vitals-Add Vitals Range_Blood Pressure",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Vitals-Add Vitals Range_Oxygen Saturation",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Vitals-Add Vitals Range_Glucose",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Vitals-Add Vitals Range_Steps",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Vitals-Add Vitals Range_Sleep",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Vitals-Add Vitals Range_Weight",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Vitals-Add Vitals Range_Temperature",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 26,
+            "name": "Add Vital Close",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 27,
+            "name": "Blood Pressure",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 27,
+            "name": "Oxygen Saturation",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 27,
+            "name": "Glucose",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 27,
+            "name": "Temperature",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 27,
+            "name": "Steps",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 27,
+            "name": "Sleep",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 27,
+            "name": "Weight",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 28,
+            "name": "Blood Pressure-Ihealth",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 28,
+            "name": "Pluse Oximeter",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 28,
+            "name": "Glucose",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 28,
+            "name": "Apple",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 28,
+            "name": "Google FIt",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 28,
+            "name": "Fitbit",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Health Kit",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Notification",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Text Size_Small",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Text Size_Medium",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Text Size_Large",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Halth Kit",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Theme",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "GeoLocation",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "About",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Goals",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Finger Printer Login",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Language_Toggle-es-en",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Change Your Pin",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Log out_Ok",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 29,
+            "name": "Log out_Cancel",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 30,
+            "name": "Request A call",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 30,
+            "name": "Text Us",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 30,
+            "name": "Email",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 31,
+            "name": "Message",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 31,
+            "name": "Email",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 31,
+            "name": "Notes Section",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 31,
+            "name": "Request Appointment",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 32,
+            "name": "ChangeImage",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 32,
+            "name": "EditProfile",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 33,
+            "name": "Submit",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 34,
+            "name": "timeSlot",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 34,
+            "name": "Submit",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 35,
+            "name": "Submit",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 36,
+            "name": "AddButton",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 36,
+            "name": "ModalClose",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 37,
+            "name": "EditProfile",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 38,
+            "name": "EditProfile",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 38,
+            "name": "Log Out",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 38,
+            "name": "Demographics",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 38,
+            "name": "Appointments",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 38,
+            "name": "Claim",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 38,
+            "name": "Log Out Confirm",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 38,
+            "name": "LogOut Cancel",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 39,
+            "name": "NickName",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 39,
+            "name": "mobile no.",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 39,
+            "name": "Change Modal ok",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 39,
+            "name": "Change Modal Cancel",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 39,
+            "name": "profile photo",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 39,
+            "name": "UpdateProfile",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 40,
+            "name": "Camera",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 40,
+            "name": "Gallery",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 40,
+            "name": "Remove",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 41,
+            "name": "Back",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 41,
+            "name": "CareTeam",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 41,
+            "name": "Messages",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 41,
+            "name": "Profile",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 41,
+            "name": "Notifications",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 41,
+            "name": "Appointments",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 42,
+            "name": "Home",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 42,
+            "name": "Notifications",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 42,
+            "name": "FamilyDrawer",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 42,
+            "name": "CareTeamDrawer",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 43,
+            "name": "SelectProfile",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 44,
+            "name": "NickName",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 44,
+            "name": "MobileNo",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 44,
+            "name": "UpdateProfile",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 44,
+            "name": "ChangeImage",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 44,
+            "name": "ModalOk",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 44,
+            "name": "ModalCancel",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 45,
+            "name": "Family Member",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 45,
+            "name": "Vitals",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 45,
+            "name": "Notifications",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 45,
+            "name": "Appointment",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 45,
+            "name": "My Profile",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 45,
+            "name": "FAQ",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 45,
+            "name": "Log Out",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 45,
+            "name": "CloseDrawer",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 45,
+            "name": "Log Out Confirm",
+            "controller": "",
+            "function": ""
+        },
+
+        {
+            "screenId": 45,
+            "name": "Log Out Cancel",
+            "controller": "",
+            "function": ""
+        }
+        
+
+    ]
+}

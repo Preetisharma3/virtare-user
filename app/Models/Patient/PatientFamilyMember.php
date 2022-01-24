@@ -2,9 +2,11 @@
 
 namespace App\Models\Patient;
 
+use Carbon\Carbon;
 use App\Models\User\User;
 use App\Models\Patient\Patient;
 use App\Models\GlobalCode\GlobalCode;
+use App\Models\Role\Role;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -49,4 +51,12 @@ class PatientFamilyMember extends Model
     {
         return $this->hasOne(GlobalCode::class, 'id', 'relationId');
     }
+
+    public function roles(){
+        return $this->belongsTo(Role::class, 'roleId');
+    }
+    public function getAgeAttribute($dateOfBirth)
+	{
+		return Carbon::parse($dateOfBirth)->age;
+	}
 }

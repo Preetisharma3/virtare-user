@@ -4,12 +4,9 @@ namespace App\Transformers\Staff;
 
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Role\RoleTransformer;
-use App\Transformers\Staff\StaffNoteTransformer;
-use App\Transformers\Staff\StaffAvailabilityTransformer;
-use App\Transformers\Staff\BookappointmentValueTransformer;
+use Illuminate\Support\Facades\URL;
 
-
-class StaffTransformer extends TransformerAbstract
+class PhysicianTransformer extends TransformerAbstract
 {
 
 
@@ -46,25 +43,25 @@ class StaffTransformer extends TransformerAbstract
     {
         return [
             'id'=>$data->id,
-            'user_id'=>$data->userId,
-            'title'=>$data->firstName,
-            'summary'=>$data->summary ? $data->summary :'',
-			'name'=>$data->firstName.' '.$data->lastName,
-            'expertise'=>$data->designation->name ? $data->designation->name :'',
-            'is_primary'=>0,
-            'type'=>$data->roles->roles,
+            "user_id"=>$data->userId,
             'uuid'=>$data->udid,
-            'type'=>$data->roles->roles,
-            'username'=>$data->email,
-            'email'=>$data->email,
-            'first_login'=>0,
-            'nickname'=>$data->nickname ? $data->nickname :'',
-			'gender'=>$data->gender->name,
-            'contact_no'=>$data->phoneNumber,
-            'profile_photo'=>$data->profile_photo ? $data->profile_photo:'',
-            'specialization'=>$data->specialization->name,
-			'designation'=>$data->designation->name,
-			'role' => $this->showData ? fractal()->item($data->roles)->transformWith(new RoleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
+            'name'=>$data->name,
+            'username'=>$data->user->email,
+            'email'=>$data->user->email,
+            "first_login"=> 0,
+            "nickname"=> $data->nickname ? $data->nickname : '',
+            'age'=>$data->getAgeAttribute($data->date_of_birth) ? $data->getAgeAttribute($data->date_of_birth) : '',
+            'date_of_birth' => date("m/d/Y",strtotime($data->dob)) ? date("m/d/Y",strtotime($data->dob)) :'',
+			'height' => $data->height ? $data->height :'',
+			'contact_no' => $data->phoneNumber,
+			'house_no' => $data->house_no,
+			'profile_photo' => (!empty($data->profile_photo))&&(!is_null($data->profile_photo)) ? URL::to('/').'/'.$data->profile_photo : "",
+			'city' => $data->city,
+			'state' => $data->state,
+			'country' => $data->country,
+			'zip_code' => $data->zip_code,
+            'is_primary'=>$data->sameAsReferal,
+            'role' => $this->showData ? fractal()->item($data->user->roles)->transformWith(new RoleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
             'vital'=>(!empty($data->userFamilyAuthorization)) ? $data->userFamilyAuthorization->vital==0 ? 0 :$data->userFamilyAuthorization->vital : '',
 		    'message'=>(!empty($data->userFamilyAuthorization))? $data->userFamilyAuthorization->message==0 ? 0 :$data->userFamilyAuthorization->message : '',
             'availability' => $data->availability ? $data->availability:array(),

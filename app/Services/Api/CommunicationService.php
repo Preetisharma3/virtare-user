@@ -17,12 +17,9 @@ class CommunicationService
     //  create Communication
     public function addCommunication($request, $id)
     {
-
-        $staff = Staff::where('id', $id)->first();
         $input = [
-            'from' => $staff->email,
-            'to' => $request->to,
-            'patientId' => $request->patientId,
+            'from' => $request->from,
+            'referenceId' => $request->referenceId,
             'messageTypeId'=>$request->messageTypeId,
             'subject' => $request->subject,
             'priorityId' => $request->priorityId,
@@ -41,7 +38,7 @@ class CommunicationService
     // get Communication
     public function getCommunication()
     {
-        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode')->get();
+        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode','priority','type')->get();
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
     }
 
