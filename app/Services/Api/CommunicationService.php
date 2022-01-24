@@ -2,6 +2,8 @@
 
 namespace App\Services\Api;
 
+use Exception;
+use Carbon\Carbon;
 use App\Models\Staff\Staff;
 use Illuminate\Support\Facades\DB;
 use App\Models\Communication\Communication;
@@ -11,6 +13,7 @@ use App\Transformers\Communication\CallRecordTransformer;
 use App\Transformers\Communication\CallStatusTransformer;
 use App\Transformers\Communication\MessageTypeTransformer;
 use App\Transformers\Communication\CommunicationTransformer;
+use App\Transformers\Communication\CommunicationCountTransformer;
 
 class CommunicationService
 {
@@ -20,7 +23,7 @@ class CommunicationService
         $input = [
             'from' => $request->from,
             'referenceId' => $request->referenceId,
-            'messageTypeId'=>$request->messageTypeId,
+            'messageTypeId' => $request->messageTypeId,
             'subject' => $request->subject,
             'priorityId' => $request->priorityId,
             'messageCategoryId' => $request->messageCategoryId,
@@ -38,7 +41,7 @@ class CommunicationService
     // get Communication
     public function getCommunication()
     {
-        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode','priority','type')->get();
+        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type')->get();
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
     }
 
@@ -73,5 +76,26 @@ class CommunicationService
     {
         $data = Communication::with('type')->select('messageTypeId', DB::raw('count(*) as count'))->groupBy('messageTypeId')->get();
         return fractal()->collection($data)->transformWith(new MessageTypeTransformer())->toArray();
+    }
+
+    public function communicationCards($request)
+    {
+        try {
+            $date2 = Carbon::parse($request->date)->setTimezone('UTC');
+            $today = CommunicationCallRecord::whereDate('createdAt', $date2)->count();
+            $yesterday = CommunicationCallRecord::whereDate('createdAt',  $date2->subDays(1))->count();
+            $tomorrow = CommunicationCallRecord::whereDate('createdAt', $date2->addDays(1))->count();
+            $week = CommunicationCallRecord::whereDate('createdAt', $date2->subDays(7))->count();
+            $Today = ['text'=>'Today','count'=> $today, 'backgroundColor'=>'#91BDFF','textColor'=>'#FFFFFF'];
+            $Yesterday = ['text'=>'Yesterday', 'count'=>$yesterday, 'backgroundColor'=>'#8E60FF','textColor'=>'#FFFFFF'];
+            $Tomorrow = ['text'=>'Tomorrow', 'count'=>$tomorrow,'backgroundColor'=> '#90EEF5','textColor'=>'#FFFFFF'];
+            $Week = ['text'=>'Week','count'=> $week, 'backgroundColor'=> '#FFA800','textColor'=>'#FFFFFF'];
+            $result = [
+                $Today, $Yesterday, $Tomorrow, $Week
+            ];
+            return fractal()->collection($result)->transformWith(new CommunicationCountTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
     }
 }

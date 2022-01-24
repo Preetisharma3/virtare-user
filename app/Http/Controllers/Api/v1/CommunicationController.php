@@ -11,7 +11,6 @@ class CommunicationController extends Controller
     public function addCommunication(request $request,$id)
     {
         return (new CommunicationService)->addCommunication( $request ,$id);
-        
     }
 
     public function getCommunication(){
@@ -32,5 +31,9 @@ class CommunicationController extends Controller
 
     public function messageType(){
         return (new CommunicationService)->messageType();
+    }
+
+    public function countCommunication(Request $request){
+        return (new CommunicationService)->communicationCards($request);
     }
 }

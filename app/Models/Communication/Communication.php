@@ -29,7 +29,7 @@ class Communication extends Model
 
     public function staff()
     {
-        return $this->hasMany(Staff::class,'email','from');
+        return $this->hasOne(Staff::class,'id','from');
     }
 
     public function patient()
