@@ -17,7 +17,7 @@ class PatientFlagTransformer extends TransformerAbstract
 		return [
             'id'=>$data->id,
             'patientId'=>$data->patientId,
-            'flags'=> fractal()->collection($data->flag)->transformWith(new FlagTransformer())->toArray()
+            'flags'=> fractal()->item($data->flag)->transformWith(new FlagTransformer())->toArray()
 		];
 	}
 

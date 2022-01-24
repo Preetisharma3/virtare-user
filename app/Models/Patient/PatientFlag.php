@@ -17,7 +17,7 @@ class PatientFlag extends Model
     use HasFactory;
 	protected $guarded = [];
 
-   public function flags(){
+   public function flag(){
     return $this->belongsTo(Flag::class, 'flagId');
    }
 }
