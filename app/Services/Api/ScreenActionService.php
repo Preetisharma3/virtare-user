@@ -13,15 +13,13 @@ class ScreenActionService
     public function addScreenAction($request)
     {
         try {
-            $screen_actions = $request->post('acreen_action');
 
-            foreach ($screen_actions as $action) {
-                $acreenAction = [
-                    'actionId' => $action,
-                    'userId'   => Auth::id(),
-                ];
-                ScreenAction::create($acreenAction);
-            }
+          $screenAction = [
+                'actionId' => $request->actionId,
+                'userId' => $request->userId,
+          ];
+          ScreenAction::create($screenAction);
+             
             return response()->json(['message' => 'Created Successfully'], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
