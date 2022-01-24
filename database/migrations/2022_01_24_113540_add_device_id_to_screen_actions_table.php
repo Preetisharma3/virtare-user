@@ -14,9 +14,7 @@ class AddDeviceIdToScreenActionsTable extends Migration
     public function up()
     {
         Schema::table('screen_actions', function (Blueprint $table) {
-            $table->bigInteger('deviceId')->unsigned()->nullable()->after('actionId');
-            $table->foreign('deviceId')->references('id')->on('devices')->onUpdate('cascade')->onDelete('cascade');
-            
+            $table->bigInteger('deviceId')->nullable()->after('actionId');
         });
     }
 
