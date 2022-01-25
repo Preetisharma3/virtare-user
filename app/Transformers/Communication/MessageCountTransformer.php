@@ -7,7 +7,7 @@ use League\Fractal\TransformerAbstract;
 use App\Transformers\Staff\StaffTransformer;
 
 
-class MessageTypeTransformer extends TransformerAbstract
+class MessageCountTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -35,8 +35,8 @@ class MessageTypeTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-          'text'=> $data['data']->type->name,
-          'data'=>fractal()->collection($data['count'])->transformWith(new MessageCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()
+          'count'=> $data['count'],
+          'time'=>Carbon::createFromFormat('H', $data['time'])->timestamp,
 		];
     }
 }
