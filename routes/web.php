@@ -52,10 +52,8 @@ $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCatego
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
 $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
-$router->get('patient/total', 'Api\v1\DashboardController@patientCount');
-$router->get('patient/active', 'Api\v1\DashboardController@activePatients');
-$router->get('patient/inActive', 'Api\v1\DashboardController@inActivePatients');
-$router->get('patient/new', 'Api\v1\DashboardController@newPatients');
+$router->get('patient/count', 'Api\v1\DashboardController@patientCount');
+$router->get('patient/condition/count', 'Api\v1\DashboardController@patientConditionCount');
 $router->get('patient/abnormal', 'Api\v1\DashboardController@abnormalPatients');
 $router->get('patient/critical', 'Api\v1\DashboardController@criticalPatients');
 $router->get('patient/condition', 'Api\v1\DashboardController@patientCondition');
