@@ -34,6 +34,10 @@ class CommunicationController extends Controller
     }
 
     public function countCommunication(Request $request){
-        return (new CommunicationService)->communicationCards($request);
+        return (new CommunicationService)->communicationCount($request);
+    }
+
+    public function searchCommunication(Request $request){
+        return (new CommunicationService)->communicationSearch($request);
     }
 }
