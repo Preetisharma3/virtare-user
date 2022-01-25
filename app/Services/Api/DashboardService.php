@@ -30,7 +30,7 @@ class DashboardService
             
             
              $data = array_merge(
-                 $patient,$count,$total
+                $total,$count,$patient
              );
 
             return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
