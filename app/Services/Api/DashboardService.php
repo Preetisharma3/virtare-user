@@ -18,16 +18,17 @@ class DashboardService
     public function count()
     {
         try {
+            $total = DB::select(
+                'CALL getTotalPatientsCount()',
+             );
+             $count = DB::select(
+                'CALL getPatientConditionsCount()',
+            );
             $patient = DB::select(
                 'CALL getPatientsCount()',
              );
-             $count = DB::select(
-                 'CALL getPatientConditionsCount()',
-             );
-             $total = DB::select(
-                'CALL getTotalPatientsCount()',
-             );
-
+            
+            
              $data = array_merge(
                  $patient,$count,$total
              );
