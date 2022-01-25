@@ -40,8 +40,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
 $router->get('getScreenAction', 'Api\v1\ScreenActionController@getScreenAction');
-$router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');
 
+$router->get('communication/search', 'Api\v1\CommunicationController@searchCommunication');
+
+$router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');
 $router->get('communication/type', 'Api\v1\CommunicationController@messageType');
 $router->post('communication', 'Api\v1\CommunicationController@addCommunication');
 $router->get('communication', 'Api\v1\CommunicationController@getCommunication');

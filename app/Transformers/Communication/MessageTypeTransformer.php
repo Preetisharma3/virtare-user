@@ -2,6 +2,7 @@
 
 namespace App\Transformers\Communication;
 
+use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Staff\StaffTransformer;
 
@@ -34,8 +35,9 @@ class MessageTypeTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-          'text'=> $data->type->name,
-          'count'=>$data->count
+          'text'=> $data['data']->type->name,
+          'count'=>$data['count']->count,
+          'time'=>Carbon::createFromFormat('H', $data['count']->time)->timestamp,
 		];
     }
 }
