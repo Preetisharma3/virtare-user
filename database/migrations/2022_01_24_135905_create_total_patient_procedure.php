@@ -20,7 +20,8 @@ class CreateTotalPatientProcedure extends Migration
         SELECT
         COUNT(patients.id) AS total,
         'totalPatients' AS text,
-        '#FFFFFF' AS color
+        '#FFFFFF' AS color,
+        '#111111' AS textColor
         FROM patients;
         END;";
         DB::unprepared($procedure);
