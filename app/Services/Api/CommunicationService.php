@@ -82,7 +82,7 @@ class CommunicationService
     public function messageType()
     {
         $data = Communication::whereDate('createdAt', Carbon::now())->with('type')->first();
-        $count = $data->select(DB::raw('count(id) as count,HOUR(createdAt) as time'))->groupBy(DB::raw('hour(createdAt)', 'count'))->first();
+        $count = Communication::select(DB::raw('count(id) as count,HOUR(createdAt) as time'))->groupBy(DB::raw('hour(createdAt)', 'count'))->get();
         $result = [
             'data' => $data,
             'count' => $count,
@@ -114,7 +114,7 @@ class CommunicationService
     public function communicationSearch($request)
     {
         try {
-            $value = $request->search;
+            $value = explode(',', $request->search);
             foreach($value as $search) {
                 $data = Communication::whereHas('staff', function ($query) use ($search) {
                         $query->where('firstName', 'LIKE', '%' . $search . '%');
