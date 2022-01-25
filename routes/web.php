@@ -32,7 +32,6 @@ $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
-
     $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
     $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
     $router->get('team', 'Api\v1\TeamController@all');
@@ -41,7 +40,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
 $router->get('getScreenAction', 'Api\v1\ScreenActionController@getScreenAction');
+
 $router->get('communication/search', 'Api\v1\CommunicationController@searchCommunication');
+
 $router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');
 $router->get('communication/type', 'Api\v1\CommunicationController@messageType');
 $router->post('communication', 'Api\v1\CommunicationController@addCommunication');
@@ -51,10 +52,8 @@ $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCatego
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
 $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
-$router->get('patient/total', 'Api\v1\DashboardController@patientCount');
-$router->get('patient/active', 'Api\v1\DashboardController@activePatients');
-$router->get('patient/inActive', 'Api\v1\DashboardController@inActivePatients');
-$router->get('patient/new', 'Api\v1\DashboardController@newPatients');
+$router->get('patient/count', 'Api\v1\DashboardController@patientCount');
+$router->get('patient/condition/count', 'Api\v1\DashboardController@patientConditionCount');
 $router->get('patient/abnormal', 'Api\v1\DashboardController@abnormalPatients');
 $router->get('patient/critical', 'Api\v1\DashboardController@criticalPatients');
 $router->get('patient/condition', 'Api\v1\DashboardController@patientCondition');

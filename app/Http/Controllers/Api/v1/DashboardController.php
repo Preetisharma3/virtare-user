@@ -13,36 +13,6 @@ class DashboardController extends Controller
         return (new DashboardService)->count($request);
     }
 
-    public function activePatients(Request $request)
-    {
-        return (new DashboardService)->activePatients($request);
-    }
-
-    public function inActivePatients(Request $request)
-    {
-        return (new DashboardService)->inActivePatients($request);
-    }
-
-    public function newPatients(Request $request)
-    {
-        return (new DashboardService)->newPatients($request);
-    }
-
-    public function abnormalPatients(Request $request)
-    {
-        return (new DashboardService)->abnormalPatients($request);
-    }
-
-    public function criticalPatients(Request $request)
-    {
-        return (new DashboardService)->criticalPatients($request);
-    }
-
-    public function patientCondition()
-    {
-        return (new DashboardService)->patientCondition();
-    }
-
     public function staffNetwork()
     {
         return (new DashboardService)->staffNetwork();

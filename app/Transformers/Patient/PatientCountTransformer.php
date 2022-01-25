@@ -11,11 +11,10 @@ class PatientCountTransformer extends TransformerAbstract
 
 	protected $availableIncludes = [];
 
-	public function transform($data): array
-	{
+	public function transform($data)
+	{ 
 		return [
-            'text'=>$data['text'],
-            'count'=>$data['count'],
+			'data' => $data,
 		];
 	}
 
