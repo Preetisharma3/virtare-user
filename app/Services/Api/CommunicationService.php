@@ -46,7 +46,7 @@ class CommunicationService
     // get Communication
     public function getCommunication()
     {
-        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type')->get();
+        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type','staffs')->get();
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
     }
 
@@ -82,7 +82,7 @@ class CommunicationService
     public function messageType()
     {
         $data = Communication::whereDate('createdAt', Carbon::now())->with('type')->first();
-        $count = $data->select(DB::raw('count(id) as count,HOUR(createdAt) as time'))->groupBy(DB::raw('hour(createdAt)','count'))->first();
+        $count = $data->select(DB::raw('count(id) as count,HOUR(createdAt) as time'))->groupBy(DB::raw('hour(createdAt)', 'count'))->first();
         $result = [
             'data' => $data,
             'count' => $count,
@@ -114,12 +114,22 @@ class CommunicationService
     public function communicationSearch($request)
     {
         try {
-            $data = Communication::whereHas('staff', function ($query) use ($request) {
-                $query->where('firstName', 'LIKE', '%' . $request->staff . '%');
-            })->whereHas('patient', function ($q) use ($request) {
-                $q->where('firstName', 'LIKE', '%' . $request->patient . '%');
-            });
-            return $data;
+            $value = $request->search;
+            foreach($value as $search) {
+                $data = Communication::whereHas('staff', function ($query) use ($search) {
+                        $query->where('firstName', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('patient', function ($q) use ($search) {
+                        $q->where('firstName', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('type', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('priority', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('globalCode', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', '%' . $search . '%');
+                })->get();
+                return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
+            }
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
