@@ -42,14 +42,18 @@ class StaffService
                 'createdBy' => 1
             ];
             $newData = Staff::create($staff);
-           return response()->json(['message' =>'Created Successfully'],200);
+            $staffData= Staff::where('id',$newData->id)->first();
+            $message = ["message"=>"created Successfully"];
+          $resp =  fractal()->item($staffData)->transformWith(new StaffTransformer())->toArray();
+          $endData = array_merge($message, $resp);
+            return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
     public function listStaff($request){
-        $data = Staff::with('roles')->paginate(5);
-        return fractal()->collection($data)->transformWith(new StaffTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+        $data = Staff::with('roles')->get();
+        return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
     }
 }
