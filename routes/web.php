@@ -45,7 +45,7 @@ $router->get('getScreenAction', 'Api\v1\ScreenActionController@getScreenAction')
 $router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');
 
 $router->get('communication/type', 'Api\v1\CommunicationController@messageType');
-$router->post('communication[/{id}]', 'Api\v1\CommunicationController@addCommunication');
+$router->post('communication', 'Api\v1\CommunicationController@addCommunication');
 $router->get('communication', 'Api\v1\CommunicationController@getCommunication');
 
 $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCategory');

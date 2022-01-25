@@ -34,28 +34,14 @@ class CommunicationTransformer extends TransformerAbstract
      */
     public function transform($data): array
     {
-        if($data->entityType=='patient'){
             return [
                 'id'=>$data->id,
                 'from'=>$data->staff->firstName,
                 'type'=>$data->type->name,
-                'to'=>$data->patient->firstName,
+                'to'=>$data->entityType=='patient'?$data->patient->firstName:$data->staff->firstName,
                 'category'=>$data->globalCode->name,
                 'priority'=>$data->priority->name,
                 'createdAt'=>date('M j, Y - h:i A', strtotime($data->createdAt)),
             ];
-        }
-        elseif($data->entityType=='staff'){
-            return [
-                'id'=>$data->id,
-                'from'=>$data->staff->firstName,
-                'type'=>$data->type->name,
-                'to'=>$data->staff->firstName,
-                'category'=>$data->globalCode->name,
-                'priority'=>$data->priority->name,
-                'createdAt'=>date('M j, Y - h:i A', strtotime($data->createdAt)),
-            ];
-        }
-        
     }
 }

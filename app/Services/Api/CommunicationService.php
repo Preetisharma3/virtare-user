@@ -18,7 +18,7 @@ use App\Transformers\Communication\CommunicationCountTransformer;
 class CommunicationService
 {
     //  create Communication
-    public function addCommunication($request, $id)
+    public function addCommunication($request)
     {
         $input = [
             'from' => $request->from,
