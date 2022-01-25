@@ -34,7 +34,12 @@ class Communication extends Model
 
     public function patient()
     {
-        return $this->hasOne(Patient::class,'id');
+        return $this->hasOne(Patient::class,'id','referenceId');
+    }
+
+    public function staffs()
+    {
+        return $this->hasOne(Staff::class,'id','referenceId');
     }
 
   
