@@ -19,8 +19,9 @@ class CreatePatientProcedure extends Migration
         BEGIN
         SELECT
         COUNT(patients.id) AS total,
-        IF(patients.isActive = 1,' activePatients',' inactivePatients') AS text,
-        IF(patients.isActive = 1,'#0FB5C2','#267DFF') AS color
+        IF(patients.isActive = 1,'activePatients',' inactivePatients') AS text,
+        IF(patients.isActive = 1,'#0FB5C2','#267DFF') AS color,
+        IF(patients.isActive = 1,'#111111','#111111') AS textColor
         FROM patients GROUP BY isActive;
         END;";
         DB::unprepared($procedure);
