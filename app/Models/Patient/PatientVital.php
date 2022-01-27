@@ -18,14 +18,10 @@ class PatientVital extends Model
     use HasFactory;
 	protected $guarded = [];
     
-    public function vitalType()
-    {
-        return $this->belongsTo(GlobalCode::class,'vitalTypeId');
-    }
-
+   
     public function type()
     {
-        return $this->belongsTo(VitalField::class,'id');
+        return $this->hasOne(VitalField::class,'id','vitalFieldId');
     }
 
     public function patient()

@@ -359,7 +359,7 @@ class PatientService
             $vitalData = $request->input('vital');
             foreach ($vitalData as $vital) {
                 $inputs = [
-                    'vitalTypeId' => $vital['vitalType'], 'createdBy' => 1, 'udid' => $udid, 'value' => $vital['value'],'patientId'=>$id
+                    'vitalFieldId' => $vital['vitalField'], 'createdBy' => 1, 'udid' => $udid, 'value' => $vital['value'],'patientId'=>$id
                 ];
                 $patient = PatientVital::create($inputs);
             }
