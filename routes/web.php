@@ -52,6 +52,8 @@ $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCatego
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
 $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
+$router->get('patient/chart', 'Api\v1\TimelineController@patientTotal');
+$router->get('appointment/summary', 'Api\v1\TimelineController@appointmentTotal');
 $router->get('patient/count', 'Api\v1\DashboardController@patientCount');
 $router->get('patient/condition/count', 'Api\v1\DashboardController@patientConditionCount');
 $router->get('patient/abnormal', 'Api\v1\DashboardController@abnormalPatients');
