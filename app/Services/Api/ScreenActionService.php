@@ -14,14 +14,11 @@ class ScreenActionService
     public function addScreenAction($request)
     {
         try {
-            
 
-          $screenAction = [
-                'actionId' => $request->actionId,
-                'userId' => $request->userId,
-                'deviceId'=>$request->deviceId,
-          ];
-          ScreenAction::create($screenAction);
+         $userId = $request->userId;
+         $actionId = $request->actionId;
+         $deviceId = $request->deviceId;
+         DB::select('CALL createScreenAction('.$userId.','.$actionId.','.$deviceId.')');
              
             return response()->json(['message' => 'Created Successfully'], 200);
         } catch (Exception $e) {
@@ -34,8 +31,8 @@ class ScreenActionService
         try {
             // $user_id = auth()->user()->id;
             // $action = ScreenAction::where('userId', $user_id)->with('action', 'user')->get();
-            $action=DB::select('CALL getScreenAction');
-            return response()->json($action);
+            $userId = $request->userId;
+            $action=DB::select('CALL getScreenAction('.$userId.')');
             return fractal()->collection($action)->transformWith(new ScreenActionTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
