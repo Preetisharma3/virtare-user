@@ -12,16 +12,19 @@ class CreateGetConditionProceduresTable extends Migration
      */
     public function up()
     {
-        $procedure = "DROP PROCEDURE IF EXISTS `getConditionById`;
-        CREATE PROCEDURE `getConditionById` (IN id int)
+        $procedure = "DROP PROCEDURE IF EXISTS `getConditionById`;";
+
+        DB::unprepared($procedure);
+
+        $procedure = "CREATE PROCEDURE `getConditionById` (IN id int)
         BEGIN
         SELECT *
-        FROM patientConditions WHERE id = idx;
+        FROM patientConditions 
         LEFT JOIN patients
-        ON patientConditions.patientId = patients.id
+        ON patientConditions.patientId = patients.id WHERE id = idx;
         END;";
 
-    DB::unprepared($procedure);
+        DB::unprepared($procedure);
     }
 
     /**
