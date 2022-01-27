@@ -117,16 +117,17 @@ class CommunicationService
             $value = explode(',', $request->search);
             foreach($value as $search) {
                 $data = Communication::whereHas('staff', function ($query) use ($search) {
-                        $query->where('firstName', 'LIKE', '%' . $search . '%');
-                })->orWhereHas('patient', function ($q) use ($search) {
-                        $q->where('firstName', 'LIKE', '%' . $search . '%');
-                })->orWhereHas('type', function ($q) use ($search) {
-                        $q->where('name', 'LIKE', '%' . $search . '%');
-                })->orWhereHas('priority', function ($q) use ($search) {
-                        $q->where('name', 'LIKE', '%' . $search . '%');
-                })->orWhereHas('globalCode', function ($q) use ($search) {
-                        $q->where('name', 'LIKE', '%' . $search . '%');
+                        $query->whereRaw("MATCH(firstName)AGAINST($search)");
+                })->orwhereHas('patient', function ($q) use ($search) {
+                        $q->whereRaw("MATCH(firstName)AGAINST($search)");
+                })->orwhereHas('type', function ($q) use ($search) {
+                        $q->whereRaw("MATCH(name)AGAINST($search)");
+                })->orwhereHas('priority', function ($q) use ($search) {
+                        $q->whereRaw("MATCH(name)AGAINST($search)");
+                })->orwhereHas('globalCode', function ($q) use ($search) {
+                        $q->whereRaw("MATCH(name)AGAINST($search)");
                 })->get();
+             //   dd($data);
                 return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
             }
             
