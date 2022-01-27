@@ -42,8 +42,6 @@ class Communication extends Model
         return $this->hasOne(Staff::class,'id','referenceId');
     }
 
-  
-
     public function globalCode()
     {
         return $this->hasOne(GlobalCode::class,'id','messageCategoryId');

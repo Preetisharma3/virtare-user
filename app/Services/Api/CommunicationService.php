@@ -46,7 +46,7 @@ class CommunicationService
     // get Communication
     public function getCommunication()
     {
-        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type','staffs')->get();
+        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->get();
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
     }
 
@@ -81,13 +81,13 @@ class CommunicationService
 
     public function messageType()
     {
-        $data = Communication::whereDate('createdAt', Carbon::now())->with('type')->first();
-        $count = Communication::select(DB::raw('count(id) as count,HOUR(createdAt) as time'))->groupBy(DB::raw('hour(createdAt)', 'count'))->get();
-        $result = [
-            'data' => $data,
-            'count' => $count,
-        ];
-        return fractal()->item($result)->transformWith(new MessageTypeTransformer())->toArray();
+        $date = Carbon::today()->format('Y-m-d');
+        // dd($date);
+        $result = DB::select(
+            "CALL communicationTypeCount('".$date."')",
+        );
+        //return $result;
+        return fractal()->collection($result)->transformWith(new MessageTypeTransformer())->toArray();
     }
 
     public function communicationCount($request)
@@ -115,22 +115,12 @@ class CommunicationService
     {
         try {
             $value = explode(',', $request->search);
-            foreach($value as $search) {
-                $data = Communication::whereHas('staff', function ($query) use ($search) {
-                        $query->whereRaw("MATCH(firstName)AGAINST($search)");
-                })->orwhereHas('patient', function ($q) use ($search) {
-                        $q->whereRaw("MATCH(firstName)AGAINST($search)");
-                })->orwhereHas('type', function ($q) use ($search) {
-                        $q->whereRaw("MATCH(name)AGAINST($search)");
-                })->orwhereHas('priority', function ($q) use ($search) {
-                        $q->whereRaw("MATCH(name)AGAINST($search)");
-                })->orwhereHas('globalCode', function ($q) use ($search) {
-                        $q->whereRaw("MATCH(name)AGAINST($search)");
-                })->get();
-             //   dd($data);
+            foreach ($value as $search) {
+                $data = DB::select(
+                    'CALL patientSearch(' . $search . ')',
+                );
                 return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
             }
-            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }

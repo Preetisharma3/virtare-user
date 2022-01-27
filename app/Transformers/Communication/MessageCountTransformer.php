@@ -17,7 +17,7 @@ class MessageCountTransformer extends TransformerAbstract
     protected $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
@@ -26,7 +26,7 @@ class MessageCountTransformer extends TransformerAbstract
     protected $availableIncludes = [
         //
     ];
-    
+
     /**
      * A Fractal transformer.
      *
@@ -34,9 +34,12 @@ class MessageCountTransformer extends TransformerAbstract
      */
     public function transform($data): array
     {
-        return [
-          'count'=> $data['count'],
-          'time'=>Carbon::createFromFormat('H', $data['time'])->timestamp,
-		];
+        
+            return [
+                'text' => $data->type->name,
+                'count' => $data['count'],
+                'time' => Carbon::parse('H', $data['time'])->timestamp,
+            ];
+        
     }
 }
