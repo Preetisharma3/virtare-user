@@ -14,19 +14,18 @@ class CreateScreenActionProcedure extends Migration
      */
     public function up()
     {
-        $screenAction = "DROP PROCEDURE IF EXISTS `createScreenAction`;
-            DELIMITER $$
+        $screenAction = "DROP PROCEDURE IF EXISTS `createScreenAction`;";
+  
+        DB::unprepared($screenAction);
 
-    CREATE PROCEDURE createScreenAction(IN userId int, IN actionId int,IN deviceId int)
+        $screenAction = "CREATE PROCEDURE createScreenAction(IN userId int, IN actionId int,IN deviceId int)
         BEGIN
 
             INSERT INTO `screen_actions`(`userId`, `actionId`, `deviceId`) VALUES (userId,actionId,deviceId);
 
 
             
-        END$$;
-
-DELIMITER ;";
+        END;";
   
         DB::unprepared($screenAction);
     }
