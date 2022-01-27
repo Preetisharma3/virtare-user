@@ -5,6 +5,7 @@ namespace App\Services\Api;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Staff\Staff;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Communication\Communication;
 use App\Models\Communication\CommunicationMessage;
@@ -20,6 +21,7 @@ class CommunicationService
     //  create Communication
     public function addCommunication($request)
     {
+        $udid = Str::uuid()->toString();
         $input = [
             'from' => $request->from,
             'referenceId' => $request->referenceId,
@@ -28,13 +30,15 @@ class CommunicationService
             'priorityId' => $request->priorityId,
             'messageCategoryId' => $request->messageCategoryId,
             'createdBy' => 1,
-            'entityType'=>$request->entityType
+            'entityType' => $request->entityType,
+            'udid' => $udid
         ];
         $data = Communication::create($input);
         CommunicationMessage::create([
             'communicationId' => $data->id,
             'message' => $request->message,
             'createdBy' => $data->createdBy,
+            'udid' => $udid
         ]);
         return response()->json(['message' => 'created Successfully'], 200);
     }
@@ -42,18 +46,20 @@ class CommunicationService
     // get Communication
     public function getCommunication()
     {
-        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type')->get();
+        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type','staffs')->get();
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
     }
 
     //Create A call Api
     public function addCallRecord($request)
     {
+        $udid = Str::uuid()->toString();
         $input = [
             'patientId' => $request->patient,
             'staffId' => $request->staff,
             'callStatusId' => $request->callStatus,
             'createdBy' => 1,
+            'udid' => $udid
         ];
         CommunicationCallRecord::create($input);
         return response()->json(['message' => 'created Successfully'], 200);
@@ -75,11 +81,16 @@ class CommunicationService
 
     public function messageType()
     {
-        $data = Communication::with('type')->select('messageTypeId', DB::raw('count(*) as count'))->groupBy('messageTypeId')->get();
-        return fractal()->collection($data)->transformWith(new MessageTypeTransformer())->toArray();
+        $data = Communication::whereDate('createdAt', Carbon::now())->with('type')->first();
+        $count = Communication::select(DB::raw('count(id) as count,HOUR(createdAt) as time'))->groupBy(DB::raw('hour(createdAt)', 'count'))->get();
+        $result = [
+            'data' => $data,
+            'count' => $count,
+        ];
+        return fractal()->item($result)->transformWith(new MessageTypeTransformer())->toArray();
     }
 
-    public function communicationCards($request)
+    public function communicationCount($request)
     {
         try {
             $date2 = Carbon::parse($request->date)->setTimezone('UTC');
@@ -87,14 +98,38 @@ class CommunicationService
             $yesterday = CommunicationCallRecord::whereDate('createdAt',  $date2->subDays(1))->count();
             $tomorrow = CommunicationCallRecord::whereDate('createdAt', $date2->addDays(1))->count();
             $week = CommunicationCallRecord::whereDate('createdAt', $date2->subDays(7))->count();
-            $Today = ['text'=>'Today','count'=> $today, 'backgroundColor'=>'#91BDFF','textColor'=>'#FFFFFF'];
-            $Yesterday = ['text'=>'Yesterday', 'count'=>$yesterday, 'backgroundColor'=>'#8E60FF','textColor'=>'#FFFFFF'];
-            $Tomorrow = ['text'=>'Tomorrow', 'count'=>$tomorrow,'backgroundColor'=> '#90EEF5','textColor'=>'#FFFFFF'];
-            $Week = ['text'=>'Week','count'=> $week, 'backgroundColor'=> '#FFA800','textColor'=>'#FFFFFF'];
+            $Today = ['text' => 'Today', 'count' => $today, 'backgroundColor' => '#91BDFF', 'textColor' => '#FFFFFF'];
+            $Yesterday = ['text' => 'Yesterday', 'count' => $yesterday, 'backgroundColor' => '#8E60FF', 'textColor' => '#FFFFFF'];
+            $Tomorrow = ['text' => 'Tomorrow', 'count' => $tomorrow, 'backgroundColor' => '#90EEF5', 'textColor' => '#FFFFFF'];
+            $Week = ['text' => 'Week', 'count' => $week, 'backgroundColor' => '#FFA800', 'textColor' => '#FFFFFF'];
             $result = [
                 $Today, $Yesterday, $Tomorrow, $Week
             ];
             return fractal()->collection($result)->transformWith(new CommunicationCountTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function communicationSearch($request)
+    {
+        try {
+            $value = explode(',', $request->search);
+            foreach($value as $search) {
+                $data = Communication::whereHas('staff', function ($query) use ($search) {
+                        $query->where('firstName', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('patient', function ($q) use ($search) {
+                        $q->where('firstName', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('type', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('priority', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('globalCode', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', '%' . $search . '%');
+                })->get();
+                return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
+            }
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }

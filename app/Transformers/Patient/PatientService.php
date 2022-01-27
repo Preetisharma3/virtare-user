@@ -358,13 +358,14 @@ class PatientService
             $udid = Str::uuid()->toString();
             $vitalData = $request->input('vital');
             foreach ($vitalData as $vital) {
+               
                 $inputs = [
-                    'vitalFieldId' => $vital['vitalField'], 'createdBy' => 1, 'udid' => $udid, 'value' => $vital['value'],'patientId'=>$id
+                    'vitalTypeId' => $vital['vitalType'], 'typeId' => $vital['name'], 'createdBy' => 1, 'udid' => $udid, 'value' => $vital['value']
                 ];
                 $patient = PatientVital::create($inputs);
             }
             DB::commit();
-            $getPatient = PatientVital::where('patientId', $id)->with('type','vitalType')->get();
+            $getPatient = VitalField::where('patientId', $id)->with('vital')->get();
             $userdata = fractal()->collection($getPatient)->transformWith(new PatientVitalTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
@@ -380,10 +381,10 @@ class PatientService
     {
         try {
             if ($vitalId) {
-                $getPatient = PatientVital::where('id', $vitalId)->with('type')->first();
+                $getPatient = VitalField::where('patientId', $id)->with('vital')->first();
                 return fractal()->item($getPatient)->transformWith(new PatientVitalTransformer())->toArray();
             } else {
-                $getPatient = PatientVital::with('type')->get();
+                $getPatient = VitalField::where('patientId', $id)->with('vital')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientVitalTransformer())->toArray();
             }
         } catch (Exception $e) {

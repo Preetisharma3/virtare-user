@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Transformers\Communication;
+namespace App\Transformers\Flag;
 
-use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
-use App\Transformers\Staff\StaffTransformer;
+use App\Transformers\GlobalCode\GlobalCodeTransformer;
 
 
-class MessageTypeTransformer extends TransformerAbstract
+class FlagTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -35,8 +34,8 @@ class MessageTypeTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-          'text'=> $data['data']->type->name,
-          'data'=>fractal()->collection($data['count'])->transformWith(new MessageCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()
+            'name'=>$data->name,
+            'color'=>$data->color
 		];
     }
 }

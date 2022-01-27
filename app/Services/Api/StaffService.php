@@ -22,7 +22,8 @@ class StaffService
                 'email' => $request->email,
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // 'password'
                 'emailVerify' => 1,
-                'createdBy' => 1
+                'createdBy' => 1,
+                'roleId'=>3,
             ];
             $data = User::create($user);
             $staff = [
@@ -37,17 +38,22 @@ class StaffService
                 'designationId' => $request->designationId,
                 'networkId' => $request->networkId,
                 'providerId'=>$request->providerId,
+                'roleId'=>3,
                 'createdBy' => 1
             ];
             $newData = Staff::create($staff);
-           return response()->json(['message' =>'Created Successfully'],200);
+            $staffData= Staff::where('id',$newData->id)->first();
+            $message = ["message"=>"created Successfully"];
+          $resp =  fractal()->item($staffData)->transformWith(new StaffTransformer())->toArray();
+          $endData = array_merge($message, $resp);
+            return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
     public function listStaff($request){
-        $data = Staff::with('roles')->paginate(5);
-        return fractal()->collection($data)->transformWith(new StaffTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+        $data = Staff::with('roles')->get();
+        return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
     }
 }

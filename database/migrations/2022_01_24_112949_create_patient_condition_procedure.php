@@ -21,6 +21,7 @@ class CreatePatientConditionProcedure extends Migration
         COUNT(patientFlags.id) AS total,
            flags.name as text,
            flags.color as color,
+           '#FFFFFF' as textColor,
            patientFlags.flagId as flagId
        FROM
            patientFlags
