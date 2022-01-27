@@ -21,17 +21,6 @@ class CreateScreenActionProcedure extends Migration
             END;";
   
         DB::unprepared($screenAction);
-
-        // $getScreenAction = "DROP PROCEDURE IF EXISTS `getScreenAction`;
-        //     CREATE PROCEDURE `getScreenAction` (IN idx int)
-        //     BEGIN
-        //     SELECT actions.name,users.email,screen_actions.createdAt FROM actions 
-        //     LEFT JOIN screen_actions ON actions.id = screen_actions.actionId 
-        //     LEFT JOIN users ON users.id = screen_actions.userId WHERE userId=idx;
-        //     END; ";
-           
-        // DB::unprepared($getScreenAction);   
-        
     }
 
     /**
