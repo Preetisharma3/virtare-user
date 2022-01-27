@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Services\Api\StaffService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Staff\StaffRequest;
 use App\Models\Staff\Staff;
 
 class StaffController extends Controller
@@ -14,7 +15,7 @@ class StaffController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function addStaff(request $request)
+    public function addStaff(StaffRequest $request)
     {
         return (new StaffService)->addStaff( $request);
         
