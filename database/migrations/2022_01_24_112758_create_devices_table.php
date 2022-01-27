@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateScreenActionsTable extends Migration
+class CreateDevicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,10 @@ class CreateScreenActionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('screenActions', function (Blueprint $table) {
+        Schema::create('devices', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('userId')->unsigned()->nullable();
-            $table->foreign('userId')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('actionId')->unsigned()->nullable();
-            $table->foreign('actionId')->references('id')->on('actions')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('deviceId')->nullable();
+            $table->string('name',100)->nullable();
+            $table->string('ipAddress')->nullable();   
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
@@ -42,6 +39,6 @@ class CreateScreenActionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('screen_actions');
+        Schema::dropIfExists('devices');
     }
 }

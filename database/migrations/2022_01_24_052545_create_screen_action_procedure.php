@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateScreenActionProceduresTable extends Migration
+class CreateScreenActionProcedure extends Migration
 {
     /**
      * Run the migrations.
@@ -15,11 +15,12 @@ class CreateScreenActionProceduresTable extends Migration
     public function up()
     {
         $screenAction = "DROP PROCEDURE IF EXISTS `createScreenAction`;
-                CREATE PROCEDURE createScreenAction(IN userId int, IN actionId int,IN deviceId int) 
-                BEGIN
-                INSERT INTO screenActions (userId,actionId,deviceId) values(userId,actionId,deviceId);
-                END;";
-                DB::unprepared($screenAction);
+            CREATE PROCEDURE  createScreenAction(IN userId int, IN actionId int,IN deviceId int) 
+            BEGIN
+            INSERT INTO screen_actions (userId,actionId,deviceId) values(userId,actionId,deviceId);
+            END;";
+  
+        DB::unprepared($screenAction);
     }
 
     /**
@@ -29,6 +30,6 @@ class CreateScreenActionProceduresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('screenActionProcedures');
+        Schema::dropIfExists('screen_action_procedure');
     }
 }
