@@ -12,6 +12,7 @@ use App\Models\Communication\CommunicationMessage;
 use App\Models\Communication\CommunicationCallRecord;
 use App\Transformers\Communication\CallRecordTransformer;
 use App\Transformers\Communication\CallStatusTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\Communication\MessageTypeTransformer;
 use App\Transformers\Communication\CommunicationTransformer;
 use App\Transformers\Communication\CommunicationCountTransformer;
@@ -46,8 +47,8 @@ class CommunicationService
     // get Communication
     public function getCommunication()
     {
-        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->get();
-        return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
+        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->paginate(2);
+        return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 
     //Create A call Api
@@ -82,11 +83,10 @@ class CommunicationService
     public function messageType()
     {
         $date = Carbon::today()->format('Y-m-d');
-        // dd($date);
         $result = DB::select(
             "CALL communicationTypeCount('".$date."')",
         );
-        //return $result;
+        //dd($result);
         return fractal()->collection($result)->transformWith(new MessageTypeTransformer())->toArray();
     }
 
@@ -117,8 +117,9 @@ class CommunicationService
             $value = explode(',', $request->search);
             foreach ($value as $search) {
                 $data = DB::select(
-                    'CALL patientSearch(' . $search . ')',
+                    "CALL patientSearch('" . $search . "')",
                 );
+                dd($data);
                 return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
             }
         } catch (Exception $e) {

@@ -19,7 +19,7 @@ class MessageTypeTransformer extends TransformerAbstract
     protected $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
@@ -28,7 +28,7 @@ class MessageTypeTransformer extends TransformerAbstract
     protected $availableIncludes = [
         //
     ];
-    
+
     /**
      * A Fractal transformer.
      *
@@ -37,9 +37,9 @@ class MessageTypeTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-           // 'text' => $data,
+            'text' => $data->messageName,
             'count' => $data->count,
             'time' => Carbon::parse('H', $data->time)->timestamp,
-		];
+        ];
     }
 }
