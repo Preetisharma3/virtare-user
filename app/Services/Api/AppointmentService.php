@@ -67,7 +67,13 @@ class AppointmentService
 
     public function todayAppointment($request)
     {
-        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId',auth()->user()->patient->id],['startDate', Carbon::today()]])->get();
+        if(auth()->user()){
+
+            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId',auth()->user()->patient->id],['startDate', Carbon::today()]])->get();
+        }else{
+
+            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId',auth()->user()->patient->id],['startDate', Carbon::today()]])->get();
+        }
         return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
     }
 }
