@@ -40,14 +40,14 @@ class DocumentService
         }
     }
 
-    public function documentList($request, $id)
+    public function documentList($request, $id,$documentId)
     {
         try {
-            if ($id) {
-                $getDocument = Document::where('id', $id)->with('documentType', 'tag')->first();
+            if ($documentId) {
+                $getDocument = Document::where('id', $documentId)->with('documentType', 'tag')->first();
                 return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
             } else {
-                $getDocument = Document::with('documentType', 'tag')->get();
+                $getDocument = Document::where('referanceId', $id)->with('documentType', 'tag')->get();
                 return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
             }
         } catch (Exception $e) {

@@ -5,6 +5,8 @@ namespace App\Transformers\Communication;
 use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Staff\StaffTransformer;
+use App\Transformers\Communication\MessageCountTransformer;
+use App\Transformers\Communication\MessageTypeCountTransformer;
 
 
 class MessageTypeTransformer extends TransformerAbstract
@@ -17,7 +19,7 @@ class MessageTypeTransformer extends TransformerAbstract
     protected $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
@@ -26,7 +28,7 @@ class MessageTypeTransformer extends TransformerAbstract
     protected $availableIncludes = [
         //
     ];
-    
+
     /**
      * A Fractal transformer.
      *
@@ -35,8 +37,9 @@ class MessageTypeTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-          'text'=> $data['data']->type->name,
-          'data'=>fractal()->collection($data['count'])->transformWith(new MessageCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()
-		];
+            'text' => $data->messageName,
+            'count' => $data->count,
+            'time' => Carbon::parse('H', $data->time)->timestamp,
+        ];
     }
 }

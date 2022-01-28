@@ -12,6 +12,7 @@ use App\Models\Communication\CommunicationMessage;
 use App\Models\Communication\CommunicationCallRecord;
 use App\Transformers\Communication\CallRecordTransformer;
 use App\Transformers\Communication\CallStatusTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\Communication\MessageTypeTransformer;
 use App\Transformers\Communication\CommunicationTransformer;
 use App\Transformers\Communication\CommunicationCountTransformer;
@@ -46,8 +47,8 @@ class CommunicationService
     // get Communication
     public function getCommunication()
     {
-        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type','staffs')->get();
-        return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
+        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->paginate(2);
+        return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 
     //Create A call Api
@@ -81,13 +82,12 @@ class CommunicationService
 
     public function messageType()
     {
-        $data = Communication::whereDate('createdAt', Carbon::now())->with('type')->first();
-        $count = Communication::select(DB::raw('count(id) as count,HOUR(createdAt) as time'))->groupBy(DB::raw('hour(createdAt)', 'count'))->get();
-        $result = [
-            'data' => $data,
-            'count' => $count,
-        ];
-        return fractal()->item($result)->transformWith(new MessageTypeTransformer())->toArray();
+        $date = Carbon::today()->format('Y-m-d');
+        $result = DB::select(
+            "CALL communicationTypeCount('".$date."')",
+        );
+        //dd($result);
+        return fractal()->collection($result)->transformWith(new MessageTypeTransformer())->toArray();
     }
 
     public function communicationCount($request)
@@ -115,21 +115,13 @@ class CommunicationService
     {
         try {
             $value = explode(',', $request->search);
-            foreach($value as $search) {
-                $data = Communication::whereHas('staff', function ($query) use ($search) {
-                        $query->where('firstName', 'LIKE', '%' . $search . '%');
-                })->orWhereHas('patient', function ($q) use ($search) {
-                        $q->where('firstName', 'LIKE', '%' . $search . '%');
-                })->orWhereHas('type', function ($q) use ($search) {
-                        $q->where('name', 'LIKE', '%' . $search . '%');
-                })->orWhereHas('priority', function ($q) use ($search) {
-                        $q->where('name', 'LIKE', '%' . $search . '%');
-                })->orWhereHas('globalCode', function ($q) use ($search) {
-                        $q->where('name', 'LIKE', '%' . $search . '%');
-                })->get();
+            foreach ($value as $search) {
+                $data = DB::select(
+                    "CALL patientSearch('" . $search . "')",
+                );
+                dd($data);
                 return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
             }
-            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
