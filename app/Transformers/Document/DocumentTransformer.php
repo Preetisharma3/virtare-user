@@ -40,6 +40,7 @@ class DocumentTransformer extends TransformerAbstract
             'type'=>$data->documentType->name,
             'patient'=>$data->referanceId,
             'document'=>$data->filePath,
+            'entity'=>$data->entityType,
             'tags'=>fractal()->collection($data->tag)->transformWith(new TagTransformer())->toArray()
 		];
     }

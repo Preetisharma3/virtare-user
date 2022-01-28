@@ -96,7 +96,7 @@ $router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecializa
 
 
 $router->post('patient/{id}/document', 'Api\v1\DocumentController@createDocument');
-$router->get('patient/{id}/document[/{documentId}]', 'Api\v1\DocumentController@listDocument');
+$router->get('{entity}/{id}/document[/{documentId}]', 'Api\v1\DocumentController@listDocument');
 
 
 $router->post('file', 'Api\v1\FileController@createFile');

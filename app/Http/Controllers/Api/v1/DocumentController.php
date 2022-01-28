@@ -13,9 +13,9 @@ class DocumentController extends Controller
         return (new DocumentService)->documentCreate( $request,$id);
     }
 
-    public function listDocument(Request $request,$id,$documentId=null)
+    public function listDocument(Request $request,$entity,$id,$documentId=null)
     {
-        return (new DocumentService)->documentList($request ,$id,$documentId);
+        return (new DocumentService)->documentList($request,$entity ,$id,$documentId);
     }
 
 

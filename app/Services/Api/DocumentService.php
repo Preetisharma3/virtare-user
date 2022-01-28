@@ -40,14 +40,18 @@ class DocumentService
         }
     }
 
-    public function documentList($request, $id,$documentId)
+    public function documentList($request, $entity,$id,$documentId)
     {
         try {
             if ($documentId) {
                 $getDocument = Document::where('id', $documentId)->with('documentType', 'tag')->first();
                 return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
             } else {
-                $getDocument = Document::where('referanceId', $id)->with('documentType', 'tag')->get();
+                if($entity=='patient'){
+                $getDocument = Document::where([['referanceId', $id],['entityType','patient']])->with('documentType', 'tag')->get();
+                }elseif($entity=='staff'){
+                    $getDocument = Document::where([['referanceId', $id],['entityType','staff']])->with('documentType', 'tag')->get();
+                }
                 return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
             }
         } catch (Exception $e) {
