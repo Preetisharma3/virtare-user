@@ -11,6 +11,7 @@ use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
 use App\Transformers\Appointment\AppointmentTransformer;
+use App\Transformers\Appointment\AppointmentDataTransformer;
 use App\Transformers\Appointment\AppointmentListTransformer;
 
 class AppointmentService
@@ -45,6 +46,11 @@ class AppointmentService
         return response()->json(['message' => 'created successfully']);
     }
 
+    public function appointmentToday(){
+        $data =Appointment::where('patientId', auth()->user()->patient->id)->whereDate('startDate', Carbon::today())->get();
+        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
+    }
+
     public function appointmentList($request)
     {
         $data = Appointment::where('patientId', auth()->user()->patient->id)->get();
@@ -67,6 +73,6 @@ class AppointmentService
     public function todayAppointment($request)
     {
         $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDate', Carbon::today())->get();
-        return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
+        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
     }
 }
