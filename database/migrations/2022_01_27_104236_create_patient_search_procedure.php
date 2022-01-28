@@ -16,19 +16,33 @@ class CreatePatientSearchProcedure extends Migration
         $procedure = "DROP PROCEDURE IF EXISTS `patientSearch`;
         CREATE PROCEDURE `patientSearch`(IN search VARCHAR(20))
         BEGIN
-        SELECT *
+SELECT staffFrom.firstName AS staffFromName,patients.firstName AS patientName,globalPriority.name AS priorityName,
+        globalMessage.name AS messageName,globalCodeCategory.name AS categoryName,staffReference.firstName AS staffReference,
+         communications.createdAt AS communicationCreateDate, communications.id AS communicationId, communications.entityType AS entity
         FROM   `communications`
+         JOIN globalCodes AS globalMessage
+        ON communications.messageTypeId  = globalMessage.id 
+         JOIN staffs AS staffFrom 
+        ON communications.from  = staffFrom.id 
+         JOIN patients 
+        ON communications.referenceid  = patients.id 
+         JOIN globalCodes AS globalPriority
+        ON communications.priorityid  = globalPriority.id 
+         JOIN globalCodes AS globalCodeCategory
+        ON communications.messagecategoryid  = globalCodeCategory.id 
+         JOIN staffs AS staffReference 
+        ON communications.referenceid  = staffReference.id 
         WHERE  (
                       EXISTS
                       (
-                             SELECT *
+                             SELECT staffs.firstName AS staffName
                              FROM   `staffs`
                              WHERE  `communications`.`FROM` = `staffs`.`id`
                              AND    match(firstName)against(search)
                              AND    `staffs`.`deletedat` IS NULL)
                OR     EXISTS
                       (
-                             SELECT *
+                             SELECT patients.firstName AS patientName
                              FROM   `patients`
                              WHERE  `communications`.`referenceid` = `patients`.`id` AND
                           `communications`.`entityType` = 'patient'
@@ -36,34 +50,35 @@ class CreatePatientSearchProcedure extends Migration
                              AND    `patients`.`deletedat` IS NULL)
                OR     EXISTS
                       (
-                             SELECT *
+                             SELECT globalCodes.name AS messageTypeName
                              FROM   `globalCodes`
                              WHERE  `communications`.`messagetypeid` = `globalCodes`.`id`
                              AND    match(Name)against(search)
                              AND    `globalCodes`.`deletedat` IS NULL)
                OR     EXISTS
                       (
-                             SELECT *
+                             SELECT globalCodes.name AS priorityName
                              FROM   `globalCodes`
                              WHERE  `communications`.`priorityid` = `globalCodes`.`id`
                              AND    match(Name)against(search)
                              AND    `globalCodes`.`deletedat` IS NULL)
                OR     EXISTS
                       (
-                             SELECT *
+                             SELECT globalCodes.name AS messageCategoryName
                              FROM   `globalCodes`
                              WHERE  `communications`.`messagecategoryid` = `globalCodes`.`id`
                              AND    match(Name)against(search)
                              AND    `globalCodes`.`deletedat` IS NULL)
                OR     EXISTS
                       (
-                             SELECT *
+                             SELECT staffs.firstName AS staffName
                              FROM   `staffs`
                              WHERE  `communications`.`referenceid` = `staffs`.`id` AND
                           `communications`.`entityType` = 'staff'
                              AND    match(firstName)against(search)
                              AND    `staffs`.`deletedat` IS NULL))
         AND    `communications`.`deletedat` IS NULL
+        LIMIT limit_val;
         END;";
         DB::unprepared($procedure);
     }

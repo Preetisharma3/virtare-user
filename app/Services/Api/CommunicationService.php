@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use App\Models\Communication\Communication;
 use App\Models\Communication\CommunicationMessage;
 use App\Models\Communication\CommunicationCallRecord;
@@ -16,6 +17,7 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\Communication\MessageTypeTransformer;
 use App\Transformers\Communication\CommunicationTransformer;
 use App\Transformers\Communication\CommunicationCountTransformer;
+use App\Transformers\Communication\CommunicationSearchTransformer;
 
 class CommunicationService
 {
@@ -45,9 +47,10 @@ class CommunicationService
     }
 
     // get Communication
-    public function getCommunication()
+    public function getCommunication($request)
     {
-        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->paginate(2);
+        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')
+        ->paginate(15, ['*'], 'page', $request->page);
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 
@@ -84,9 +87,8 @@ class CommunicationService
     {
         $date = Carbon::today()->format('Y-m-d');
         $result = DB::select(
-            "CALL communicationTypeCount('".$date."')",
+            "CALL communicationTypeCount('" . $date . "')",
         );
-        //dd($result);
         return fractal()->collection($result)->transformWith(new MessageTypeTransformer())->toArray();
     }
 
@@ -114,13 +116,19 @@ class CommunicationService
     public function communicationSearch($request)
     {
         try {
+            $paginate = 1;
             $value = explode(',', $request->search);
             foreach ($value as $search) {
                 $data = DB::select(
-                    "CALL patientSearch('" . $search . "')",
+                    "CALL patientSearch('" . $search . "','" . $paginate . "')",
                 );
-                dd($data);
-                return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
+                $page = $request->page;
+                $offSet = ($page * $paginate) - $paginate;
+                $currentPage = array_slice($data, $offSet, $paginate, true);
+    $paginator = new \Illuminate\Pagination\LengthAwarePaginator($currentPage, count($data), $paginate, $page);
+                $route=URL::current();
+                $paginator->path($route);
+                return fractal()->collection($data)->transformWith(new CommunicationSearchTransformer())->paginateWith(new IlluminatePaginatorAdapter($paginator))->toArray();
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);

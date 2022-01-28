@@ -13,8 +13,8 @@ class CommunicationController extends Controller
         return (new CommunicationService)->addCommunication($request);
     }
 
-    public function getCommunication(){
-        return (new CommunicationService)->getCommunication();
+    public function getCommunication(Request $request){
+        return (new CommunicationService)->getCommunication($request);
     }
 
     public function addCallRecord(request $request){
