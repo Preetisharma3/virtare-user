@@ -15,14 +15,16 @@ use App\Transformers\Staff\StaffSpecializationTransformer;
 
 class DashboardService
 {
-    public function count()
+    public function count($request)
     {
         try {
+            $timelineId = $request->timelineId;
+
             $total = DB::select(
                 'CALL getTotalPatientsCount()',
              );
              $count = DB::select(
-                'CALL getPatientConditionsCount()',
+                'CALL getPatientConditionsCount('.$timelineId.')',
             );
             $patient = DB::select(
                 'CALL getPatientsCount()',
