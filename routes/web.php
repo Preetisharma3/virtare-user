@@ -37,17 +37,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('team', 'Api\v1\TeamController@all');
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
 });
-
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
 $router->get('getScreenAction', 'Api\v1\ScreenActionController@getScreenAction');
-
-$router->get('communication/search', 'Api\v1\CommunicationController@searchCommunication');
-
 $router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');
 $router->get('communication/type', 'Api\v1\CommunicationController@messageType');
 $router->post('communication', 'Api\v1\CommunicationController@addCommunication');
 $router->get('communication', 'Api\v1\CommunicationController@getCommunication');
-
 $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCategory');
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
@@ -62,7 +57,6 @@ $router->get('patient[/{id}]', 'Api\v1\PatientController@listPatient');
 $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientCondition');
 $router->get('patient/{id}/condition[/{conditionId}]', 'Api\v1\PatientController@listPatientCondition');
 $router->post('staff', 'Api\v1\StaffController@addStaff');
-
 $router->get('staff', 'Api\v1\StaffController@listStaff');
 $router->post('patient/{id}/referals', 'Api\v1\PatientController@createPatientReferals');
 $router->get('patient/{id}/referals[/{referalsId}]', 'Api\v1\PatientController@listPatientReferals');
@@ -96,15 +90,18 @@ $router->get('widget/assign', 'Api\v1\WidgetController@getassignedWidget');
 $router->get('program', 'Api\v1\ProgramController@listProgram');
 $router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
 $router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
-$router->post('document/{id}', 'Api\v1\DocumentController@createDocument');
-$router->get('document[/{id}]', 'Api\v1\DocumentController@listDocument');
+
+
+$router->post('patient/{id}/document', 'Api\v1\DocumentController@createDocument');
+$router->get('patient/{id}/document[/{documentId}]', 'Api\v1\DocumentController@listDocument');
+
+
 $router->post('file', 'Api\v1\FileController@createFile');
 $router->delete('file', 'Api\v1\FileController@deleteFile');
 $router->get('count/patient','Api\v1\DashboardController@patientCountMonthly');
 $router->get('count/appointment','Api\v1\DashboardController@appointmentCountMonthly');
 $router->put('profile','Api\v1\UserController@profile');
 $router->get('field[/{id}]','Api\v1\VitalController@listVitalTypeField');
-
 $router->post('callRecord', 'Api\v1\CommunicationController@addCallRecord');
 $router->get('inQueue','Api\v1\CommunicationController@inQueue');
 $router->get('goingOn','Api\v1\CommunicationController@goingOn');
@@ -118,7 +115,6 @@ $router->post('patientReferals/{id}', 'Api\v1\PatientController@createPatientRef
 $router->post('patientPhysician/{id}', 'Api\v1\PatientController@createPatientPhysician');
 $router->post('patientProgram/{id}', 'Api\v1\PatientController@createPatientProgram');
 $router->post('patientVital/{id}', 'Api\v1\PatientController@createPatientVital');
-
 $router->post('module', 'Api\v1\ModuleController@createModule');
 $router->get('module', 'Api\v1\ModuleController@getModule');
 $router->post('screen', 'Api\v1\ScreenController@createScreen');
