@@ -11,7 +11,7 @@ use App\Transformers\Appointment\AppointmentDataTransformer;
 use App\Transformers\Appointment\TodayAppointmentTransformer;
 
 
-class StaffTransformer extends TransformerAbstract
+class StaffDataTransformer extends TransformerAbstract
 {
 
 
@@ -71,11 +71,6 @@ class StaffTransformer extends TransformerAbstract
             'status' => $data->isActive ? 'Active' : 'Inactive',
             'designation' => $data->designation->name,
             'role' => $this->showData ? fractal()->item($data->roles)->transformWith(new RoleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
-            'vital' => (!empty($data->userFamilyAuthorization)) ? $data->userFamilyAuthorization->vital == 0 ? 0 : $data->userFamilyAuthorization->vital : '',
-            'message' => (!empty($data->userFamilyAuthorization)) ? $data->userFamilyAuthorization->message == 0 ? 0 : $data->userFamilyAuthorization->message : '',
-            'availability' => $data->availability ? fractal()->collection($data->availability)->transformWith(new StaffAvailabilityTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
-            'notes' => $data->appointment  ? fractal()->item($data->appointment)->transformWith(new StaffNoteTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
-            'today_appointment'=> $data->todayAppointment  ? fractal()->item($data->appointment)->transformWith(new AppointmentDataTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
         ];
     }
 }

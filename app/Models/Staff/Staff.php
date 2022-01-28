@@ -57,6 +57,6 @@ class Staff extends Model
 	}
 
 	public function todayAppointment(){
-		return $this->appointment()->where('startDate',Carbon::today());
+		return $this->appointment()->where([['startDate',Carbon::today()],['patientId',auth()->user()->patient->id]]);
 	}
 }
