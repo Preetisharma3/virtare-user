@@ -22,7 +22,8 @@ class CreateConditionProcedure extends Migration
            flags.name as text,
            flags.color as color,
            '#FFFFFF' as textColor,
-           patientFlags.flagId as flagId
+           patientFlags.flagId as flagId,
+           
        FROM
            patientFlags
        JOIN flags ON patientFlags.flagId = flags.id
