@@ -14,7 +14,6 @@ class AppointmentDataTransformer extends TransformerAbstract
 
     public function transform($data): array
     {
-        // dd($data->staff);
         return [
             "date"=>$data->startDate,
             "notes"=>$data->note,

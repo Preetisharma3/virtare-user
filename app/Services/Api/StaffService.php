@@ -53,7 +53,7 @@ class StaffService
     }
 
     public function listStaff($request){
-        $data = Staff::with('roles')->get();
+        $data = Staff::with('roles','appointment')->get();
         return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
     }
 }
