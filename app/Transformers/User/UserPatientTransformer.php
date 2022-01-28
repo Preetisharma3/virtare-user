@@ -24,7 +24,6 @@ class UserPatientTransformer extends TransformerAbstract
 
 	public function transform($user): array
 	{
-		// dd($user->patient->firstName);
 		return [
 			'id'=>$user->id,
 			'uuid' => $user->udid,

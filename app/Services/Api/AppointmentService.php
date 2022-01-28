@@ -47,7 +47,7 @@ class AppointmentService
 
     public function appointmentList($request)
     {
-        $data = Appointment::where('patientId', auth()->user()->patient->id)->where('startDate', '>=', Carbon::now()->toDateString())->orderBy('startDate')->get();
+        $data = Appointment::where('patientId', auth()->user()->patient->id)->get();
         $results = Helper::dateGroup($data, 'startDate');
         return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
     }

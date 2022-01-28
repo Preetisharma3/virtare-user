@@ -5,6 +5,7 @@ namespace App\Services\Api;
 use Exception;
 use App\Models\User\User;
 use App\Models\Staff\Staff;
+use App\Transformers\User\UserPatientTransformer;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\User\UserTransformer;
 
@@ -13,8 +14,15 @@ class UserService
     public function userProfile($request)
     {
         try {
-            $data = User::where('id', auth()->user()->id)->first();
-            return fractal()->item($data)->transformWith(new UserTransformer())->toArray();
+            if(auth()->user()->roleId == 3){
+                $data = User::where('id', auth()->user()->id)->first();
+                return fractal()->item($data)->transformWith(new UserTransformer())->toArray();
+            }elseif(auth()->user()->roleId == 4){
+                $data = User::where('id', auth()->user()->id)->first();
+                return fractal()->item($data)->transformWith(new UserPatientTransformer())->toArray();
+            }else{
+                return response()->json(['message' =>'Unauthorised']);
+            }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
