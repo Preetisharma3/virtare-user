@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\User\UserTransformer;
 use App\Transformers\Staff\StaffTransformer;
+use Illuminate\Support\Facades\DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 
@@ -55,5 +56,37 @@ class StaffService
     public function listStaff($request){
         $data = Staff::with('roles')->get();
         return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
+    }
+
+    public function addStaffContact($request , $id)
+    {
+       try{
+        $udid = Str::random(10);
+        $firstName = $request->firstName;
+        $lastName = $request->lastName;
+        $email = $request->email;
+        $phoneNumber = $request->phoneNumber;
+        $staffId = $id;
+        DB::select('CALL createStaffContact("'.$udid.'","'.$firstName.'","'.$lastName.'","'.$email.'","'.$phoneNumber.'","'.$staffId.'")');
+        return response()->json(['message' => "created Successfully"]);
+    }catch (Exception $e){
+        return response()->json(['message' => $e->getMessage()], 500);  
+       }
+        
+    }
+
+    public function addStaffAvailability($request, $id)
+    {
+        try{
+            $udid = Str::random(10);
+            $startTime = $request->startTime;
+            $endTime = $request->endTime;
+            $staffId = $id;
+            DB::select('CALL createStaffAvailability("'.$udid.'","'.$startTime.'","'.$endTime.'","'.$staffId.'")');
+            return response()->json(['message' => "created Successfully"]);
+        }catch (Exception $e){
+        return response()->json(['message' => $e->getMessage()], 500);  
+       }
+       
     }
 }

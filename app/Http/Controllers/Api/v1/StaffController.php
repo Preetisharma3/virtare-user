@@ -31,6 +31,16 @@ class StaffController extends Controller
         return (new StaffService)->listStaff($request);
     }
 
+    public function addStaffContact(Request $request , $id)
+    {
+        return (new StaffService)->addStaffContact($request, $id);
+    }
+
+    public function addStaffAvailability(Request $request , $id)
+    {
+        return (new StaffService)->addStaffAvailability($request, $id);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
