@@ -2,13 +2,12 @@
 
 namespace App\Transformers\Staff;
 
+use App\Transformers\Appointment\AppointmentDataTransformer;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Role\RoleTransformer;
 use App\Transformers\Staff\StaffNoteTransformer;
 use App\Transformers\Staff\StaffAvailabilityTransformer;
 use App\Transformers\Staff\BookappointmentValueTransformer;
-use App\Transformers\Appointment\AppointmentDataTransformer;
-use App\Transformers\Appointment\TodayAppointmentTransformer;
 
 
 class StaffTransformer extends TransformerAbstract
@@ -75,7 +74,6 @@ class StaffTransformer extends TransformerAbstract
             'message' => (!empty($data->userFamilyAuthorization)) ? $data->userFamilyAuthorization->message == 0 ? 0 : $data->userFamilyAuthorization->message : '',
             'availability' => $data->availability ? fractal()->collection($data->availability)->transformWith(new StaffAvailabilityTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
             'notes' => $data->appointment  ? fractal()->item($data->appointment)->transformWith(new StaffNoteTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
-            'today_appointment'=> $data->todayAppointment  ? fractal()->item($data->appointment)->transformWith(new AppointmentDataTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
         ];
     }
 }
