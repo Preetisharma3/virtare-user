@@ -35,7 +35,7 @@ class TagTransformer extends TransformerAbstract
     {
         return [
             'id'=>$data->id,
-			'tag'=>$data->tag,
+			'tag'=>$data->tags->name,
             'documentId'=>$data->documentId,
 		];
     }

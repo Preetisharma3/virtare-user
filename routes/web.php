@@ -95,7 +95,7 @@ $router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
 $router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
 
 
-$router->post('patient/{id}/document', 'Api\v1\DocumentController@createDocument');
+$router->post('{entity}/{id}/document', 'Api\v1\DocumentController@createDocument');
 $router->get('{entity}/{id}/document[/{documentId}]', 'Api\v1\DocumentController@listDocument');
 
 
