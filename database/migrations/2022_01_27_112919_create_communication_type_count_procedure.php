@@ -14,7 +14,9 @@ class CreateCommunicationTypeCountProcedure extends Migration
      */
     public function up()
     {
-        $procedure = "DROP PROCEDURE IF EXISTS `communicationTypeCount`;
+        $procedure = "DROP PROCEDURE IF EXISTS `communicationTypeCount`;";
+        DB::unprepared($procedure);
+        $procedure = "
         CREATE PROCEDURE `communicationTypeCount`(In date DATE)
         BEGIN
         Select count(communications.id) AS count,hour(communications.createdat) AS time,
@@ -22,7 +24,7 @@ class CreateCommunicationTypeCountProcedure extends Migration
         FROM `communications` 
         JOIN globalCodes 
         ON communications.messageTypeId  = globalCodes.id 
-        WHERE date(`communications`.`createdat`) = dateAND
+        WHERE date(`communications`.`createdat`) = date AND
         `communications`.`deletedat` IS NULL GROUP BY hour(communications.createdat),globalCodes.name;
         END;";
         DB::unprepared($procedure);
