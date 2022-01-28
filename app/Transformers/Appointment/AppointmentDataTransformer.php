@@ -19,7 +19,7 @@ class AppointmentDataTransformer extends TransformerAbstract
             "date"=>$data->startDate,
             "notes"=>$data->note,
             'time'=>$data->startTime,
-            "staff"=>$data->staff != null ? fractal()->item($data->staff)->transformWith(new StaffTransformer)->toArray() : array()
+            "staff"=>$data->staff != null ? fractal()->item($data->staff)->transformWith(new StaffTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array()
         ];
     }
 }
