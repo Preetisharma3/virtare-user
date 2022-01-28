@@ -32,7 +32,7 @@ $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
-    $router->get('appointment/today/list','Api\v1\AppointmentController@appointmentToday');
+    $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
     $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
     $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
    
@@ -89,7 +89,6 @@ $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
 $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
 $router->get('appointment/future', 'Api\v1\AppointmentController@futureAppointment');
 $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
-$router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
 $router->post('task', 'Api\v1\TaskController@addTask');
 $router->get('task', 'Api\v1\TaskController@listTask');
 $router->get('task/priority', 'Api\v1\TaskController@priorityTask');

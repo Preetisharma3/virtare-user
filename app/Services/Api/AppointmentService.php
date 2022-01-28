@@ -46,11 +46,6 @@ class AppointmentService
         return response()->json(['message' => 'created successfully']);
     }
 
-    public function appointmentToday(){
-        $data =Appointment::where('patientId', auth()->user()->patient->id)->whereDate('startDate', Carbon::today())->get();
-        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
-    }
-
     public function appointmentList($request)
     {
         $data = Appointment::where('patientId', auth()->user()->patient->id)->get();
@@ -72,7 +67,7 @@ class AppointmentService
 
     public function todayAppointment($request)
     {
-        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDate', Carbon::today())->get();
+        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId',auth()->user()->patient->id],['startDate', Carbon::today()]])->get();
         return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
     }
 }
