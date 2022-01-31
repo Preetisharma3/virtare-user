@@ -11,33 +11,51 @@ use App\Transformers\Document\DocumentTransformer;
 
 class DocumentService
 {
-    public function documentCreate($request,$entity, $id)
+    public function documentCreate($request, $entity, $id, $documentId, $tagId)
     {
         DB::beginTransaction();
         try {
-            $udid = Str::uuid()->toString();
-            $input = [
-                'name' => $request->input('name'), 'filePath' => $request->input('document'), 'documentTypeId' => $request->input('type'),
-                'referanceId' => $id, 'entityType' => $request->input('entity'), 'udid' => $udid, 'createdBy' => 1
-            ];
-            $document = Document::create($input);
-            $tags = $request->input('tags');
-            foreach ($tags as $value) {
-                $tag = [
-                    'tag' => $value, 'createdBy' => 1, 'udid' => $udid, 'documentId' => $document['id']
+            if (!$documentId) {
+                $udid = Str::uuid()->toString();
+                $input = [
+                    'name' => $request->input('name'), 'filePath' => $request->input('document'), 'documentTypeId' => $request->input('type'),
+                    'referanceId' => $id, 'entityType' => $request->input('entity'), 'udid' => $udid, 'createdBy' => 1
                 ];
-                Tag::create($tag);
+                $document = Document::create($input);
+                $tags = $request->input('tags');
+                foreach ($tags as $value) {
+                    $tag = [
+                        'tag' => $value, 'createdBy' => 1, 'udid' => $udid, 'documentId' => $document['id']
+                    ];
+                    Tag::create($tag);
+                }
+                if ($entity == 'patient') {
+                    $getDocument = Document::where([['id', $document->id], ['entityType', 'patient']])->with('documentType', 'tag.tags')->first();
+                } elseif ($entity == 'staff') {
+                    $getDocument = Document::where([['id', $document->id], ['entityType', 'staff']])->with('documentType', 'tag.tags')->first();
+                }
+
+                $userdata = fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
+                $message = ['message' => 'created successfully'];
+            } else {
+                $input = [
+                    'name' => $request->input('name'), 'filePath' => $request->input('document'), 'documentTypeId' => $request->input('type'),
+                    'updatedBy' => 1
+                ];
+                $document = Document::where('id', $documentId)->update($input);
+                $tags = $request->input('tags');
+                    $tag = ['tag' => $tags, 'updatedBy' => 1,];
+                    $tagData=Tag::where('id', $tagId)->update($tag);
+
+                if ($entity == 'patient') {
+                    $getDocument = Document::where([['id', $documentId], ['entityType', 'patient']])->with('documentType', 'tag.tags')->first();
+                } elseif ($entity == 'staff') {
+                    $getDocument = Document::where([['id', $documentId], ['entityType', 'staff']])->with('documentType', 'tag.tags')->first();
+                }
+                $userdata = fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
+                $message = ['message' => 'updated successfully'];
             }
             DB::commit();
-            if($entity=='patient'){
-                $getDocument = Document::where([['id', $document->id],['entityType','patient']])->with('documentType', 'tag.tags')->first();
-            }
-            elseif($entity=='staff'){
-                $getDocument = Document::where([['id', $document->id],['entityType','staff']])->with('documentType', 'tag.tags')->first();
-            }
-            
-            $userdata = fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
-            $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {
@@ -46,22 +64,21 @@ class DocumentService
         }
     }
 
-    public function documentList($request, $entity,$id,$documentId)
+    public function documentList($request, $entity, $id, $documentId)
     {
         try {
             if ($documentId) {
-                if($entity=='patient'){
-                    $getDocument = Document::where([['id', $documentId],['entityType','patient']])->with('documentType', 'tag.tags')->first();
-                }
-                elseif($entity=='staff'){
-                    $getDocument = Document::where([['id', $documentId],['entityType','staff']])->with('documentType', 'tag.tags')->first();
+                if ($entity == 'patient') {
+                    $getDocument = Document::where([['id', $documentId], ['entityType', 'patient']])->with('documentType', 'tag.tags')->first();
+                } elseif ($entity == 'staff') {
+                    $getDocument = Document::where([['id', $documentId], ['entityType', 'staff']])->with('documentType', 'tag.tags')->first();
                 }
                 return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
             } else {
-                if($entity=='patient'){
-                $getDocument = Document::where([['referanceId', $id],['entityType','patient']])->with('documentType', 'tag.tags')->get();
-                }elseif($entity=='staff'){
-                    $getDocument = Document::where([['referanceId', $id],['entityType','staff']])->with('documentType', 'tag.tags')->get();
+                if ($entity == 'patient') {
+                    $getDocument = Document::where([['referanceId', $id], ['entityType', 'patient']])->with('documentType', 'tag.tags')->get();
+                } elseif ($entity == 'staff') {
+                    $getDocument = Document::where([['referanceId', $id], ['entityType', 'staff']])->with('documentType', 'tag.tags')->get();
                 }
                 return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
             }

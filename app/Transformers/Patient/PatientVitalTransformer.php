@@ -14,7 +14,7 @@ class PatientVitalTransformer extends TransformerAbstract
 	{
 		return [
 			'id' => $data->id,
-			'vitalField' => $data->vitalType->name,
+			'vitalField' => $data->type->name,
 			'value' => $data->value,
 		];
 	}
