@@ -6,35 +6,35 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreatePatientSearchProcedure extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        $procedure = "DROP PROCEDURE IF EXISTS `patientSearch`;";
-        DB::unprepared($procedure);
+       /**
+        * Run the migrations.
+        *
+        * @return void
+        */
+       public function up()
+       {
+              $procedure = "DROP PROCEDURE IF EXISTS `patientSearch`;";
+              DB::unprepared($procedure);
 
-        $procedure = "CREATE PROCEDURE `patientSearch`(IN search VARCHAR(20))
+              $procedure = "CREATE PROCEDURE `patientSearch`(IN search VARCHAR(20))
         BEGIN
-SELECT staffFrom.firstName AS staffFromName,patients.firstName AS patientName,globalPriority.name AS priorityName,
-        globalMessage.name AS messageName,globalCodeCategory.name AS categoryName,staffReference.firstName AS staffReference,
-         communications.createdAt AS communicationCreateDate, communications.id AS communicationId, communications.entityType AS entity
-        FROM   `communications`
-         JOIN globalCodes AS globalMessage
-        ON communications.messageTypeId  = globalMessage.id 
-         JOIN staffs AS staffFrom 
-        ON communications.from  = staffFrom.id 
-         JOIN patients 
-        ON communications.referenceid  = patients.id 
-         JOIN globalCodes AS globalPriority
-        ON communications.priorityid  = globalPriority.id 
-         JOIN globalCodes AS globalCodeCategory
-        ON communications.messagecategoryid  = globalCodeCategory.id 
-         JOIN staffs AS staffReference 
-        ON communications.referenceid  = staffReference.id 
-        WHERE  (
+       SELECT staffFrom.firstName AS staffFromName,patients.firstName AS patientName,globalPriority.name AS priorityName,
+       globalMessage.name AS messageName,globalCodeCategory.name AS categoryName,staffReference.firstName AS staffReference,
+       communications.createdAt AS communicationCreateDate, communications.id AS communicationId, communications.entityType AS entity
+       FROM   `communications`
+       JOIN globalCodes AS globalMessage
+       ON communications.messageTypeId  = globalMessage.id 
+       JOIN staffs AS staffFrom 
+       ON communications.from  = staffFrom.id 
+       JOIN patients 
+       ON communications.referenceid  = patients.id 
+       JOIN globalCodes AS globalPriority
+       ON communications.priorityid  = globalPriority.id 
+       JOIN globalCodes AS globalCodeCategory
+       ON communications.messagecategoryid  = globalCodeCategory.id 
+       JOIN staffs AS staffReference 
+       ON communications.referenceid  = staffReference.id 
+       WHERE  (
                       EXISTS
                       (
                              SELECT staffs.firstName AS staffName
@@ -79,24 +79,19 @@ SELECT staffFrom.firstName AS staffFromName,patients.firstName AS patientName,gl
                           `communications`.`entityType` = 'staff'
                              AND    match(firstName)against(search)
                              AND    `staffs`.`deletedat` IS NULL))
-<<<<<<< HEAD
-        AND    `communications`.`deletedat` IS NULL
-        LIMIT limit_val;
-=======
-        AND    `communications`.`deletedat` IS NULL;
->>>>>>> main
-        END;";
-        DB::unprepared($procedure);
-    }
+       AND    `communications`.`deletedat` IS NULL
+       LIMIT limit_val;
+       END;";
+              DB::unprepared($procedure);
+       }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('patient_search_procedure');
-    }
+       /**
+        * Reverse the migrations.
+        *
+        * @return void
+        */
+       public function down()
+       {
+              Schema::dropIfExists('patient_search_procedure');
+       }
 }
-
