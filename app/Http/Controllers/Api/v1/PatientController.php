@@ -39,7 +39,7 @@ class PatientController extends Controller
     return (new PatientService)->patientConditionCreate($request, $id);
   }
 
-  public function updatePatientCondition(PatientConditionRequest $request, $id,$conditionId)
+  public function updatePatientCondition(PatientConditionRequest $request, $id,$conditionId=null)
   {
     return (new PatientService)->patientConditionUpdate($request, $id,$conditionId);
   }
@@ -67,6 +67,11 @@ class PatientController extends Controller
   public function createPatientPhysician(PatientPhysicianRequest $request, $id)
   {
     return (new PatientService)->patientPhysicianCreate($request, $id);
+  }
+
+  public function updatePatientPhysician(PatientPhysicianRequest $request, $id,$physicianId)
+  {
+    return (new PatientService)->patientPhysicianUpdate($request, $id,$physicianId);
   }
 
   public function listPatientPhysician(Request $request, $id, $physicianId = null)
@@ -127,6 +132,11 @@ class PatientController extends Controller
   public function createPatientInsurance(Request $request, $id)
   {
     return (new PatientService)->patientInsuranceCreate($request, $id);
+  }
+
+  public function updatePatientInsurance(Request $request, $id,$insuranceId=null)
+  {
+    return (new PatientService)->patientInsuranceUpdate($request, $id,$insuranceId);
   }
 
   public function listPatientInsurance(Request $request, $id, $insuranceId = null)

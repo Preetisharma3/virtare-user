@@ -252,12 +252,23 @@ class PatientService
     {
         DB::beginTransaction();
         try {
+            $udid = Str::uuid()->toString();
             $conditions = $request->input('condition');
-                $patient = PatientCondition::where('id',$conditionId)->update(['conditionId' => $conditions, 'updatedBy' => 1,]);
+            if ($conditionId) {
+                $patient = PatientCondition::where('id', $conditionId)->update(['conditionId' => $request->input('conditions'), 'updatedBy' => 1]);
+                $getPatient = PatientCondition::where('id', $conditionId)->with('patient', 'condition')->get();
+                $userdata = fractal()->collection($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
+                $message = ['message' => 'updated successfully'];
+            } else {
+                foreach ($conditions as $condition) {
+                    $patient = PatientCondition::create(['conditionId' => $condition, 'patientId' => $id, 'createdBy' => 1, 'udid' => $udid]);
+                    $getPatient = PatientCondition::where('patientId', $id)->with('patient', 'condition')->get();
+                    $userdata = fractal()->collection($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
+                    $message = ['message' => 'created successfully'];
+                }
+            }
             DB::commit();
-            $getPatient = PatientCondition::where('id', $conditionId)->with('patient', 'condition')->get();
-            $userdata = fractal()->collection($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
-            $message = ['message' => 'updated successfully'];
+
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {
@@ -307,17 +318,17 @@ class PatientService
     }
 
     // Update Patient Referals
-    public function patientReferalsUpdate($request, $id,$referalsId)
+    public function patientReferalsUpdate($request, $id, $referalsId)
     {
         DB::beginTransaction();
         try {
             $input = [
                 'name' => $request->input('name'), 'designationId' => $request->input('designation'), 'email' => $request->input('email'),
-                 'fax' => $request->input('fax'), 'updatedBy' => 1, 'phoneNumber' => $request->input('phoneNumber')
+                'fax' => $request->input('fax'), 'updatedBy' => 1, 'phoneNumber' => $request->input('phoneNumber')
             ];
-            $patient = PatientReferal::where('id',$referalsId)->update($input);
+            $patient = PatientReferal::where('id', $referalsId)->update($input);
             DB::commit();
-            $getPatient = PatientReferal::where('id', $patient->id)->with('patient', 'designation')->first();
+            $getPatient = PatientReferal::where('id', $referalsId)->with('patient', 'designation')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
             $message = ['message' => 'update successfully'];
             $endData = array_merge($message, $userdata);
@@ -351,7 +362,7 @@ class PatientService
         try {
             $udid = Str::uuid()->toString();
             $user = [
-                'password' => Hash::make('password'), 'udid' => Str::random(10),
+                'password' => Hash::make('password'),
                 'email' => $request->input('email'), 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 5, 'udid' => $udid
             ];
             $userData = User::create($user);
@@ -365,6 +376,35 @@ class PatientService
             $getPatient = PatientPhysician::where('id', $patient->id)->with('patient', 'designation', 'user')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
             $message = ['message' => 'created successfully'];
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Update Patient Physician
+    public function patientPhysicianUpdate($request, $id, $physicianId)
+    {
+        DB::beginTransaction();
+        try {
+            $usersId = PatientPhysician::where('id', $physicianId)->first();
+            $uId = $usersId->userId;
+            $user = [
+                'email' => $request->input('email'), 'updatedBy' => 1,
+            ];
+            $userData = User::where('id', $uId)->update($user);
+            $input = [
+                'sameAsReferal' => $request->input('sameAsAbove'), 'patientId' => $id, 'fax' => $request->input('fax'),
+                'updatedBy' => 1, 'phoneNumber' => $request->input('phoneNumber'), 'designationId' => $request->input('designation'),
+                'name' => $request->input('name'),
+            ];
+            $patient = PatientPhysician::where('id', $physicianId)->update($input);
+            DB::commit();
+            $getPatient = PatientPhysician::where('id', $physicianId)->with('patient', 'designation', 'user')->first();
+            $userdata = fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
+            $message = ['message' => 'update successfully'];
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {
@@ -603,6 +643,44 @@ class PatientService
             $getPatient = PatientInsurance::where('id', $patient->id)->with('patient')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
             $message = ['message' => 'created successfully'];
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Update Patient Insurance
+    public function patientInsuranceUpdate($request, $id, $insuranceId)
+    {
+        DB::beginTransaction();
+        try {
+            $udid = Str::uuid()->toString();
+            $insurance = $request->input('insurance');
+            if ($insuranceId) {
+                $input = [
+                    'insuranceNumber' => $request->input('insuranceNumber'), 'expirationDate' => $request->input('expirationDate'),  'updatedBy' => 1,
+                    'insuranceNameId' => $request->input('insuranceName'), 'insuranceTypeId' => $request->input('insuranceType'),
+                ];
+                $patient = PatientInsurance::where('id', $insuranceId)->update($input);
+                $getPatient = PatientInsurance::where('id', $insuranceId)->with('patient')->first();
+                $userdata = fractal()->item($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
+                $message = ['message' => 'update successfully'];
+            } else {
+                foreach ($insurance as $value) {
+                    $input = [
+                        'insuranceNumber' => $value['insuranceNumber'], 'expirationDate' => $value['expirationDate'],  'createdBy' => 1,
+                        'insuranceNameId' => $value['insuranceName'], 'insuranceTypeId' => $value['insuranceType'], 'patientId' => $id, 'udid' => $udid
+                    ];
+                    $patient = PatientInsurance::create($input);
+                    $getPatient = PatientInsurance::where('patientId', $id)->with('patient')->get();
+                    $userdata = fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
+                    $message = ['message' => 'create successfully'];
+                }
+            }
+
+            DB::commit();
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {
