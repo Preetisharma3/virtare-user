@@ -50,7 +50,7 @@ class CommunicationService
     public function getCommunication($request)
     {
         $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')
-        ->paginate(15, ['*'], 'page', $request->page);
+            ->paginate(15, ['*'], 'page', $request->page);
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 
@@ -125,9 +125,9 @@ class CommunicationService
                 $page = $request->page;
                 $offSet = ($page * $paginate) - $paginate;
                 $currentPage = array_slice($data, $offSet, $paginate, true);
-    $paginator = new \Illuminate\Pagination\LengthAwarePaginator($currentPage, count($data), $paginate, $page);
-                $route=URL::current();
-                $paginator->path($route);
+                $paginator = new \Illuminate\Pagination\LengthAwarePaginator($currentPage, count($data), $paginate, $page);
+                $route = URL::current();
+                $paginator->setPath($route);
                 return fractal()->collection($data)->transformWith(new CommunicationSearchTransformer())->paginateWith(new IlluminatePaginatorAdapter($paginator))->toArray();
             }
         } catch (Exception $e) {
