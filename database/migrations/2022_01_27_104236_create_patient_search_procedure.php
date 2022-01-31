@@ -13,8 +13,10 @@ class CreatePatientSearchProcedure extends Migration
      */
     public function up()
     {
-        $procedure = "DROP PROCEDURE IF EXISTS `patientSearch`;
-        CREATE PROCEDURE `patientSearch`(IN search VARCHAR(20))
+        $procedure = "DROP PROCEDURE IF EXISTS `patientSearch`;";
+        DB::unprepared($procedure);
+
+        $procedure = "CREATE PROCEDURE `patientSearch`(IN search VARCHAR(20))
         BEGIN
 SELECT staffFrom.firstName AS staffFromName,patients.firstName AS patientName,globalPriority.name AS priorityName,
         globalMessage.name AS messageName,globalCodeCategory.name AS categoryName,staffReference.firstName AS staffReference,
@@ -77,8 +79,12 @@ SELECT staffFrom.firstName AS staffFromName,patients.firstName AS patientName,gl
                           `communications`.`entityType` = 'staff'
                              AND    match(firstName)against(search)
                              AND    `staffs`.`deletedat` IS NULL))
+<<<<<<< HEAD
         AND    `communications`.`deletedat` IS NULL
         LIMIT limit_val;
+=======
+        AND    `communications`.`deletedat` IS NULL;
+>>>>>>> main
         END;";
         DB::unprepared($procedure);
     }

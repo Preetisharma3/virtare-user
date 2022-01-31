@@ -15,7 +15,7 @@ class ScreenAction extends Model
     protected $softDelete = true;
     const DELETED_AT = 'deletedAt';
     public $timestamps = false;
-    protected $table = 'screen_actions';
+    protected $table = 'screenActions';
     use HasFactory;
     protected $guarded = [];
 

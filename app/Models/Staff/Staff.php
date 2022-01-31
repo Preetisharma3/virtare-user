@@ -2,8 +2,11 @@
 
 namespace App\Models\Staff;
 
-use App\Models\GlobalCode\GlobalCode;
+use Carbon\Carbon;
 use App\Models\Role\Role;
+use App\Models\GlobalCode\GlobalCode;
+use App\Models\Appointment\Appointment;
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,5 +44,19 @@ class Staff extends Model
 	public function roles()
 	{
 		return $this->belongsTo(Role::class, 'roleId');
+	}
+
+	public function appointment()
+	{
+		return $this->belongsTo(Appointment::class, 'id','staffId');
+	}
+
+	public function user()
+	{
+		return $this->belongsTo(User::class, 'id');
+	}
+
+	public function todayAppointment(){
+		return $this->appointment()->where('startDate',Carbon::today());
 	}
 }

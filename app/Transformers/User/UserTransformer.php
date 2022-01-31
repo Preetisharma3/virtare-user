@@ -23,6 +23,7 @@ class UserTransformer extends TransformerAbstract
 
 	public function transform($user): array
 	{
+		dd($user);
 		return [
 			'id'=>$user->id,
 			'uuid' => $user->udid,

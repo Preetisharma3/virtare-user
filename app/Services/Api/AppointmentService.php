@@ -11,6 +11,7 @@ use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
 use App\Transformers\Appointment\AppointmentTransformer;
+use App\Transformers\Appointment\AppointmentDataTransformer;
 use App\Transformers\Appointment\AppointmentListTransformer;
 
 class AppointmentService
@@ -47,7 +48,7 @@ class AppointmentService
 
     public function appointmentList($request)
     {
-        $data = Appointment::where('patientId', auth()->user()->patient->id)->where('startDate', '>=', Carbon::now()->toDateString())->orderBy('startDate')->get();
+        $data = Appointment::where('patientId', auth()->user()->patient->id)->get();
         $results = Helper::dateGroup($data, 'startDate');
         return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
     }
@@ -66,7 +67,13 @@ class AppointmentService
 
     public function todayAppointment($request)
     {
-        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDate', Carbon::today())->get();
-        return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
+        if(auth()->user()){
+
+            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId',auth()->user()->patient->id],['startDate', Carbon::today()]])->get();
+        }else{
+
+            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId',auth()->user()->patient->id],['startDate', Carbon::today()]])->get();
+        }
+        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
     }
 }

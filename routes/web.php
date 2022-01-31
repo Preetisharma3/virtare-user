@@ -34,9 +34,11 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('logout', 'Api\v1\AuthController@logout');
     $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
     $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
+   
     $router->get('team', 'Api\v1\TeamController@all');
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
 });
+$router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
 $router->get('getScreenAction', 'Api\v1\ScreenActionController@getScreenAction');
 $router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');
@@ -48,6 +50,8 @@ $router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCatego
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
 $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
+$router->get('patient/chart', 'Api\v1\TimelineController@patientTotal');
+$router->get('appointment/summary', 'Api\v1\TimelineController@appointmentTotal');
 $router->get('patient/count', 'Api\v1\DashboardController@patientCount');
 $router->get('patient/condition/count', 'Api\v1\DashboardController@patientConditionCount');
 $router->get('patient/abnormal', 'Api\v1\DashboardController@abnormalPatients');
@@ -80,7 +84,6 @@ $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
 $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
 $router->get('appointment/future', 'Api\v1\AppointmentController@futureAppointment');
 $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
-$router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
 $router->post('task', 'Api\v1\TaskController@addTask');
 $router->get('task', 'Api\v1\TaskController@listTask');
 $router->get('task/priority', 'Api\v1\TaskController@priorityTask');
@@ -93,8 +96,8 @@ $router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
 $router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
 
 
-$router->post('patient/{id}/document', 'Api\v1\DocumentController@createDocument');
-$router->get('patient/{id}/document[/{documentId}]', 'Api\v1\DocumentController@listDocument');
+$router->post('{entity}/{id}/document', 'Api\v1\DocumentController@createDocument');
+$router->get('{entity}/{id}/document[/{documentId}]', 'Api\v1\DocumentController@listDocument');
 
 
 $router->post('file', 'Api\v1\FileController@createFile');

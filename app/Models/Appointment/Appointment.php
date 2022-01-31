@@ -7,6 +7,7 @@ use App\Models\Patient\Patient;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Staff\Staff;
+use App\Transformers\Staff\StaffAvailabilityTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Appointment extends Model
@@ -28,6 +29,10 @@ class Appointment extends Model
     public function staff()
     {
         return $this->belongsTo(Staff::class, 'staffId');
+    }
+
+    public function availability(){
+        return $this->hasMany(StaffAvailability::class,'staffId');
     }
 
     public function appointmentType()

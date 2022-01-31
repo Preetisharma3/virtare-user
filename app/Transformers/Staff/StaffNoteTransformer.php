@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Transformers\Tag;
+namespace App\Transformers\Staff;
 
 use League\Fractal\TransformerAbstract;
-use App\Transformers\GlobalCode\GlobalCodeTransformer;
 
-
-class TagTransformer extends TransformerAbstract
+class StaffNoteTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -35,8 +33,9 @@ class TagTransformer extends TransformerAbstract
     {
         return [
             'id'=>$data->id,
-			'tag'=>$data->tags->name,
-            'documentId'=>$data->documentId,
-		];
+            'notes'=>$data->note,
+            'type'=>$data->appointmentType->name,
+            'date'=>$data->startDate
+        ];
     }
 }

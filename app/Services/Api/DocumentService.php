@@ -11,7 +11,7 @@ use App\Transformers\Document\DocumentTransformer;
 
 class DocumentService
 {
-    public function documentCreate($request, $id)
+    public function documentCreate($request,$entity, $id)
     {
         DB::beginTransaction();
         try {
@@ -29,7 +29,13 @@ class DocumentService
                 Tag::create($tag);
             }
             DB::commit();
-            $getDocument = Document::where('id', $document->id)->with('documentType', 'tag')->first();
+            if($entity=='patient'){
+                $getDocument = Document::where([['id', $document->id],['entityType','patient']])->with('documentType', 'tag.tags')->first();
+            }
+            elseif($entity=='staff'){
+                $getDocument = Document::where([['id', $document->id],['entityType','staff']])->with('documentType', 'tag.tags')->first();
+            }
+            
             $userdata = fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
@@ -40,14 +46,23 @@ class DocumentService
         }
     }
 
-    public function documentList($request, $id,$documentId)
+    public function documentList($request, $entity,$id,$documentId)
     {
         try {
             if ($documentId) {
-                $getDocument = Document::where('id', $documentId)->with('documentType', 'tag')->first();
+                if($entity=='patient'){
+                    $getDocument = Document::where([['id', $documentId],['entityType','patient']])->with('documentType', 'tag.tags')->first();
+                }
+                elseif($entity=='staff'){
+                    $getDocument = Document::where([['id', $documentId],['entityType','staff']])->with('documentType', 'tag.tags')->first();
+                }
                 return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
             } else {
-                $getDocument = Document::where('referanceId', $id)->with('documentType', 'tag')->get();
+                if($entity=='patient'){
+                $getDocument = Document::where([['referanceId', $id],['entityType','patient']])->with('documentType', 'tag.tags')->get();
+                }elseif($entity=='staff'){
+                    $getDocument = Document::where([['referanceId', $id],['entityType','staff']])->with('documentType', 'tag.tags')->get();
+                }
                 return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
             }
         } catch (Exception $e) {

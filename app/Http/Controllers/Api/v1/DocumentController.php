@@ -8,14 +8,14 @@ use App\Services\Api\DocumentService;
 
 class DocumentController extends Controller
 {
-    public function createDocument(Request $request,$id)
+    public function createDocument(Request $request,$entity,$id)
     {
-        return (new DocumentService)->documentCreate( $request,$id);
+        return (new DocumentService)->documentCreate( $request,$entity,$id);
     }
 
-    public function listDocument(Request $request,$id,$documentId=null)
+    public function listDocument(Request $request,$entity,$id,$documentId=null)
     {
-        return (new DocumentService)->documentList($request ,$id,$documentId);
+        return (new DocumentService)->documentList($request,$entity ,$id,$documentId);
     }
 
 
