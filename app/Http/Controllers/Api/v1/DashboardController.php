@@ -13,23 +13,13 @@ class DashboardController extends Controller
         return (new DashboardService)->count($request);
     }
 
-    public function staffNetwork()
+    public function staffNetwork(Request $request)
     {
-        return (new DashboardService)->staffNetwork();
+        return (new DashboardService)->staffNetwork($request);
     }
 
-    public function staffSpecialization()
+    public function staffSpecialization(Request $request)
     {
-        return (new DashboardService)->staffSpecialization();
-    }
-
-    public function patientCountMonthly()
-    {
-        return (new DashboardService)->patientCountMonthly();
-    }
-
-    public function appointmentCountMonthly()
-    {
-        return (new DashboardService)->appointmentCountMonthly();
+        return (new DashboardService)->staffSpecialization($request);
     }
 }
