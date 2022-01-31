@@ -57,6 +57,7 @@ $router->get('patient/abnormal', 'Api\v1\DashboardController@abnormalPatients');
 $router->get('patient/critical', 'Api\v1\DashboardController@criticalPatients');
 $router->get('patient/condition', 'Api\v1\DashboardController@patientCondition');
 $router->post('patient', 'Api\v1\PatientController@createPatient');
+$router->put('patient/{id}/familyMember/{familyMemberId}/emergency[/{emergencyId}]', 'Api\v1\PatientController@updatePatient');
 $router->get('patient[/{id}]', 'Api\v1\PatientController@listPatient');
 $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientCondition');
 $router->get('patient/{id}/condition[/{conditionId}]', 'Api\v1\PatientController@listPatientCondition');

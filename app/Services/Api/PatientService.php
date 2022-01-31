@@ -107,6 +107,96 @@ class PatientService
         }
     }
 
+    // Update Patient
+    public function patientUpdate($request, $id,$familyMemberId,$emergencyId)
+    {
+            DB::beginTransaction();
+        try {
+            $usersId=Patient::where('id',$id)->first();
+            $uId=$usersId->userId;
+            // Updated Ptient details in User Table
+            $user = [
+                 'email' => $request->input('email'),
+                 'updatedBy' => 1
+            ];
+            $userUpdate=User::where('id',$uId)->update($user);
+
+
+            // Updated  patient details in Patient Table
+            $patient = [
+                'firstName' => $request->input('firstName'), 'middleName' => $request->input('middleName'), 'lastName' => $request->input('lastName'),
+                'dob' => $request->input('dob'), 'genderId' => $request->input('gender'), 'languageId' => $request->input('language'), 'otherLanguageId' => json_encode($request->input('otherLanguage')),
+                'nickName' => $request->input('nickName'), 'phoneNumber' => $request->input('phoneNumber'), 'contactTypeId' => json_encode($request->input('contactType')),
+                'contactTimeId' => $request->input('contactTime'), 'medicalRecordNumber' => $request->input('medicalRecordNumber'), 'countryId' => $request->input('country'),
+                'stateId' => $request->input('state'), 'city' => $request->input('city'), 'zipCode' => $request->input('zipCode'), 'appartment' => $request->input('appartment'),
+                'address' => $request->input('address'), 'updatedBy' => 1, 'height' => $request->input('height'), 'weight' => $request->input('weight')
+            ];
+            $newData = Patient::where('id',$id)->update($patient);
+
+
+
+
+
+
+            // Updated family in user Table
+            $usersId=PatientFamilyMember::where('id',$familyMemberId)->first();
+            $familyId=$usersId->userId;
+
+            $familyMemberUser = [
+                'email' => $request->input('familyEmail'),
+                'updatedBy' => 1
+            ];
+            $fam = User::where('id',$familyId)->update($familyMemberUser);
+
+
+            //Updated Family in patientFamilyMember Table
+            $familyMember = [
+                'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
+                'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 
+                 'updatedBy' => 1,
+            ];
+            $familyData = PatientFamilyMember::where('id',$familyMemberId)->update($familyMember);
+
+
+
+
+
+
+
+            //Updated emergency contact in PatientEmergencyContact table
+            $emergencyContact = [
+                'fullName' => $request->input('emergencyFullName'), 'phoneNumber' => $request->input('emergencyPhoneNumber'), 'contactTypeId' => json_encode($request->input('emergencyContactType')),
+                'contactTimeId' => $request->input('emergencyContactTime'), 'genderId' => $request->input('emergencyGender'),
+                'updatedBy' => 1, 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily')
+            ];
+            $emergency=PatientEmergencyContact::where('id',$emergencyId)->update($emergencyContact);
+
+            DB::commit();
+
+            $getPatient = Patient::where('id', $id)->with(
+                'user',
+                'family.user',
+                'emergency',
+                'gender',
+                'language',
+                'contactType',
+                'contactTime',
+                'state',
+                'country',
+                'otherLanguage',
+                'flags.flag'
+            )->first();
+            $userdata = fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
+            $message = ['message' => 'update successfully'];
+            $endData = array_merge($message, $userdata);
+            return $endData;
+           
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
 
     // Patient Listing
     public function patientList($request, $id)

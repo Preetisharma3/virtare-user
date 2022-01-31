@@ -24,6 +24,11 @@ class PatientController extends Controller
     return (new PatientService)->patientCreate($request);
   }
 
+  public function updatePatient(Request $request,$id,$familyMemberId,$emergencyId=null)
+  {
+    return (new PatientService)->patientUpdate($request,$id,$familyMemberId,$emergencyId);
+  }
+
   public function listPatient(Request $request, $id = null)
   {
     return (new PatientService)->patientList($request, $id);
