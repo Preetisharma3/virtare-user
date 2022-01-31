@@ -39,6 +39,11 @@ class PatientController extends Controller
     return (new PatientService)->patientConditionCreate($request, $id);
   }
 
+  public function updatePatientCondition(PatientConditionRequest $request, $id,$conditionId)
+  {
+    return (new PatientService)->patientConditionUpdate($request, $id,$conditionId);
+  }
+
   public function listPatientCondition(Request $request, $id, $conditionId = null)
   {
     return (new PatientService)->patientConditionList($request, $id, $conditionId);
@@ -47,6 +52,11 @@ class PatientController extends Controller
   public function createPatientReferals(PatientReferalRequest $request, $id)
   {
     return (new PatientService)->patientReferalsCreate($request, $id);
+  }
+
+  public function updatePatientReferals(Request $request, $id,$referalsId)
+  {
+    return (new PatientService)->patientReferalsUpdate($request, $id,$referalsId);
   }
 
   public function listPatientReferals(Request $request, $id, $referalsId = null)

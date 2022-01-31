@@ -42,7 +42,7 @@ class PatientService
             $udid = Str::uuid()->toString();
             // Added Ptient details in User Table
             $user = [
-                'password' => Hash::make('password'), 'email' => $request->input('email'),'udid' => $udid,
+                'password' => Hash::make('password'), 'email' => $request->input('email'), 'udid' => $udid,
                 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 4
             ];
             $data = User::create($user);
@@ -54,7 +54,7 @@ class PatientService
                 'nickName' => $request->input('nickName'), 'userId' => $data->id, 'phoneNumber' => $request->input('phoneNumber'), 'contactTypeId' => json_encode($request->input('contactType')),
                 'contactTimeId' => $request->input('contactTime'), 'medicalRecordNumber' => $request->input('medicalRecordNumber'), 'countryId' => $request->input('country'),
                 'stateId' => $request->input('state'), 'city' => $request->input('city'), 'zipCode' => $request->input('zipCode'), 'appartment' => $request->input('appartment'),
-                'address' => $request->input('address'), 'createdBy' => 1, 'height' => $request->input('height'), 'weight' => $request->input('weight'),'udid' => $udid
+                'address' => $request->input('address'), 'createdBy' => 1, 'height' => $request->input('height'), 'weight' => $request->input('weight'), 'udid' => $udid
             ];
             $newData = Patient::create($patient);
 
@@ -71,7 +71,7 @@ class PatientService
                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                 'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
-                 'createdBy' => 1, 'userId' => $fam->id,'udid' => $udid
+                'createdBy' => 1, 'userId' => $fam->id, 'udid' => $udid
             ];
             $familyData = PatientFamilyMember::create($familyMember);
 
@@ -79,7 +79,7 @@ class PatientService
             $emergencyContact = [
                 'fullName' => $request->input('emergencyFullName'), 'phoneNumber' => $request->input('emergencyPhoneNumber'), 'contactTypeId' => json_encode($request->input('emergencyContactType')),
                 'contactTimeId' => $request->input('emergencyContactTime'), 'genderId' => $request->input('emergencyGender'), 'patientId' => $newData->id,
-                'createdBy' => 1, 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily'),'udid' => $udid
+                'createdBy' => 1, 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily'), 'udid' => $udid
             ];
             PatientEmergencyContact::create($emergencyContact);
             DB::commit();
@@ -108,18 +108,18 @@ class PatientService
     }
 
     // Update Patient
-    public function patientUpdate($request, $id,$familyMemberId,$emergencyId)
+    public function patientUpdate($request, $id, $familyMemberId, $emergencyId)
     {
-            DB::beginTransaction();
+        DB::beginTransaction();
         try {
-            $usersId=Patient::where('id',$id)->first();
-            $uId=$usersId->userId;
+            $usersId = Patient::where('id', $id)->first();
+            $uId = $usersId->userId;
             // Updated Ptient details in User Table
             $user = [
-                 'email' => $request->input('email'),
-                 'updatedBy' => 1
+                'email' => $request->input('email'),
+                'updatedBy' => 1
             ];
-            $userUpdate=User::where('id',$uId)->update($user);
+            $userUpdate = User::where('id', $uId)->update($user);
 
 
             // Updated  patient details in Patient Table
@@ -131,38 +131,26 @@ class PatientService
                 'stateId' => $request->input('state'), 'city' => $request->input('city'), 'zipCode' => $request->input('zipCode'), 'appartment' => $request->input('appartment'),
                 'address' => $request->input('address'), 'updatedBy' => 1, 'height' => $request->input('height'), 'weight' => $request->input('weight')
             ];
-            $newData = Patient::where('id',$id)->update($patient);
-
-
-
-
-
+            $newData = Patient::where('id', $id)->update($patient);
 
             // Updated family in user Table
-            $usersId=PatientFamilyMember::where('id',$familyMemberId)->first();
-            $familyId=$usersId->userId;
+            $usersId = PatientFamilyMember::where('id', $familyMemberId)->first();
+            $familyId = $usersId->userId;
 
             $familyMemberUser = [
                 'email' => $request->input('familyEmail'),
                 'updatedBy' => 1
             ];
-            $fam = User::where('id',$familyId)->update($familyMemberUser);
-
+            $fam = User::where('id', $familyId)->update($familyMemberUser);
 
             //Updated Family in patientFamilyMember Table
             $familyMember = [
                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
-                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 
-                 'updatedBy' => 1,
+                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
+                'updatedBy' => 1,
             ];
-            $familyData = PatientFamilyMember::where('id',$familyMemberId)->update($familyMember);
-
-
-
-
-
-
+            $familyData = PatientFamilyMember::where('id', $familyMemberId)->update($familyMember);
 
             //Updated emergency contact in PatientEmergencyContact table
             $emergencyContact = [
@@ -170,7 +158,7 @@ class PatientService
                 'contactTimeId' => $request->input('emergencyContactTime'), 'genderId' => $request->input('emergencyGender'),
                 'updatedBy' => 1, 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily')
             ];
-            $emergency=PatientEmergencyContact::where('id',$emergencyId)->update($emergencyContact);
+            $emergency = PatientEmergencyContact::where('id', $emergencyId)->update($emergencyContact);
 
             DB::commit();
 
@@ -191,7 +179,6 @@ class PatientService
             $message = ['message' => 'update successfully'];
             $endData = array_merge($message, $userdata);
             return $endData;
-           
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -246,12 +233,31 @@ class PatientService
             $udid = Str::uuid()->toString();
             $conditions = $request->input('condition');
             foreach ($conditions as $condition) {
-                $patient = PatientCondition::create(['conditionId' => $condition, 'patientId' => $id, 'createdBy' => 1,'udid' => $udid]);
+                $patient = PatientCondition::create(['conditionId' => $condition, 'patientId' => $id, 'createdBy' => 1, 'udid' => $udid]);
             }
             DB::commit();
             $getPatient = PatientCondition::where('patientId', $id)->with('patient', 'condition')->get();
             $userdata = fractal()->collection($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
             $message = ['message' => 'created successfully'];
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Update Patient Condition
+    public function patientConditionUpdate($request, $id, $conditionId)
+    {
+        DB::beginTransaction();
+        try {
+            $conditions = $request->input('condition');
+                $patient = PatientCondition::where('id',$conditionId)->update(['conditionId' => $conditions, 'updatedBy' => 1,]);
+            DB::commit();
+            $getPatient = PatientCondition::where('id', $conditionId)->with('patient', 'condition')->get();
+            $userdata = fractal()->collection($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
+            $message = ['message' => 'updated successfully'];
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {
@@ -284,14 +290,36 @@ class PatientService
             $udid = Str::uuid()->toString();
             $input = [
                 'name' => $request->input('name'), 'designationId' => $request->input('designation'), 'email' => $request->input('email'),
-                'patientId' => $id, 'fax' => $request->input('fax'), 'createdBy' => 1, 'phoneNumber' => $request->input('phoneNumber'),'udid' => $udid
+                'patientId' => $id, 'fax' => $request->input('fax'), 'createdBy' => 1, 'phoneNumber' => $request->input('phoneNumber'), 'udid' => $udid
             ];
-            
+
             $patient = PatientReferal::create($input);
             DB::commit();
             $getPatient = PatientReferal::where('id', $patient->id)->with('patient', 'designation')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
             $message = ['message' => 'created successfully'];
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Update Patient Referals
+    public function patientReferalsUpdate($request, $id,$referalsId)
+    {
+        DB::beginTransaction();
+        try {
+            $input = [
+                'name' => $request->input('name'), 'designationId' => $request->input('designation'), 'email' => $request->input('email'),
+                 'fax' => $request->input('fax'), 'updatedBy' => 1, 'phoneNumber' => $request->input('phoneNumber')
+            ];
+            $patient = PatientReferal::where('id',$referalsId)->update($input);
+            DB::commit();
+            $getPatient = PatientReferal::where('id', $patient->id)->with('patient', 'designation')->first();
+            $userdata = fractal()->item($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
+            $message = ['message' => 'update successfully'];
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {
@@ -324,13 +352,13 @@ class PatientService
             $udid = Str::uuid()->toString();
             $user = [
                 'password' => Hash::make('password'), 'udid' => Str::random(10),
-                'email' => $request->input('email'), 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 5,'udid' => $udid
+                'email' => $request->input('email'), 'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 5, 'udid' => $udid
             ];
             $userData = User::create($user);
             $input = [
                 'sameAsReferal' => $request->input('sameAsAbove'), 'patientId' => $id, 'fax' => $request->input('fax'),
                 'createdBy' => 1, 'phoneNumber' => $request->input('phoneNumber'), 'userId' => $userData->id, 'designationId' => $request->input('designation'),
-                'name' => $request->input('name'),'udid' => $udid
+                'name' => $request->input('name'), 'udid' => $udid
             ];
             $patient = PatientPhysician::create($input);
             DB::commit();
@@ -369,7 +397,7 @@ class PatientService
             $udid = Str::uuid()->toString();
             $input = [
                 'programtId' => $request->input('program'), 'onboardingScheduleDate' => $request->input('onboardingScheduleDate'), 'dischargeDate' => $request->input('dischargeDate'),
-                'patientId' => $id, 'createdBy' => 1, 'isActive' => $request->input('status'),'udid' => $udid
+                'patientId' => $id, 'createdBy' => 1, 'isActive' => $request->input('status'), 'udid' => $udid
             ];
             $patient = PatientProgram::create($input);
             DB::commit();
@@ -409,7 +437,7 @@ class PatientService
             $input = [
                 'inventoryId' => $request->input('inventory'), 'patientId' => $id, 'deviceType' => $request->input('deviceType'),
                 'modelNumber' => $request->input('modelNumber'), 'serialNumber' => $request->input('serialNumber'), 'createdBy' => 1,
-                'macAddress' => $request->input('macAddress'), 'deviceTime' => $request->input('deviceTime'), 'serverTime' => $request->input('serverTime'),'udid' => $udid
+                'macAddress' => $request->input('macAddress'), 'deviceTime' => $request->input('deviceTime'), 'serverTime' => $request->input('serverTime'), 'udid' => $udid
             ];
             $patient = PatientInventory::create($input);
             DB::commit();
@@ -449,12 +477,12 @@ class PatientService
             $vitalData = $request->input('vital');
             foreach ($vitalData as $vital) {
                 $inputs = [
-                    'vitalFieldId' => $vital['vitalField'], 'createdBy' => 1, 'udid' => $udid, 'value' => $vital['value'],'patientId'=>$id
+                    'vitalFieldId' => $vital['vitalField'], 'createdBy' => 1, 'udid' => $udid, 'value' => $vital['value'], 'patientId' => $id
                 ];
                 $patient = PatientVital::create($inputs);
             }
             DB::commit();
-            $getPatient = PatientVital::where('patientId', $id)->with('type','vitalType')->get();
+            $getPatient = PatientVital::where('patientId', $id)->with('type', 'vitalType')->get();
             $userdata = fractal()->collection($getPatient)->transformWith(new PatientVitalTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             $endData = array_merge($message, $userdata);
@@ -488,7 +516,7 @@ class PatientService
         try {
             $udid = Str::uuid()->toString();
             $input = [
-                'history' => $request->input('history'), 'patientId' => $id,  'createdBy' => 1,'udid' => $udid
+                'history' => $request->input('history'), 'patientId' => $id,  'createdBy' => 1, 'udid' => $udid
             ];
             $patient = PatientMedicalHistory::create($input);
             DB::commit();
@@ -526,7 +554,7 @@ class PatientService
             $udid = Str::uuid()->toString();
             $input = [
                 'medicine' => $request->input('medicine'), 'frequency' => $request->input('frequency'),  'createdBy' => 1,
-                'startDate' => $request->input('startDate'), 'endDate' => $request->input('endDate'), 'patientId' => $id,'udid' => $udid
+                'startDate' => $request->input('startDate'), 'endDate' => $request->input('endDate'), 'patientId' => $id, 'udid' => $udid
             ];
             $patient = PatientMedicalRoutine::create($input);
             DB::commit();
@@ -598,7 +626,4 @@ class PatientService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
-
-
-    
 }
