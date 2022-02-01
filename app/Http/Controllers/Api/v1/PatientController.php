@@ -139,5 +139,10 @@ class PatientController extends Controller
     return (new PatientService)->patientInventoryListing($request);
   }
 
+  public function inventory(Request $request,$id)
+  {
+    return (new PatientService)->inventoryUpdate($request,$id);
+  }
+
  
 }

@@ -40,6 +40,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('patientFamily/{id}', 'Api\v1\PatientFamilyController@createPatientFamily');
     $router->get('patientFamily[/{id}]', 'Api\v1\PatientFamilyController@listPatientFamily');
     $router->get('patientInventory', 'Api\v1\PatientController@listingPatientInventory');
+    $router->put('inventory/{id}/link', 'Api\v1\PatientController@inventory');
     $router->get('team', 'Api\v1\TeamController@all');
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
 });

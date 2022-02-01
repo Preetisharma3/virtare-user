@@ -226,14 +226,14 @@ class PatientService
     {
         DB::beginTransaction();
         try {
-            $patientDelete=PatientCondition::where('patientId', $id)->delete();
+            $patientDelete = PatientCondition::where('patientId', $id)->delete();
 
             $udid = Str::uuid()->toString();
             $conditions = $request->input('condition');
             foreach ($conditions as $condition) {
                 $input = [
                     'conditionId' => $condition,
-                     'patientId' => $id, 'udid' => $udid,'createdBy'=>1
+                    'patientId' => $id, 'udid' => $udid, 'createdBy' => 1
                 ];
                 $patient = PatientCondition::create($input);
 
@@ -653,7 +653,7 @@ class PatientService
                 $userdata = fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
                 $message = ['message' => 'create successfully'];
             }
-            
+
             DB::commit();
             $endData = array_merge($message, $userdata);
             return $endData;
@@ -682,11 +682,33 @@ class PatientService
     // List Patient Inventory With Login
     public function patientInventoryListing($request)
     {
-        dd(Auth::id());
         try {
-            $getPatient = PatientInventory::where('patientId', Auth::id())->with('patient', 'inventory', 'deviceTypes')->get();
+            $patient = Patient::where('userId', Auth::id())->first();
+            $patientId = $patient->id;
+            $getPatient = PatientInventory::where('patientId', $patientId)->with('patient', 'inventory', 'deviceTypes')->get();
             return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
         } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Update Patient Inventory IsAdded
+    public function inventoryUpdate($request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $patient = Patient::where('userId', Auth::id())->first();
+            $patientId = $patient->id;
+            $inventory=['isAdded'=>1];
+            PatientInventory::where('patientId',$patientId)->update($inventory);
+            $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
+            $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+            $message = ['message' => 'updated successfully'];
+            DB::commit();
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
