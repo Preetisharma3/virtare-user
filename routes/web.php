@@ -51,7 +51,7 @@ $router->get('communication/search', 'Api\v1\CommunicationController@searchCommu
 $router->get('communication/type', 'Api\v1\CommunicationController@messageType');
 $router->post('communication', 'Api\v1\CommunicationController@addCommunication');
 $router->get('communication', 'Api\v1\CommunicationController@getCommunication');
-$router->get('globalCodeCategory', 'Api\v1\GlobalCodeController@globalCodeCategory');
+$router->get('globalCodeCategory[/{id}]', 'Api\v1\GlobalCodeController@globalCodeCategory');
 $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
 $router->put('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
 $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
