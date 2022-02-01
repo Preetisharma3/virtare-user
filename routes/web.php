@@ -79,6 +79,7 @@ $router->get('patient/{id}/physician[/{physicianId}]', 'Api\v1\PatientController
 $router->post('patient/{id}/program', 'Api\v1\PatientController@createPatientProgram');
 $router->put('patient/{id}/program/{programId}', 'Api\v1\PatientController@createPatientProgram');
 $router->get('patient/{id}/program[/{programId}]', 'Api\v1\PatientController@listPatientProgram');
+$router->delete('patient/{id}/program/{programId}', 'Api\v1\PatientController@deletePatientProgram');
 $router->post('patient/{id}/inventory', 'Api\v1\PatientController@createPatientInventory');
 $router->put('patient/{id}/inventory/{inventoryId}', 'Api\v1\PatientController@createPatientInventory');
 $router->get('patient/{id}/inventory[/{inventoryId}]', 'Api\v1\PatientController@listPatientInventory');

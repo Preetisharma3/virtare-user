@@ -433,6 +433,23 @@ class PatientService
         }
     }
 
+    // Delete Patient Program
+    public function patientProgramDelete($request, $id, $programId)
+    {
+        DB::beginTransaction();
+        try {
+            $data = ['deletedBy' => 1, 'isDelete' => 1];
+            $program = PatientProgram::where('id', $programId)->update($data);
+            $patient = PatientProgram::where('id', $programId)->delete();
+            DB::commit();
+            return response()->json(['message' => 'deleted successfully']);
+            
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
     // Add And Update Patient Inventory
     public function patientInventoryCreate($request, $id, $inventoryId)
     {
@@ -699,8 +716,8 @@ class PatientService
         try {
             $patient = Patient::where('userId', Auth::id())->first();
             $patientId = $patient->id;
-            $inventory=['isAdded'=>1];
-            PatientInventory::where('patientId',$patientId)->update($inventory);
+            $inventory = ['isAdded' => 1];
+            PatientInventory::where('patientId', $patientId)->update($inventory);
             $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             $message = ['message' => 'updated successfully'];
