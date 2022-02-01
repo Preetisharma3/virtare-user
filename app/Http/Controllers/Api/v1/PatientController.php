@@ -118,4 +118,11 @@ class PatientController extends Controller
   {
     return (new PatientService)->patientInsuranceList($request, $id, $insuranceId);
   }
+
+  public function linstingPatientInsurance(Request $request)
+  {
+    return (new PatientService)->patientInsuranceListing($request);
+  }
+
+ 
 }

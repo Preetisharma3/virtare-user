@@ -39,6 +39,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('patientFamily', 'Api\v1\PatientFamilyController@createPatientFamily');
     $router->put('patientFamily/{id}', 'Api\v1\PatientFamilyController@createPatientFamily');
     $router->get('patientFamily[/{id}]', 'Api\v1\PatientFamilyController@listPatientFamily');
+    $router->get('patientInventory', 'Api\v1\PatientController@listPatientInventory');
     $router->get('team', 'Api\v1\TeamController@all');
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
 });

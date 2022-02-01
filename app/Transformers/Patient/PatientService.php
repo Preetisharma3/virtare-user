@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use App\Models\Patient\PatientVital;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Patient\PatientProgram;
 use App\Models\Patient\PatientReferal;
@@ -687,4 +688,22 @@ class PatientService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
+<<<<<<< HEAD
+
+    // List Patient Inventory With Login
+    public function patientInsuranceListing($request)
+    {
+        try {
+                $getPatient = PatientInventory::where('patientId', Auth::id())->with('patient', 'inventory', 'deviceTypes')->get();
+                return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+
+    
 }
+=======
+}
+>>>>>>> main
