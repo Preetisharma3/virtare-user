@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
 use App\Transformers\Appointment\AppointmentTransformer;
@@ -69,5 +70,15 @@ class AppointmentService
     {
         $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId',auth()->user()->patient->id],['startDate', Carbon::today()]])->get();
         return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
+    }
+
+    public function appointmentSearch($request){
+        $fromDate = $request->fromDate;
+        $toDate = $request->toDate;
+        $data = DB::select(
+            'CALL appointmentList('.$fromDate.','.$toDate.')',
+         );
+        dd($data);
+        
     }
 }
