@@ -640,29 +640,20 @@ class PatientService
     {
         DB::beginTransaction();
         try {
-            if (!$insuranceId) {
-                $udid = Str::uuid()->toString();
-                $insurance = $request->input('insurance');
-                foreach ($insurance as $value) {
-                    $input = [
-                        'insuranceNumber' => $value['insuranceNumber'], 'expirationDate' => $value['expirationDate'],  'createdBy' => 1,
-                        'insuranceNameId' => $value['insuranceName'], 'insuranceTypeId' => $value['insuranceType'], 'patientId' => $id, 'udid' => $udid
-                    ];
-                    $patient = PatientInsurance::create($input);
-                    $getPatient = PatientInsurance::where('patientId', $id)->with('patient')->get();
-                    $userdata = fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
-                    $message = ['message' => 'create successfully'];
-                }
-            } else {
+            PatientInsurance::where('patientId', $id)->delete();
+            $udid = Str::uuid()->toString();
+            $insurance = $request->input('insurance');
+            foreach ($insurance as $value) {
                 $input = [
-                    'insuranceNumber' => $request->input('insuranceNumber'), 'expirationDate' => $request->input('expirationDate'),  'updatedBy' => 1,
-                    'insuranceNameId' => $request->input('insuranceName'), 'insuranceTypeId' => $request->input('insuranceType'),
+                    'insuranceNumber' => $value['insuranceNumber'], 'expirationDate' => $value['expirationDate'],  'createdBy' => 1,
+                    'insuranceNameId' => $value['insuranceName'], 'insuranceTypeId' => $value['insuranceType'], 'patientId' => $id, 'udid' => $udid
                 ];
-                $patient = PatientInsurance::where('id', $insuranceId)->update($input);
-                $getPatient = PatientInsurance::where('id', $insuranceId)->with('patient')->first();
-                $userdata = fractal()->item($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
-                $message = ['message' => 'update successfully'];
+                $patient = PatientInsurance::create($input);
+                $getPatient = PatientInsurance::where('patientId', $id)->with('patient')->get();
+                $userdata = fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
+                $message = ['message' => 'create successfully'];
             }
+            
             DB::commit();
             $endData = array_merge($message, $userdata);
             return $endData;
