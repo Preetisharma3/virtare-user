@@ -19,7 +19,7 @@ class PatientProgramTransformer extends TransformerAbstract
             'patientId'=>$data->patientId,
             'onboardingScheduleDate'=>$data->onboardingScheduleDate,
             'dischargeDate'=>$data->dischargeDate,
-            'status'=>$data->isActive,
+            'status'=>$data->isActive==1?'Active':'Inactive',
 		];
 	}
 }

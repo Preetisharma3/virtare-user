@@ -39,7 +39,7 @@ class GlobalCodeTransformer extends TransformerAbstract
 			'name'=>$data->name,
             'description'=>$data->description,
             'status'=>$data->isActive,
-            'userCount'=>0
+            'usedCount'=>0
 		];
     }
 }
