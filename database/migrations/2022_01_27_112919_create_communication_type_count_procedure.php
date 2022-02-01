@@ -19,12 +19,17 @@ class CreateCommunicationTypeCountProcedure extends Migration
         $procedure = "
         CREATE PROCEDURE `communicationTypeCount`(In date DATE)
         BEGIN
-        Select count(communications.id) AS count,hour(communications.createdat) AS time,
-        globalCodes.name AS messageName
+        Select count(communications.id) AS count,hour(communications.createdat) AS time, globalCodes.name AS messageName
         FROM `communications` 
-        JOIN globalCodes 
+         JOIN globalCodes 
         ON communications.messageTypeId  = globalCodes.id 
+<<<<<<< HEAD
+       
+        WHERE date(`communications`.`createdat`) = date
+        AND
+=======
         WHERE date(`communications`.`createdat`) = date AND
+>>>>>>> main
         `communications`.`deletedat` IS NULL GROUP BY hour(communications.createdat),globalCodes.name;
         END;";
         DB::unprepared($procedure);
