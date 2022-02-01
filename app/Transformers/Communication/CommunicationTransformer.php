@@ -5,7 +5,7 @@ namespace App\Transformers\Communication;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Staff\StaffTransformer;
 use App\Transformers\GlobalCode\GlobalCodeTransformer;
-
+use Carbon\Carbon;
 
 class CommunicationTransformer extends TransformerAbstract
 {
@@ -42,7 +42,7 @@ class CommunicationTransformer extends TransformerAbstract
                 'to'=>$data->patient->firstName,
                 'category'=>$data->globalCode->name,
                 'priority'=>$data->priority->name,
-                'createdAt'=>date('M j, Y - h:i A', strtotime($data->createdAt)),
+                'createdAt'=>Carbon::parse($data->createdAt)->timestamp,
             ];
         }
         else{
@@ -53,7 +53,7 @@ class CommunicationTransformer extends TransformerAbstract
                 'to'=>$data->staffs->firstName,
                 'category'=>$data->globalCode->name,
                 'priority'=>$data->priority->name,
-                'createdAt'=>date('M j, Y - h:i A', strtotime($data->createdAt)),
+                'createdAt'=>Carbon::parse($data->createdAt)->timestamp,
             ];
         }
             
