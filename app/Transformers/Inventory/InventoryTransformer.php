@@ -13,8 +13,8 @@ class InventoryTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id' => $data->id,
-            'deviceType' => $data->deviceTypes->name,
+            'udid' => $data->udid,
+            'deviceType' => $data->deviceType,
             'modelNumber' => $data->modelNumber,
             'serialNumber' => $data->serialNumber,
             'macAddress' => $data->macAddress,

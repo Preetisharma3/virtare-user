@@ -138,3 +138,7 @@ $router->post('module', 'Api\v1\ModuleController@createModule');
 $router->get('module', 'Api\v1\ModuleController@getModule');
 $router->post('screen', 'Api\v1\ScreenController@createScreen');
 $router->get('screen', 'Api\v1\ScreenController@getScreen');
+$router->post('inventory', 'Api\v1\InventoryController@store');
+$router->get('inventory', 'Api\v1\InventoryController@index');
+$router->put('inventory/{id}', 'Api\v1\InventoryController@update');
+$router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
