@@ -78,7 +78,7 @@ class AppointmentService
         $data = DB::select(
             'CALL appointmentList('.$fromDate.','.$toDate.')',
          );
-        dd($data);
+        return($data);
         
     }
 }
