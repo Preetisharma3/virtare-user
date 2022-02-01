@@ -3,15 +3,8 @@
 namespace App\Services\Api;
 
 use Exception;
-use App\Helper;
-use App\Models\Staff\Staff;
-use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
-use App\Models\Appointment\Appointment;
-use App\Transformers\Staff\StaffNetworkTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
-use App\Transformers\Dashboard\CountPerMonthTransformer;
-use App\Transformers\Staff\StaffSpecializationTransformer;
 
 class DashboardService
 {
@@ -22,53 +15,50 @@ class DashboardService
 
             $total = DB::select(
                 'CALL getTotalPatientsCount()',
-             );
-             $count = DB::select(
-                'CALL getPatientConditionsCount('.$timelineId.')',
+            );
+            $count = DB::select(
+                'CALL getPatientConditionsCount(' . $timelineId . ')',
             );
             $patient = DB::select(
                 'CALL getPatientsCount()',
-             );
-            
-            
-             $data = array_merge(
-                $total,$count,$patient
-             );
+            );
+
+
+            $data = array_merge(
+                $total,
+                $count,
+                $patient
+            );
 
             return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
-   
 
-   
-
-    
-
-
-    public function staffNetwork()
+    public function staffNetwork($request)
     {
-        $data = Staff::with('network')->select('networkId', DB::raw('count(*) as count'))->groupBy('networkId')->get();
-        return fractal()->collection($data)->transformWith(new StaffNetworkTransformer())->toArray();
+        try {
+            $timelineId = $request->timelineId;
+            $data = DB::select(
+                'CALL getStaffNeworkCount(' . $timelineId . ')',
+            );
+            return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
-    public function staffSpecialization()
+    public function staffSpecialization($request)
     {
-        $data = Staff::with('specialization')->select('specializationId', DB::raw('count(*) as count'))->groupBy('specializationId')->get();
-        return fractal()->collection($data)->transformWith(new StaffSpecializationTransformer())->toArray();
-    }
-
-    public function patientCountMonthly()
-    {
-        $data = Patient::select(DB::raw('count(*) as count'), DB::raw("DATE_FORMAT(createdAt, '%M') month"),  DB::raw('YEAR(createdAt) year'))->groupby('year', 'month')->get();
-        $patientData = Helper::dateGroup($data, 'year');
-        return fractal()->collection($patientData)->transformWith(new CountPerMonthTransformer())->toArray();
-    }
-
-    public function appointmentCountMonthly(){
-        $data = Appointment::select(DB::raw('count(*) as count'), DB::raw("DATE_FORMAT(startTime, '%M') month"),  DB::raw('YEAR(startTime) year'))->groupby('year', 'month')->get();
-        $appointmentData = Helper::dateGroup($data, 'year');
-        return fractal()->collection($appointmentData)->transformWith(new CountPerMonthTransformer())->toArray();
+        try {
+            $timelineId = $request->timelineId;
+            $data = DB::select(
+                'CALL getStaffSpecializationCount(' . $timelineId . ')',
+            );
+            return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }
