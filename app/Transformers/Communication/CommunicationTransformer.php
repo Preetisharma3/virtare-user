@@ -42,7 +42,7 @@ class CommunicationTransformer extends TransformerAbstract
                 'to'=>$data->patient->firstName,
                 'category'=>$data->globalCode->name,
                 'priority'=>$data->priority->name,
-                'createdAt'=>Carbon::parse($data->createdAt)->timestamp,
+                'createdAt'=>strtotime($data->createdAt),
             ];
         }
         else{
@@ -53,7 +53,7 @@ class CommunicationTransformer extends TransformerAbstract
                 'to'=>$data->staffs->firstName,
                 'category'=>$data->globalCode->name,
                 'priority'=>$data->priority->name,
-                'createdAt'=>Carbon::parse($data->createdAt)->timestamp,
+                'createdAt'=>strtotime($data->createdAt),
             ];
         }
             

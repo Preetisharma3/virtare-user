@@ -41,7 +41,7 @@ class CommunicationSearchTransformer extends TransformerAbstract
                 'to'=> $data->entity=='patient'?$data->patientName:$data->staffReference,
                 'category'=>$data->categoryName,
                 'priority'=>$data->priorityName,
-                'createdAt'=>Carbon::parse($data->communicationCreateDate)->timestamp,
+                'createdAt'=>strtotime($data->createdAt),
             ];
         
             
