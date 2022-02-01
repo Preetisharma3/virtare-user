@@ -95,6 +95,10 @@ $router->get('patient/{id}/medicalRoutine[/{medicalRoutineId}]', 'Api\v1\Patient
 $router->post('patient/{id}/insurance', 'Api\v1\PatientController@createPatientInsurance');
 $router->put('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@createPatientInsurance');
 $router->get('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@listPatientInsurance');
+$router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevice');
+$router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
+
+
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
 $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
 $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
