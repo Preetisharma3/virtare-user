@@ -39,7 +39,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('patientFamily', 'Api\v1\PatientFamilyController@createPatientFamily');
     $router->put('patientFamily/{id}', 'Api\v1\PatientFamilyController@createPatientFamily');
     $router->get('patientFamily[/{id}]', 'Api\v1\PatientFamilyController@listPatientFamily');
-    $router->get('patientInventory', 'Api\v1\PatientController@listPatientInventory');
+    $router->get('patientInventory', 'Api\v1\PatientController@listingPatientInventory');
     $router->get('team', 'Api\v1\TeamController@all');
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
 });
@@ -66,7 +66,6 @@ $router->post('patient', 'Api\v1\PatientController@createPatient');
 $router->put('patient/{id}/familyMember/{familyMemberId}/emergency[/{emergencyId}]', 'Api\v1\PatientController@createPatient');
 $router->get('patient[/{id}]', 'Api\v1\PatientController@listPatient');
 $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientCondition');
-$router->put('patient/{id}/condition[/{conditionId}]', 'Api\v1\PatientController@createPatientCondition');
 $router->get('patient/{id}/condition[/{conditionId}]', 'Api\v1\PatientController@listPatientCondition');
 $router->post('staff', 'Api\v1\StaffController@addStaff');
 $router->get('staff', 'Api\v1\StaffController@listStaff');
