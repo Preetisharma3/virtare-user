@@ -24,6 +24,11 @@ class PatientController extends Controller
     return (new PatientService)->patientCreate($request, $id, $familyMemberId, $emergencyId);
   }
 
+  public function updatePatient(Request $request, $id = null, $familyMemberId = null, $emergencyId = null)
+  {
+    return (new PatientService)->patientCreate($request, $id, $familyMemberId, $emergencyId);
+  }
+
   public function listPatient(Request $request, $id = null)
   {
     return (new PatientService)->patientList($request, $id);
@@ -44,12 +49,22 @@ class PatientController extends Controller
     return (new PatientService)->patientReferalsCreate($request, $id, $referalsId);
   }
 
+  public function updatePatientReferals(Request $request, $id, $referalsId = null)
+  {
+    return (new PatientService)->patientReferalsCreate($request, $id, $referalsId);
+  }
+
   public function listPatientReferals(Request $request, $id, $referalsId = null)
   {
     return (new PatientService)->patientReferalsList($request, $id, $referalsId);
   }
 
   public function createPatientPhysician(PatientPhysicianRequest $request, $id, $physicianId = null)
+  {
+    return (new PatientService)->patientPhysicianCreate($request, $id, $physicianId);
+  }
+
+  public function updatePatientPhysician(Request $request, $id, $physicianId = null)
   {
     return (new PatientService)->patientPhysicianCreate($request, $id, $physicianId);
   }
