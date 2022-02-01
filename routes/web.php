@@ -82,7 +82,8 @@ $router->put('patient/{id}/program/{programId}', 'Api\v1\PatientController@creat
 $router->get('patient/{id}/program[/{programId}]', 'Api\v1\PatientController@listPatientProgram');
 $router->delete('patient/{id}/program/{programId}', 'Api\v1\PatientController@deletePatientProgram');
 $router->post('patient/{id}/inventory', 'Api\v1\PatientController@createPatientInventory');
-$router->put('patient/{id}/inventory/{inventoryId}', 'Api\v1\PatientController@createPatientInventory');
+$router->put('patient/{id}/inventory/{inventoryId}', 'Api\v1\PatientController@updatePatientInventory');
+$router->delete('patient/{id}/inventory/{inventoryId}', 'Api\v1\PatientController@deletePatientInventory');
 $router->get('patient/{id}/inventory[/{inventoryId}]', 'Api\v1\PatientController@listPatientInventory');
 $router->post('patient/{id}/vital', 'Api\v1\PatientController@createPatientVital');
 $router->put('patient/{id}/vital/{vitalId}', 'Api\v1\PatientController@createPatientVital');
