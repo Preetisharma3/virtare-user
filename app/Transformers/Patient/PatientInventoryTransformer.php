@@ -22,6 +22,7 @@ class PatientInventoryTransformer extends TransformerAbstract
             'macAddress' => $data->macAddress,
             'deviceTime' => $data->deviceTime,
             'serverTime' => $data->serverTime,
+            'status'=>$data->isActive==1?'Active':'Inactive',
             'inventory' => fractal()->item($data->inventory)->transformWith(new InventoryTransformer())->toArray(),
         ];
     }

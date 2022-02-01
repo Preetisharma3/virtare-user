@@ -468,10 +468,9 @@ class PatientService
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
                 $message = ['message' => 'created successfully'];
             } else {
+
                 $input = [
-                    'inventoryId' => $request->input('inventory'),  'deviceType' => $request->input('deviceType'),
-                    'modelNumber' => $request->input('modelNumber'), 'serialNumber' => $request->input('serialNumber'), 'updatedBy' => 1,
-                    'macAddress' => $request->input('macAddress'), 'deviceTime' => $request->input('deviceTime'), 'serverTime' => $request->input('serverTime')
+                    'isActive' => $request->input('status'),  'updatedBy' => 1,
                 ];
                 $patient = PatientInventory::where('id', $inventoryId)->update($input);
                 $getPatient = PatientInventory::where('id', $inventoryId)->with('patient', 'inventory', 'deviceTypes')->first();
@@ -499,6 +498,21 @@ class PatientService
                 return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             }
         } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function patientInventoryDelete($request, $id, $inventoryId)
+    {
+        try {
+            DB::beginTransaction();
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            PatientInventory::find($id)->update($data);
+            PatientInventory::find($id)->delete();
+            DB::commit();
+            return response()->json(['message' => 'delete successfully']);
+        } catch (Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
@@ -747,8 +761,8 @@ class PatientService
                 $message = ['message' => 'create successfully'];
             } else {
                 $device = ['otherDeviceId' => $request->input('otherDevice'), 'status' => $request->input('status'), 'updatedBy' => 1];
-                $patient = PatientDevice::where('id',$deviceId)->update($device);
-                $getPatient = PatientDevice::where('id', $deviceId)->with('patient','otherDevice')->first();
+                $patient = PatientDevice::where('id', $deviceId)->update($device);
+                $getPatient = PatientDevice::where('id', $deviceId)->with('patient', 'otherDevice')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientDeviceTransformer())->toArray();
                 $message = ['message' => 'updated successfully'];
             }
