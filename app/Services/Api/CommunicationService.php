@@ -49,8 +49,10 @@ class CommunicationService
     // get Communication
     public function getCommunication($request)
     {
+
         $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')
             ->paginate(15, ['*'], 'page', $request->page);
+
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 

@@ -24,6 +24,11 @@ class PatientController extends Controller
     return (new PatientService)->patientCreate($request);
   }
 
+  public function updatePatient(Request $request,$id,$familyMemberId,$emergencyId=null)
+  {
+    return (new PatientService)->patientUpdate($request,$id,$familyMemberId,$emergencyId);
+  }
+
   public function listPatient(Request $request, $id = null)
   {
     return (new PatientService)->patientList($request, $id);
@@ -32,6 +37,11 @@ class PatientController extends Controller
   public function createPatientCondition(PatientConditionRequest $request, $id)
   {
     return (new PatientService)->patientConditionCreate($request, $id);
+  }
+
+  public function updatePatientCondition(PatientConditionRequest $request, $id,$conditionId=null)
+  {
+    return (new PatientService)->patientConditionUpdate($request, $id,$conditionId);
   }
 
   public function listPatientCondition(Request $request, $id, $conditionId = null)
@@ -44,6 +54,11 @@ class PatientController extends Controller
     return (new PatientService)->patientReferalsCreate($request, $id);
   }
 
+  public function updatePatientReferals(Request $request, $id,$referalsId)
+  {
+    return (new PatientService)->patientReferalsUpdate($request, $id,$referalsId);
+  }
+
   public function listPatientReferals(Request $request, $id, $referalsId = null)
   {
     return (new PatientService)->patientReferalsList($request, $id, $referalsId);
@@ -52,6 +67,11 @@ class PatientController extends Controller
   public function createPatientPhysician(PatientPhysicianRequest $request, $id)
   {
     return (new PatientService)->patientPhysicianCreate($request, $id);
+  }
+
+  public function updatePatientPhysician(PatientPhysicianRequest $request, $id,$physicianId)
+  {
+    return (new PatientService)->patientPhysicianUpdate($request, $id,$physicianId);
   }
 
   public function listPatientPhysician(Request $request, $id, $physicianId = null)
@@ -112,6 +132,11 @@ class PatientController extends Controller
   public function createPatientInsurance(Request $request, $id)
   {
     return (new PatientService)->patientInsuranceCreate($request, $id);
+  }
+
+  public function updatePatientInsurance(Request $request, $id,$insuranceId=null)
+  {
+    return (new PatientService)->patientInsuranceUpdate($request, $id,$insuranceId);
   }
 
   public function listPatientInsurance(Request $request, $id, $insuranceId = null)
