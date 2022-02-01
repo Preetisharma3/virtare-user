@@ -137,5 +137,8 @@ class GlobalCodeCategorySeeder extends Seeder
         GlobalCodeCategory::create([
             'name'=>'Timeline'
         ]);
+        GlobalCodeCategory::create([
+            'name'=>'Other Devices'
+        ]);
     }
 }
