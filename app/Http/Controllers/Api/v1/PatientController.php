@@ -29,9 +29,9 @@ class PatientController extends Controller
     return (new PatientService)->patientList($request, $id);
   }
 
-  public function createPatientCondition(PatientConditionRequest $request, $id, $conditionId = null)
+  public function createPatientCondition(PatientConditionRequest $request, $id)
   {
-    return (new PatientService)->patientConditionCreate($request, $id, $conditionId);
+    return (new PatientService)->patientConditionCreate($request, $id);
   }
 
   public function listPatientCondition(Request $request, $id, $conditionId = null)
@@ -119,9 +119,9 @@ class PatientController extends Controller
     return (new PatientService)->patientInsuranceList($request, $id, $insuranceId);
   }
 
-  public function linstingPatientInsurance(Request $request)
+  public function listingPatientInventory(Request $request)
   {
-    return (new PatientService)->patientInsuranceListing($request);
+    return (new PatientService)->patientInventoryListing($request);
   }
 
  

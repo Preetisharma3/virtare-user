@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use App\Models\Patient\PatientVital;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Patient\PatientProgram;
 use App\Models\Patient\PatientReferal;
@@ -221,27 +222,26 @@ class PatientService
     }
 
     // Add And Update Patient Condition
-    public function patientConditionCreate($request, $id, $conditionId)
+    public function patientConditionCreate($request, $id)
     {
         DB::beginTransaction();
         try {
-            if (!$conditionId) {
-                $udid = Str::uuid()->toString();
-                $conditions = $request->input('condition');
-                foreach ($conditions as $condition) {
-                    $patient = PatientCondition::create(['conditionId' => $condition, 'patientId' => $id, 'createdBy' => 1, 'udid' => $udid]);
-                    $getPatient = PatientCondition::where('patientId', $id)->with('patient', 'condition')->get();
-                    $userdata = fractal()->collection($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
-                    $message = ['message' => 'created successfully'];
-                }
-            } else {
-                $patient = PatientCondition::where('id', $conditionId)->update(['conditionId' => $request->input('condition'), 'updatedBy' => 1]);
-                $getPatient = PatientCondition::where('id', $conditionId)->with('patient', 'condition')->get();
+            $patientDelete=PatientCondition::where('patientId', $id)->delete();
+
+            $udid = Str::uuid()->toString();
+            $conditions = $request->input('condition');
+            foreach ($conditions as $condition) {
+                $input = [
+                    'conditionId' => $condition,
+                     'patientId' => $id, 'udid' => $udid,'createdBy'=>1
+                ];
+                $patient = PatientCondition::create($input);
+
+                $getPatient = PatientCondition::where('patientId', $id)->with('patient')->get();
                 $userdata = fractal()->collection($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $message = ['message' => 'create successfully'];
             }
             DB::commit();
-
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {
@@ -683,6 +683,18 @@ class PatientService
                 $getPatient = PatientInsurance::where('patientId', $id)->with('patient', 'insuranceName', 'insuranceType')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
             }
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // List Patient Inventory With Login
+    public function patientInventoryListing($request)
+    {
+        dd(Auth::id());
+        try {
+            $getPatient = PatientInventory::where('patientId', Auth::id())->with('patient', 'inventory', 'deviceTypes')->get();
+            return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
