@@ -9,6 +9,7 @@ use App\Models\Patient\Patient;
 use App\Models\Vital\VitalField;
 use Illuminate\Support\Facades\DB;
 use App\Models\Patient\PatientVital;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Patient\PatientProgram;
 use App\Models\Patient\PatientReferal;
@@ -505,6 +506,17 @@ class PatientService
                 $getPatient = PatientInsurance::where('patientId', $id)->with('patient', 'insuranceName', 'insuranceType')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
             }
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // List Patient Inventory With Login
+    public function patientInsuranceListing($request)
+    {
+        try {
+                $getPatient = PatientInventory::where('patientId', Auth::id())->with('patient', 'inventory', 'deviceTypes')->get();
+                return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
