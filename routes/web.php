@@ -36,7 +36,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('logout', 'Api\v1\AuthController@logout');
     $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
     $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
-
+    $router->post('patientFamily', 'Api\v1\PatientFamilyController@createPatientFamily');
+    $router->put('patientFamily/{id}', 'Api\v1\PatientFamilyController@createPatientFamily');
+    $router->get('patientFamily[/{id}]', 'Api\v1\PatientFamilyController@listPatientFamily');
     $router->get('team', 'Api\v1\TeamController@all');
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
 });
