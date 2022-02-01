@@ -19,29 +19,48 @@ class AppointmentService
 
     public function addAppointment($request)
     {
-        $input = [
-            'udid' => Str::random(10),
-            'appointmentTypeId' => $request->appointmentTypeId,
-            'startDate' => $request->startDate,
-            'startTime' => $request->startTime,
-            'durationId' => $request->durationId,
-            'note' => $request->note,
-            'createdBy' => Auth::user()->id,
-        ];
-        if (Auth::user()->roleId == 4) {
-            $patientData = Patient::where('userId', Auth::user()->id)->first();
+        if(Auth::user()){
+
+            $input = [
+                'udid' => Str::random(10),
+                'appointmentTypeId' => $request->appointmentTypeId,
+                'startDate' => $request->startDate,
+                'startTime' => $request->startTime,
+                'durationId' => $request->durationId,
+                'note' => $request->note,
+                'createdBy' => Auth::user()->id,
+            ];
+            if (Auth::user()->roleId == 4) {
+                $patientData = Patient::where('userId', Auth::user()->id)->first();
+                $entity = [
+                    'staffId' => $request->staffId,
+                    'patientId' => $patientData->id,
+                ];
+            } else {
+                $staffData = Staff::where('userId', Auth::user()->id)->first();
+                $entity = [
+                    'staffId' => $staffData->id,
+                    'patientId' => $request->patientId,
+                ];
+            }
+            $data = array_merge($entity, $input);
+        }else{
+            $input = [
+                'udid' => Str::random(10),
+                'appointmentTypeId' => $request->appointmentTypeId,
+                'startDate' => $request->startDate,
+                'startTime' => $request->startTime,
+                'durationId' => $request->durationId,
+                'note' => $request->note,
+                'createdBy' => 1,
+            ];
             $entity = [
                 'staffId' => $request->staffId,
-                'patientId' => $patientData->id,
-            ];
-        } else {
-            $staffData = Staff::where('userId', Auth::user()->id)->first();
-            $entity = [
-                'staffId' => $staffData->id,
                 'patientId' => $request->patientId,
             ];
+            
+            $data = array_merge($entity, $input);
         }
-        $data = array_merge($entity, $input);
         Appointment::create($data);
         return response()->json(['message' => 'created successfully']);
     }
