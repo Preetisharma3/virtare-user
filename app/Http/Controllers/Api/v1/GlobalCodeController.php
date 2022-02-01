@@ -9,9 +9,9 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class GlobalCodeController extends BaseController
 {
-    public function globalCodeCategory(Request $request)
+    public function globalCodeCategory(Request $request,$id=null)
     {
-        return (new GlobalCodeService)->globalCodeCategoryList($request);
+        return (new GlobalCodeService)->globalCodeCategoryList($request,$id);
     }
 
     public function createGlobalCode(Request $request)

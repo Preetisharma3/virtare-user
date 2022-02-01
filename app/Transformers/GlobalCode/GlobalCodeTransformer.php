@@ -37,7 +37,9 @@ class GlobalCodeTransformer extends TransformerAbstract
             'globalCodeCategoryId'=>$data->globalCodeCategory->id,
             'globalCodeCategory'=>$data->globalCodeCategory->name,
 			'name'=>$data->name,
-            'description'=>$data->description
+            'description'=>$data->description,
+            'status'=>$data->isActive,
+            'userCount'=>0
 		];
     }
 }
