@@ -13,6 +13,7 @@ use App\Models\Patient\PatientInsurance;
 use App\Models\Patient\PatientProgram;
 use App\Transformers\GlobalCode\GlobalCodeTransformer;
 use App\Transformers\GlobalCode\GlobalCodeCategoryTransformer;
+use Symfony\Component\Console\Input\Input;
 
 class GlobalCodeService
 {
@@ -25,6 +26,21 @@ class GlobalCodeService
                } else {
                     $global = GlobalCodeCategory::where('id', $id)->with('globalCode')->first();
                     return fractal()->item($global)->transformWith(new GlobalCodeCategoryTransformer())->toArray();
+               }
+          } catch (Exception $e) {
+               return response()->json(['message' => $e->getMessage()],  500);
+          }
+     }
+
+     public function globalCodeList($request, $id)
+     {
+          try {
+               if (!$id) {
+                    $global = GlobalCode::get();
+                    return fractal()->collection($global)->transformWith(new GlobalCodeTransformer())->toArray();
+               } else {
+                    $global = GlobalCode::where('id', $id)->first();
+                    return fractal()->item($global)->transformWith(new GlobalCodeTransformer())->toArray();
                }
           } catch (Exception $e) {
                return response()->json(['message' => $e->getMessage()],  500);
@@ -60,14 +76,22 @@ class GlobalCodeService
      public function globalCodeUpdate($request, $id)
      {
           try {
-               $merge = $request->merge(['globalCodeCategoryId' => $request->globalcodecategory, 'updatedBy' => 1, 'isActive' => $request->status]);
-               $global = GlobalCode::find($id)->update($merge->only([
-                    'globalCodeCategoryId', 'name', 'description', 'updatedBy', 'isActive'
-               ]));
-               $input = GlobalCode::find($id)->first();
-               $data = GlobalCode::whereHas('globalCodeCategory', function ($q) use ($input, $id) {
-                    $q->where('id', $input['globalCodeCategoryId']);
-               })->where('id', $id)->with('globalCodeCategory')->first();
+               $globalCode = array();
+               if(!empty($request->globalcodecategory)){
+                    $globalCode['globalCodeCategoryId'] = $request->globalcodecategory;
+               }
+               if(!empty($request->name)){
+                    $globalCode['name'] = $request->name;
+               }
+               if(!empty($request->description)){
+                    $globalCode['description'] = $request->description;
+               }
+               if(isset($request->status)){
+                    $globalCode['isActive'] = $request->status;
+               }
+               $globalCode['updatedBy'] = 1;
+               $global = GlobalCode::find($id)->update($globalCode);
+               $data = GlobalCode::where('id', $id)->with('globalCodeCategory')->first();
                $userdata = fractal()->item($data)->transformWith(new GlobalCodeTransformer())->toArray();
                $message = ['message' => 'updated successfully'];
                $endData = array_merge($message, $userdata);
