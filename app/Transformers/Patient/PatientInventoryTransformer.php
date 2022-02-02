@@ -23,6 +23,6 @@ class PatientInventoryTransformer extends TransformerAbstract
             'status'=>$data->isActive==1?'Active':'Inactive',
             
         ];
-        return array_merge($field,$inventory['data']);
+        return array_merge($inventory['data'],$field);
     }
 }
