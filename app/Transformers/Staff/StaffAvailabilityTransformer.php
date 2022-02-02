@@ -2,6 +2,7 @@
 
 namespace App\Transformers\Staff;
 
+
 use App\Transformers\Appointment\AppointmentDataTransformer;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Role\RoleTransformer;
@@ -9,8 +10,10 @@ use App\Transformers\Staff\StaffNoteTransformer;
 use App\Transformers\Staff\BookappointmentValueTransformer;
 
 
+
 class StaffAvailabilityTransformer extends TransformerAbstract
 {
+
 
 
     protected $showData;
@@ -19,6 +22,7 @@ class StaffAvailabilityTransformer extends TransformerAbstract
     {
         $this->showData = $showData;
     }
+
     /**
      * List of resources to automatically include
      *
@@ -27,6 +31,7 @@ class StaffAvailabilityTransformer extends TransformerAbstract
     protected $defaultIncludes = [
         //
     ];
+
 
     /**
      * List of resources possible to include
@@ -37,6 +42,8 @@ class StaffAvailabilityTransformer extends TransformerAbstract
         //
     ];
 
+    
+
     /**
      * A Fractal transformer.
      *
@@ -44,11 +51,13 @@ class StaffAvailabilityTransformer extends TransformerAbstract
      */
     public function transform($data): array
     {
+
             return [
                 'id'=>$data->id,
                 'staff_id'=>$data->staffId,
                 'start_time'=>$data->startTime,
                 'finish_time'=>$data->endTime
             ];
+
     }
 }

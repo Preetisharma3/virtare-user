@@ -71,6 +71,7 @@ $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientC
 $router->get('patient/{id}/condition[/{conditionId}]', 'Api\v1\PatientController@listPatientCondition');
 $router->post('staff', 'Api\v1\StaffController@addStaff');
 $router->get('staff', 'Api\v1\StaffController@listStaff');
+$router->put('staff/{id}', 'Api\v1\StaffController@updateStaff');
 $router->post('patient/{id}/referals', 'Api\v1\PatientController@createPatientReferals');
 $router->put('patient/{id}/referals/{referalsId}', 'Api\v1\PatientController@updatePatientReferals');
 $router->get('patient/{id}/referals[/{referalsId}]', 'Api\v1\PatientController@listPatientReferals');
@@ -149,5 +150,14 @@ $router->post('screen', 'Api\v1\ScreenController@createScreen');
 $router->get('screen', 'Api\v1\ScreenController@getScreen');
 
 $router->post('staffContact/{id}', 'Api\v1\StaffController@addStaffContact');
+$router->get('staffContact', 'Api\v1\StaffController@listStaffContact');
+$router->put('staffContact/{id}', 'Api\v1\StaffController@updateStaffContact');
+$router->delete('staffContact/{id}', 'Api\v1\StaffController@deleteStaffContact');
 $router->post('staffAvailability/{id}', 'Api\v1\StaffController@addStaffAvailability');
-
+$router->get('staffAvailability', 'Api\v1\StaffController@listStaffAvailability');
+$router->put('staffAvailability/{id}', 'Api\v1\StaffController@updateStaffAvailability');
+$router->delete('staffAvailability/{id}', 'Api\v1\StaffController@deleteStaffAvailability');
+$router->post('staffRole/{id}', 'Api\v1\StaffController@addStaffRole');
+$router->get('staffRole', 'Api\v1\StaffController@listStaffRole');
+$router->put('staffRole/{id}', 'Api\v1\StaffController@updateStaffRole');
+$router->delete('staffRole/{id}', 'Api\v1\StaffController@deleteStaffRole');
