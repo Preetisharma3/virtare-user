@@ -2,6 +2,7 @@
 
 namespace App\Transformers\Patient;
 
+use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\User\UserTransformer;
 
@@ -24,6 +25,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'contactTime' => $data->contactTime->name,
 				'relation' => $data->relation->name,
 				'email' => $data->user->email,
+				'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
 			];
 		}
 		else{
@@ -36,6 +38,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'contactType' => $data->contactTypeId,
 				'contactTime' => $data->contactTime->name,
 				'email' => $data->email,
+				'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
 			];
 		}
 		

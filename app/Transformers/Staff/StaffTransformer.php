@@ -2,12 +2,12 @@
 
 namespace App\Transformers\Staff;
 
-use App\Transformers\Appointment\AppointmentDataTransformer;
+use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Role\RoleTransformer;
 use App\Transformers\Staff\StaffNoteTransformer;
 use App\Transformers\Staff\StaffAvailabilityTransformer;
-use App\Transformers\Staff\BookappointmentValueTransformer;
+
 
 
 class StaffTransformer extends TransformerAbstract
@@ -45,7 +45,6 @@ class StaffTransformer extends TransformerAbstract
      */
     public function transform($data): array
     {
-        // dd();
         return [
             'id' => $data->id,
             'user_id' => $data->userId,
@@ -63,7 +62,7 @@ class StaffTransformer extends TransformerAbstract
             'nickname' => $data->nickname ? $data->nickname : '',
             'gender' => $data->gender->name,
             'contact_no' => $data->phoneNumber,
-            'profile_photo' => $data->profile_photo ? $data->profile_photo : '',
+            'profile_photo' =>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
             'network' => $data->network->name,
             'specialization' => $data->specialization->name,
             'createdAt' => $data->createdAt,
