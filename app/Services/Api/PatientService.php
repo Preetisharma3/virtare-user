@@ -3,11 +3,13 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Models\Tag\Tag;
 use App\Models\User\User;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use App\Models\Document\Document;
 use Illuminate\Support\Facades\DB;
+use App\Models\Patient\PatientFlag;
 use App\Models\Patient\PatientVital;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,9 +24,8 @@ use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
-use App\Models\Patient\PatientFlag;
-use App\Models\Tag\Tag;
 use App\Transformers\Patient\PatientTransformer;
+use App\Transformers\Inventory\InventoryTransformer;
 use App\Transformers\Patient\PatientVitalTransformer;
 use App\Transformers\Patient\PatientDeviceTransformer;
 use App\Transformers\Patient\PatientMedicalTransformer;
@@ -533,13 +534,11 @@ class PatientService
             if (!$inventoryId) {
                 $udid = Str::uuid()->toString();
                 $input = [
-                    'inventoryId' => $request->input('inventory'), 'patientId' => $id, 'deviceType' => $request->input('deviceType'),
-                    'modelNumber' => $request->input('modelNumber'), 'serialNumber' => $request->input('serialNumber'), 'createdBy' => 1,
-                    'macAddress' => $request->input('macAddress'), 'deviceTime' => $request->input('deviceTime'), 'serverTime' => $request->input('serverTime'), 'udid' => $udid
+                    'inventoryId' => $request->input('inventory'), 'patientId' => $id,'createdBy' => 1,'udid' => $udid
                 ];
                 $patient = PatientInventory::create($input);
                 $getPatient = PatientInventory::where('id', $patient->id)->with('patient', 'inventory', 'deviceTypes')->first();
-                $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+                $userdata = fractal()->item($getPatient)->transformWith(new InventoryTransformer())->toArray();
                 $message = ['message' => 'created successfully'];
             } else {
 
@@ -548,7 +547,7 @@ class PatientService
                 ];
                 $patient = PatientInventory::where('id', $inventoryId)->update($input);
                 $getPatient = PatientInventory::where('id', $inventoryId)->with('patient', 'inventory', 'deviceTypes')->first();
-                $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+                $userdata = fractal()->item($getPatient)->transformWith(new InventoryTransformer())->toArray();
                 $message = ['message' => 'updated successfully'];
             }
             DB::commit();
@@ -566,10 +565,10 @@ class PatientService
         try {
             if ($inventoryId) {
                 $getPatient = PatientInventory::where('id', $inventoryId)->with('patient', 'inventory', 'deviceTypes')->first();
-                return fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+                return fractal()->item($getPatient)->transformWith(new InventoryTransformer())->toArray();
             } else {
                 $getPatient = PatientInventory::where('patientId', $id)->with('patient', 'inventory', 'deviceTypes')->get();
-                return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+                return fractal()->collection($getPatient)->transformWith(new InventoryTransformer())->toArray();
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);

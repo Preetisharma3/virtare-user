@@ -13,11 +13,17 @@ class InventoryTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id' => $data->id,
-            'deviceType' => $data->deviceTypes->name,
-            'modelNumber' => $data->modelNumber,
-            'serialNumber' => $data->serialNumber,
-            'macAddress' => $data->macAddress,
+            'patientInventoryId' => $data->id,
+            'patientInventoryudid'=>$data->udid,
+            'patientId'=>$data->patientId,
+            'inventoryId'=>$data->inventoryId,
+            'inventoryUdid'=>$data->inventory->udid,
+            'deviceType' => $data->inventory->deviceTypes->name,
+            'modelNumber' => $data->inventory->modelNumber,
+            'serialNumber' => $data->inventory->serialNumber,
+            'macAddress' => $data->inventory->macAddress,
+            'isAdded'=>$data->isAdded,
+            'isActive'=>$data->isActive
         ];
     }
 }
