@@ -3,11 +3,13 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Models\Tag\Tag;
 use App\Models\User\User;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use App\Models\Document\Document;
 use Illuminate\Support\Facades\DB;
+use App\Models\Patient\PatientFlag;
 use App\Models\Patient\PatientVital;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,9 +24,8 @@ use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
-use App\Models\Patient\PatientFlag;
-use App\Models\Tag\Tag;
 use App\Transformers\Patient\PatientTransformer;
+use App\Transformers\Inventory\InventoryTransformer;
 use App\Transformers\Patient\PatientVitalTransformer;
 use App\Transformers\Patient\PatientDeviceTransformer;
 use App\Transformers\Patient\PatientMedicalTransformer;
@@ -533,9 +534,7 @@ class PatientService
             if (!$inventoryId) {
                 $udid = Str::uuid()->toString();
                 $input = [
-                    'inventoryId' => $request->input('inventory'), 'patientId' => $id, 'deviceType' => $request->input('deviceType'),
-                    'modelNumber' => $request->input('modelNumber'), 'serialNumber' => $request->input('serialNumber'), 'createdBy' => 1,
-                    'macAddress' => $request->input('macAddress'), 'deviceTime' => $request->input('deviceTime'), 'serverTime' => $request->input('serverTime'), 'udid' => $udid
+                    'inventoryId' => $request->input('inventory'), 'patientId' => $id,'createdBy' => 1,'udid' => $udid
                 ];
                 $patient = PatientInventory::create($input);
                 $getPatient = PatientInventory::where('id', $patient->id)->with('patient', 'inventory', 'deviceTypes')->first();

@@ -96,9 +96,9 @@ class DocumentService
         try {
             $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
             if ($entity == 'patient') {
-                Document::where(['id', $documentId], ['entityType', 'patient'])->update($data);
+                Document::where([['id', $documentId], ['entityType', 'patient']])->update($data);
                 tag::where('documentId', $documentId)->update($data);
-                Document::where(['id', $documentId], ['entityType', 'patient'])->delete();
+                Document::where([['id', $documentId], ['entityType', 'patient']])->delete();
                 tag::where('documentId', $documentId)->delete();
             }
             DB::commit();
