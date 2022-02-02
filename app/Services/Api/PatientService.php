@@ -64,22 +64,37 @@ class PatientService
                 ];
                 $newData = Patient::create($patient);
 
-                // Added family in user Table
-                $familyMemberUser = [
 
-                    'password' => Hash::make('password'), 'udid' => $udid, 'email' => $request->input('familyEmail'),
-                    'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 4
-                ];
-                $fam = User::create($familyMemberUser);
 
                 //Added Family in patientFamilyMember Table
-                $familyMember = [
-                    'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
-                    'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
-                    'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
-                    'createdBy' => 1, 'userId' => $fam->id, 'udid' => $udid
-                ];
-                $familyData = PatientFamilyMember::create($familyMember);
+                $userData = User::where([['email', $request->email], ['roleId', 4]])->first();
+                $userEmail = $userData->id;
+                if ($userData) {
+                    $familyMember = [
+                        'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
+                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                        'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
+                        'createdBy' => 1, 'userId' => $userEmail, 'udid' => $udid
+                    ];
+                    $familyData = PatientFamilyMember::create($familyMember);
+                } else {
+                    // Added family in user Table
+                    $familyMemberUser = [
+
+                        'password' => Hash::make('password'), 'udid' => $udid, 'email' => $request->input('familyEmail'),
+                        'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 4
+                    ];
+                    $fam = User::create($familyMemberUser);
+                    //Added Family in patientFamilyMember Table
+                    $familyMember = [
+                        'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
+                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                        'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
+                        'createdBy' => 1, 'userId' => $userEmail, 'udid' => $udid
+                    ];
+                    $familyData = PatientFamilyMember::create($familyMember);
+                }
+
 
                 //Added emergency contact in PatientEmergencyContact table
                 $emergencyContact = [
@@ -534,7 +549,7 @@ class PatientService
             if (!$inventoryId) {
                 $udid = Str::uuid()->toString();
                 $input = [
-                    'inventoryId' => $request->input('inventory'), 'patientId' => $id,'createdBy' => 1,'udid' => $udid
+                    'inventoryId' => $request->input('inventory'), 'patientId' => $id, 'createdBy' => 1, 'udid' => $udid
                 ];
                 $patient = PatientInventory::create($input);
                 $getPatient = PatientInventory::where('id', $patient->id)->with('patient', 'inventory', 'deviceTypes')->first();
@@ -917,7 +932,7 @@ class PatientService
     }
 
     // List Patient Device
-    public function patientDeviceList($request,$id)
+    public function patientDeviceList($request, $id)
     {
         try {
             $getPatient = PatientDevice::where('patientId', $id)->with('patient')->get();
@@ -926,5 +941,4 @@ class PatientService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
-
 }
