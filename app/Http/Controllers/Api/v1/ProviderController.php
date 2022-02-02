@@ -8,7 +8,7 @@ use App\Services\Api\ProviderService;
 
 class ProviderController extends Controller
 {
-    
+
     public function index()
     {
         //
@@ -19,13 +19,17 @@ class ProviderController extends Controller
         return (new ProviderService)->store($request);
     }
 
+    public function providerLocationStore(Request $request,$id)
+    {
+        return (new ProviderService)->providerLocationStore($request,$id);
+    }
 
     public function update(Request $request, $id)
     {
         //
     }
 
-    
+
     public function destroy($id)
     {
         //
