@@ -105,6 +105,7 @@ $router->get('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController
 $router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
 $router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevice');
 $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
+$router->get('patient/{id}/device', 'Api\v1\PatientController@listPatientDevice');
 
 
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');

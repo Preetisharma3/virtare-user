@@ -916,4 +916,16 @@ class PatientService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
+
+    // List Patient Device
+    public function patientDeviceList($request,$id)
+    {
+        try {
+            $getPatient = PatientDevice::where('patientId', $id)->with('patient')->get();
+            return fractal()->collection($getPatient)->transformWith(new PatientDeviceTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
 }
