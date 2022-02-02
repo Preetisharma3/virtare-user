@@ -114,7 +114,7 @@ $router->get('patient/{id}/device', 'Api\v1\PatientController@listPatientDevice'
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
 $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
 $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
-$router->get('appointment/search','Api\v1\AppointmentController@appointmentSearch');
+$router->get('appointment/search', 'Api\v1\AppointmentController@appointmentSearch');
 $router->get('appointment/future', 'Api\v1\AppointmentController@futureAppointment');
 $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
 $router->post('task', 'Api\v1\TaskController@addTask');
@@ -177,4 +177,4 @@ $router->post('inventory', 'Api\v1\InventoryController@store');
 $router->get('inventory', 'Api\v1\InventoryController@index');
 $router->put('inventory/{id}', 'Api\v1\InventoryController@update');
 $router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
-
+$router->post('provider', 'Api\v1\ProviderController@store');
