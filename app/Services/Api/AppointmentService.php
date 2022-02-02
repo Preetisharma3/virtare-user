@@ -76,9 +76,8 @@ class AppointmentService
         $fromDate = $request->fromDate;
         $toDate = $request->toDate;
         $data = DB::select(
-            'CALL appointmentList('.$fromDate.','.$toDate.')',
+            'CALL appointmentList("'.$fromDate.'","'.$toDate.'")',
          );
-        return($data);
-        
+        return response()->json(['data'=>$data],200);
     }
 }
