@@ -538,7 +538,7 @@ class PatientService
                 ];
                 $patient = PatientInventory::create($input);
                 $getPatient = PatientInventory::where('id', $patient->id)->with('patient', 'inventory', 'deviceTypes')->first();
-                $userdata = fractal()->item($getPatient)->transformWith(new InventoryTransformer())->toArray();
+                $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
                 $message = ['message' => 'created successfully'];
             } else {
 
@@ -547,7 +547,7 @@ class PatientService
                 ];
                 $patient = PatientInventory::where('id', $inventoryId)->update($input);
                 $getPatient = PatientInventory::where('id', $inventoryId)->with('patient', 'inventory', 'deviceTypes')->first();
-                $userdata = fractal()->item($getPatient)->transformWith(new InventoryTransformer())->toArray();
+                $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
                 $message = ['message' => 'updated successfully'];
             }
             DB::commit();
@@ -565,10 +565,10 @@ class PatientService
         try {
             if ($inventoryId) {
                 $getPatient = PatientInventory::where('id', $inventoryId)->with('patient', 'inventory', 'deviceTypes')->first();
-                return fractal()->item($getPatient)->transformWith(new InventoryTransformer())->toArray();
+                return fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             } else {
                 $getPatient = PatientInventory::where('patientId', $id)->with('patient', 'inventory', 'deviceTypes')->get();
-                return fractal()->collection($getPatient)->transformWith(new InventoryTransformer())->toArray();
+                return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
