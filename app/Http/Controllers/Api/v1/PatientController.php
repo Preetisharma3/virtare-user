@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
+use App\Services\Api\FamilyService;
 use App\Http\Controllers\Controller;
 use App\Services\Api\PatientService;
 use App\Http\Requests\Patient\PatientRequest;
@@ -34,6 +35,11 @@ class PatientController extends Controller
     return (new PatientService)->patientList($request, $id);
   }
 
+  public function deletePatient(Request $request, $id)
+  {
+    return (new PatientService)->patientDelete($request, $id);
+  }
+
   public function createPatientCondition(PatientConditionRequest $request, $id)
   {
     return (new PatientService)->patientConditionCreate($request, $id);
@@ -59,6 +65,11 @@ class PatientController extends Controller
     return (new PatientService)->patientReferalsList($request, $id, $referalsId);
   }
 
+  public function deletePatientReferals(Request $request, $id, $referalsId)
+  {
+    return (new PatientService)->patientReferalsDelete($request, $id, $referalsId);
+  }
+
   public function createPatientPhysician(PatientPhysicianRequest $request, $id, $physicianId = null)
   {
     return (new PatientService)->patientPhysicianCreate($request, $id, $physicianId);
@@ -72,6 +83,11 @@ class PatientController extends Controller
   public function listPatientPhysician(Request $request, $id, $physicianId = null)
   {
     return (new PatientService)->patientPhysicianList($request, $id, $physicianId);
+  }
+
+  public function deletePatientPhysician(Request $request, $id, $physicianId)
+  {
+    return (new PatientService)->patientPhysicianDelete($request, $id, $physicianId);
   }
 
   public function createPatientProgram(PatientProgramRequest $request, $id, $programId = null)
@@ -119,6 +135,11 @@ class PatientController extends Controller
     return (new PatientService)->patientVitalList($request, $id, $vitalId);
   }
 
+  public function deletePatientVital(Request $request, $id, $vitalId = null)
+  {
+    return (new PatientService)->patientVitalDelete($request, $id, $vitalId);
+  }
+
   public function createPatientMedicalHistory(PatientMedicalHistoryRequest $request, $id, $medicalHistoryId = null)
   {
     return (new PatientService)->patientMedicalHistoryCreate($request, $id, $medicalHistoryId);
@@ -127,6 +148,11 @@ class PatientController extends Controller
   public function listPatientMedicalHistory(Request $request, $id, $medicalHistoryId = null)
   {
     return (new PatientService)->patientMedicalHistoryList($request, $id, $medicalHistoryId);
+  }
+
+  public function deletePatientMedicalHistory(Request $request, $id, $medicalHistoryId)
+  {
+    return (new PatientService)->patientMedicalHistoryDelete($request, $id, $medicalHistoryId);
   }
 
   public function createPatientMedicalRoutine(PatientMedicalRoutineRequest $request, $id, $medicalRoutineId = null)
@@ -139,6 +165,11 @@ class PatientController extends Controller
     return (new PatientService)->patientMedicalRoutineList($request, $id, $medicalRoutineId);
   }
 
+  public function deletePatientMedicalRoutine(Request $request, $id, $medicalRoutineId)
+  {
+    return (new PatientService)->patientMedicalRoutineDelete($request, $id, $medicalRoutineId);
+  }
+
   public function createPatientInsurance(Request $request, $id, $insuranceId = null)
   {
     return (new PatientService)->patientInsuranceCreate($request, $id, $insuranceId);
@@ -147,6 +178,11 @@ class PatientController extends Controller
   public function listPatientInsurance(Request $request, $id, $insuranceId = null)
   {
     return (new PatientService)->patientInsuranceList($request, $id, $insuranceId);
+  }
+
+  public function deletePatientInsurance(Request $request, $id, $insuranceId)
+  {
+    return (new PatientService)->patientInsuranceDelete($request, $id, $insuranceId);
   }
 
   public function listingPatientInventory(Request $request)
@@ -162,6 +198,33 @@ class PatientController extends Controller
   public function createPatientDevice(Request $request,$id,$deviceId=null)
   {
     return (new PatientService)->patientDeviceCreate($request,$id,$deviceId);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // Family 
+  public function createFamily(Request $request,$id=null)
+  {
+    return (new FamilyService)->familyCreate($request,$id);
   }
 
  

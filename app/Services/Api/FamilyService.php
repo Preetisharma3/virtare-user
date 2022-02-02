@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Patient\PatientFamilyMember;
 use App\Transformers\Patient\PatientFamilyMemberTransformer;
 
-class PatientFamilyService
+class FamilyService
 {
-    public function patientFamilyCreate($request, $id)
+    public function familyCreate($request, $id)
     {
         DB::beginTransaction();
         try {
@@ -66,21 +66,6 @@ class PatientFamilyService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
-        }
-    }
-
-    public function patientFamilyList($request, $id)
-    {
-        try {
-            if (!$id) {
-                $data = PatientFamilyMember::get();
-                return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
-            } else {
-                $data = PatientFamilyMember::where('id', $id)->first();
-                return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
-            }
-        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
