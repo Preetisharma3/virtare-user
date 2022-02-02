@@ -14,7 +14,7 @@ class InventoryTransformer extends TransformerAbstract
     { 
         return [
             'udid' => $data->udid,
-            'deviceType' => $data->deviceType,
+            'deviceType' => $data->deviceTypes->name,
             'modelNumber' => $data->modelNumber,
             'serialNumber' => $data->serialNumber,
             'macAddress' => $data->macAddress,
