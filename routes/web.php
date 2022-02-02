@@ -161,3 +161,9 @@ $router->post('staffRole/{id}', 'Api\v1\StaffController@addStaffRole');
 $router->get('staffRole', 'Api\v1\StaffController@listStaffRole');
 $router->put('staffRole/{id}', 'Api\v1\StaffController@updateStaffRole');
 $router->delete('staffRole/{id}', 'Api\v1\StaffController@deleteStaffRole');
+
+$router->post('inventory', 'Api\v1\InventoryController@store');
+$router->get('inventory', 'Api\v1\InventoryController@index');
+$router->put('inventory/{id}', 'Api\v1\InventoryController@update');
+$router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
+
