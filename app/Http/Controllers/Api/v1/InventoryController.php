@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 class InventoryController extends Controller
 {
-    public function index()
+    public function index(request $request)
     {
-        return (new InventoryService)->index();
+        return (new InventoryService)->index($request);
     }
 
     public function store(Request $request)

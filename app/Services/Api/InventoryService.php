@@ -29,10 +29,12 @@ class InventoryService
         }
     }
 
-    public function index()
+    public function index($request)
     {
         try {
-            $data = DB::select('CALL inventoryList()');
+            $isAvailable = $request->isAvailable;
+            $deviceType = $request->deviceType;
+            $data = DB::select('CALL inventoryList("' . $isAvailable . '","' . $deviceType . '")');
             return fractal()->collection($data)->transformWith(new InventoryTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
