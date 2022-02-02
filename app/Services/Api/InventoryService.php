@@ -2,6 +2,7 @@
 
 namespace App\Services\Api;
 
+use App\Models\Inventory\Inventory;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,7 @@ class InventoryService
             $macAddress = $request->macAddress;
             $isActive = $request->isActive;
             $createdBy = 1;
-            DB::raw('CALL createInventories(?,?,?,?,?,?),(' . $udid . ',' . $deviceType . ',' . $modelNumber . ',' . $serialNumber . ',' . $macAddress . ',' . $isActive . ',' . $createdBy . ')');
+            DB::select('CALL createInventories("' . $udid . '","' . $deviceType . '","' . $modelNumber . '","' . $serialNumber . '","' . $macAddress . '","' . $isActive . '","' . $createdBy . '")');
             return response()->json(['message' => 'Created Successfully'], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -30,8 +31,12 @@ class InventoryService
 
     public function index()
     {
-        $data = DB::select('CALL inventoryList()');
-        return fractal()->collection($data)->transformWith(new InventoryTransformer())->toArray();
+        try {
+            $data = DB::select('CALL inventoryList()');
+            return fractal()->collection($data)->transformWith(new InventoryTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     public function update($request, $id)
@@ -43,16 +48,24 @@ class InventoryService
             $macAddress = $request->macAddress;
             $isActive = $request->isActive;
             $updatedBy = 1;
-            DB::select('CALL updateInventory(?,?,?,?,?,?,?),(' . $id . ',' . $deviceType . ',' . $modelNumber . ',' . $serialNumber . ',' . $macAddress . ',' . $isActive . ',' . $updatedBy . ')');
+            DB::select('CALL updateInventory("' . $id . '","' . $deviceType . '","' . $modelNumber . '","' . $serialNumber . '","' . $macAddress . '","' . $isActive . '","' . $updatedBy . '")');
+            $message  = ['message' => 'updated successfully'];
+            $newData = Inventory::where('id', $id)->first();
+            $data =  fractal()->item($newData)->transformWith(new InventoryTransformer())->toArray();
+            $response = array_merge($message, $data);
+            return $response;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-
     public function destroy($id)
     {
-        DB::select('CALL deleteInventory(' . $id . ')');
-        return response()->json(['message' => 'deleted successfully'], 200);
+        try {
+            DB::select('CALL deleteInventory(' . $id . ')');
+            return response()->json(['message' => 'deleted successfully'], 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }

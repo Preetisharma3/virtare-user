@@ -14,10 +14,14 @@ class CreateInventoryDeleteProcedure extends Migration
      */
     public function up()
     {
-        $screenAction = "DROP PROCEDURE IF EXISTS `deleteInventory`;
-        CREATE PROCEDURE  deleteInventory(IN id int) 
+        $screenAction = "DROP PROCEDURE IF EXISTS `deleteInventory`;";
+
+        DB::unprepared($screenAction);
+
+        $screenAction = "
+        CREATE PROCEDURE  deleteInventory(IN idx int) 
         BEGIN
-        DELETE FROM `inventories` WHERE id=id;
+        DELETE FROM `inventories` WHERE id=idx;
         END;";
 
         DB::unprepared($screenAction);

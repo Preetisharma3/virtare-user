@@ -11,7 +11,7 @@ class InventoryTransformer extends TransformerAbstract
     protected $availableIncludes = [];
 
     public function transform($data): array
-    {
+    { 
         return [
             'udid' => $data->udid,
             'deviceType' => $data->deviceType,
