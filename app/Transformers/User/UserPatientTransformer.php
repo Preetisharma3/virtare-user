@@ -38,7 +38,7 @@ class UserPatientTransformer extends TransformerAbstract
 			'height' => $user->patient->height,
 			'contactNo' => $user->patient->phoneNumber,
 			'house_no' => $user->patient->appartment,
-			'profile_photo' => (!empty($user->profile_photo))&&(!is_null($user->profile_photo)) ? URL::to('/').'/'.$user->profile_photo : "",
+			'profile_photo' => (!empty($user->profilePhoto))&&(!is_null($user->profilePhoto)) ? URL::to('/').'/'.$user->profilePhoto : "",
 			'city' => $user->patient->city,
 			'state' => $user->patient->state->name,
 			'country' => $user->patient->country->name,
