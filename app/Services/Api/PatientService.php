@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User\User;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
+use App\Models\Document\Document;
 use Illuminate\Support\Facades\DB;
 use App\Models\Patient\PatientVital;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,8 @@ use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
+use App\Models\Patient\PatientFlag;
+use App\Models\Tag\Tag;
 use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Patient\PatientVitalTransformer;
 use App\Transformers\Patient\PatientDeviceTransformer;
@@ -223,6 +226,46 @@ class PatientService
         }
     }
 
+    // Delete patient
+    public function patientDelete($request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            $patient = Patient::where('id', $id)->first();
+            $user = $patient->userId;
+            $document = Document::where([['referanceId', $id], ['entityType', 'patient']])->first();
+            $tag = $document->id;
+            $tables = [
+                User::where('id', $user),
+                PatientVital::where('id', $id),
+                PatientProgram::where('patientId', $id),
+                PatientInsurance::where('patientId', $id),
+                PatientInventory::where('patientId', $id),
+                PatientPhysician::where('patientId', $id),
+                PatientFamilyMember::where('patientId', $id),
+                PatientMedicalHistory::where('patientId', $id),
+                PatientMedicalRoutine::where('patientId', $id),
+                PatientFlag::where('patientId', $id),
+                PatientCondition::where('patientId', $id),
+                PatientEmergencyContact::where('patientId', $id),
+                PatientEmergencyContact::where('patientId', $id),
+                PatientEmergencyContact::where('patientId', $id),
+                PatientEmergencyContact::where('patientId', $id),
+                Tag::where('documentId', $tag),
+            ];
+            foreach ($tables as $table) {
+                $table->update($data);
+                $table->delete();
+            }
+            DB::commit();
+            return response()->json(['message' => 'delete successfully']);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
     // Add And Update Patient Condition
     public function patientConditionCreate($request, $id)
     {
@@ -279,9 +322,7 @@ class PatientService
                     'name' => $request->input('name'), 'designationId' => $request->input('designation'), 'email' => $request->input('email'),
                     'patientId' => $id, 'fax' => $request->input('fax'), 'createdBy' => 1, 'phoneNumber' => $request->input('phoneNumber'), 'udid' => $udid
                 ];
-
                 $patient = PatientReferal::create($input);
-                DB::commit();
                 $getPatient = PatientReferal::where('id', $patient->id)->with('patient', 'designation')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
                 $message = ['message' => 'created successfully'];
@@ -295,6 +336,7 @@ class PatientService
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
                 $message = ['message' => 'update successfully'];
             }
+            DB::commit();
 
             $endData = array_merge($message, $userdata);
             return $endData;
@@ -304,7 +346,7 @@ class PatientService
         }
     }
 
-    // List Patient referals
+    // List Patient Referals
     public function patientReferalsList($request, $id, $referalsId)
     {
         try {
@@ -316,6 +358,22 @@ class PatientService
                 return fractal()->collection($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
             }
         } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Delete Patient Referals
+    public function patientReferalsDelete($request, $id, $referalsId)
+    {
+        DB::beginTransaction();
+        try {
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            PatientReferal::find($referalsId)->update($data);
+            PatientReferal::find($referalsId)->delete();
+            DB::commit();
+            return response()->json(['message' => 'delete successfully']);
+        } catch (Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
@@ -381,6 +439,22 @@ class PatientService
                 return fractal()->collection($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
             }
         } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Delete Patient Physician
+    public function patientPhysicianDelete($request, $id, $physicianId)
+    {
+        DB::beginTransaction();
+        try {
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            PatientPhysician::find($physicianId)->update($data);
+            PatientPhysician::find($physicianId)->delete();
+            DB::commit();
+            return response()->json(['message' => 'delete successfully']);
+        } catch (Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
@@ -502,13 +576,14 @@ class PatientService
         }
     }
 
+    // Delete Patient Inventory
     public function patientInventoryDelete($request, $id, $inventoryId)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
-            PatientInventory::find($id)->update($data);
-            PatientInventory::find($id)->delete();
+            PatientInventory::find($inventoryId)->update($data);
+            PatientInventory::find($inventoryId)->delete();
             DB::commit();
             return response()->json(['message' => 'delete successfully']);
         } catch (Exception $e) {
@@ -569,6 +644,22 @@ class PatientService
         }
     }
 
+    // Delete Patient Vitals
+    public function patientVitalDelete($request, $id, $vitalId)
+    {
+        DB::beginTransaction();
+        try {
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            PatientVital::find($vitalId)->update($data);
+            PatientVital::find($vitalId)->delete();
+            DB::commit();
+            return response()->json(['message' => 'delete successfully']);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
     // Add And Update Patient Clinical Data
     public function patientMedicalHistoryCreate($request, $id, $medicalHistoryId)
     {
@@ -613,6 +704,22 @@ class PatientService
                 return fractal()->collection($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
             }
         } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Delete Patient History
+    public function patientMedicalHistoryDelete($request, $id, $medicalHistoryId)
+    {
+        DB::beginTransaction();
+        try {
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            PatientMedicalHistory::find($medicalHistoryId)->update($data);
+            PatientMedicalHistory::find($medicalHistoryId)->delete();
+            DB::commit();
+            return response()->json(['message' => 'delete successfully']);
+        } catch (Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
@@ -667,6 +774,22 @@ class PatientService
         }
     }
 
+    // Delete Patient Medical Routine 
+    public function patientMedicalRoutineDelete($request, $id, $medicalRoutineId)
+    {
+        DB::beginTransaction();
+        try {
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            PatientMedicalRoutine::find($medicalRoutineId)->update($data);
+            PatientMedicalRoutine::find($medicalRoutineId)->delete();
+            DB::commit();
+            return response()->json(['message' => 'delete successfully']);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
     // Add And Update Patient Insurance
     public function patientInsuranceCreate($request, $id, $insuranceId)
     {
@@ -696,17 +819,33 @@ class PatientService
     }
 
     // List Patient Insurance
-    public function patientInsuranceList($request, $id, $medicalRoutineId)
+    public function patientInsuranceList($request, $id, $insuranceId)
     {
         try {
-            if ($medicalRoutineId) {
-                $getPatient = PatientInsurance::where('id', $medicalRoutineId)->with('patient', 'insuranceName', 'insuranceType')->first();
+            if ($insuranceId) {
+                $getPatient = PatientInsurance::where('id', $insuranceId)->with('patient', 'insuranceName', 'insuranceType')->first();
                 return fractal()->item($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
             } else {
                 $getPatient = PatientInsurance::where('patientId', $id)->with('patient', 'insuranceName', 'insuranceType')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
             }
         } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Delete Patient Insurance
+    public function patientInsuranceDelete($request, $id, $insuranceId)
+    {
+        DB::beginTransaction();
+        try {
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            PatientInsurance::find($insuranceId)->update($data);
+            PatientInsurance::find($insuranceId)->delete();
+            DB::commit();
+            return response()->json(['message' => 'delete successfully']);
+        } catch (Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
@@ -745,6 +884,7 @@ class PatientService
         }
     }
 
+    // Add Patient Device
     public function patientDeviceCreate($request, $id, $deviceId)
     {
         DB::beginTransaction();
@@ -776,4 +916,16 @@ class PatientService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
+
+    // List Patient Device
+    public function patientDeviceList($request,$id)
+    {
+        try {
+            $getPatient = PatientDevice::where('patientId', $id)->with('patient')->get();
+            return fractal()->collection($getPatient)->transformWith(new PatientDeviceTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
 }

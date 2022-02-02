@@ -11,6 +11,7 @@ use App\Transformers\Document\DocumentTransformer;
 
 class DocumentService
 {
+    // Add Document
     public function documentCreate($request, $entity, $id, $documentId, $tagId)
     {
         DB::beginTransaction();
@@ -44,8 +45,8 @@ class DocumentService
                 ];
                 $document = Document::where('id', $documentId)->update($input);
                 $tags = $request->input('tags');
-                    $tag = ['tag' => $tags, 'updatedBy' => 1,];
-                    $tagData=Tag::where('id', $tagId)->update($tag);
+                $tag = ['tag' => $tags, 'updatedBy' => 1,];
+                $tagData = Tag::where('id', $tagId)->update($tag);
 
                 if ($entity == 'patient') {
                     $getDocument = Document::where([['id', $documentId], ['entityType', 'patient']])->with('documentType', 'tag.tags')->first();
@@ -64,6 +65,7 @@ class DocumentService
         }
     }
 
+    // List Document
     public function documentList($request, $entity, $id, $documentId)
     {
         try {
@@ -83,6 +85,26 @@ class DocumentService
                 return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
             }
         } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Delete Document
+    public function documentDelete($request, $entity, $id, $documentId)
+    {
+        DB::beginTransaction();
+        try {
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            if ($entity == 'patient') {
+                Document::where(['id', $documentId], ['entityType', 'patient'])->update($data);
+                tag::where('documentId', $documentId)->update($data);
+                Document::where(['id', $documentId], ['entityType', 'patient'])->delete();
+                tag::where('documentId', $documentId)->delete();
+            }
+            DB::commit();
+            return response()->json(['message' => 'delete successfully']);
+        } catch (Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }

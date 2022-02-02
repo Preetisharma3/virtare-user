@@ -18,5 +18,10 @@ class DocumentController extends Controller
         return (new DocumentService)->documentList($request,$entity ,$id,$documentId);
     }
 
+    public function deleteDocument(Request $request,$entity,$id,$documentId)
+    {
+        return (new DocumentService)->documentDelete($request,$entity ,$id,$documentId);
+    }
+
 
 }
