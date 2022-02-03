@@ -66,7 +66,7 @@ class StaffTransformer extends TransformerAbstract
             'profile_photo' =>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
             'network' => $data->network->name,
             'specialization' => $data->specialization->name,
-            'createdAt' => $data->createdAt,
+            'createdAt' => strtotime($data->createdAt),
             'status' => $data->isActive ? 'Active' : 'Inactive',
             'designation' => $data->designation->name,
             'role' => $this->showData ? fractal()->item($data->roles)->transformWith(new RoleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
