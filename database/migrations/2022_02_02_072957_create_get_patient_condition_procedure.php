@@ -17,25 +17,11 @@ class CreateGetPatientConditionProcedure extends Migration
         $procedure = "DROP PROCEDURE IF EXISTS `getPatientCondition`;";
         DB::unprepared($procedure);
         $procedure = "
-        CREATE PROCEDURE `getPatientCondition`(IN idx INT(11)= NULL)
+        CREATE  PROCEDURE `getPatientCondition` (IN `idx` INT,IN `patientIdx` INT)  
         BEGIN
-         IF (idx IS NULL)  
-SELECT globalCodes.name ,patientConditions.id,patientConditions.udid,
-patientConditions.createdAt,patientConditions.patientId
-     FROM patientConditions
-      LEFT JOIN globalCodes 
-        ON patientConditions.conditionId=globalCodes.id
-        LEFT JOIN patients 
-        ON patientConditions.patientId=patients.id
-   ELSE 
-    SELECT globalCodes.name ,patientConditions.id,patientConditions.udid,
-patientConditions.createdAt,patientConditions.patientId
-     FROM patientConditions WHERE id=idx
-      LEFT JOIN globalCodes 
-        ON patientConditions.conditionId=globalCodes.id
-        LEFT JOIN patients 
-        ON patientConditions.patientId=patients.id
-   END IF;  
+        SELECT globalCodes.name ,patientConditions.id AS conditionId,patientConditions.udid,patientConditions.createdAt,patientConditions.patientId
+        FROM patientConditions LEFT JOIN globalCodes ON patientConditions.conditionId=globalCodes.id LEFT JOIN patients
+        ON `patientConditions`.patientId=patients.id WHERE  (patientConditions.patientId = patientIdx) AND (patientConditions.id = idx OR idx = '') ;
         END;";
         DB::unprepared($procedure);
     }
