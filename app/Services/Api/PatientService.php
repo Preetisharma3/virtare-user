@@ -64,8 +64,6 @@ class PatientService
                 ];
                 $newData = Patient::create($patient);
 
-
-
                 //Added Family in patientFamilyMember Table
                 $userData = User::where([['email', $request->email], ['roleId', 4]])->first();
                 $userEmail = $userData->id;
@@ -95,7 +93,6 @@ class PatientService
                     $familyData = PatientFamilyMember::create($familyMember);
                 }
 
-
                 //Added emergency contact in PatientEmergencyContact table
                 $emergencyContact = [
                     'fullName' => $request->input('emergencyFullName'), 'phoneNumber' => $request->input('emergencyPhoneNumber'), 'contactTypeId' => json_encode($request->input('emergencyContactType')),
@@ -103,11 +100,6 @@ class PatientService
                     'createdBy' => 1, 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily'), 'udid' => $udid
                 ];
                 PatientEmergencyContact::create($emergencyContact);
-
-
-
-
-
                 $getPatient = Patient::where('id', $newData->id)->with(
                     'user',
                     'family.user',
@@ -132,7 +124,6 @@ class PatientService
                     'updatedBy' => 1
                 ];
                 $userUpdate = User::where('id', $uId)->update($user);
-
 
                 // Updated  patient details in Patient Table
                 $patient = [
