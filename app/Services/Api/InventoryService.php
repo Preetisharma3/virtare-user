@@ -2,10 +2,11 @@
 
 namespace App\Services\Api;
 
-use App\Models\Inventory\Inventory;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use App\Models\Inventory\Inventory;
+use App\Transformers\Device\DeviceModelTransformer;
 use App\Transformers\Inventory\InventoryTransformer;
 
 
@@ -68,6 +69,17 @@ class InventoryService
         try {
             DB::select('CALL deleteInventory(' . $id . ')');
             return response()->json(['message' => 'deleted successfully'], 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getModels($request)
+    {
+        try {
+            $deviceType = $request->deviceType;
+            $data = DB::select('CALL deviceModelList("' . $deviceType . '")');
+            return fractal()->collection($data)->transformWith(new DeviceModelTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
