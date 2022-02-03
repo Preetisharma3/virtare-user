@@ -15,14 +15,16 @@ class InventoryService
     public function store($request)
     {
         try {
-            $udid = Str::random(10);
-            $deviceType = $request->deviceType;
-            $modelNumber = $request->modelNumber;
-            $serialNumber = $request->serialNumber;
-            $macAddress = $request->macAddress;
-            $isActive = $request->isActive;
-            $createdBy = 1;
-            DB::select('CALL createInventories("' . $udid . '","' . $deviceType . '","' . $modelNumber . '","' . $serialNumber . '","' . $macAddress . '","' . $isActive . '","' . $createdBy . '")');
+            $input = $request->only(['deviceModelId', 'serialNumber', 'macAddress', 'isActive']);
+            $otherData = [
+                'udid' => Str::random(10),
+                'createdBy' => 1
+            ];
+            $data = json_encode(array_merge($input, $otherData));
+            DB::select(
+                "CALL createInventories("' . $data . '")",
+            );
+
             return response()->json(['message' => 'Created Successfully'], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
