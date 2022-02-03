@@ -14,11 +14,15 @@ class PatientInventoryTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id' => $data->id,
+            'id' => $data->patientInventoryId,
             'patientId' => $data->patientId,
             'isAdded'=>$data->isAdded,
             'status'=>$data->isActive==1?'Active':'Inactive',
-            'inventory' => fractal()->item($data->inventory)->transformWith(new InventoryTransformer())->toArray(),
+            'inventoryId'=>$data->inventoryId,
+            'deviceType' => $data->deviceType,
+            'modelNumber' => $data->modelNumber,
+            'serialNumber' => $data->serialNumber,
+            'macAddress' => $data->macAddress,
         ];
     }
 }

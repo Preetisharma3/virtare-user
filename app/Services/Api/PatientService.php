@@ -577,13 +577,10 @@ class PatientService
     public function patientInventoryList($request, $id, $inventoryId)
     {
         try {
-            if ($inventoryId) {
-                $getPatient = PatientInventory::where('id', $inventoryId)->with('patient', 'inventory', 'deviceTypes')->first();
-                return fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
-            } else {
-                $getPatient = PatientInventory::where('patientId', $id)->with('patient', 'inventory', 'deviceTypes')->get();
-                return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
-            }
+            $result = DB::select(
+                "CALL getPatientInventory('" . $inventoryId . "','" . $id . "')"
+            );
+            return fractal()->collection($result)->transformWith(new PatientInventoryTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
