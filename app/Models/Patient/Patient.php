@@ -81,7 +81,7 @@ class Patient extends Model
 
     public function vitals()
 	{
-		return $this->hasMany(VitalField::class, 'patientId');
+		return $this->hasMany(PatientVital::class, 'patientId');
 	}
 
     public function conditions()
