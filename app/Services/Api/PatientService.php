@@ -607,9 +607,9 @@ class PatientService
                 $vitalData = $request->input('vital');
                 foreach ($vitalData as $vital) {
                     $inputs = [
-                        'vitalFieldId' => $vital['vitalField'], 'createdBy' => 1, 'udid' => $udid, 'value' => $vital['value'], 'patientId' => $id
+                        'vitalFieldId' => $vital['vitalField'], 'createdBy' => Auth::id(), 'udid' => $udid, 'value' => $vital['value'], 'patientId' => Auth::id()
                     ];
-                    $patient = PatientVital::create($inputs);
+                    PatientVital::create($inputs);
                 }
                 $getPatient = PatientVital::where('patientId', $id)->with('type')->get();
                 $userdata = fractal()->collection($getPatient)->transformWith(new PatientVitalTransformer())->toArray();
