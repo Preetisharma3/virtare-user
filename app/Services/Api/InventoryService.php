@@ -22,7 +22,7 @@ class InventoryService
             ];
             $data = json_encode(array_merge($input, $otherData));
             DB::select(
-                "CALL createInventories("' . $data . '")",
+                "CALL createInventories('" . $data . "')"
             );
 
             return response()->json(['message' => 'Created Successfully'], 200);

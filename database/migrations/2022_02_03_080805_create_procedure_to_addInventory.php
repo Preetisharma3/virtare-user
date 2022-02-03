@@ -22,7 +22,7 @@ class CreateProcedureToAddInventory extends Migration
             'CREATE PROCEDURE  createInventories(IN data JSON) 
         BEGIN
         INSERT INTO inventories 
-        (udid,deviceType,modelNumber,serialNumber,macAddress,isActive,createdBy) 
+        (udid,deviceModelId,serialNumber,macAddress,isActive,createdBy) 
         values
         (JSON_UNQUOTE(JSON_EXTRACT(data, "$.udid")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.deviceModelId")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.serialNumber")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.macAddress")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.isActive")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.createdBy")));
         END;';
