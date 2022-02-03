@@ -66,8 +66,8 @@ class PatientService
 
                 //Added Family in patientFamilyMember Table
                 $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 4]])->first();
-                $userEmail = $userData->id;
                 if ($userData) {
+                    $userEmail = $userData->id;
                     $familyMember = [
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                         'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
@@ -88,7 +88,7 @@ class PatientService
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                         'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
-                        'createdBy' => 1, 'userId' => $userEmail, 'udid' => $udid
+                        'createdBy' => 1, 'userId' => $fam->id, 'udid' => $udid
                     ];
                     $familyData = PatientFamilyMember::create($familyMember);
                 }
