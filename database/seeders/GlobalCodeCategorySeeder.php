@@ -24,10 +24,21 @@ class GlobalCodeCategorySeeder extends Seeder
         $udid = Str::uuid()->toString();
 
 
-        GlobalCodeCategory::create([
+        $appointment=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Appointment Type',
-
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $appointment->id,
+            'name' => 'Wellness',
+            'description' => 'Appointment Type'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $appointment->id,
+            'name' => 'Clinical',
+            'description' => 'Appointment Type'
         ]);
         $specialization=GlobalCodeCategory::create([
             'udid' => $udid,
@@ -77,9 +88,33 @@ class GlobalCodeCategorySeeder extends Seeder
             'name' => 'Completed',
             'description' => 'Task Status'
         ]);
-        GlobalCodeCategory::create([
+        $taskCategory=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Task Category'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $taskCategory->id,
+            'name' => 'Admin',
+            'description' => 'Task Category'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $taskCategory->id,
+            'name' => 'Clinical',
+            'description' => 'Task Category'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $taskCategory->id,
+            'name' => 'Office',
+            'description' => 'Task Category'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $taskCategory->id,
+            'name' => 'Personal',
+            'description' => 'Task Category'
         ]);
         $taskPriority=GlobalCodeCategory::create([
             'udid' => $udid,
@@ -181,37 +216,181 @@ class GlobalCodeCategorySeeder extends Seeder
             'name' => 'Out',
             'description' => 'Network'
         ]);
-        GlobalCodeCategory::create([
+        $documentType=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Document Types'
         ]);
-        GlobalCodeCategory::create([
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $documentType->id,
+            'name' => 'Id proof',
+            'description' => 'Document Types'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $documentType->id,
+            'name' => 'Clinical',
+            'description' => 'Document Types'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $documentType->id,
+            'name' => 'Insurance',
+            'description' => 'Document Types'
+        ]);
+        $documentTag=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Document Tags'
         ]);
-        GlobalCodeCategory::create([
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $documentTag->id,
+            'name' => 'Tag1',
+            'description' => 'Document Tags'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $documentTag->id,
+            'name' => 'Tag2',
+            'description' => 'Document Tags'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $documentTag->id,
+            'name' => 'Tag3',
+            'description' => 'Document Tags'
+        ]);
+        $language=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Language'
         ]);
-        GlobalCodeCategory::create([
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $language->id,
+            'name' => 'English',
+            'description' => 'Language'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $language->id,
+            'name' => 'Spanish',
+            'description' => 'Language'
+        ]);
+        $contactType=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Contact Type'
         ]);
-        GlobalCodeCategory::create([
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $contactType->id,
+            'name' => 'Email',
+            'description' => 'Contact Type'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $contactType->id,
+            'name' => 'Text',
+            'description' => 'Contact Type'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $contactType->id,
+            'name' => 'Phone',
+            'description' => 'Contact Type'
+        ]);
+        $contactTime=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Contact Time'
         ]);
-        GlobalCodeCategory::create([
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $contactTime->id,
+            'name' => 'Morning',
+            'description' => 'Contact Time'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $contactTime->id,
+            'name' => 'Afternoon',
+            'description' => 'Contact Time'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $contactTime->id,
+            'name' => 'Evening',
+            'description' => 'Contact Time'
+        ]);
+        $healthCondition=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Health Conditions'
         ]);
-        GlobalCodeCategory::create([
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $healthCondition->id,
+            'name' => 'Normal',
+            'description' => 'Health Conditions'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $healthCondition->id,
+            'name' => 'High',
+            'description' => 'Health Conditions'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $healthCondition->id,
+            'name' => 'Critical',
+            'description' => 'Health Conditions'
+        ]);
+        $designation=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Designations'
         ]);
-        GlobalCodeCategory::create([
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $designation->id,
+            'name' => 'Administrator',
+            'description' => 'Designations'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $designation->id,
+            'name' => 'Manager',
+            'description' => 'Designations'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $designation->id,
+            'name' => 'Executive',
+            'description' => 'Designations'
+        ]);
+        $insuranceName=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Insurance Name'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $insuranceName->id,
+            'name' => 'Personal',
+            'description' => 'Insurance Name'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $insuranceName->id,
+            'name' => 'Business',
+            'description' => 'Insurance Name'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $insuranceName->id,
+            'name' => 'Life/Health',
+            'description' => 'Insurance Name'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $insuranceName->id,
+            'name' => 'Benefits',
+            'description' => 'Insurance Name'
         ]);
         GlobalCodeCategory::create([
             'udid' => $udid,
@@ -321,9 +500,33 @@ class GlobalCodeCategorySeeder extends Seeder
             'udid' => $udid,
             'name' => 'Email Domains'
         ]);
-        GlobalCodeCategory::create([
+        $programType=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Program types'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $programType->id,
+            'name' => 'TCM - Transitional Care Management',
+            'description' => 'Program types'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $programType->id,
+            'name' => 'Mental Wellness',
+            'description' => 'Program types'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $programType->id,
+            'name' => 'RPM - Remote Patient Montoring',
+            'description' => 'Program types'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $programType->id,
+            'name' => 'CCM - Chronic Care Management',
+            'description' => 'Program types'
         ]);
         GlobalCodeCategory::create([
             'udid' => $udid,
@@ -341,9 +544,63 @@ class GlobalCodeCategorySeeder extends Seeder
             'udid' => $udid,
             'name' => 'Service Type'
         ]);
-        GlobalCodeCategory::create([
+        $duration=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'Duration'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $duration->id,
+            'name' => '10 Mins',
+            'description' => 'Duration'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $duration->id,
+            'name' => '20 Mins',
+            'description' => 'Duration'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $duration->id,
+            'name' => '30 Mins',
+            'description' => 'Duration'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $duration->id,
+            'name' => '40 Mins',
+            'description' => 'Duration'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $duration->id,
+            'name' => '1 hour',
+            'description' => 'Duration'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $duration->id,
+            'name' => '2 hour',
+            'description' => 'Duration'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $duration->id,
+            'name' => '3 hour',
+            'description' => 'Duration'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $duration->id,
+            'name' => '4 hour',
+            'description' => 'Duration'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $duration->id,
+            'name' => 'Full Day',
+            'description' => 'Duration'
         ]);
         GlobalCodeCategory::create([
             'udid' => $udid,
@@ -369,9 +626,39 @@ class GlobalCodeCategorySeeder extends Seeder
             'udid' => $udid,
             'name' => 'Tracking Types'
         ]);
-        GlobalCodeCategory::create([
+        $widgetType=GlobalCodeCategory::create([
             'udid' => $udid,
             'name' => 'widgets types'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $widgetType->id,
+            'name' => 'List View',
+            'description' => 'widgets types'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $widgetType->id,
+            'name' => 'Line Chart',
+            'description' => 'widgets types'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $widgetType->id,
+            'name' => 'Pie Chart',
+            'description' => 'widgets types'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $widgetType->id,
+            'name' => 'Bar Chart',
+            'description' => 'widgets types'
+        ]);
+        GlobalCode::create([
+            'udid' => $udid,
+            'globalCodeCategoryId' => $widgetType->id,
+            'name' => 'Numeric Metric',
+            'description' => 'widgets types'
         ]);
         GlobalCodeCategory::create([
             'udid' => $udid,
