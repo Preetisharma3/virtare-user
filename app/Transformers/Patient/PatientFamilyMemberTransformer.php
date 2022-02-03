@@ -17,7 +17,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 			return [
 				'id' => $data->id,
 				'patientId'=>$data->patientId,
-				'fullName' => $data->fullName,
+				'fullName' =>ucfirst($data->fullName) ,
 				'gender' => $data->gender->name,
 				'phoneNumber' => $data->phoneNumber,
 				'contactType' => $data->contactTypeId,
@@ -30,7 +30,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 			return [
 				'id' => $data->id,
 				'patientId'=>$data->patientId,
-				'fullName' => $data->fullName,
+				'fullName' => ucfirst($data->fullName),
 				'gender' => $data->gender->name,
 				'phoneNumber' => $data->phoneNumber,
 				'contactType' => $data->contactTypeId,
