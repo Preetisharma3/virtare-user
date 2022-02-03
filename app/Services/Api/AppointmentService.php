@@ -25,8 +25,8 @@ class AppointmentService
             $input = [
                 'udid' => Str::random(10),
                 'appointmentTypeId' => $request->appointmentTypeId,
-                'startDate' => $request->startDate,
-                'startTime' => $request->startTime,
+                'startDate' => date("Y-m-d",$request->startDate),
+                'startTime' => date("H:i:s",$request->startDate),
                 'durationId' => $request->durationId,
                 'note' => $request->note,
                 'createdBy' => Auth::user()->id,
@@ -49,8 +49,8 @@ class AppointmentService
             $input = [
                 'udid' => Str::random(10),
                 'appointmentTypeId' => $request->appointmentTypeId,
-                'startDate' => $request->startDate,
-                'startTime' => $request->startTime,
+                'startDate' => date("Y-m-d",$request->startDate),
+                'startTime' => date("H:i:s",$request->startDate),
                 'durationId' => $request->durationId,
                 'note' => $request->note,
                 'createdBy' => 1,
@@ -75,7 +75,7 @@ class AppointmentService
 
     public function futureAppointment($request)
     {
-        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDate', '>', Carbon::today())->get();
+        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDate', '>=', Carbon::today())->get();
         return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
     }
 
