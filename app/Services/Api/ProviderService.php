@@ -15,26 +15,17 @@ class ProviderService
     public function store($request)
     {
         try {
-            $udid = Str::uuid()->toString();
-            $name = $request->name;
-            $address = $request->address;
-            $countryId = $request->countryId;
-            $stateId = $request->stateId;
-            $city = $request->city;
-            $zipcode = $request->zipcode;
-            $phoneNumber = $request->phoneNumber;
-            $tagId = $request->tagId;
-            $moduleId = $request->moduleId;
-            $isActive = $request->isActive;
-            $createdBy = 1;
+            $input = $request->only(['name', 'address', 'countryId', 'stateId', 'city', 'zipcode', 'phoneNumber', 'tagId', 'moduleId', 'isActive']);
+            $otherData = [
+                'udid' => Str::uuid()->toString(),
+                'createdBy' => 1
+            ];
+            $data = JSON_ENCODE(array_merge(
+                $input,
+                $otherData
+            ));
             DB::select(
-                'CALL addProvider
-            (
-            "' . $udid . '","' . $name . '","' . $address . '",
-            "' . $countryId . '","' . $stateId . '","' . $city . '",
-            "' . $zipcode . '","' . $phoneNumber . '","' . $tagId . '",
-            "' . $moduleId . '","' . $isActive . '","' . $createdBy . '"
-            )'
+                "CALL addProvider('" . $data . "')"
             );
             return response()->json(['message' => 'Created Successfully'], 200);
         } catch (Exception $e) {
@@ -45,22 +36,18 @@ class ProviderService
     public function providerLocationStore($request, $id)
     {
         try {
-            $udid = Str::uuid()->toString();
-            $providerId = $id;
-            $locationName = $request->locationName;
-            $locationAddress = $request->locationAddress;
-            $numberOfLocations = $request->numberOfLocations;
-            $stateId = $request->stateId;
-            $city = $request->city;
-            $zipCode = $request->zipCode;
-            $phoneNumber = $request->phoneNumber;
-            $email = $request->email;
-            $websiteUrl = $request->websiteUrl;
-            $isActive = $request->isActive;
-            $isDefault = $request->isDefault;
-            $createdBy = 1;
+            $input = $request->only(['locationName', 'locationAddress', 'numberOfLocations', 'stateId', 'city', 'zipCode', 'phoneNumber', 'email', 'websiteUrl', 'isActive', 'isDefault']);
+            $otherData = [
+                'udid' => Str::uuid()->toString(),
+                'providerId'=>$id,
+                'createdBy' => 1
+            ];
+            $data = JSON_ENCODE(array_merge(
+                $input,
+                $otherData
+            ));
             DB::select(
-                'CALL addProviderLocations("' . $udid . '","' . $providerId . '","' . $locationName . '","' . $numberOfLocations . '","' . $locationAddress . '","' . $stateId . '","' . $city . '","' . $zipCode . '","' . $phoneNumber . '","' . $email . '","' . $websiteUrl . '","' . $isDefault . '","' . $isActive . '","' . $createdBy . '")'
+                "CALL addProviderLocations('" . $data . "')"
             );
             return response()->json(['message' => 'Created Successfully'], 200);
         } catch (Exception $e) {

@@ -17,14 +17,13 @@ class CreateAddProvidersProcedure extends Migration
         DB::unprepared($procedure);
 
         $procedure =
-            "CREATE PROCEDURE `addProvider`(IN udid VARCHAR(255), IN name VARCHAR(50),IN address TEXT,IN countryId INT,IN stateId INT,IN city VARCHAR(30),IN zipcode VARCHAR(255),IN phoneNumber VARCHAR(255),IN tagId VARCHAR(255),IN moduleId VARCHAR(255),IN isActive TINYINT,IN createdBy int)
+            'CREATE PROCEDURE `addProvider`(IN data TEXT)
         BEGIN
         INSERT INTO providers 
         (udid,name,address,countryId,stateId,city,zipcode,phoneNumber,tagId,moduleId,isActive,createdBy) 
         values
-        (udid,name,address,countryId,stateId,city,zipcode,phoneNumber,tagId,moduleId,isActive,createdBy);
-        SELECT LAST_INSERT_ID() as id from providers;
-        END;";
+        (JSON_UNQUOTE(JSON_EXTRACT(data, "$.udid")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.name")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.address")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.countryId")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.stateId")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.city")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.zipcode")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.phoneNumber")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.tagId")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.moduleId")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.isActive")),JSON_UNQUOTE(JSON_EXTRACT(data, "$.createdBy")));
+        END;';
         DB::unprepared($procedure);
     }
 
