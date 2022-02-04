@@ -4,6 +4,7 @@ namespace App\Models\Inventory;
 
 use App\Models\GlobalCode\GlobalCode;
 use App\Models\Patient\PatientInventory;
+use App\Models\Device\DeviceModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,9 +19,9 @@ class Inventory extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function deviceTypes()
+    public function model()
     {
-        return $this->hasOne(GlobalCode::class, 'id', 'deviceType');
+        return $this->hasOne(DeviceModel::class, 'id', 'deviceModelId');
     }
 
     public function inventory(){

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models\Device;
-
+use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
