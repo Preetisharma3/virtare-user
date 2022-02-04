@@ -26,6 +26,6 @@ class Module extends Model
 
     public function screens()
     {
-        return $this->hasMany(Screen::class,'id');
+        return $this->hasMany(Screen::class,'moduleId');
     }
 }

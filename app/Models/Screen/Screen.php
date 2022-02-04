@@ -20,6 +20,6 @@ class Screen extends Model
 
     public function action()
     {
-        return $this->hasMany(Action::class, 'id');
+        return $this->hasMany(Action::class, 'screenId');
     }
 }
