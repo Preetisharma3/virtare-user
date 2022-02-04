@@ -603,49 +603,42 @@ class PatientService
     }
 
     // Add And Update Patient Vitals
-    public function patientVitalCreate($request, $id, $vitalId)
+    public function patientVitalCreate($request)
     {
         DB::beginTransaction();
         try {
-            if (!$vitalId) {
-                $udid = Str::uuid()->toString();
-                $dataVital = $request->only(['vital', 'addType', 'takeTime', 'comment', 'createdType', 'deviceInfo']);
-                foreach ($dataVital['vital'] as $vital) {
-                    $takeTime = Helper::date($vital['takeTime']);
-                    $startTime = Helper::date($vital['startTime']);
-                    $endTime = Helper::date($vital['endTime']);
-                    $data = array(
-                        'vitalFieldId' => $vital['type'],
-                        'createdBy' => Auth::id(),
-                        'udid' => $udid,
-                        'value' => $vital['value'],
-                        'patientId' => $id,
-                        'units' => $vital['units'],
-                        'takeTime' => $takeTime,
-                        'startTime' => $startTime,
-                        'endTime' => $endTime,
-                        'addType' => $dataVital['addType'],
-                        'createdType' => $dataVital['createdType'],
-                        'comment' => $dataVital['comment'],
-                        'deviceInfo' => json_encode($dataVital['deviceInfo'])
-                    );
-                    PatientVital::create($data);
-                }
-                $result = DB::select(
-                    "CALL getPatientVital('" . $vitalId . "','" . $id . "')"
-                );
-                $userdata = fractal()->collection($result)->transformWith(new PatientVitalTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
-            } else {
-                $vitalData = $request->input('vital');
-                $inputs = [
-                    'vitalFieldId' => $request->input('vitalField'), 'updatedBy' => Auth::id(),  'value' => $request->input('value')
+            $userId = Auth::id();
+            $patient = Patient::where('userId', $userId)->first();
+            $patientId = $patient->id;
+            $udid = Str::uuid()->toString();
+            $dataVital = $request->vital;
+            foreach ($dataVital as $vital) {
+                $takeTime = Helper::date($vital['takeTime']);
+                $startTime = Helper::date($vital['startTime']);
+                $endTime = Helper::date($vital['endTime']);
+                $data = [
+                    'vitalFieldId' => $vital['type'],
+                    'createdBy' => $userId,
+                    'udid' => $udid,
+                    'value' => $vital['value'],
+                    'patientId' => $patientId,
+                    'units' => $vital['units'],
+                    'takeTime' => $takeTime,
+                    'startTime' => $startTime,
+                    'endTime' => $endTime,
+                    'addType' => $vital['addType'],
+                    'createdType' => $vital['createdType'],
+                    'comment' => $vital['comment'],
+                    'deviceInfo' => json_encode($vital['deviceInfo'])
                 ];
-                $patient = PatientVital::where('id', $vitalId)->update($inputs);
-                $getPatient = PatientVital::where('id', $vitalId)->with('type')->first();
-                $userdata = fractal()->item($getPatient)->transformWith(new PatientVitalTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $vital = PatientVital::create($data);
             }
+            $result = DB::select(
+                "CALL getPatientVital('" . $patientId . "')"
+            );
+            $userdata = fractal()->collection($result)->transformWith(new PatientVitalTransformer())->toArray();
+            $message = ['message' => 'created successfully'];
+
             DB::commit();
             $endData = array_merge($message, $userdata);
             return $endData;
@@ -656,11 +649,14 @@ class PatientService
     }
 
     // List Patient Vitals
-    public function patientVitalList($request, $id, $vitalId)
+    public function patientVitalList($request)
     {
         try {
+            $userId = Auth::id();
+            $patient = Patient::where('userId', $userId)->first();
+            $patientId = $patient->id;
             $result = DB::select(
-                "CALL getPatientVital('" . $vitalId . "','" . $id . "')"
+                "CALL getPatientVital('" . $patientId . "')"
             );
             return fractal()->collection($result)->transformWith(new PatientVitalTransformer())->toArray();
         } catch (Exception $e) {

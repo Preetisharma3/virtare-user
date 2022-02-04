@@ -17,7 +17,7 @@ class CreateGetPatientVitalProcedure extends Migration
         $procedure = "DROP PROCEDURE IF EXISTS `getPatientVital`;";
         DB::unprepared($procedure);
         $procedure = "
-        CREATE PROCEDURE `getPatientVital`(In idx INT,In patientIdx INT)
+        CREATE PROCEDURE `getPatientVital`(In patientIdx INT)
         BEGIN
         SELECT patientVitals.*, vitalFields.name vitalFieldName,
         globalCodes.name AS deviceName
@@ -30,8 +30,7 @@ class CreateGetPatientVitalProcedure extends Migration
         ON vitalTypeFields.vitalTypeId=globalCodes.id 
         LEFT JOIN patients
         ON `patientVitals`.patientId=patients.id 
-        WHERE (patientVitals.patientId = patientIdx) 
-        AND (patientVitals.id = idx OR idx = '')
+        WHERE patientVitals.patientId = patientIdx
         ORDER BY patientVitals.takeTime DESC;
         END;";
         DB::unprepared($procedure);
