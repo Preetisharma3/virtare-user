@@ -21,6 +21,7 @@ class CreateProcedureOfInventoryList extends Migration
             "CREATE PROCEDURE `inventoryList`(IN isAvailable TINYINT,IN deviceType INT)
         BEGIN
         SELECT
+            inventories.*,
          inventories.udid AS udid,
          deviceModels.modelName AS modelNumber,
          globalCodes.name AS deviceType,
