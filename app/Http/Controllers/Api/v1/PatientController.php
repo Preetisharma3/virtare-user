@@ -125,14 +125,14 @@ class PatientController extends Controller
     return (new PatientService)->patientInventoryDelete($request, $id, $inventoryId);
   }
 
-  public function createPatientVital(Request $request, $id, $vitalId = null)
+  public function createPatientVital(Request $request)
   {
-    return (new PatientService)->patientVitalCreate($request, $id, $vitalId);
+    return (new PatientService)->patientVitalCreate($request);
   }
 
-  public function listPatientVital(Request $request, $id, $vitalId = null)
+  public function listPatientVital(Request $request)
   {
-    return (new PatientService)->patientVitalList($request, $id, $vitalId);
+    return (new PatientService)->patientVitalList($request);
   }
 
   public function deletePatientVital(Request $request, $id, $vitalId = null)
