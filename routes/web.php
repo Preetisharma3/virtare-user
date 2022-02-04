@@ -180,6 +180,7 @@ $router->post('inventory', 'Api\v1\InventoryController@store');
 $router->get('inventory', 'Api\v1\InventoryController@index');
 $router->put('inventory/{id}', 'Api\v1\InventoryController@update');
 $router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
+$router->get('model','Api\v1\InventoryController@getModels');
 
 $router->get('staff/specialization/count','Api\v1\StaffController@specializationCount');
 $router->get('staff/network/count','Api\v1\StaffController@networkCount');

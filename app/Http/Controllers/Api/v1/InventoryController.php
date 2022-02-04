@@ -27,4 +27,8 @@ class InventoryController extends Controller
     {
         return (new InventoryService)->destroy($id);
     }
+
+    public function getModels(Request $request){
+        return (new InventoryService)->getModels($request);
+    }
 }
