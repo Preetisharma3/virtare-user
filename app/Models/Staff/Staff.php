@@ -48,7 +48,7 @@ class Staff extends Model
 
 	public function appointment()
 	{
-		return $this->belongsTo(Appointment::class, 'id','staffId');
+		return $this->hasMany(Appointment::class,'staffId');
 	}
 
 	public function user()
