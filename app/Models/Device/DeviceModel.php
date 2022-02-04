@@ -12,7 +12,7 @@ class DeviceModel extends Model
     protected $softDelete = true;
     const DELETED_AT = 'deletedAt';
     public $timestamps = false;
-    protected $table = 'inventories';
+    protected $table = 'deviceModels';
     use HasFactory;
     protected $guarded = [];
 
