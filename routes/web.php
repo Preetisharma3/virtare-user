@@ -177,3 +177,9 @@ $router->get('inventory', 'Api\v1\InventoryController@index');
 $router->put('inventory/{id}', 'Api\v1\InventoryController@update');
 $router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
 
+$router->post('role', 'Api\v1\RolePermissionController@createRole');
+$router->post('permission', 'Api\v1\RolePermissionController@createPermission');
+$router->post('roleModule', 'Api\v1\RolePermissionController@createRoleModule');
+$router->post('roleModuleScreen', 'Api\v1\RolePermissionController@createRoleModuleScreen');
+$router->post('rolePermission', 'Api\v1\RolePermissionController@createRolePermission');
+$router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
