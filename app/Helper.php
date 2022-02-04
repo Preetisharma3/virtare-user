@@ -29,4 +29,11 @@ class Helper
         }
         return $patientData;
     }
+
+    public static function date($date)
+    {
+        $date = Carbon::createFromTimestamp($date)->format('Y-m-d H:i:s');
+
+        return $date;
+    }
 }
