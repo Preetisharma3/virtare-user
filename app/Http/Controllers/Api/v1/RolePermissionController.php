@@ -8,10 +8,25 @@ use Illuminate\Http\Request;
 
 class RolePermissionController extends Controller
 {
+
+    public function roleList(Request $request)
+    {
+        return (new RolePermissionService)->roleList($request); 
+    }
     
     public function createRole(Request $request)
     {
         return (new RolePermissionService)->createRole($request);
+    }
+
+    public function updateRole(Request $request, $id)
+    {
+        return (new RolePermissionService)->updateRole($request, $id); 
+    }
+
+    public function deleteRole(Request $request, $id)
+    {
+        return (new RolePermissionService)->deleteRole($request, $id); 
     }
 
     public function createPermission(Request $request)

@@ -7,12 +7,57 @@ use App\Models\Role\Role;
 use Exception;
 use Illuminate\Support\Str;
 use App\Transformers\Role\RoleTransformer;
+use App\Transformers\Role\RoleListTransformer;
 use App\Transformers\RolePermission\PermissionTransformer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RolePermissionService
 {
+
+    public function roleList($request)
+    {
+        try{
+            $data = Role::all();
+            return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
+        }catch(Exception $e){
+            return response()->json(['message' => $e->getMessage()], 500);    
+        } 
+    }
+
+    public function updateRole($request, $id)
+    {
+        try{
+            $role = [
+                'roles' => $request->input('roles'),
+                'roleDescription' => $request->input('roleDescription'),
+                'roleType' => $request->input('roleType'),
+                'masterLogin' => $request->input('masterLogin'),
+                'isActive' => $request->input('isActive'),
+            ];
+            Role::where('id',$id)->update($role);
+            $roleData = Role::where('id', $id)->first();
+            $message = ["message"=>"Updated Successfully"];
+            $resp =  fractal()->item($roleData)->transformWith(new RoleListTransformer())->toArray();
+            $endData = array_merge($message, $resp);
+            return $endData;
+        }catch (Exception $e){
+            return response()->json(['message' => $e->getMessage()], 500);  
+           }
+    }
+
+    public function deleteRole($request, $id)
+    {
+        try{
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            Role::find($id)->update($data);
+            Role::find($id)->delete();
+
+            return response()->json(['message' =>"Deleted Successfully"]);
+        }catch (Exception $e){
+            return response()->json(['message' => $e->getMessage()], 500);   
+        }
+    }
 
 
     public function permissionsList($request)
