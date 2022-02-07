@@ -36,7 +36,9 @@ class PermissionTransformer extends TransformerAbstract
     public function transform($data)
     {
         return[ 
-            'modules'=> fractal()->item($data)->transformWith(new ModuleTransformer)->toArray(),
+            'modules'=>[ 
+                fractal()->item($data)->transformWith(new ModuleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()
+            ],
         ];
       
     }

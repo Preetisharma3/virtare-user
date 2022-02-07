@@ -90,7 +90,7 @@ class RolePermissionService
     {
         try{
             $data = Module::with('screens')->get();
-            return fractal()->collection($data)->transformWith(new PermissionTransformer())->toArray();
+            return fractal()->collection($data)->transformWith(new PermissionTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
         }catch(Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);    
         }
