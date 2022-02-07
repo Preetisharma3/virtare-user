@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\Controller;
-use App\Services\Api\RolePermissionService;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Role\RoleRequest;
+use App\Services\Api\RolePermissionService;
 
 class RolePermissionController extends Controller
 {
@@ -14,7 +15,7 @@ class RolePermissionController extends Controller
         return (new RolePermissionService)->roleList($request); 
     }
     
-    public function createRole(Request $request)
+    public function createRole(RoleRequest $request)
     {
         return (new RolePermissionService)->createRole($request);
     }
