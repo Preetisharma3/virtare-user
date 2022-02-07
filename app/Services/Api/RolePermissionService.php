@@ -25,6 +25,34 @@ class RolePermissionService
         } 
     }
 
+    public function createRole($request)
+    {
+        try{
+            $role = [
+                'udid' => Str::random(10),
+                'roles' => $request->input('name'),
+                'roleDescription' => $request->input('description'),
+                'roleType' => $request->input('name'),
+                'masterLogin' => 1,
+            ];
+            Role::create($role);
+            $role = Role::where('udid', $role['udid'])->first();
+            $message = ["message"=>"created Successfully"];
+            $resp =  fractal()->item($role)->transformWith(new RoleListTransformer())->toArray();
+            $endData = array_merge($message, $resp);
+            return $endData;
+
+        }catch (Exception $e){
+            return response()->json(['message' => $e->getMessage()], 500);  
+           } 
+    }
+
+    public function editRole($request,$id)
+    {
+        $data = Role::where('id', $id)->get();
+        return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
+    }
+
     public function updateRole($request, $id)
     {
         try{
@@ -49,9 +77,7 @@ class RolePermissionService
     public function deleteRole($request, $id)
     {
         try{
-            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
-            Role::find($id)->update($data);
-            Role::find($id)->delete();
+            Role::where('id',$id)->delete();
 
             return response()->json(['message' =>"Deleted Successfully"]);
         }catch (Exception $e){
@@ -71,25 +97,27 @@ class RolePermissionService
         
     }
     
+
+   
     
-    public function createRole($request)
-    {
-        try{
-            $udid = Str::random(10);
-            $roles = $request->roles;
-            $roleDescription = $request->roleDescription;
-            $roleType = $request->roleType;
-            $masterLogin = $request->masterLogin;
-            DB::select('CALL createRole("'.$udid.'","'.$roles.'","'.$roleDescription.'","'.$roleType.'","'.$masterLogin.'")');
-            $role = Role::where('udid', $udid)->first();
-            $message = ["message"=>"created Successfully"];
-            $resp =  fractal()->item($role)->transformWith(new RoleTransformer())->toArray();
-            $endData = array_merge($message, $resp);
-            return $endData;
-        }catch (Exception $e){
-            return response()->json(['message' => $e->getMessage()], 500);  
-           }
-    }
+    // public function createRole($request)
+    // {
+    //     try{
+    //         $udid = Str::random(10);
+    //         $roles = $request->roles;
+    //         $roleDescription = $request->roleDescription;
+    //         $roleType = $request->roleType;
+    //         $masterLogin = $request->masterLogin;
+    //         DB::select('CALL createRole("'.$udid.'","'.$roles.'","'.$roleDescription.'","'.$roleType.'","'.$masterLogin.'")');
+    //         $role = Role::where('udid', $udid)->first();
+    //         $message = ["message"=>"created Successfully"];
+    //         $resp =  fractal()->item($role)->transformWith(new RoleTransformer())->toArray();
+    //         $endData = array_merge($message, $resp);
+    //         return $endData;
+    //     }catch (Exception $e){
+    //         return response()->json(['message' => $e->getMessage()], 500);  
+    //        }
+    // }
 
     public function createPermission($request)
     {

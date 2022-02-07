@@ -19,6 +19,11 @@ class RolePermissionController extends Controller
         return (new RolePermissionService)->createRole($request);
     }
 
+    public function editRole(Request $request,$id)
+    {
+        return (new RolePermissionService)->editRole($request, $id);
+    }
+
     public function updateRole(Request $request, $id)
     {
         return (new RolePermissionService)->updateRole($request, $id); 
