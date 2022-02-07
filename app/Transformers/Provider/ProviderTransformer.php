@@ -33,7 +33,7 @@ class ProviderTransformer extends TransformerAbstract
     public function transform($data)
     {
         return[ 
-            'id'=>$data->udid,
+            'id'=>$data->id,
             'name' => $data->name,
         ];
       
