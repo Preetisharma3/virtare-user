@@ -188,7 +188,10 @@ class PatientService
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
                 $message = ['message' => 'update successfully'];
             }
+
             DB::commit();
+
+
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {

@@ -34,7 +34,7 @@ class CreateGetPatientVitalProcedure extends Migration
         AND(vitalFields.name=typeVital OR typeVital='')
         GROUP BY patientVitals.vitalFieldId
         ORDER BY patientVitals.takeTime DESC;
-        END;";
+END;";
         DB::unprepared($procedure);
     }
 
