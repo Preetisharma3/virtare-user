@@ -11,7 +11,7 @@ class ProviderController extends Controller
 
     public function index()
     {
-        //
+        return (new ProviderService)->index();
     }
 
     public function store(Request $request)

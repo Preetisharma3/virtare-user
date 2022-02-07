@@ -179,3 +179,4 @@ $router->put('inventory/{id}', 'Api\v1\InventoryController@update');
 $router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
 $router->post('provider', 'Api\v1\ProviderController@store');
 $router->post('provider/{id}/location', 'Api\v1\ProviderController@providerLocationStore');
+$router->get('provider','Api\v1\ProviderController@index');

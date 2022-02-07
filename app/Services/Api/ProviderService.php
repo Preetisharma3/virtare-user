@@ -3,9 +3,11 @@
 namespace App\Services\Api;
 
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Models\Provider\Provider;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Transformers\Provider\ProviderTransformer;
 
 
 
@@ -53,5 +55,10 @@ class ProviderService
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
+    }
+
+    public function index(){
+        $data = Provider::all();
+        return fractal()->collection($data)->transformWith(new ProviderTransformer())->toArray();
     }
 }
