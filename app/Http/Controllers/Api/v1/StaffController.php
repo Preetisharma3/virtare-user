@@ -20,70 +20,84 @@ class StaffController extends Controller
         return (new StaffService)->addStaff( $request);
         
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function listStaff(Request $request)
     {
         return (new StaffService)->listStaff($request);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function updateStaff(Request $request,$id)
     {
-        //
+        return (new StaffService)->updateStaff($request, $id); 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function addStaffContact(Request $request , $id)
     {
-        //
+        return (new StaffService)->addStaffContact($request, $id);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function listStaffContact(Request $request)
     {
-        //
+        return (new StaffService)->listStaffContact($request);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function updateStaffContact(Request $request , $id)
     {
-        //
+        return (new StaffService)->updateStaffContact($request, $id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function deleteStaffContact(Request $request, $id)
     {
-        //
+        return (new StaffService)->deleteStaffContact($request, $id);  
     }
+
+    public function addStaffAvailability(Request $request , $id)
+    {
+        return (new StaffService)->addStaffAvailability($request, $id);
+    }
+
+    public function listStaffAvailability(Request $request)
+    {
+        return (new StaffService)->listStaffAvailability($request);
+    }
+
+    public function updateStaffAvailability(Request $request , $id)
+    {
+        return (new StaffService)->updateStaffAvailability($request, $id); 
+    }
+
+    public function deleteStaffAvailability(Request $request, $id)
+    {
+        return (new StaffService)->deleteStaffAvailability($request, $id);  
+    }
+
+    public function addStaffRole(Request $request, $id)
+    {
+        return (new StaffService)->addStaffRole($request, $id);
+    }
+
+    public function listStaffRole(Request $request)
+    {
+        return (new StaffService)->listStaffRole($request);
+    }
+
+    public function updateStaffRole(Request $request , $id)
+    {
+        return (new StaffService)->updateStaffRole($request, $id); 
+    }
+
+    public function deleteStaffRole(Request $request , $id)
+    {
+        return (new StaffService)->deleteStaffRole($request, $id); 
+    }
+
+    public function specializationCount()
+    {
+        return (new StaffService)->specializationCount(); 
+    }
+
+    public function networkCount()
+    {
+        return (new StaffService)->networkCount(); 
+    }
+
 }

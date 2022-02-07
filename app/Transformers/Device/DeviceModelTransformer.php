@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Transformers\Communication;
+namespace App\Transformers\Device;
 
-use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
-use App\Transformers\Staff\StaffTransformer;
-use App\Transformers\Communication\MessageCountTransformer;
-use App\Transformers\Communication\MessageTypeCountTransformer;
-
-
-class MessageTypeTransformer extends TransformerAbstract
+class DeviceModelTransformer extends TransformerAbstract
 {
+
+
+    protected $showData;
+
+	public function __construct($showData = true)
+	{
+		$this->showData = $showData;
+	}
     /**
      * List of resources to automatically include
      *
@@ -19,7 +21,7 @@ class MessageTypeTransformer extends TransformerAbstract
     protected $defaultIncludes = [
         //
     ];
-
+    
     /**
      * List of resources possible to include
      *
@@ -28,7 +30,7 @@ class MessageTypeTransformer extends TransformerAbstract
     protected $availableIncludes = [
         //
     ];
-
+    
     /**
      * A Fractal transformer.
      *
@@ -37,9 +39,8 @@ class MessageTypeTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'text' => $data->messageName,
-            'count' => $data->count,
-            'time' => $data->time,
+            'deviceType'=>$data->deviceType,
+            'modelNumber'=>$data->modelNumber,
         ];
     }
 }

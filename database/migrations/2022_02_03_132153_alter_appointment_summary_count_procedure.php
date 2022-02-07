@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTotalAppointmentSummaryCountProcedure extends Migration
+class AlterAppointmentSummaryCountProcedure extends Migration
 {
     /**
      * Run the migrations.
@@ -18,29 +18,29 @@ class CreateTotalAppointmentSummaryCountProcedure extends Migration
         CREATE PROCEDURE `getTotalAppointmentSummaryCount`(timelineId INT(20))
         BEGIN
         IF timelineId = 122 THEN
-             SELECT count(*) as total,
-            DATE_FORMAT(appointments.startTime,'%h:%i %p') as time
+            SELECT count(*) as total,
+            hour(appointments.startTime) as duration
             FROM appointments
             WHERE startDate > date_sub(now(), interval 1 day)
-            GROUP BY (time);
+            GROUP BY (duration);
         ELSEIF timelineId = 123 THEN
             SELECT count(*) as total,
-            dayname(appointments.startDate) as week
+            dayname(appointments.startDate) as duration
             FROM appointments
             WHERE startDate > date_sub(now(), interval 7 day)
-            GROUP BY (week);
+            GROUP BY (duration);
         ELSEIF timelineID = 124 THEN
             SELECT count(*) as total,
-            DATE_FORMAT(appointments.startDate,'%b %d,%Y') as day
+            DATE_FORMAT(appointments.startDate,'%b %d,%Y') as duration
             FROM appointments
             WHERE startDate > date_sub(now(), interval 1 month)
-            GROUP BY (day);
+            GROUP BY (duration);
         ELSEIF timelineId = 125 THEN
             SELECT count(*) as total,
-            MONTHNAME(appointments.startDate) as month
+            MONTHNAME(appointments.startDate) as duration
             FROM appointments
             WHERE startDate > date_sub(now(), interval 1 year)
-            GROUP BY (month);
+            GROUP BY (duration);
         END IF;
         END;";
         DB::unprepared($procedure);
@@ -53,6 +53,6 @@ class CreateTotalAppointmentSummaryCountProcedure extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('totalAppointmentSummaryCountProcedure');
+        //
     }
 }

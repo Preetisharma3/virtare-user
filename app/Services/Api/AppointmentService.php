@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
 use App\Transformers\Appointment\AppointmentTransformer;
@@ -24,8 +25,8 @@ class AppointmentService
             $input = [
                 'udid' => Str::random(10),
                 'appointmentTypeId' => $request->appointmentTypeId,
-                'startDate' => $request->startDate,
-                'startTime' => $request->startTime,
+                'startDate' => date("Y-m-d",$request->startDate),
+                'startTime' => date("H:i:s",$request->startDate),
                 'durationId' => $request->durationId,
                 'note' => $request->note,
                 'createdBy' => Auth::user()->id,
@@ -48,8 +49,8 @@ class AppointmentService
             $input = [
                 'udid' => Str::random(10),
                 'appointmentTypeId' => $request->appointmentTypeId,
-                'startDate' => $request->startDate,
-                'startTime' => $request->startTime,
+                'startDate' => date("Y-m-d",$request->startDate),
+                'startTime' => date("H:i:s",$request->startDate),
                 'durationId' => $request->durationId,
                 'note' => $request->note,
                 'createdBy' => 1,
@@ -67,14 +68,14 @@ class AppointmentService
 
     public function appointmentList($request)
     {
-        $data = Appointment::where('patientId', auth()->user()->patient->id)->get();
+        $data = Appointment::where([['patientId', auth()->user()->patient->id],['startDate', '>=', Carbon::today()]])->get();
         $results = Helper::dateGroup($data, 'startDate');
         return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
     }
 
     public function futureAppointment($request)
     {
-        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDate', '>', Carbon::today())->get();
+        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDate', '>=', Carbon::today())->get();
         return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
     }
 
@@ -94,5 +95,14 @@ class AppointmentService
             $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDate', Carbon::today())->get();
         }
         return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
+    }
+
+    public function appointmentSearch($request){
+        $fromDate = $request->fromDate;
+        $toDate = $request->toDate;
+        $data = DB::select(
+            'CALL appointmentList("'.$fromDate.'","'.$toDate.'")',
+         );
+        return response()->json(['data'=>$data],200);
     }
 }

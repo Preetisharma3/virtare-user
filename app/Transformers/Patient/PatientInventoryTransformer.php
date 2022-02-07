@@ -13,12 +13,16 @@ class PatientInventoryTransformer extends TransformerAbstract
 
     public function transform($data): array
     {
-        return [
+        $inventory = fractal()->item($data->inventory)->transformWith(new InventoryTransformer())->toArray();
+
+
+        $field = [
             'id' => $data->id,
-            'patientId' => $data->patientId,
+            'inventoryId' => $data->inventoryId,
             'isAdded'=>$data->isAdded,
-            'status'=>$data->isActive==1?'Active':'Inactive',
-            'inventory' => fractal()->item($data->inventory)->transformWith(new InventoryTransformer())->toArray(),
+            'status'=>$data->isActive,
+            
         ];
+        return array_merge($inventory['data'],$field);
     }
 }
