@@ -50,7 +50,6 @@ class PatientTransformer extends TransformerAbstract
             'emergencyContact' => fractal()->item($data->emergency)->transformWith(new PatientFamilyMemberTransformer())->toArray(),
             'patientFlags' => $data->flags ? fractal()->collection($data->flags)->transformWith(new PatientFlagTransformer())->toArray() : [],
             'patientVitals'=> $data->vitals ?fractal()->collection($data->vitals)->transformWith(new PatientVitalTransformer())->toArray(): [],
-            
         ];
     }
 }
