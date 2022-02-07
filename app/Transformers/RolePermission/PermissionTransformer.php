@@ -6,7 +6,7 @@ use App\Transformers\Screen\ScreenTransformer;
 use App\Transformers\Action\ActionTransformer;
 use App\Transformers\Module\ModuleTransformer;
 use League\Fractal\TransformerAbstract;
- 
+
 
 class PermissionTransformer extends TransformerAbstract
 {
@@ -18,7 +18,7 @@ class PermissionTransformer extends TransformerAbstract
     protected $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
@@ -27,7 +27,7 @@ class PermissionTransformer extends TransformerAbstract
     protected $availableIncludes = [
         //
     ];
-    
+
     /**
      * A Fractal transformer.
      *
@@ -35,11 +35,10 @@ class PermissionTransformer extends TransformerAbstract
      */
     public function transform($data)
     {
-        return[ 
-            'modules'=>[ 
-                fractal()->item($data)->transformWith(new ModuleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()
-            ],
+        return [
+                "name" => $data->name,
+                "description"=>$data->description,
+                "screens" => fractal()->collection($data->screens)->transformWith(new ScreenTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()
         ];
-      
     }
 }
