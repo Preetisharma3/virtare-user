@@ -55,9 +55,9 @@ class StaffController extends Controller
         return (new StaffService)->addStaffAvailability($request, $id);
     }
 
-    public function listStaffAvailability(Request $request)
+    public function listStaffAvailability(Request $request,$id)
     {
-        return (new StaffService)->listStaffAvailability($request);
+        return (new StaffService)->listStaffAvailability($request,$id);
     }
 
     public function updateStaffAvailability(Request $request , $id)

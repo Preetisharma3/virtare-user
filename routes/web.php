@@ -168,10 +168,10 @@ $router->post('staff/{id}/availability', 'Api\v1\StaffController@addStaffAvailab
 $router->get('staff/{id}/availability', 'Api\v1\StaffController@listStaffAvailability');
 $router->put('staff/{id}/availability/{staffId}', 'Api\v1\StaffController@updateStaffAvailability');
 $router->delete('staff/{id}/availability/{staffId}', 'Api\v1\StaffController@deleteStaffAvailability');
-$router->post('staffRole/{id}', 'Api\v1\StaffController@addStaffRole');
-$router->get('staffRole', 'Api\v1\StaffController@listStaffRole');
-$router->put('staffRole/{id}', 'Api\v1\StaffController@updateStaffRole');
-$router->delete('staffRole/{id}', 'Api\v1\StaffController@deleteStaffRole');
+$router->post('staff/{id}/role', 'Api\v1\StaffController@addStaffRole');
+$router->get('staff/{id}/role', 'Api\v1\StaffController@listStaffRole');
+$router->put('staff/{id}/role/{staffId}', 'Api\v1\StaffController@updateStaffRole');
+$router->delete('staff/{id}/role/{staffId}', 'Api\v1\StaffController@deleteStaffRole');
 
 $router->post('inventory', 'Api\v1\InventoryController@store');
 $router->get('inventory', 'Api\v1\InventoryController@index');

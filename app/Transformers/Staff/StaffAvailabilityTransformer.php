@@ -54,9 +54,9 @@ class StaffAvailabilityTransformer extends TransformerAbstract
 
             return [
                 'id'=>$data->id,
-                'staff_id'=>$data->staffId,
-                'start_time'=>$data->startTime,
-                'finish_time'=>$data->endTime
+                'staffId'=>$data->staffId,
+                'startTime'=>$data->startTime,
+                'endTime'=>$data->endTime
             ];
 
     }

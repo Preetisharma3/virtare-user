@@ -128,8 +128,13 @@ class StaffService
     public function listStaffContact($request, $id)
     {
         try {
-            $staffContact = StaffContact::where('staffId',$id)->get();
+            if(!empty($request->id)){
+                $staffContact = StaffContact::where('staffId',$id)->get();
             return  fractal()->collection($staffContact)->transformWith(new StaffContactTransformer())->toArray();
+            }else{
+                return response()->json(['message' => 'Somethings Went Worng']);
+            }
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -158,9 +163,14 @@ class StaffService
     public function deleteStaffContact($request, $id)
     {
         try {
-            StaffContact::where('id', $id)->delete();
+            if(!empty($request->id)){
+                StaffContact::where('staffId', $id)->delete();
 
-            return response()->json(['message' => "Deleted Successfully"]);
+                return response()->json(['message' => "Deleted Successfully"]);
+            }else{
+                return response()->json(['message' => 'Somethings Went Worng']);
+            }
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -185,10 +195,10 @@ class StaffService
         }
     }
 
-    public function listStaffAvailability($request)
+    public function listStaffAvailability($request,$id)
     {
         try {
-            $staffAvailability = StaffAvailability::all();
+            $staffAvailability = StaffAvailability::where('staffId',$id)->get();
             return fractal()->collection($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -216,7 +226,7 @@ class StaffService
     public function deleteStaffAvailability($request, $id)
     {
         try {
-            StaffAvailability::where('id', $id)->delete();
+            StaffAvailability::where('staffId', $id)->delete();
 
             return response()->json(['message' => "Deleted Successfully"]);
         } catch (Exception $e) {
