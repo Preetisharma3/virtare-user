@@ -922,10 +922,8 @@ class PatientService
     {
         DB::beginTransaction();
         try {
-            $patient = Patient::where('userId', Auth::id())->first();
-            $patientId = $patient->id;
             $inventory = ['isAdded' => 1];
-            PatientInventory::where('patientId', $patientId)->update($inventory);
+            PatientInventory::where('id', $id)->update($inventory);
             $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             $message = ['message' => 'updated successfully'];
