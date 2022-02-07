@@ -94,6 +94,10 @@ class Patient extends Model
 		return $this->hasMany(PatientFlag::class, 'patientId');
 	}
 
+    public function inventories()
+	{
+		return $this->hasMany(PatientInventory::class, 'patientId');
+	}
 
 
 }

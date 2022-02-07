@@ -14,8 +14,8 @@ class InventoryTransformer extends TransformerAbstract
     { 
         return [
             'id' => $data->id,
-            'deviceType' => (!empty($data->deviceTypes->name))?$data->deviceTypes->name:$data->deviceType,
-            'modelNumber' => $data->modelNumber,
+            'deviceType' => (!empty($data->model->deviceType->name))?$data->model->deviceType->name:$data->deviceType,
+            'modelNumber' => $data->modelNumber?$data->modelNumber:$data->model->modelName,
             'serialNumber' => $data->serialNumber,
             'macAddress' => $data->macAddress,
         ];
