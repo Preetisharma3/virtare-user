@@ -227,9 +227,9 @@ class PatientController extends Controller
 
 
   // Family 
-  public function createFamily(Request $request,$id=null)
+  public function createFamily(Request $request)
   {
-    return (new FamilyService)->familyCreate($request,$id);
+    return (new FamilyService)->familyCreate($request);
   }
 
  

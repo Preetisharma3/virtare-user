@@ -14,11 +14,12 @@ use App\Transformers\Patient\PatientFamilyMemberTransformer;
 
 class FamilyService
 {
-    public function familyCreate($request, $id)
-    {
+    public function familyCreate($request)
+    { 
         DB::beginTransaction();
         try {
-            if (!$id) {
+            $patient = PatientFamilyMember::where('id', Auth::id())->first();
+            if (!$patient) {
                 $patient = Patient::where('userId', Auth::id())->first();
                 $patientId = $patient->id;
                 $udid = Str::uuid()->toString();
@@ -40,14 +41,13 @@ class FamilyService
                 $userdata = fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
                 $message = ['message' => 'created successfully'];
             } else {
-                $patient = PatientFamilyMember::where('userId', Auth::id())->first();
+                
                 $usersId = $patient->userId;
                 $familyMemberUser = [
                     'email' => $request->input('email'),
                     'updatedBy' => Auth::id()
                 ];
                 $fam = User::where('id', $usersId)->update($familyMemberUser);
-
                 //updated Family in patientFamilyMember Table
                 $familyMember = [
                     'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),
@@ -55,13 +55,12 @@ class FamilyService
                     'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'),
                     'updatedBy' => Auth::id(),
                 ];
-                $familyData = PatientFamilyMember::where('id', $id)->update($familyMember);
-                $data = PatientFamilyMember::where('id', $id)->first();
+                $familyData = PatientFamilyMember::where('id',Auth::id())->update($familyMember);
+                $data = PatientFamilyMember::where('id', Auth::id())->first();
                 $userdata = fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
                 $message = ['message' => 'updated successfully'];
             }
             DB::commit();
-
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {
