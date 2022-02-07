@@ -102,28 +102,33 @@ class StaffService
     public function addStaffContact($request, $id)
     {
         try {
-            $udid = Str::random(10);
-            $firstName = $request->firstName;
-            $lastName = $request->lastName;
-            $email = $request->email;
-            $phoneNumber = $request->phoneNumber;
-            $staffId = $id;
-            DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
-            $staffContactData = StaffContact::where('udid', $udid)->first();
-            $message = ["message" => "created Successfully"];
-            $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
-            $endData = array_merge($message, $resp);
-            return $endData;
+            if(!empty($request->id)){
+                $udid = Str::random(10);
+                $firstName = $request->firstName;
+                $lastName = $request->lastName;
+                $email = $request->email;
+                $phoneNumber = $request->phoneNumber;
+                $staffId = $id;
+                DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
+                $staffContactData = StaffContact::where('udid', $udid)->first();
+                $message = ["message" => "created Successfully"];
+                $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
+                $endData = array_merge($message, $resp);
+                return $endData;
+            }else{
+                return response()->json(['message' => 'Somethings Went Worng']);
+            }
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
 
-    public function listStaffContact($request)
+    public function listStaffContact($request, $id)
     {
         try {
-            $staffContact = StaffContact::all();
+            $staffContact = StaffContact::where('staffId',$id)->get();
             return  fractal()->collection($staffContact)->transformWith(new StaffContactTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);

@@ -35,9 +35,9 @@ class StaffController extends Controller
         return (new StaffService)->addStaffContact($request, $id);
     }
 
-    public function listStaffContact(Request $request)
+    public function listStaffContact(Request $request, $id)
     {
-        return (new StaffService)->listStaffContact($request);
+        return (new StaffService)->listStaffContact($request, $id);
     }
 
     public function updateStaffContact(Request $request , $id)

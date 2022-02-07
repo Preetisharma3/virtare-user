@@ -160,8 +160,8 @@ $router->get('module', 'Api\v1\ModuleController@getModule');
 $router->post('screen', 'Api\v1\ScreenController@createScreen');
 $router->get('screen', 'Api\v1\ScreenController@getScreen');
 
-$router->post('staffContact/{id}', 'Api\v1\StaffController@addStaffContact');
-$router->get('staffContact', 'Api\v1\StaffController@listStaffContact');
+$router->post('staff/{id}/contact', 'Api\v1\StaffController@addStaffContact');
+$router->get('staff/{id}/contact', 'Api\v1\StaffController@listStaffContact');
 $router->put('staffContact/{id}', 'Api\v1\StaffController@updateStaffContact');
 $router->delete('staffContact/{id}', 'Api\v1\StaffController@deleteStaffContact');
 $router->post('staffAvailability/{id}', 'Api\v1\StaffController@addStaffAvailability');
