@@ -24,7 +24,7 @@ class ScreenTransformer extends TransformerAbstract
         return [
 			    'name'=>$data->name,
                 'moduleId'=>$data->moduleId,
-                'actions'=> fractal()->collection($data->action)->transformWith(new ActionTransformer)->toArray(),
+                'actions'=> fractal()->collection($data->action)->transformWith(new ActionTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray(),
 		];
     }
 }
