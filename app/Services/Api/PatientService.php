@@ -631,7 +631,7 @@ class PatientService
                     ];
                     $vital = PatientVital::create($data);
                     $result = DB::select(
-                        "CALL getPatientVital('" . $id . "')"
+                        "CALL getPatientVital('" . $id . "','" . $request->type . "')"
                     );
                 }
             } else {
@@ -661,7 +661,7 @@ class PatientService
                     ];
                     $vital = PatientVital::create($data);
                     $result = DB::select(
-                        "CALL getPatientVital('" . $patientId . "')"
+                        "CALL getPatientVital('" . $id . "','" . $request->type . "')"
                     );
                 }
             }
@@ -682,14 +682,14 @@ class PatientService
         try {
             if ($id) {
                 $result = DB::select(
-                    "CALL getPatientVital('" . $id . "')"
+                    "CALL getPatientVital('" . $id . "','" . $request->type . "')"
                 );
             } else {
                 $userId = Auth::id();
                 $patient = Patient::where('userId', $userId)->first();
                 $patientId = $patient->id;
                 $result = DB::select(
-                    "CALL getPatientVital('" . $patientId . "')"
+                    "CALL getPatientVital('" . $patientId . "','" . $request->type . "')"
                 );
             }
             return fractal()->collection($result)->transformWith(new PatientVitalTransformer())->toArray();
@@ -922,10 +922,8 @@ class PatientService
     {
         DB::beginTransaction();
         try {
-            $patient = Patient::where('userId', Auth::id())->first();
-            $patientId = $patient->id;
             $inventory = ['isAdded' => 1];
-            PatientInventory::where('patientId', $patientId)->update($inventory);
+            PatientInventory::where('id', $id)->update($inventory);
             $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             $message = ['message' => 'updated successfully'];
