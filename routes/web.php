@@ -180,3 +180,14 @@ $router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
 
 $router->get('staff/specialization/count','Api\v1\StaffController@specializationCount');
 $router->get('staff/network/count','Api\v1\StaffController@networkCount');
+$router->post('role', 'Api\v1\RolePermissionController@createRole');
+$router->get('roleList', 'Api\v1\RolePermissionController@roleList');
+$router->get('role/{id}', 'Api\v1\RolePermissionController@editRole');
+$router->put('role/{id}', 'Api\v1\RolePermissionController@updateRole');
+$router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
+$router->post('permission', 'Api\v1\RolePermissionController@createPermission');
+$router->post('roleModule', 'Api\v1\RolePermissionController@createRoleModule');
+$router->post('roleModuleScreen', 'Api\v1\RolePermissionController@createRoleModuleScreen');
+$router->post('rolePermission', 'Api\v1\RolePermissionController@createRolePermission');
+$router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
+
