@@ -233,19 +233,30 @@ class StaffService
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
-
     public function addStaffRole($request, $id)
     {
-        try {
-            $udid = Str::random(10);
-            $userId = $id;
-            $roleId = $request->roleId;
-            DB::select('CALL createstaffRole("' . $udid . '","' . $userId . '","' . $roleId . '")');
-            return response()->json(['message' => "created Successfully"]);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
-        }
+        $role = [
+            'udid' => Str::random(10),
+            'staffId' => $id,
+            'roleId' => json_decode(json_encode($request->input('roleId'))),
+            
+        ];
+        UserRole::create($role);
+        return response()->json(['message' => "created Successfully"]);
     }
+
+    // public function addStaffRole($request, $id)
+    // {
+    //     try {
+    //         $udid = Str::random(10);
+    //         $staffId = $id;
+    //         $roleId = $request->roleId;
+    //         DB::select('CALL createstaffRole("' . $udid . '","' . $staffId . '","' . $roleId . '")');
+    //         return response()->json(['message' => "created Successfully"]);
+    //     } catch (Exception $e) {
+    //         return response()->json(['message' => $e->getMessage()], 500);
+    //     }
+    // }
 
     public function listStaffRole($request)
     {
