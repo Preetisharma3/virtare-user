@@ -35,6 +35,9 @@ class ProviderTransformer extends TransformerAbstract
         return[ 
             'id'=>$data->udid,
             'name' => $data->name,
+            'address'=>$data->address,
+            'zipcode'=>$data->zipcode,
+            'phoneNumber'=>$data->phoneNumber,
         ];
       
     }
