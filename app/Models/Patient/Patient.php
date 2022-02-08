@@ -81,7 +81,12 @@ class Patient extends Model
 
     public function vitals()
 	{
-		return $this->hasMany(PatientVital::class, 'patientId')->latest()->groupBy('vitalFieldId');
+		return $this->hasMany(PatientVital::class, 'patientId')->whereIn(\DB::raw('(patientVitals.takeTime,vitalFieldId)'), function ($query) {
+            return $query->from('patientVitals')
+                ->selectRaw('max(`takeTime`),vitalFieldId')
+                ->groupBy("vitalFieldId");
+                
+        })->groupBy('vitalFieldId');
 	}
 
     public function conditions()
