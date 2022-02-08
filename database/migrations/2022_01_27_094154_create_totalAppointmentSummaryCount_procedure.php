@@ -18,7 +18,7 @@ class CreateTotalAppointmentSummaryCountProcedure extends Migration
         CREATE PROCEDURE `getTotalAppointmentSummaryCount`(timelineId INT(20))
         BEGIN
         IF timelineId = 122 THEN
-            SELECT count(*) as total,
+             SELECT count(*) as total,
             DATE_FORMAT(appointments.startTime,'%h:%i %p') as time
             FROM appointments
             WHERE startDate > date_sub(now(), interval 1 day)

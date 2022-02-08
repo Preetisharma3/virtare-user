@@ -39,7 +39,7 @@ class MessageTypeTransformer extends TransformerAbstract
         return [
             'text' => $data->messageName,
             'count' => $data->count,
-            'time' => Carbon::parse('H', $data->time)->timestamp,
+            'time' => $data->time,
         ];
     }
 }

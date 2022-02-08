@@ -1,23 +1,25 @@
 <?php
 
-namespace App\Models\Patient;
-
-use App\Models\Flag\Flag;
+namespace App\Models\Device;
+use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PatientFlag extends Model
+class DeviceModel extends Model
 {
     use SoftDeletes;
     protected $softDelete = true;
     const DELETED_AT = 'deletedAt';
     public $timestamps = false;
-	protected $table = 'patientFlags';
+    protected $table = 'deviceModels';
     use HasFactory;
-	protected $guarded = [];
+    protected $guarded = [];
 
-   public function flag(){
-    return $this->belongsTo(Flag::class, 'flagId');
-   }
+    public function deviceType()
+    {
+        return $this->belongsTo(GlobalCode::class,'deviceTypeId');
+    }
+
+   
 }

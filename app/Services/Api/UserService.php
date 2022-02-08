@@ -34,12 +34,12 @@ class UserService
         try {
             if (auth()->user()->roleId == 4) {
                 Patient::where('userId', Auth::user()->id)->update([
-                    "nickName" => $request->nick_name,
+                    "nickName" => $request->nickname,
                     "phoneNumber" => $request->contact_no,
                     "updatedBy" => Auth::user()->id,
                 ]);
-                Document::where([['referanceId', Auth::user()->id],['entityType','patient']])->update([
-                    "filePath"=>$request->path,
+                User::where('id', Auth::user()->id)->update([
+                    "profilePhoto"=>str_replace(\URL::to('/').'/', "", $request->path),
                 ]);
                 $user = User::where('udid', Auth::user()->udid)->first();
                 return fractal()->item($user)->transformWith(new UserPatientTransformer(true))->toArray();
@@ -47,6 +47,9 @@ class UserService
                 Staff::where('userId', Auth::user()->id)->update([
                     "phoneNumber" => $request->phoneNumber,
                     "updatedBy" => Auth::user()->id,
+                ]);
+                User::where('id', Auth::user()->id)->update([
+                    "profilePhoto"=>str_replace(\URL::to('/').'/', "", $request->path),
                 ]);
                 $user = User::where('udid', Auth::user()->udid)->first();
                 return fractal()->item($user)->transformWith(new UserTransformer(true))->toArray();

@@ -2,6 +2,7 @@
 
 namespace App\Transformers\Patient;
 
+use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\User\UserTransformer;
 
@@ -21,7 +22,8 @@ class PatientPhysicianTransformer extends TransformerAbstract
             'phoneNumber'=>$data->phoneNumber,
             'email'=>$data->email,
             'fax'=>$data->fax,
-            'sameAsReferal'=>$data->sameAsReferal
+            'sameAsReferal'=>$data->sameAsReferal,
+			'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
 		];
 	}
 }

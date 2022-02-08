@@ -32,4 +32,8 @@ class AppointmentController extends Controller
     return (new AppointmentService)->appointmentList($request);
   }
 
+  public function appointmentSearch(request $request){
+    return (new AppointmentService)->appointmentSearch($request);
+  }
+
 }

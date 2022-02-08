@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGetPatientReferalsProcedure extends Migration
+class AddProfilePicInUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,6 +14,7 @@ class CreateGetPatientReferalsProcedure extends Migration
      */
     public function up()
     {
+<<<<<<< HEAD:database/migrations/2022_02_02_073610_create_get_patient_referals_procedure.php
         $procedure = "DROP PROCEDURE IF EXISTS `getPatientReferal`;";
         DB::unprepared($procedure);
         $procedure = "
@@ -24,6 +25,11 @@ class CreateGetPatientReferalsProcedure extends Migration
         ON `patientReferals`.patientId=patients.id WHERE  (patientReferals.patientId = patientIdx) AND (patientReferals.id = idx OR idx = '');
         END;";
         DB::unprepared($procedure);
+=======
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('profilePhoto')->after('email');
+        });
+>>>>>>> main:database/migrations/2022_02_02_043339_add_profilePic_in_users_table.php
     }
 
     /**
@@ -33,6 +39,8 @@ class CreateGetPatientReferalsProcedure extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('get_patient_referals_procedure');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('profilePhoto');
+        });
     }
 }
