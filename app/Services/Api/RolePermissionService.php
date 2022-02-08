@@ -3,12 +3,14 @@
 namespace App\Services\Api;
 
 use App\Models\Module\Module;
+use App\Models\Permission\Permission;
 use App\Models\Role\Role;
 use Exception;
 use Illuminate\Support\Str;
 use App\Transformers\Role\RoleTransformer;
 use App\Transformers\Role\RoleListTransformer;
 use App\Transformers\RolePermission\PermissionTransformer;
+use App\Transformers\RolePermission\RolePermissionTransformer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -82,6 +84,18 @@ class RolePermissionService
             return response()->json(['message' =>"Deleted Successfully"]);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);   
+        }
+    }
+
+    public function rolePermissionList($request)
+    {
+        try{
+            $id = $request->id;
+            $data = Role::where('id',$id)->with('permissions')->get();
+            $array  = ['role'=>fractal()->collection($data)->transformWith(new PermissionTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()];
+            return $array;
+        }catch(Exception $e){
+            return response()->json(['message' => $e->getMessage()], 500);    
         }
     }
 

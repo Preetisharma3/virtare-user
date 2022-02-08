@@ -190,4 +190,5 @@ $router->post('roleModule', 'Api\v1\RolePermissionController@createRoleModule');
 $router->post('roleModuleScreen', 'Api\v1\RolePermissionController@createRoleModuleScreen');
 $router->post('rolePermission', 'Api\v1\RolePermissionController@createRolePermission');
 $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
+$router->get('rolePermissionList', 'Api\v1\RolePermissionController@rolePermissionList');
 

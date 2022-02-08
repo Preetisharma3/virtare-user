@@ -35,6 +35,11 @@ class RolePermissionController extends Controller
         return (new RolePermissionService)->deleteRole($request, $id); 
     }
 
+    public function rolePermissionList(Request $request)
+    {
+        return (new RolePermissionService)->rolePermissionList($request);
+    }
+
     public function createPermission(Request $request)
     {
         return (new RolePermissionService)->createPermission($request); 

@@ -22,4 +22,9 @@ class Screen extends Model
     {
         return $this->hasMany(Action::class, 'screenId');
     }
+
+    public function module()
+    {
+        return $this->belongsTo(Module::class, 'moduleId');
+    }
 }
