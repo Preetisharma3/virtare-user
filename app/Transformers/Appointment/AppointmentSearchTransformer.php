@@ -16,6 +16,8 @@ class AppointmentSearchTransformer extends TransformerAbstract
         return [
             "date"=>strtotime($data->startDate." ".$data->startTime),
             "notes"=>$data->note,
+            "duration"=>$data->duration,
+            "appointmentType"=>$data->appointmentType,
             'time'=>strtotime($data->startDate." ".$data->startTime),
             "patient"=>$data->patient,
             "staff"=>$data->staff 
