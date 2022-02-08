@@ -25,6 +25,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'contactTime' => $data->contactTimeId,
 				'relation' => $data->relation->name,
 				'email' => $data->user->email,
+				'isPrimary'=>$data->isPrimary,
 				'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
 			];
 		}

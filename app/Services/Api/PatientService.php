@@ -73,7 +73,7 @@ class PatientService
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                         'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
-                        'createdBy' => 1, 'userId' => $userEmail, 'udid' => Str::uuid()->toString()
+                        'createdBy' => 1, 'userId' => $userEmail, 'udid' => Str::uuid()->toString(),'isPrimary'=>1
                     ];
                     $familyData = PatientFamilyMember::create($familyMember);
                 } else {
