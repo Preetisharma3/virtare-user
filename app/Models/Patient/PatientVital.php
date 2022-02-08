@@ -19,7 +19,7 @@ class PatientVital extends Model
 	protected $guarded = [];
     
    
-    public function type()
+    public function vitalFieldName()
     {
         return $this->hasOne(VitalField::class,'id','vitalFieldId');
     }

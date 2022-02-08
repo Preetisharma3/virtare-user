@@ -47,7 +47,6 @@ class PatientService
         DB::beginTransaction();
         try {
             if (!$id) {
-
                 // Added Ptient details in User Table
                 $user = [
                     'password' => Hash::make('password'), 'email' => $request->input('email'), 'udid' => Str::uuid()->toString(),
@@ -68,9 +67,6 @@ class PatientService
 
                 //Added Family in patientFamilyMember Table
                 $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 4]])->first();
-
-
-
                 if ($userData) {
                     $userEmail = $userData->id;
                     $familyMember = [
@@ -95,7 +91,6 @@ class PatientService
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
 
                         'createdBy' => 1, 'userId' => $fam->id, 'udid' => Str::uuid()->toString()
-
                     ];
                     $familyData = PatientFamilyMember::create($familyMember);
                 }
@@ -146,13 +141,11 @@ class PatientService
                 // Updated family in user Table
                 $usersId = PatientFamilyMember::where('id', $familyMemberId)->first();
                 $familyId = $usersId->userId;
-
                 $familyMemberUser = [
                     'email' => $request->input('familyEmail'),
                     'updatedBy' => 1
                 ];
                 $fam = User::where('id', $familyId)->update($familyMemberUser);
-
 
                 //Updated Family in patientFamilyMember Table
                 $familyMember = [
@@ -170,8 +163,6 @@ class PatientService
                     'updatedBy' => 1, 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily')
                 ];
                 $emergency = PatientEmergencyContact::where('id', $emergencyId)->update($emergencyContact);
-
-
                 $getPatient = Patient::where('id', $id)->with(
                     'user',
                     'family.user',
@@ -188,10 +179,7 @@ class PatientService
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
                 $message = ['message' => 'update successfully'];
             }
-
             DB::commit();
-
-
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {
@@ -216,7 +204,8 @@ class PatientService
                     'state',
                     'country',
                     'otherLanguage',
-                    'flags.flag'
+                    'flags.flag',
+                    'inventories.inventory'
                 )->first();
                 return fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
             } else {
@@ -231,7 +220,8 @@ class PatientService
                     'state',
                     'country',
                     'otherLanguage',
-                    'flags.flag'
+                    'flags.flag',
+                    'inventories.inventory'
                 )->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientTransformer())->toArray();
             }
@@ -428,9 +418,7 @@ class PatientService
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
                 $message = ['message' => 'update successfully'];
             }
-
             DB::commit();
-
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {
@@ -661,7 +649,7 @@ class PatientService
                     ];
                     $vital = PatientVital::create($data);
                     $result = DB::select(
-                        "CALL getPatientVital('" . $id . "','" . $request->type . "')"
+                        "CALL getPatientVital('" . $patientId . "','" . $request->type . "')"
                     );
                 }
             }
