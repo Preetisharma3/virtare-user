@@ -241,7 +241,7 @@ class StaffService
             $role = [
                 'udid' => Str::random(10),
                 'staffId' => $id,
-                'roleId' => $roleId,
+                'accessRoleId' => $roleId,
                 
             ];
             UserRole::create($role);
