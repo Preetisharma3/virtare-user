@@ -102,7 +102,7 @@ class PatientService
                     'createdBy' => 1, 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily'), 'udid' => Str::uuid()->toString()
                 ];
                 PatientEmergencyContact::create($emergencyContact);
-                $getPatient = Patient::where('id', $newData->id)->with(
+                $getPatient = Patient::where('udid', $newData->udid)->with(
                     'user',
                     'family.user',
                     'emergency',
@@ -193,7 +193,7 @@ class PatientService
     {
         try {
             if ($id) {
-                $getPatient = Patient::where('id', $id)->with(
+                $getPatient = Patient::where('udid', $id)->with(
                     'user',
                     'family.user',
                     'emergency',

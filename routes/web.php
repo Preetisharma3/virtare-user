@@ -43,10 +43,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     $router->get('team', 'Api\v1\TeamController@all');
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
-    $router->post('patient/{id}/vital', 'Api\v1\PatientController@createPatientVital');
     $router->post('patient/vital', 'Api\v1\PatientController@createPatientVital');
     $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
-    $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
 });
 $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
 $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
@@ -94,7 +92,8 @@ $router->post('patient/{id}/inventory', 'Api\v1\PatientController@createPatientI
 $router->put('patient/{id}/inventory/{inventoryId}', 'Api\v1\PatientController@updatePatientInventory');
 $router->delete('patient/{id}/inventory/{inventoryId}', 'Api\v1\PatientController@deletePatientInventory');
 $router->get('patient/{id}/inventory[/{inventoryId}]', 'Api\v1\PatientController@listPatientInventory');
-
+$router->post('patient/{id}/vital', 'Api\v1\PatientController@createPatientVital');
+$router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
 $router->put('patient/{id}/vital/{vitalId}', 'Api\v1\PatientController@createPatientVital');
 $router->delete('patient/{id}/vital/{vitalId}', 'Api\v1\PatientController@deletePatientVital');
 $router->post('patient/{id}/medicalHistory', 'Api\v1\PatientController@createPatientMedicalHistory');
