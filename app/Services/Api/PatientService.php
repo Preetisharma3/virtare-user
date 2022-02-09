@@ -67,17 +67,13 @@ class PatientService
 
                 //Added Family in patientFamilyMember Table
                 $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 4]])->first();
-<<<<<<< HEAD
-                $userEmail = $userData->id;
-=======
->>>>>>> main
                 if ($userData) {
                     $userEmail = $userData->id;
                     $familyMember = [
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                         'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
-                        'createdBy' => 1, 'userId' => $userEmail, 'udid' => Str::uuid()->toString(),'isPrimary'=>1
+                        'createdBy' => 1, 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1
                     ];
                     $familyData = PatientFamilyMember::create($familyMember);
                 } else {
@@ -196,39 +192,10 @@ class PatientService
     public function patientList($request, $id)
     {
         try {
-            if ($id) {
-                $getPatient = Patient::where('id', $id)->with(
-                    'user',
-                    'family.user',
-                    'emergency',
-                    'gender',
-                    'language',
-                    'contactType',
-                    'contactTime',
-                    'state',
-                    'country',
-                    'otherLanguage',
-                    'flags.flag',
-                    'inventories.inventory'
-                )->first();
-                return fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
-            } else {
-                $getPatient = Patient::with(
-                    'user',
-                    'family.user',
-                    'emergency',
-                    'gender',
-                    'language',
-                    'contactType',
-                    'contactTime',
-                    'state',
-                    'country',
-                    'otherLanguage',
-                    'flags.flag',
-                    'inventories.inventory'
-                )->get();
-                return fractal()->collection($getPatient)->transformWith(new PatientTransformer())->toArray();
-            }
+            $result = DB::select(
+                "CALL getPatient('" . $id . "')"
+            );
+            return fractal()->collection($result)->transformWith(new PatientTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -287,18 +254,9 @@ class PatientService
                     'conditionId' => $condition,
                     'patientId' => $id, 'udid' => $udid, 'createdBy' => 1
                 ];
-<<<<<<< HEAD
-                $patient = PatientCondition::create($input);
-                $conditionId = null;
-                $result = DB::select(
-                    "CALL getPatientCondition('" . $conditionId . "','" . $id . "')"
-                );
-                $userdata = fractal()->collection($result)->transformWith(new PatientConditionTransformer())->toArray();
-=======
                 PatientCondition::create($input);
                 $getPatient = PatientCondition::where('patientId', $id)->with('patient')->get();
                 $userdata = fractal()->collection($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
->>>>>>> main
                 $message = ['message' => 'create successfully'];
             }
             DB::commit();
@@ -449,7 +407,7 @@ class PatientService
             $result = DB::select(
                 "CALL getPatientPhysician('" . $physicianId . "','" . $id . "')"
             );
-                return fractal()->collection($result)->transformWith(new PatientPhysicianTransformer())->toArray();
+            return fractal()->collection($result)->transformWith(new PatientPhysicianTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
