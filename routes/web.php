@@ -196,4 +196,5 @@ $router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
 $router->post('rolePermission', 'Api\v1\RolePermissionController@createRolePermission');
 $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
 $router->get('rolePermissionList', 'Api\v1\RolePermissionController@rolePermissionList');
+$router->get('role','Api\v1\AccessRoleController@index');
 
