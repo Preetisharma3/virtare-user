@@ -199,3 +199,8 @@ $router->post('roleModuleScreen', 'Api\v1\RolePermissionController@createRoleMod
 $router->post('rolePermission', 'Api\v1\RolePermissionController@createRolePermission');
 $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
 
+$router->post('generalParameterGroup', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
+$router->get('generalParameterGroup[/{id}]', 'Api\v1\GeneralParameterController@listGeneralParameterGroup');
+$router->put('generalParameter/{id}', 'Api\v1\GeneralParameterController@updateGeneralParameter');
+$router->delete('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameterGroup');
+$router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameter');
