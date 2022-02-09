@@ -45,6 +45,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
     $router->post('patient/vital', 'Api\v1\PatientController@createPatientVital');
     $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
+    
 });
 $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
 $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
@@ -197,4 +198,6 @@ $router->post('rolePermission/{id}', 'Api\v1\RolePermissionController@createRole
 $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
 $router->get('rolePermissionList', 'Api\v1\RolePermissionController@rolePermissionList');
 $router->get('role','Api\v1\AccessRoleController@index');
+$router->get('staff/access','Api\v1\AccessRoleController@assignedRoles');
+$router->get('staff/{id}/access','Api\v1\AccessRoleController@assignedRoles');
 
