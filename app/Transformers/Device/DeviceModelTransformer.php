@@ -39,6 +39,7 @@ class DeviceModelTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
+            'id'=>$data->id,
             'deviceType'=>$data->deviceType,
             'modelNumber'=>$data->modelNumber,
         ];
