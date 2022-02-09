@@ -235,13 +235,18 @@ class StaffService
     }
     public function addStaffRole($request, $id)
     {
-        $role = [
-            'udid' => Str::random(10),
-            'staffId' => $id,
-            'roleId' => json_decode(json_encode($request->input('roleId'))),
-            
-        ];
-        UserRole::create($role);
+        $roles = $request->roles;
+        foreach($roles as $roleId)
+        {
+            $role = [
+                'udid' => Str::random(10),
+                'staffId' => $id,
+                'accessRoleId' => $roleId,
+                
+            ];
+            UserRole::create($role);
+        }
+        
         return response()->json(['message' => "created Successfully"]);
     }
 
