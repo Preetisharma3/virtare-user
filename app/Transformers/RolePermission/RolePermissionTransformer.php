@@ -8,7 +8,7 @@ use App\Transformers\Module\ModuleTransformer;
 use League\Fractal\TransformerAbstract;
 
 
-class PermissionTransformer extends TransformerAbstract
+class RolePermissionTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -36,9 +36,10 @@ class PermissionTransformer extends TransformerAbstract
     public function transform($data)
     {
         return [
-                "name" => $data->name,
-                "description"=>$data->description,
-                "screens" => fractal()->collection($data->screens)->transformWith(new ScreenTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()
+                "name" => $data->role->roles,
+                "description"=>$data->role->roleDescription,
+                'actions'=> fractal()->item($data->action)->transformWith(new ActionTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray(),
+                
         ];
     }
 }

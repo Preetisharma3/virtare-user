@@ -19,11 +19,6 @@ class Module extends Model
     protected $guarded = [];
 
 
-    // public function actions()
-    // {
-    //     return $this->hasManyThrough(Action::class ,'');
-    // }
-
     public function screens()
     {
         return $this->hasMany(Screen::class,'moduleId');

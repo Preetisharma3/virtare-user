@@ -40,24 +40,9 @@ class RolePermissionController extends Controller
         return (new RolePermissionService)->rolePermissionList($request);
     }
 
-    public function createPermission(Request $request)
+    public function createRolePermission(Request $request,$id)
     {
-        return (new RolePermissionService)->createPermission($request); 
-    }
-
-    public function createRoleModule(Request $request)
-    {
-        return (new RolePermissionService)->createRoleModule($request);  
-    }
-
-    public function createRoleModuleScreen(Request $request)
-    {
-        return (new RolePermissionService)->createRoleModuleScreen($request); 
-    }
-
-    public function createRolePermission(Request $request)
-    {
-        return (new RolePermissionService)->createRolePermission($request);
+        return (new RolePermissionService)->createRolePermission($request,$id);
     }
 
     public function permissionsList(Request $request)
