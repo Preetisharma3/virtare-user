@@ -40,87 +40,87 @@ class PatientController extends Controller
     return (new PatientService)->patientDelete($request, $id);
   }
 
-  public function createPatientCondition(PatientConditionRequest $request, $id)
+  public function createPatientCondition(PatientConditionRequest $request, $id=null)
   {
     return (new PatientService)->patientConditionCreate($request, $id);
   }
 
-  public function listPatientCondition(Request $request, $id, $conditionId = null)
+  public function listPatientCondition(Request $request, $id=null)
   {
-    return (new PatientService)->patientConditionList($request, $id, $conditionId);
+    return (new PatientService)->patientConditionList($request, $id);
   }
 
-  public function createPatientReferals(PatientReferalRequest $request, $id, $referalsId = null)
-  {
-    return (new PatientService)->patientReferalsCreate($request, $id, $referalsId);
-  }
-
-  public function updatePatientReferals(Request $request, $id, $referalsId = null)
+  public function createPatientReferals(PatientReferalRequest $request, $id=null, $referalsId = null)
   {
     return (new PatientService)->patientReferalsCreate($request, $id, $referalsId);
   }
 
-  public function listPatientReferals(Request $request, $id, $referalsId = null)
+  public function updatePatientReferals(Request $request, $id=null, $referalsId)
+  {
+    return (new PatientService)->patientReferalsCreate($request, $id, $referalsId);
+  }
+
+  public function listPatientReferals(Request $request, $id=null, $referalsId = null)
   {
     return (new PatientService)->patientReferalsList($request, $id, $referalsId);
   }
 
-  public function deletePatientReferals(Request $request, $id, $referalsId)
+  public function deletePatientReferals(Request $request, $id=null, $referalsId)
   {
     return (new PatientService)->patientReferalsDelete($request, $id, $referalsId);
   }
 
-  public function createPatientPhysician(PatientPhysicianRequest $request, $id, $physicianId = null)
+  public function createPatientPhysician(PatientPhysicianRequest $request, $id=null, $physicianId = null)
   {
     return (new PatientService)->patientPhysicianCreate($request, $id, $physicianId);
   }
 
-  public function updatePatientPhysician(Request $request, $id, $physicianId = null)
+  public function updatePatientPhysician(Request $request, $id=null, $physicianId = null)
   {
     return (new PatientService)->patientPhysicianCreate($request, $id, $physicianId);
   }
 
-  public function listPatientPhysician(Request $request, $id, $physicianId = null)
+  public function listPatientPhysician(Request $request, $id=null, $physicianId = null)
   {
     return (new PatientService)->patientPhysicianList($request, $id, $physicianId);
   }
 
-  public function deletePatientPhysician(Request $request, $id, $physicianId)
+  public function deletePatientPhysician(Request $request, $id=null, $physicianId)
   {
     return (new PatientService)->patientPhysicianDelete($request, $id, $physicianId);
   }
 
-  public function createPatientProgram(PatientProgramRequest $request, $id, $programId = null)
+  public function createPatientProgram(PatientProgramRequest $request, $id=null, $programId = null)
   {
     return (new PatientService)->patientProgramCreate($request, $id, $programId);
   }
 
-  public function listPatientProgram(Request $request, $id, $programId = null)
+  public function listPatientProgram(Request $request, $id=null, $programId = null)
   {
     return (new PatientService)->patientProgramList($request, $id, $programId);
   }
 
-  public function deletePatientProgram(Request $request, $id, $programId = null)
+  public function deletePatientProgram(Request $request, $id=null, $programId = null)
   {
     return (new PatientService)->patientProgramDelete($request, $id, $programId);
   }
 
-  public function createPatientInventory(Request $request, $id, $inventoryId = null)
+  public function createPatientInventory(Request $request, $id=null, $inventoryId = null)
   {
     return (new PatientService)->patientInventoryCreate($request, $id, $inventoryId);
   }
 
-  public function updatePatientInventory(Request $request, $id, $inventoryId = null)
+  public function updatePatientInventory(Request $request, $id=null, $inventoryId = null)
   {
     return (new PatientService)->patientInventoryCreate($request, $id, $inventoryId);
   }
 
-  public function listPatientInventory(Request $request, $id, $inventoryId = null)
+  public function listPatientInventory(Request $request, $id=null, $inventoryId = null)
   {
     return (new PatientService)->patientInventoryList($request, $id, $inventoryId);
   }
 
-  public function deletePatientInventory(Request $request, $id, $inventoryId)
+  public function deletePatientInventory(Request $request, $id=null, $inventoryId)
   {
     return (new PatientService)->patientInventoryDelete($request, $id, $inventoryId);
   }

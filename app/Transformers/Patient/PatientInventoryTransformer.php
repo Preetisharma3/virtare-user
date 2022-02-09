@@ -17,7 +17,7 @@ class PatientInventoryTransformer extends TransformerAbstract
 
 
         $field = [
-            'id' => $data->id,
+            'id' => $data->udid,
             'inventoryId' => $data->inventoryId,
             'isAdded'=>$data->isAdded,
             'status'=>$data->isActive,
