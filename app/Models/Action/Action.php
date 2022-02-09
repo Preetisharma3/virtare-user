@@ -2,6 +2,7 @@
 
 namespace App\Models\Action;
 
+use App\Models\Screen\Screen;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,4 +16,8 @@ class Action extends Model
     protected $table = 'actions';
     use HasFactory;
     protected $guarded = [];
+
+    public function screen(){
+        return $this->belongsTo(Screen::class,'screenId');
+    }
 }

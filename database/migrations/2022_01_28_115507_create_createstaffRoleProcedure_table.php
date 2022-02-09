@@ -15,9 +15,9 @@ class CreateCreatestaffRoleProcedureTable extends Migration
     public function up()
     {
         $createStaffRole = "DROP PROCEDURE IF EXISTS `createStaffRole`;
-            CREATE PROCEDURE  createStaffRole(IN udid varchar(255), IN userId int,IN roleId int) 
+            CREATE PROCEDURE  createStaffRole(IN udid varchar(255), IN staffId int,IN roleId int) 
             BEGIN
-            INSERT INTO userRoles (udid,userId,roleId) values(udid,userId,roleId);
+            INSERT INTO userRoles (udid,staffId,roleId) values(udid,staffId,roleId);
             END;";
   
         DB::unprepared($createStaffRole);
