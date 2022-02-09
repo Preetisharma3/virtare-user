@@ -102,29 +102,39 @@ class StaffService
     public function addStaffContact($request, $id)
     {
         try {
-            $udid = Str::random(10);
-            $firstName = $request->firstName;
-            $lastName = $request->lastName;
-            $email = $request->email;
-            $phoneNumber = $request->phoneNumber;
-            $staffId = $id;
-            DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
-            $staffContactData = StaffContact::where('udid', $udid)->first();
-            $message = ["message" => "created Successfully"];
-            $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
-            $endData = array_merge($message, $resp);
-            return $endData;
+            if(!empty($request->id)){
+                $udid = Str::random(10);
+                $firstName = $request->firstName;
+                $lastName = $request->lastName;
+                $email = $request->email;
+                $phoneNumber = $request->phoneNumber;
+                $staffId = $id;
+                DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
+                $staffContactData = StaffContact::where('udid', $udid)->first();
+                $message = ["message" => "created Successfully"];
+                $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
+                $endData = array_merge($message, $resp);
+                return $endData;
+            }else{
+                return response()->json(['message' => 'Somethings Went Worng']);
+            }
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
 
-    public function listStaffContact($request)
+    public function listStaffContact($request, $id)
     {
         try {
-            $staffContact = StaffContact::all();
+            if(!empty($request->id)){
+                $staffContact = StaffContact::where('staffId',$id)->get();
             return  fractal()->collection($staffContact)->transformWith(new StaffContactTransformer())->toArray();
+            }else{
+                return response()->json(['message' => 'Somethings Went Worng']);
+            }
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -153,9 +163,14 @@ class StaffService
     public function deleteStaffContact($request, $id)
     {
         try {
-            StaffContact::where('id', $id)->delete();
+            if(!empty($request->id)){
+                StaffContact::where('staffId', $id)->delete();
 
-            return response()->json(['message' => "Deleted Successfully"]);
+                return response()->json(['message' => "Deleted Successfully"]);
+            }else{
+                return response()->json(['message' => 'Somethings Went Worng']);
+            }
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -180,10 +195,10 @@ class StaffService
         }
     }
 
-    public function listStaffAvailability($request)
+    public function listStaffAvailability($request,$id)
     {
         try {
-            $staffAvailability = StaffAvailability::all();
+            $staffAvailability = StaffAvailability::where('staffId',$id)->get();
             return fractal()->collection($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -211,26 +226,37 @@ class StaffService
     public function deleteStaffAvailability($request, $id)
     {
         try {
-            StaffAvailability::where('id', $id)->delete();
+            StaffAvailability::where('staffId', $id)->delete();
 
             return response()->json(['message' => "Deleted Successfully"]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
-
     public function addStaffRole($request, $id)
     {
-        try {
-            $udid = Str::random(10);
-            $userId = $id;
-            $roleId = $request->roleId;
-            DB::select('CALL createstaffRole("' . $udid . '","' . $userId . '","' . $roleId . '")');
-            return response()->json(['message' => "created Successfully"]);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
-        }
+        $role = [
+            'udid' => Str::random(10),
+            'staffId' => $id,
+            'roleId' => json_decode(json_encode($request->input('roleId'))),
+            
+        ];
+        UserRole::create($role);
+        return response()->json(['message' => "created Successfully"]);
     }
+
+    // public function addStaffRole($request, $id)
+    // {
+    //     try {
+    //         $udid = Str::random(10);
+    //         $staffId = $id;
+    //         $roleId = $request->roleId;
+    //         DB::select('CALL createstaffRole("' . $udid . '","' . $staffId . '","' . $roleId . '")');
+    //         return response()->json(['message' => "created Successfully"]);
+    //     } catch (Exception $e) {
+    //         return response()->json(['message' => $e->getMessage()], 500);
+    //     }
+    // }
 
     public function listStaffRole($request)
     {
