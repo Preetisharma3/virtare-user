@@ -36,9 +36,9 @@ class PermissionTransformer extends TransformerAbstract
     public function transform($data)
     {
         return [
-                "name" => $data->name,
-                "description"=>$data->description,
-                "screens" => fractal()->collection($data->screens)->transformWith(new ScreenTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()
+                "name" => $data->role->roles,
+                "description"=>$data->role->roleDescription,
+                //"screens" => fractal()->collection($data->screens)->transformWith(new ScreenTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()
         ];
     }
 }
