@@ -11,13 +11,14 @@ class InventoryTransformer extends TransformerAbstract
     protected $availableIncludes = [];
 
     public function transform($data): array
-    { 
+    {
         return [
             'id' => $data->id,
-            'deviceType' => (!empty($data->model->deviceType->name))?$data->model->deviceType->name:$data->deviceType,
-            'modelNumber' => $data->modelNumber?$data->modelNumber:$data->model->modelName,
+            'deviceType' => (!empty($data->model->deviceType->name)) ? $data->model->deviceType->name : $data->deviceType,
+            'modelNumber' => $data->modelNumber ? $data->modelNumber : $data->model->modelName,
             'serialNumber' => $data->serialNumber,
             'macAddress' => $data->macAddress,
+            'status' => $data->isActive ? True : False
         ];
     }
 }
