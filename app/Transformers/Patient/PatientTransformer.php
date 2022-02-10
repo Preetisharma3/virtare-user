@@ -23,6 +23,7 @@ class PatientTransformer extends TransformerAbstract
             'name' => ucfirst($data->firstName),
             'middleName' => ucfirst($data->middleName),
             'lastName' => ucfirst($data->lastName),
+            'fullName'=>ucfirst($data->firstName).' '.ucfirst($data->middleName).' '.ucfirst($data->lastName),
             'dob' => $data->dob,
             'gender' => $data->gender->name,
             'language' => $data->language->name,
