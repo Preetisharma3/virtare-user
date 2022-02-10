@@ -150,7 +150,7 @@ class PatientService
                 //Updated Family in patientFamilyMember Table
                 $familyMember = [
                     'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
-                    'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                    'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' =>json_encode(array($request->input('familyContactTime'))) ,
                     'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
                     'updatedBy' => 1,
                 ];
@@ -159,7 +159,7 @@ class PatientService
                 //Updated emergency contact in PatientEmergencyContact table
                 $emergencyContact = [
                     'fullName' => $request->input('emergencyFullName'), 'phoneNumber' => $request->input('emergencyPhoneNumber'), 'contactTypeId' => json_encode($request->input('emergencyContactType')),
-                    'contactTimeId' => $request->input('emergencyContactTime'), 'genderId' => $request->input('emergencyGender'),
+                    'contactTimeId' => json_encode(array($request->input('emergencyContactTime'))), 'genderId' => $request->input('emergencyGender'),
                     'updatedBy' => 1, 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily')
                 ];
                 $emergency = PatientEmergencyContact::where('id', $emergencyId)->update($emergencyContact);
