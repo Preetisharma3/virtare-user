@@ -17,6 +17,7 @@ class PatientTimeLineTransformer extends TransformerAbstract
             'heading'=>$data->heading,
             'title'=>$data->title,
             'type'=>$data->type,
+            'createdAt'=>strtotime($data->createdAt)
 		];
 	}
 }
