@@ -74,7 +74,7 @@ class PatientService
                 ];
                 $newData = Patient::create($patient);
                 $timeLine = [
-                    'patientId' => $newData->id, 'heading' => 'Patient Register', 'title' => $newData->firstName . ' ' . 'Added to Plateform', 'type' => 1,
+                    'patientId' => $newData->id, 'heading' => 'Patient Register', 'title' => $newData->firstName . ' ' . 'Added to platform', 'type' => 1,
                     'createdBy' => 1, 'udid' => Str::uuid()->toString()
                 ];
                 PatientTimeLine::create($timeLine);
@@ -481,7 +481,7 @@ class PatientService
             if (!$programId) {
                 $udid = Str::uuid()->toString();
                 $input = [
-                    'programtId' => $request->input('program'), 'onboardingScheduleDate' => $request->input('onboardingScheduleDate'), 'dischargeDate' => $request->input('dischargeDate'),
+                    'programtId' => $request->input('program'), 'onboardingScheduleDate' =>  date("Y-m-d", $request->input('onboardingScheduleDate')), 'dischargeDate' => date("Y-m-d",$request->input('dischargeDate')),
                     'patientId' => $id, 'createdBy' => 1, 'isActive' => $request->input('status'), 'udid' => $udid
                 ];
                 $patient = PatientProgram::create($input);
@@ -490,7 +490,7 @@ class PatientService
                 $message = ['message' => 'created successfully'];
             } else {
                 $input = [
-                    'programtId' => $request->input('program'), 'onboardingScheduleDate' => $request->input('onboardingScheduleDate'), 'dischargeDate' => $request->input('dischargeDate'),
+                    'programtId' => $request->input('program'), 'onboardingScheduleDate' => date("Y-m-d",$request->input('onboardingScheduleDate')), 'dischargeDate' => date("Y-m-d",$request->input('dischargeDate')),
                     'updatedBy' => 1, 'isActive' => $request->input('status')
                 ];
                 $patient = PatientProgram::where('id', $programId)->update($input);
@@ -659,13 +659,13 @@ class PatientService
                     $vitalData = PatientVital::create($data);
 
                     $patientData = Patient::where('id', $id)->first();
-                    $vitalField=VitalField::where('id',$vitalData->vitalFieldId)->first();
-                    $type=VitalTypeField::where('vitalFieldId',$vitalData->vitalFieldId)->first();
-                    $device=GlobalCode::where('id', $type->vitalTypeId)->first();
+                    $vitalField = VitalField::where('id', $vitalData->vitalFieldId)->first();
+                    $type = VitalTypeField::where('vitalFieldId', $vitalData->vitalFieldId)->first();
+                    $device = GlobalCode::where('id', $type->vitalTypeId)->first();
 
                     $timeLine = [
                         'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' .
-                            'Submit' . ' ' . $device->name . ' ' . 'Reading' . ' ' . $vitalField->name . ',' . $vital['value'], 'type' => 1,
+                            'Submit' . ' ' . $device->name . ' ' . 'Reading' . ' ' . $vitalField->name . ' ' . $vital['value'], 'type' => 1,
                         'createdBy' => 1, 'udid' => Str::uuid()->toString()
                     ];
                     PatientTimeLine::create($timeLine);
@@ -700,9 +700,9 @@ class PatientService
                     ];
                     $vitalData = PatientVital::create($data);
                     $patientData = Patient::where('id', $patientId)->first();
-                    $vitalField=VitalField::where('id',$vitalData->vitalFieldId)->first();
-                    $type=VitalTypeField::where('vitalFieldId',$vitalData->vitalFieldId)->first();
-                    $device=GlobalCode::where('id', $type->vitalTypeId)->first();
+                    $vitalField = VitalField::where('id', $vitalData->vitalFieldId)->first();
+                    $type = VitalTypeField::where('vitalFieldId', $vitalData->vitalFieldId)->first();
+                    $device = GlobalCode::where('id', $type->vitalTypeId)->first();
 
                     $timeLine = [
                         'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' .
@@ -837,7 +837,7 @@ class PatientService
                 $udid = Str::uuid()->toString();
                 $input = [
                     'medicine' => $request->input('medicine'), 'frequency' => $request->input('frequency'),  'createdBy' => 1,
-                    'startDate' => $request->input('startDate'), 'endDate' => $request->input('endDate'), 'patientId' => $id, 'udid' => $udid
+                    'startDate' =>date("Y-m-d",$request->input('startDate')), 'endDate' => date("Y-m-d",$request->input('endDate')), 'patientId' => $id, 'udid' => $udid
                 ];
                 $patient = PatientMedicalRoutine::create($input);
                 $getPatient = PatientMedicalRoutine::where('id', $patient->id)->with('patient')->first();
@@ -974,6 +974,22 @@ class PatientService
         try {
             $inventory = ['isAdded' => 1];
             PatientInventory::where('id', $id)->update($inventory);
+            $patient=PatientInventory::where('id', $id)->first();
+
+            $user=User::where('id',Auth::id())->first();
+            $userId=$user->id;
+            $patientData = Patient::where('userId', $userId)->first();
+            $inventory = Inventory::where('id', $patient->inventoryId)->first();
+            $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
+            $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
+            $deviceType = $device->name;
+            $timeLine = [
+                'patientId' => $patientData->id, 'heading' => 'Inventory Assigned', 'title' => $deviceType.' '.'Linked to'.' '.$patientData->firstName, 'type' => 1,
+                'createdBy' => 1, 'udid' => Str::uuid()->toString()
+            ];
+            PatientTimeLine::create($timeLine);
+
+
             $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             $message = ['message' => 'updated successfully'];

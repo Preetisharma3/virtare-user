@@ -17,8 +17,8 @@ class PatientProgramTransformer extends TransformerAbstract
 			'id'=>$data->id,
             'program'=>$data->program->type->name,
             'patientId'=>$data->patientId,
-            'onboardingScheduleDate'=>$data->onboardingScheduleDate,
-            'dischargeDate'=>$data->dischargeDate,
+            'onboardingScheduleDate'=>strtotime($data->onboardingScheduleDate),
+            'dischargeDate'=>strtotime($data->dischargeDate),
             'status'=>$data->isActive==1?'Active':'Inactive',
 		];
 	}

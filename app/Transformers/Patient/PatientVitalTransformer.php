@@ -23,6 +23,7 @@ class PatientVitalTransformer extends TransformerAbstract
 			'addType'=>$data->addType,
 			'createdType'=>$data->createdType,
 			'comment'=>$data->comment,
+			'lastReadingDate'=>$data->createdAt,
 			'deviceInfo'=>$data->deviceInfo,
 		];
 	}
