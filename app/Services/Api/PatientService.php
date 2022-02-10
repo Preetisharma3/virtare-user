@@ -74,7 +74,7 @@ class PatientService
                 ];
                 $newData = Patient::create($patient);
                 $timeLine = [
-                    'patientId' => $newData->id, 'heading' => 'Patient Register', 'title' => $newData->firstName . ' ' . 'Added to platform', 'type' => 1,
+                    'patientId' => $newData->id, 'heading' => 'Patient Register', 'title' => $newData->firstName . ' ' . $newData->lastName . ' ' . 'Added to platform', 'type' => 1,
                     'createdBy' => 1, 'udid' => Str::uuid()->toString()
                 ];
                 PatientTimeLine::create($timeLine);
@@ -557,7 +557,7 @@ class PatientService
                 $deviceType = $device->name;
 
                 $timeLine = [
-                    'patientId' => $patientData->id, 'heading' => 'Device Assigned', 'title' => $deviceType . ' ' . ' Device Assigned to ' . ' ' . $patientData->firstName, 'type' => 1,
+                    'patientId' => $patientData->id, 'heading' => 'Device Assigned', 'title' => $deviceType . ' ' . ' Device Assigned to ' . ' ' . $patientData->firstName. ' ' . $patientData->lastName, 'type' => 1,
                     'createdBy' => 1, 'udid' => Str::uuid()->toString()
                 ];
                 PatientTimeLine::create($timeLine);
@@ -615,7 +615,7 @@ class PatientService
             $deviceType = $device->name;
 
             $timeLine = [
-                'patientId' => $patientData->id, 'heading' => 'Device Removed', 'title' => $deviceType . ' ' . ' Device Removed from ' . ' ' . $patientData->firstName, 'type' => 1,
+                'patientId' => $patientData->id, 'heading' => 'Device Removed', 'title' => $deviceType . ' ' . ' Device Removed from ' . ' ' . $patientData->firstName. ' ' . $patientData->lastName, 'type' => 1,
                 'createdBy' => 1, 'udid' => Str::uuid()->toString()
             ];
             PatientTimeLine::create($timeLine);
@@ -664,7 +664,7 @@ class PatientService
                     $device = GlobalCode::where('id', $type->vitalTypeId)->first();
 
                     $timeLine = [
-                        'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' .
+                        'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' . $patientData->lastName . ' ' .
                             'Submit' . ' ' . $device->name . ' ' . 'Reading' . ' ' . $vitalField->name . ' ' . $vital['value'], 'type' => 1,
                         'createdBy' => 1, 'udid' => Str::uuid()->toString()
                     ];
@@ -705,7 +705,7 @@ class PatientService
                     $device = GlobalCode::where('id', $type->vitalTypeId)->first();
 
                     $timeLine = [
-                        'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' .
+                        'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' . $patientData->lastName. ' ' .
                             'Submit' . ' ' . $device->name . ' ' . 'Reading' . ' ' . $vitalField->name . ',' . $vital['value'], 'type' => 1,
                         'createdBy' => 1, 'udid' => Str::uuid()->toString()
                     ];
@@ -974,17 +974,17 @@ class PatientService
         try {
             $inventory = ['isAdded' => 1];
             PatientInventory::where('id', $id)->update($inventory);
-            $patient=PatientInventory::where('id', $id)->first();
+            $patient = PatientInventory::where('id', $id)->first();
 
-            $user=User::where('id',Auth::id())->first();
-            $userId=$user->id;
+            $user = User::where('id', Auth::id())->first();
+            $userId = $user->id;
             $patientData = Patient::where('userId', $userId)->first();
             $inventory = Inventory::where('id', $patient->inventoryId)->first();
             $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
             $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
             $deviceType = $device->name;
             $timeLine = [
-                'patientId' => $patientData->id, 'heading' => 'Inventory Assigned', 'title' => $deviceType.' '.'Linked to'.' '.$patientData->firstName, 'type' => 1,
+                'patientId' => $patientData->id, 'heading' => 'Inventory Assigned', 'title' => $deviceType . ' ' . 'Linked to' . ' ' . $patientData->firstName.' '.$patientData->lastName, 'type' => 1,
                 'createdBy' => 1, 'udid' => Str::uuid()->toString()
             ];
             PatientTimeLine::create($timeLine);
@@ -1024,8 +1024,6 @@ class PatientService
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientDeviceTransformer())->toArray();
                 $message = ['message' => 'updated successfully'];
             }
-
-
             DB::commit();
             $endData = array_merge($message, $userdata);
             return $endData;
