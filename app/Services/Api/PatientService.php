@@ -87,7 +87,7 @@ class PatientService
                     //Added Family in patientFamilyMember Table
                     $familyMember = [
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
-                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => json_encode(array($request->input('familyContactTime'))),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
 
                         'createdBy' => 1, 'userId' => $fam->id, 'udid' => Str::uuid()->toString()
@@ -98,7 +98,7 @@ class PatientService
                 //Added emergency contact in PatientEmergencyContact table
                 $emergencyContact = [
                     'fullName' => $request->input('emergencyFullName'), 'phoneNumber' => $request->input('emergencyPhoneNumber'), 'contactTypeId' => json_encode($request->input('emergencyContactType')),
-                    'contactTimeId' => $request->input('emergencyContactTime'), 'genderId' => $request->input('emergencyGender'), 'patientId' => $newData->id,
+                    'contactTimeId' => json_encode(array($request->input('emergencyContactTime'))), 'genderId' => $request->input('emergencyGender'), 'patientId' => $newData->id,
                     'createdBy' => 1, 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily'), 'udid' => Str::uuid()->toString()
                 ];
                 PatientEmergencyContact::create($emergencyContact);
