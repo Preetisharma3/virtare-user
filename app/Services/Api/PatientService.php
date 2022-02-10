@@ -1036,7 +1036,7 @@ class PatientService
         try {
             $patient = Patient::where('udid', $id)->first();
             $patientId = $patient->id;
-            $getPatient = PatientTimeLine::where('patientId', $patientId)->with('patient')->get();
+            $getPatient = PatientTimeLine::where('patientId', $patientId)->with('patient')->orderBy('id', 'DESC')->get();
             return fractal()->collection($getPatient)->transformWith(new PatientTimelineTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
