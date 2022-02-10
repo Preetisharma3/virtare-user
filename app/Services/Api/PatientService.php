@@ -692,9 +692,16 @@ class PatientService
                 $patient = Patient::where('userId', $userId)->first();
                 $patientId = $patient->id;
                 $program = PatientProgram::where('udid', $programId)->first();
-                $result = DB::select(
-                    "CALL getPatientProgram('" . $program->id . "','" . $patientId . "')"
-                );
+                if (!$programId) {
+                    $result = DB::select(
+                        "CALL getPatientProgram('" . '' . "','" . $patientId . "')"
+                    );
+                } else {
+                    $program = PatientProgram::where('udid', $programId)->first();
+                    $result = DB::select(
+                        "CALL getPatientProgram('" . $program->id . "','" . $patientId . "')"
+                    );
+                }
             } else {
                 $patient = Patient::where('udid', $id)->first();
                 $patientId = $patient->id;
