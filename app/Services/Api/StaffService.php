@@ -263,10 +263,10 @@ class StaffService
     //     }
     // }
 
-    public function listStaffRole($request)
+    public function listStaffRole($request,$id)
     {
         try {
-            $staffRole = UserRole::with('roles')->get();
+            $staffRole = UserRole::where('staffId',$id)->get();
             return fractal()->collection($staffRole)->transformWith(new StaffRoleTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
