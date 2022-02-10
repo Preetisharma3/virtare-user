@@ -2,8 +2,9 @@
 
 namespace App\Services\Api;
 
-use App\Helper;
 use Exception;
+use App\Helper;
+use Carbon\Carbon;
 use App\Models\Tag\Tag;
 use App\Models\User\User;
 use Illuminate\Support\Str;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Patient\PatientDevice;
 use App\Models\Patient\PatientProgram;
 use App\Models\Patient\PatientReferal;
+use App\Models\Patient\PatientTimeLine;
 use App\Models\Patient\PatientCondition;
 use App\Models\Patient\PatientInsurance;
 use App\Models\Patient\PatientInventory;
@@ -32,12 +34,12 @@ use App\Transformers\Patient\PatientDeviceTransformer;
 use App\Transformers\Patient\PatientMedicalTransformer;
 use App\Transformers\Patient\PatientProgramTransformer;
 use App\Transformers\Patient\PatientReferalTransformer;
+use App\Transformers\Patient\PatientTimelineTransformer;
 use App\Transformers\Patient\PatientConditionTransformer;
 use App\Transformers\Patient\PatientInsuranceTransformer;
 use App\Transformers\Patient\PatientInventoryTransformer;
 use App\Transformers\Patient\PatientPhysicianTransformer;
 use App\Transformers\Patient\PatientMedicalRoutineTransformer;
-use Carbon\Carbon;
 
 class PatientService
 {
@@ -963,6 +965,19 @@ class PatientService
         try {
             $getPatient = PatientDevice::where('patientId', $id)->with('patient')->get();
             return fractal()->collection($getPatient)->transformWith(new PatientDeviceTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // List Patient Timeline
+    public function patientTimelineList($request, $id)
+    {
+        try {
+            $patient=Patient::where('udid',$id)->first();
+            $patientId=$patient->id;
+            $getPatient = PatientTimeLine::where('patientId', $patientId)->with('patient')->get();
+            return fractal()->collection($getPatient)->transformWith(new PatientTimelineTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
