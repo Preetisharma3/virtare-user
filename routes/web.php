@@ -170,8 +170,8 @@ $router->put('staff/{id}/availability/{staffId}', 'Api\v1\StaffController@update
 $router->delete('staff/{id}/availability/{staffId}', 'Api\v1\StaffController@deleteStaffAvailability');
 $router->post('staff/{id}/role', 'Api\v1\StaffController@addStaffRole');
 $router->get('staff/{id}/role', 'Api\v1\StaffController@listStaffRole');
-$router->put('staff/{id}/role/{staffId}', 'Api\v1\StaffController@updateStaffRole');
-$router->delete('staff/{id}/role/{staffId}', 'Api\v1\StaffController@deleteStaffRole');
+$router->put('staff/{staffId}/role/{id}', 'Api\v1\StaffController@updateStaffRole');
+$router->delete('staff/{staffId}/role/{id}', 'Api\v1\StaffController@deleteStaffRole');
 
 $router->post('inventory', 'Api\v1\InventoryController@store');
 $router->get('inventory', 'Api\v1\InventoryController@index');

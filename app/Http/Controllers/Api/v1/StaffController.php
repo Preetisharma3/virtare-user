@@ -85,9 +85,9 @@ class StaffController extends Controller
         return (new StaffService)->updateStaffRole($request, $id); 
     }
 
-    public function deleteStaffRole(Request $request , $id)
+    public function deleteStaffRole(Request $request ,$staffId, $id)
     {
-        return (new StaffService)->deleteStaffRole($request, $id); 
+        return (new StaffService)->deleteStaffRole($request,$staffId, $id); 
     }
 
     public function specializationCount()
