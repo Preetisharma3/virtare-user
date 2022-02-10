@@ -97,7 +97,7 @@ class AppointmentService
 
     public function todayAppointment($request)
     {
-        if (auth()->user()) {
+        if (auth()->user()->patient) {
 
             $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', auth()->user()->patient->id], ['startDate', Carbon::today()]])->get();
         } else {
