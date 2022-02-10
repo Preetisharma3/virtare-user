@@ -11,6 +11,7 @@ use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
+use App\Models\Patient\PatientTimeLine;
 use App\Transformers\Appointment\AppointmentTransformer;
 use App\Transformers\Appointment\AppointmentDataTransformer;
 use App\Transformers\Appointment\AppointmentListTransformer;
@@ -64,6 +65,14 @@ class AppointmentService
             $data = array_merge($entity, $input);
         }
         Appointment::create($data);
+
+        $patientData = Patient::where('id', $request->patientId)->first();
+        $staffData = Staff::where('id', $request->staffId)->first();
+        $timeLine = [
+            'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for'.' '. $patientData->firstName.' '.'Added with'.' '.$staffData->firstName, 'type' => 1,
+            'createdBy' => 1, 'udid' => Str::uuid()->toString()
+        ];
+        PatientTimeLine::create($timeLine);
         return response()->json(['message' => 'created successfully']);
     }
 
@@ -88,7 +97,7 @@ class AppointmentService
 
     public function todayAppointment($request)
     {
-        if (auth()->user()) {
+        if (auth()->user()->patient) {
 
             $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', auth()->user()->patient->id], ['startDate', Carbon::today()]])->get();
         } else {

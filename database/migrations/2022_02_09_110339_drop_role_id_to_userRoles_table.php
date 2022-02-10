@@ -14,6 +14,7 @@ class DropRoleIdToUserRolesTable extends Migration
     public function up()
     {
         Schema::table('userRoles', function (Blueprint $table) {
+            $table->dropForeign('userroles_roleid_foreign');
             $table->dropColumn('roleId');
         });
     }
