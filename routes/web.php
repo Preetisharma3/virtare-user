@@ -69,6 +69,15 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('patient/medicalHistory/{medicalHistoryId}', 'Api\v1\PatientController@createPatientMedicalHistory');
     $router->get('patient/medicalHistory[/{medicalHistoryId}]', 'Api\v1\PatientController@listPatientMedicalHistory');
     $router->delete('patient/medicalHistory/{medicalHistoryId}', 'Api\v1\PatientController@deletePatientMedicalHistory');
+    $router->post('patient/medicalRoutine', 'Api\v1\PatientController@createPatientMedicalRoutine');
+    $router->put('patient/medicalRoutine/{medicalRoutineId}', 'Api\v1\PatientController@createPatientMedicalRoutine');
+    $router->get('patient/medicalRoutine[/{medicalRoutineId}]', 'Api\v1\PatientController@listPatientMedicalRoutine');
+    $router->delete('patient/medicalRoutine/{medicalRoutineId}', 'Api\v1\PatientController@deletePatientMedicalRoutine');
+    $router->post('patient/insurance', 'Api\v1\PatientController@createPatientInsurance');
+    $router->put('patient/insurance[/{insuranceId}]', 'Api\v1\PatientController@createPatientInsurance');
+    $router->get('patient/insurance[/{insuranceId}]', 'Api\v1\PatientController@listPatientInsurance');
+    $router->delete('patient/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
+
 
 
 
@@ -127,6 +136,14 @@ $router->post('patient/{id}/medicalHistory', 'Api\v1\PatientController@createPat
 $router->put('patient/{id}/medicalHistory/{medicalHistoryId}', 'Api\v1\PatientController@createPatientMedicalHistory');
 $router->get('patient/{id}/medicalHistory[/{medicalHistoryId}]', 'Api\v1\PatientController@listPatientMedicalHistory');
 $router->delete('patient/{id}/medicalHistory/{medicalHistoryId}', 'Api\v1\PatientController@deletePatientMedicalHistory');
+$router->post('patient/{id}/medicalRoutine', 'Api\v1\PatientController@createPatientMedicalRoutine');
+$router->put('patient/{id}/medicalRoutine/{medicalRoutineId}', 'Api\v1\PatientController@createPatientMedicalRoutine');
+$router->get('patient/{id}/medicalRoutine[/{medicalRoutineId}]', 'Api\v1\PatientController@listPatientMedicalRoutine');
+$router->delete('patient/{id}/medicalRoutine/{medicalRoutineId}', 'Api\v1\PatientController@deletePatientMedicalRoutine');
+$router->post('patient/{id}/insurance', 'Api\v1\PatientController@createPatientInsurance');
+$router->put('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@createPatientInsurance');
+$router->get('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@listPatientInsurance');
+$router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
 
 
 $router->post('staff', 'Api\v1\StaffController@addStaff');
@@ -136,14 +153,8 @@ $router->put('staff/{id}', 'Api\v1\StaffController@updateStaff');
 
 
 
-$router->post('patient/{id}/medicalRoutine', 'Api\v1\PatientController@createPatientMedicalRoutine');
-$router->put('patient/{id}/medicalRoutine/{medicalRoutineId}', 'Api\v1\PatientController@createPatientMedicalRoutine');
-$router->get('patient/{id}/medicalRoutine[/{medicalRoutineId}]', 'Api\v1\PatientController@listPatientMedicalRoutine');
-$router->delete('patient/{id}/medicalRoutine/{medicalRoutineId}', 'Api\v1\PatientController@deletePatientMedicalRoutine');
-$router->post('patient/{id}/insurance', 'Api\v1\PatientController@createPatientInsurance');
-$router->put('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@createPatientInsurance');
-$router->get('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@listPatientInsurance');
-$router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
+
+
 $router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevice');
 $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
 $router->get('patient/{id}/device', 'Api\v1\PatientController@listPatientDevice');

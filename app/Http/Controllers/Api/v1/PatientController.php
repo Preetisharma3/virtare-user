@@ -155,32 +155,32 @@ class PatientController extends Controller
     return (new PatientService)->patientMedicalHistoryDelete($request, $id, $medicalHistoryId);
   }
 
-  public function createPatientMedicalRoutine(PatientMedicalRoutineRequest $request, $id, $medicalRoutineId = null)
+  public function createPatientMedicalRoutine(PatientMedicalRoutineRequest $request, $id=null, $medicalRoutineId = null)
   {
     return (new PatientService)->patientMedicalRoutineCreate($request, $id, $medicalRoutineId);
   }
 
-  public function listPatientMedicalRoutine(Request $request, $id, $medicalRoutineId = null)
+  public function listPatientMedicalRoutine(Request $request, $id=null, $medicalRoutineId = null)
   {
     return (new PatientService)->patientMedicalRoutineList($request, $id, $medicalRoutineId);
   }
 
-  public function deletePatientMedicalRoutine(Request $request, $id, $medicalRoutineId)
+  public function deletePatientMedicalRoutine(Request $request, $id=null, $medicalRoutineId)
   {
     return (new PatientService)->patientMedicalRoutineDelete($request, $id, $medicalRoutineId);
   }
 
-  public function createPatientInsurance(Request $request, $id, $insuranceId = null)
+  public function createPatientInsurance(Request $request, $id=null, $insuranceId = null)
   {
     return (new PatientService)->patientInsuranceCreate($request, $id, $insuranceId);
   }
 
-  public function listPatientInsurance(Request $request, $id, $insuranceId = null)
+  public function listPatientInsurance(Request $request, $id=null, $insuranceId = null)
   {
     return (new PatientService)->patientInsuranceList($request, $id, $insuranceId);
   }
 
-  public function deletePatientInsurance(Request $request, $id, $insuranceId)
+  public function deletePatientInsurance(Request $request, $id=null, $insuranceId)
   {
     return (new PatientService)->patientInsuranceDelete($request, $id, $insuranceId);
   }
