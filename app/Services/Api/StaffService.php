@@ -266,7 +266,7 @@ class StaffService
     public function listStaffRole($request,$id)
     {
         try {
-            $staffRole = UserRole::where('staffId',$id)->get();
+            $staffRole = UserRole::where('staffId',$id)->with('roles')->get();
             return fractal()->collection($staffRole)->transformWith(new StaffRoleTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
