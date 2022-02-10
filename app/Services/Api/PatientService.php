@@ -943,9 +943,15 @@ class PatientService
     {
         DB::beginTransaction();
         try {
-            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
-            PatientVital::find($vitalId)->update($data);
-            PatientVital::find($vitalId)->delete();
+            if(!$id){
+                $data = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
+                PatientVital::find($vitalId)->update($data);
+                PatientVital::find($vitalId)->delete();
+            }else{
+                $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+                PatientVital::find($vitalId)->update($data);
+                PatientVital::find($vitalId)->delete();
+            }
             DB::commit();
             return response()->json(['message' => 'delete successfully']);
         } catch (Exception $e) {
@@ -959,24 +965,46 @@ class PatientService
     {
         DB::beginTransaction();
         try {
-            if (!$medicalHistoryId) {
-                $udid = Str::uuid()->toString();
-                $input = [
-                    'history' => $request->input('history'), 'patientId' => $id,  'createdBy' => 1, 'udid' => $udid
-                ];
-                $patient = PatientMedicalHistory::create($input);
-                $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient')->first();
-                $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
-            } else {
-                $input = [
-                    'history' => $request->input('history'), 'updatedBy' => 1
-                ];
-                $patient = PatientMedicalHistory::where('id', $medicalHistoryId)->update($input);
-                $getPatient = PatientMedicalHistory::where('id', $medicalHistoryId)->with('patient')->first();
-                $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+            if(!$id){
+                if (!$medicalHistoryId) {
+                    $udid = Str::uuid()->toString();
+                    $input = [
+                        'history' => $request->input('history'), 'patientId' => $id,  'createdBy' => Auth::id(), 'udid' => $udid
+                    ];
+                    $patient = PatientMedicalHistory::create($input);
+                    $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient')->first();
+                    $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                    $message = ['message' => 'created successfully'];
+                } else {
+                    $input = [
+                        'history' => $request->input('history'), 'updatedBy' => 1
+                    ];
+                    $patient = PatientMedicalHistory::where('id', $medicalHistoryId)->update($input);
+                    $getPatient = PatientMedicalHistory::where('id', $medicalHistoryId)->with('patient')->first();
+                    $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                    $message = ['message' => 'updated successfully'];
+                }
+            }else{
+                if (!$medicalHistoryId) {
+                    $udid = Str::uuid()->toString();
+                    $input = [
+                        'history' => $request->input('history'), 'patientId' => $id,  'createdBy' => 1, 'udid' => $udid
+                    ];
+                    $patient = PatientMedicalHistory::create($input);
+                    $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient')->first();
+                    $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                    $message = ['message' => 'created successfully'];
+                } else {
+                    $input = [
+                        'history' => $request->input('history'), 'updatedBy' => 1
+                    ];
+                    $patient = PatientMedicalHistory::where('id', $medicalHistoryId)->update($input);
+                    $getPatient = PatientMedicalHistory::where('id', $medicalHistoryId)->with('patient')->first();
+                    $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                    $message = ['message' => 'updated successfully'];
+                }
             }
+            
             DB::commit();
             $endData = array_merge($message, $userdata);
             return $endData;

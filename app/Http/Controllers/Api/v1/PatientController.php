@@ -140,17 +140,17 @@ class PatientController extends Controller
     return (new PatientService)->patientVitalDelete($request, $id, $vitalId);
   }
 
-  public function createPatientMedicalHistory(PatientMedicalHistoryRequest $request, $id, $medicalHistoryId = null)
+  public function createPatientMedicalHistory(PatientMedicalHistoryRequest $request, $id=null, $medicalHistoryId = null)
   {
     return (new PatientService)->patientMedicalHistoryCreate($request, $id, $medicalHistoryId);
   }
 
-  public function listPatientMedicalHistory(Request $request, $id, $medicalHistoryId = null)
+  public function listPatientMedicalHistory(Request $request, $id=null, $medicalHistoryId = null)
   {
     return (new PatientService)->patientMedicalHistoryList($request, $id, $medicalHistoryId);
   }
 
-  public function deletePatientMedicalHistory(Request $request, $id, $medicalHistoryId)
+  public function deletePatientMedicalHistory(Request $request, $id=null, $medicalHistoryId)
   {
     return (new PatientService)->patientMedicalHistoryDelete($request, $id, $medicalHistoryId);
   }
