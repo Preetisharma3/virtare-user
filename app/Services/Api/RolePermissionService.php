@@ -22,7 +22,7 @@ class RolePermissionService
     public function roleList($request)
     {
         try{
-            $data = Role::all();
+            $data = AccessRole::all();
             return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
         }catch(Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);    

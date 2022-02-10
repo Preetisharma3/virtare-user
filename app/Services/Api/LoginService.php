@@ -16,7 +16,7 @@ class LoginService
             auth()->logout();
             return response()->json(['message' => 'User successfully signed out']);
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            return response()->json(['message' => 'User successfully signed out'],  200);
         }
     }
 }

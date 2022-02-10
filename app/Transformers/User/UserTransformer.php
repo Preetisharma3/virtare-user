@@ -32,7 +32,7 @@ class UserTransformer extends TransformerAbstract
 			'name'=>$user->staff->firstName.' '.$user->staff->lastName,
 			'username'=>$user->email,
 			'email'=>$user->email,
-			'profile_photo'=>(!empty($user->profilePhoto))&&(!is_null($user->profilePhoto)) ? URL::to('/').'/'.$user->profilePhoto : "",
+			'profile_photo'=>(!empty($user->profilePhoto))&&(!is_null($user->profilePhoto)) ? str_replace("public", "", URL::to('/')).'/'.$user->profilePhoto : "",
 			'emailverified' =>$user->emailVerify ? true : false,
 			'gender'=>$user->staff->gender->name,
 			'network'=>$user->staff->network->name,

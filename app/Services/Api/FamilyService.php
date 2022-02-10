@@ -15,7 +15,7 @@ use App\Transformers\Patient\PatientFamilyMemberTransformer;
 class FamilyService
 {
     public function familyCreate($request, $id)
-    {
+    { 
         DB::beginTransaction();
         try {
             if (!$id) {
@@ -24,38 +24,37 @@ class FamilyService
                 $udid = Str::uuid()->toString();
                 $familyMemberUser = [
                     'password' => Hash::make('password'), 'udid' => $udid, 'email' => $request->input('email'),
-                    'emailVerify' => 1, 'createdBy' => 1, 'roleId' => 6
+                    'emailVerify' => 1, 'createdBy' => Auth::id(), 'roleId' => 6
                 ];
                 $fam = User::create($familyMemberUser);
 
                 //Added Family in patientFamilyMember Table
                 $familyMember = [
                     'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),
-                    'contactTypeId' => json_encode($request->input('contactType')), 'contactTimeId' => $request->input('contactTime'),
+                    'contactTypeId' => json_encode($request->input('contactType')), 'contactTimeId' => json_encode($request->input('contactTime')),
                     'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'), 'patientId' => $patientId,
-                    'createdBy' => 1, 'userId' => $fam->id, 'udid' => $udid
+                    'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => $udid
                 ];
                 $familyData = PatientFamilyMember::create($familyMember);
                 $data = PatientFamilyMember::where('id', $familyData->id)->first();
                 $userdata = fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
                 $message = ['message' => 'created successfully'];
             } else {
-                $patient = Patient::where('userId', Auth::id())->first();
+                $patient = PatientFamilyMember::where('id', $id)->first();
                 $usersId = $patient->userId;
                 $familyMemberUser = [
                     'email' => $request->input('email'),
-                    'updatedBy' => 1
+                    'updatedBy' => Auth::id()
                 ];
                 $fam = User::where('id', $usersId)->update($familyMemberUser);
-
                 //updated Family in patientFamilyMember Table
                 $familyMember = [
                     'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),
                     'contactTypeId' => json_encode($request->input('contactType')), 'contactTimeId' => $request->input('contactTime'),
                     'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'),
-                    'updatedBy' => 1,
+                    'updatedBy' => Auth::id(),
                 ];
-                $familyData = PatientFamilyMember::where('id', $id)->update($familyMember);
+                $familyData = PatientFamilyMember::where('id',$id)->update($familyMember);
                 $data = PatientFamilyMember::where('id', $id)->first();
                 $userdata = fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
                 $message = ['message' => 'updated successfully'];

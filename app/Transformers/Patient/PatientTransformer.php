@@ -2,6 +2,7 @@
 
 namespace App\Transformers\Patient;
 
+use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\User\UserTransformer;
 use App\Transformers\Patient\PatientFlagTransformer;
@@ -18,6 +19,7 @@ class PatientTransformer extends TransformerAbstract
     {
         return [
             'id' => $data->id,
+            'udid'=>$data->udid,
             'name' => ucfirst($data->firstName),
             'middleName' => ucfirst($data->middleName),
             'lastName' => ucfirst($data->lastName),
@@ -46,9 +48,13 @@ class PatientTransformer extends TransformerAbstract
             'vitalField' => $data->name,
             'flagName' => 'jhj',
             'flagColor' => 'fhghg',
+            'medicalRecordNumber'=>$data->medicalRecordNumber,
+            'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
             'patientFamilyMember' => fractal()->item($data->family)->transformWith(new PatientFamilyMemberTransformer())->toArray(),
             'emergencyContact' => fractal()->item($data->emergency)->transformWith(new PatientFamilyMemberTransformer())->toArray(),
             'patientFlags' => $data->flags ? fractal()->collection($data->flags)->transformWith(new PatientFlagTransformer())->toArray() : [],
+            'patientVitals'=> $data->vitals ?fractal()->collection($data->vitals)->transformWith(new PatientVitalTransformer())->toArray(): [],
+
         ];
     }
 }

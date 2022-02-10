@@ -11,22 +11,24 @@ use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
+use App\Models\Patient\PatientTimeLine;
 use App\Transformers\Appointment\AppointmentTransformer;
 use App\Transformers\Appointment\AppointmentDataTransformer;
 use App\Transformers\Appointment\AppointmentListTransformer;
+use App\Transformers\Appointment\AppointmentSearchTransformer;
 
 class AppointmentService
 {
 
     public function addAppointment($request)
     {
-        if(Auth::user()){
+        if (Auth::user()) {
 
             $input = [
                 'udid' => Str::random(10),
                 'appointmentTypeId' => $request->appointmentTypeId,
-                'startDate' => date("Y-m-d",$request->startDate),
-                'startTime' => date("H:i:s",$request->startDate),
+                'startDate' => date("Y-m-d", $request->startDate),
+                'startTime' => date("H:i:s", $request->startDate),
                 'durationId' => $request->durationId,
                 'note' => $request->note,
                 'createdBy' => Auth::user()->id,
@@ -45,12 +47,12 @@ class AppointmentService
                 ];
             }
             $data = array_merge($entity, $input);
-        }else{
+        } else {
             $input = [
                 'udid' => Str::random(10),
                 'appointmentTypeId' => $request->appointmentTypeId,
-                'startDate' => date("Y-m-d",$request->startDate),
-                'startTime' => date("H:i:s",$request->startDate),
+                'startDate' => date("Y-m-d", $request->startDate),
+                'startTime' => date("H:i:s", $request->startDate),
                 'durationId' => $request->durationId,
                 'note' => $request->note,
                 'createdBy' => 1,
@@ -59,16 +61,24 @@ class AppointmentService
                 'staffId' => $request->staffId,
                 'patientId' => $request->patientId,
             ];
-            
+
             $data = array_merge($entity, $input);
         }
         Appointment::create($data);
+
+        $patientData = Patient::where('id', $request->patientId)->first();
+        $staffData = Staff::where('id', $request->staffId)->first();
+        $timeLine = [
+            'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for'.' '. $patientData->firstName.' '.'Added with'.' '.$staffData->firstName, 'type' => 1,
+            'createdBy' => 1, 'udid' => Str::uuid()->toString()
+        ];
+        PatientTimeLine::create($timeLine);
         return response()->json(['message' => 'created successfully']);
     }
 
     public function appointmentList($request)
     {
-        $data = Appointment::where([['patientId', auth()->user()->patient->id],['startDate', '>=', Carbon::today()]])->get();
+        $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDate', '>=', Carbon::today()]])->get();
         $results = Helper::dateGroup($data, 'startDate');
         return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
     }
@@ -87,22 +97,23 @@ class AppointmentService
 
     public function todayAppointment($request)
     {
-        if(auth()->user()){
+        if (auth()->user()->patient) {
 
-            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId',auth()->user()->patient->id],['startDate', Carbon::today()]])->get();
-        }else{
+            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', auth()->user()->patient->id], ['startDate', Carbon::today()]])->get();
+        } else {
 
             $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDate', Carbon::today())->get();
         }
         return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
     }
 
-    public function appointmentSearch($request){
-        $fromDate = $request->fromDate;
-        $toDate = $request->toDate;
+    public function appointmentSearch($request)
+    {
+        $fromDate = date("Y-m-d", $request->fromDate);
+        $toDate = date("Y-m-d", $request->toDate);
         $data = DB::select(
-            'CALL appointmentList("'.$fromDate.'","'.$toDate.'")',
-         );
-        return response()->json(['data'=>$data],200);
+            'CALL appointmentList("' . $fromDate . '","' . $toDate . '")',
+        );
+        return fractal()->collection($data)->transformWith(new AppointmentSearchTransformer())->toArray();
     }
 }

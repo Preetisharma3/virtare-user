@@ -15,5 +15,10 @@ class VitalField extends Model
 	protected $table = 'vitalFields';
     use HasFactory;
 	protected $guarded = [];
+
+    public function deviceName()
+    {
+        return $this->belongsTo(VitalTypeField::class,'vitalFieldId');
+    }
     
 }
