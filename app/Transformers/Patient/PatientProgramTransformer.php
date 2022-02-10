@@ -14,9 +14,8 @@ class PatientProgramTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-			'id'=>$data->udid,
-            'program'=>$data->program->type->name,
-            'patientId'=>$data->patientId,
+			'id'=>$data->patientProgramUdid,
+            'program'=>$data->name,
             'onboardingScheduleDate'=>$data->onboardingScheduleDate,
             'dischargeDate'=>$data->dischargeDate,
             'status'=>$data->isActive==1?'Active':'Inactive',

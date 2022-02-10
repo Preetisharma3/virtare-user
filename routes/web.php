@@ -144,21 +144,13 @@ $router->post('patient/{id}/insurance', 'Api\v1\PatientController@createPatientI
 $router->put('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@createPatientInsurance');
 $router->get('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@listPatientInsurance');
 $router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
-
-
-$router->post('staff', 'Api\v1\StaffController@addStaff');
-$router->get('staff', 'Api\v1\StaffController@listStaff');
-$router->put('staff/{id}', 'Api\v1\StaffController@updateStaff');
-
-
-
-
-
-
 $router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevice');
 $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
 $router->get('patient/{id}/device', 'Api\v1\PatientController@listPatientDevice');
 
+$router->post('staff', 'Api\v1\StaffController@addStaff');
+$router->get('staff', 'Api\v1\StaffController@listStaff');
+$router->put('staff/{id}', 'Api\v1\StaffController@updateStaff');
 
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
 $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
