@@ -21,7 +21,11 @@ class AssignedRolesTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-               $data
+              'id'=>$data->id,
+              'staffId'=>$data->staffId,
+              'staffName'=>$data->StaffName,
+              'roleId'=>$data->accessRoleId,
+              'role'=>$data->role
 		];
     }
 }
