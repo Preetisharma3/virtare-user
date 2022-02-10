@@ -40,12 +40,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('family/{id}', 'Api\v1\PatientController@createFamily');
     $router->get('patientInventory', 'Api\v1\PatientController@listingPatientInventory');
     $router->put('inventory/{id}/link', 'Api\v1\PatientController@inventory');
+    $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
 
     $router->get('team', 'Api\v1\TeamController@all');
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
     $router->post('patient/vital', 'Api\v1\PatientController@createPatientVital');
     $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
-    
 });
 $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
 $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
@@ -180,14 +180,14 @@ $router->post('inventory', 'Api\v1\InventoryController@store');
 $router->get('inventory', 'Api\v1\InventoryController@index');
 $router->put('inventory/{id}', 'Api\v1\InventoryController@update');
 $router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
-$router->get('model','Api\v1\InventoryController@getModels');
+$router->get('model', 'Api\v1\InventoryController@getModels');
 
-$router->get('staff/specialization/count','Api\v1\StaffController@specializationCount');
-$router->get('staff/network/count','Api\v1\StaffController@networkCount');
+$router->get('staff/specialization/count', 'Api\v1\StaffController@specializationCount');
+$router->get('staff/network/count', 'Api\v1\StaffController@networkCount');
 
 $router->post('provider', 'Api\v1\ProviderController@store');
 $router->post('provider/{id}/location', 'Api\v1\ProviderController@providerLocationStore');
-$router->get('provider','Api\v1\ProviderController@index');
+$router->get('provider', 'Api\v1\ProviderController@index');
 
 $router->post('role', 'Api\v1\RolePermissionController@createRole');
 $router->get('roleList', 'Api\v1\RolePermissionController@roleList');
@@ -197,7 +197,5 @@ $router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
 $router->post('rolePermission/{id}', 'Api\v1\RolePermissionController@createRolePermission');
 $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
 $router->get('rolePermissionList', 'Api\v1\RolePermissionController@rolePermissionList');
-$router->get('role','Api\v1\AccessRoleController@index');
-$router->get('staff/access','Api\v1\AccessRoleController@assignedRoles');
-$router->get('staff/{id}/access','Api\v1\AccessRoleController@assignedRoles');
-
+$router->get('role', 'Api\v1\AccessRoleController@index');
+$router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
