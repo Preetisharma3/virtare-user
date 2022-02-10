@@ -69,7 +69,7 @@ class AppointmentService
         $patientData = Patient::where('id', $request->patientId)->first();
         $staffData = Staff::where('id', $request->staffId)->first();
         $timeLine = [
-            'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for'.' '. $patientData->firstName.' '.'Added with'.' '.$staffData->firstName, 'type' => 1,
+            'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for'.' '. $patientData->firstName.' '. $patientData->lastName.' '.'Added with'.' '.$staffData->firstName.' '. $staffData->lastName, 'type' => 1,
             'createdBy' => 1, 'udid' => Str::uuid()->toString()
         ];
         PatientTimeLine::create($timeLine);
