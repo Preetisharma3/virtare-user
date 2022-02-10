@@ -837,7 +837,7 @@ class PatientService
                 $udid = Str::uuid()->toString();
                 $input = [
                     'medicine' => $request->input('medicine'), 'frequency' => $request->input('frequency'),  'createdBy' => 1,
-                    'startDate' => $request->input('startDate'), 'endDate' => $request->input('endDate'), 'patientId' => $id, 'udid' => $udid
+                    'startDate' =>date("Y-m-d",$request->input('startDate')), 'endDate' => date("Y-m-d",$request->input('endDate')), 'patientId' => $id, 'udid' => $udid
                 ];
                 $patient = PatientMedicalRoutine::create($input);
                 $getPatient = PatientMedicalRoutine::where('id', $patient->id)->with('patient')->first();
