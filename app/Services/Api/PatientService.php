@@ -481,7 +481,7 @@ class PatientService
             if (!$programId) {
                 $udid = Str::uuid()->toString();
                 $input = [
-                    'programtId' => $request->input('program'), 'onboardingScheduleDate' => $request->input('onboardingScheduleDate'), 'dischargeDate' => $request->input('dischargeDate'),
+                    'programtId' => $request->input('program'), 'onboardingScheduleDate' =>  date("Y-m-d", $request->input('onboardingScheduleDate')), 'dischargeDate' => date("Y-m-d",$request->input('dischargeDate')),
                     'patientId' => $id, 'createdBy' => 1, 'isActive' => $request->input('status'), 'udid' => $udid
                 ];
                 $patient = PatientProgram::create($input);
@@ -490,7 +490,7 @@ class PatientService
                 $message = ['message' => 'created successfully'];
             } else {
                 $input = [
-                    'programtId' => $request->input('program'), 'onboardingScheduleDate' => $request->input('onboardingScheduleDate'), 'dischargeDate' => $request->input('dischargeDate'),
+                    'programtId' => $request->input('program'), 'onboardingScheduleDate' => date("Y-m-d",$request->input('onboardingScheduleDate')), 'dischargeDate' => date("Y-m-d",$request->input('dischargeDate')),
                     'updatedBy' => 1, 'isActive' => $request->input('status')
                 ];
                 $patient = PatientProgram::where('id', $programId)->update($input);
