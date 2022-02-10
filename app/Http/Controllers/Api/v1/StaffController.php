@@ -75,9 +75,9 @@ class StaffController extends Controller
         return (new StaffService)->addStaffRole($request, $id);
     }
 
-    public function listStaffRole(Request $request)
+    public function listStaffRole(Request $request,$id)
     {
-        return (new StaffService)->listStaffRole($request);
+        return (new StaffService)->listStaffRole($request,$id);
     }
 
     public function updateStaffRole(Request $request , $id)
