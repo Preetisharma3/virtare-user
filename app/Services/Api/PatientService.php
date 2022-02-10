@@ -74,7 +74,7 @@ class PatientService
                 ];
                 $newData = Patient::create($patient);
                 $timeLine = [
-                    'patientId' => $newData->id, 'heading' => 'Patient Register', 'title' => $newData->firstName . ' ' . 'Added to Plateform', 'type' => 1,
+                    'patientId' => $newData->id, 'heading' => 'Patient Register', 'title' => $newData->firstName . ' ' . 'Added to platform', 'type' => 1,
                     'createdBy' => 1, 'udid' => Str::uuid()->toString()
                 ];
                 PatientTimeLine::create($timeLine);
@@ -659,13 +659,13 @@ class PatientService
                     $vitalData = PatientVital::create($data);
 
                     $patientData = Patient::where('id', $id)->first();
-                    $vitalField=VitalField::where('id',$vitalData->vitalFieldId)->first();
-                    $type=VitalTypeField::where('vitalFieldId',$vitalData->vitalFieldId)->first();
-                    $device=GlobalCode::where('id', $type->vitalTypeId)->first();
+                    $vitalField = VitalField::where('id', $vitalData->vitalFieldId)->first();
+                    $type = VitalTypeField::where('vitalFieldId', $vitalData->vitalFieldId)->first();
+                    $device = GlobalCode::where('id', $type->vitalTypeId)->first();
 
                     $timeLine = [
                         'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' .
-                            'Submit' . ' ' . $device->name . ' ' . 'Reading' . ' ' . $vitalField->name . ',' . $vital['value'], 'type' => 1,
+                            'Submit' . ' ' . $device->name . ' ' . 'Reading' . ' ' . $vitalField->name . ' ' . $vital['value'], 'type' => 1,
                         'createdBy' => 1, 'udid' => Str::uuid()->toString()
                     ];
                     PatientTimeLine::create($timeLine);
@@ -700,9 +700,9 @@ class PatientService
                     ];
                     $vitalData = PatientVital::create($data);
                     $patientData = Patient::where('id', $patientId)->first();
-                    $vitalField=VitalField::where('id',$vitalData->vitalFieldId)->first();
-                    $type=VitalTypeField::where('vitalFieldId',$vitalData->vitalFieldId)->first();
-                    $device=GlobalCode::where('id', $type->vitalTypeId)->first();
+                    $vitalField = VitalField::where('id', $vitalData->vitalFieldId)->first();
+                    $type = VitalTypeField::where('vitalFieldId', $vitalData->vitalFieldId)->first();
+                    $device = GlobalCode::where('id', $type->vitalTypeId)->first();
 
                     $timeLine = [
                         'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' .
@@ -974,6 +974,22 @@ class PatientService
         try {
             $inventory = ['isAdded' => 1];
             PatientInventory::where('id', $id)->update($inventory);
+            $patient=PatientInventory::where('id', $id)->first();
+
+            $user=User::where('id',Auth::id())->first();
+            $userId=$user->id;
+            $patientData = Patient::where('userId', $userId)->first();
+            $inventory = Inventory::where('id', $patient->inventoryId)->first();
+            $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
+            $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
+            $deviceType = $device->name;
+            $timeLine = [
+                'patientId' => $patientData->id, 'heading' => 'Inventory Assigned', 'title' => $deviceType.' '.'Linked to'.' '.$patientData->firstName, 'type' => 1,
+                'createdBy' => 1, 'udid' => Str::uuid()->toString()
+            ];
+            PatientTimeLine::create($timeLine);
+
+
             $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             $message = ['message' => 'updated successfully'];
