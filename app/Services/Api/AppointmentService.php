@@ -73,7 +73,7 @@ class AppointmentService
         }
     }
 
-  
+
 
     public function newAppointments()
     {
@@ -101,18 +101,21 @@ class AppointmentService
 
     public function appointmentSearch($request)
     {
-        try{
-        $fromDate='';
-        $toDate='';
-        $fromDate = date("Y-m-d H:i:s", $request->fromDate);
-        if(!empty( $request->toDate)){
-            $toDate = date("Y-m-d H:i:s", $request->toDate);
-        }
+        try {
+            
+            $fromDate = time();
+            $toDate = '';
+            if (!empty($request->toDate)) {
+                $toDate = date("Y-m-d H:i:s", $request->toDate);
+            }
+            if(!empty($request->fromDate)){
+                $fromDate = date("Y-m-d H:i:s", $request->fromDate);
+            }
             $data = DB::select(
                 'CALL appointmentList("' . $fromDate . '","' . $toDate . '")',
             );
-        return fractal()->collection($data)->transformWith(new AppointmentSearchTransformer())->toArray();
-        }catch(Exception $e){
+            return fractal()->collection($data)->transformWith(new AppointmentSearchTransformer())->toArray();
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }

@@ -14,6 +14,7 @@ class AppointmentSearchTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
+            "id"=>$data->id,
             "date"=>strtotime($data->startDate),
             "notes"=>$data->note,
             "duration"=>$data->duration,
