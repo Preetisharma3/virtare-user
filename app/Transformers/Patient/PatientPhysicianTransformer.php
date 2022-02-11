@@ -15,14 +15,14 @@ class PatientPhysicianTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-			'id'=>$data->udid,
+			'id'=>$data->patientPhysicianUdid,
             'name'=>$data->name,
-            'designation'=>$data->designation->name,
+            'designation'=>$data->designation,
             'phoneNumber'=>$data->phoneNumber,
-            'email'=>$data->user->email,
+            'email'=>$data->email,
             'fax'=>$data->fax,
             'sameAsReferal'=>$data->sameAsReferal,
-			'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
+			'profile_photo'=>(!empty($data->profilePhoto))&&(!is_null($data->profilePhoto)) ? URL::to('/').'/'.$data->profilePhoto : "",
 		];
 	}
 }

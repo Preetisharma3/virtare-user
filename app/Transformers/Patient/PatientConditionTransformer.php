@@ -14,8 +14,8 @@ class PatientConditionTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-			'id'=>$data->udid,
-            'condition'=>$data->condition->name,
+			'id'=>$data->patientCoditionUdid,
+            'condition'=>$data->conditionName,
 		];
 	}
 }

@@ -46,6 +46,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Patient
     $router->post('patient', 'Api\v1\PatientController@createPatient');
+    $router->post('patient/condition', 'Api\v1\PatientController@createPatientCondition');
     $router->get('patient/condition', 'Api\v1\PatientController@listPatientCondition');
     $router->post('patient/referals', 'Api\v1\PatientController@createPatientReferals');
     $router->get('patient/referals[/{referalsId}]', 'Api\v1\PatientController@listPatientReferals');
@@ -77,10 +78,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('patient/insurance[/{insuranceId}]', 'Api\v1\PatientController@createPatientInsurance');
     $router->get('patient/insurance[/{insuranceId}]', 'Api\v1\PatientController@listPatientInsurance');
     $router->delete('patient/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
-
-
-
-
 });
 $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
 $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');

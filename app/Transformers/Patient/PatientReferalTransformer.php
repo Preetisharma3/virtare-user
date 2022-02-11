@@ -3,7 +3,6 @@
 namespace App\Transformers\Patient;
 
 use League\Fractal\TransformerAbstract;
-use App\Transformers\User\UserTransformer;
 
 class PatientReferalTransformer extends TransformerAbstract
 {
@@ -14,9 +13,9 @@ class PatientReferalTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-			'id'=>$data->udid,
+			'id'=>$data->patientReferalUdid,
             'name'=>$data->name,
-            'designation'=>$data->designation->name,
+            'designation'=>$data->designation,
             'phoneNumber'=>$data->phoneNumber,
             'email'=>$data->email,
             'fax'=>$data->fax,
