@@ -46,6 +46,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
     $router->post('patient/vital', 'Api\v1\PatientController@createPatientVital');
     $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
+
+    $router->post('patient/device', 'Api\v1\PatientController@createPatientDevice');
+    $router->put('patient/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
+    $router->get('patient/device', 'Api\v1\PatientController@listPatientDevice');
 });
 $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
 $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
@@ -207,4 +211,3 @@ $router->get('generalParameterGroup[/{id}]', 'Api\v1\GeneralParameterController@
 $router->put('generalParameter/{id}', 'Api\v1\GeneralParameterController@updateGeneralParameter');
 $router->delete('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameterGroup');
 $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameter');
-
