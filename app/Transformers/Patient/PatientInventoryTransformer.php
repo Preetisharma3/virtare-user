@@ -20,7 +20,7 @@ class PatientInventoryTransformer extends TransformerAbstract
             'id' => $data->id,
             'inventoryId' => $data->inventoryId,
             'isAdded'=>$data->isAdded,
-            'status'=>$data->isActive==1?'Active':'Inactive',
+            'status'=>$data->isActive,
             
         ];
         return array_merge($inventory['data'],$field);

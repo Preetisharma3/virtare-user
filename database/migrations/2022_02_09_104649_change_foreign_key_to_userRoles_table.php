@@ -16,11 +16,8 @@ class ChangeForeignKeyToUserRolesTable extends Migration
         Schema::table('userRoles', function (Blueprint $table) {
             $table->dropForeign('userroles_userid_foreign');
             $table->dropColumn('userId');
-
-            $table->bigInteger('accessRoleId')->unsigned()->nullable()->after('staffId');
+            $table->bigInteger('accessRoleId')->unsigned()->nullable()->after('udid');
             $table->foreign('accessRoleId')->references('id')->on('accessRoles')->onUpdate('cascade')->onDelete('cascade');
-
-
         });
     }
 

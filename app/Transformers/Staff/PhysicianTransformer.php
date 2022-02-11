@@ -64,7 +64,7 @@ class PhysicianTransformer extends TransformerAbstract
             'fax'=>$data->fax,
             'sameAsReferal'=>$data->sameAsReferal,
 			'zip_code' => $data->zip_code,
-            'is_primary'=>$data->sameAsReferal,
+            'isPrimary'=>$data->sameAsReferal,
             'role' => $this->showData ? fractal()->item($data->user->roles)->transformWith(new RoleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
             'vital'=>(!empty($data->userFamilyAuthorization)) ? $data->userFamilyAuthorization->vital==0 ? 0 :$data->userFamilyAuthorization->vital : '',
 		    'message'=>(!empty($data->userFamilyAuthorization))? $data->userFamilyAuthorization->message==0 ? 0 :$data->userFamilyAuthorization->message : '',

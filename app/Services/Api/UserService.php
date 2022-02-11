@@ -39,7 +39,7 @@ class UserService
                     "updatedBy" => Auth::user()->id,
                 ]);
                 User::where('id', Auth::user()->id)->update([
-                    "profilePhoto"=>$request->path,
+                    "profilePhoto"=>str_replace(\URL::to('/').'/', "", $request->path),
                 ]);
                 $user = User::where('udid', Auth::user()->udid)->first();
                 return fractal()->item($user)->transformWith(new UserPatientTransformer(true))->toArray();
@@ -49,7 +49,7 @@ class UserService
                     "updatedBy" => Auth::user()->id,
                 ]);
                 User::where('id', Auth::user()->id)->update([
-                    "profilePhoto"=>$request->path,
+                    "profilePhoto"=>str_replace(\URL::to('/').'/', "", $request->path),
                 ]);
                 $user = User::where('udid', Auth::user()->udid)->first();
                 return fractal()->item($user)->transformWith(new UserTransformer(true))->toArray();

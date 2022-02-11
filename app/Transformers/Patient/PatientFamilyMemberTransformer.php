@@ -22,9 +22,10 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'gender' => $data->gender->name,
 				'phoneNumber' => $data->phoneNumber,
 				'contactType' => $data->contactTypeId,
-				'contactTime' => $data->contactTime->name,
+				'contactTime' => $data->contactTimeId,
 				'relation' => $data->relation->name,
 				'email' => $data->user->email,
+				'isPrimary'=>$data->isPrimary,
 				'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
 			];
 		}
@@ -36,7 +37,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'gender' => $data->gender->name,
 				'phoneNumber' => $data->phoneNumber,
 				'contactType' => $data->contactTypeId,
-				'contactTime' => $data->contactTime->name,
+				'contactTime' => $data->contactTimeId,
 				'email' => $data->email,
 				'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
 			];

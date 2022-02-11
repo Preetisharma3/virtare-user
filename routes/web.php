@@ -40,9 +40,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('family/{id}', 'Api\v1\PatientController@createFamily');
     $router->get('patientInventory', 'Api\v1\PatientController@listingPatientInventory');
     $router->put('inventory/{id}/link', 'Api\v1\PatientController@inventory');
+    $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
 
     $router->get('team', 'Api\v1\TeamController@all');
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
+    $router->post('patient/vital', 'Api\v1\PatientController@createPatientVital');
+    $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
 });
 $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
 $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
@@ -91,8 +94,8 @@ $router->put('patient/{id}/inventory/{inventoryId}', 'Api\v1\PatientController@u
 $router->delete('patient/{id}/inventory/{inventoryId}', 'Api\v1\PatientController@deletePatientInventory');
 $router->get('patient/{id}/inventory[/{inventoryId}]', 'Api\v1\PatientController@listPatientInventory');
 $router->post('patient/{id}/vital', 'Api\v1\PatientController@createPatientVital');
+$router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
 $router->put('patient/{id}/vital/{vitalId}', 'Api\v1\PatientController@createPatientVital');
-$router->get('patient/{id}/vital[/{vitalId}]', 'Api\v1\PatientController@listPatientVital');
 $router->delete('patient/{id}/vital/{vitalId}', 'Api\v1\PatientController@deletePatientVital');
 $router->post('patient/{id}/medicalHistory', 'Api\v1\PatientController@createPatientMedicalHistory');
 $router->put('patient/{id}/medicalHistory/{medicalHistoryId}', 'Api\v1\PatientController@createPatientMedicalHistory');
@@ -109,12 +112,13 @@ $router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientControlle
 $router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevice');
 $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
 $router->get('patient/{id}/device', 'Api\v1\PatientController@listPatientDevice');
+$router->get('patient/{id}/timeLine', 'Api\v1\PatientController@listPatientTimeline');
 
 
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
 $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
 $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
-$router->get('appointment/search','Api\v1\AppointmentController@appointmentSearch');
+$router->get('appointment/search', 'Api\v1\AppointmentController@appointmentSearch');
 $router->get('appointment/future', 'Api\v1\AppointmentController@futureAppointment');
 $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
 $router->post('task', 'Api\v1\TaskController@addTask');
@@ -177,9 +181,14 @@ $router->post('inventory', 'Api\v1\InventoryController@store');
 $router->get('inventory', 'Api\v1\InventoryController@index');
 $router->put('inventory/{id}', 'Api\v1\InventoryController@update');
 $router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
+$router->get('model', 'Api\v1\InventoryController@getModels');
 
-$router->get('staff/specialization/count','Api\v1\StaffController@specializationCount');
-$router->get('staff/network/count','Api\v1\StaffController@networkCount');
+$router->get('staff/specialization/count', 'Api\v1\StaffController@specializationCount');
+$router->get('staff/network/count', 'Api\v1\StaffController@networkCount');
+
+$router->post('provider', 'Api\v1\ProviderController@store');
+$router->post('provider/{id}/location', 'Api\v1\ProviderController@providerLocationStore');
+$router->get('provider', 'Api\v1\ProviderController@index');
 
 $router->post('role', 'Api\v1\RolePermissionController@createRole');
 $router->get('roleList', 'Api\v1\RolePermissionController@roleList');
@@ -189,4 +198,13 @@ $router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
 $router->post('rolePermission/{id}', 'Api\v1\RolePermissionController@createRolePermission');
 $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
 $router->get('rolePermissionList', 'Api\v1\RolePermissionController@rolePermissionList');
+
+$router->get('role','Api\v1\AccessRoleController@index');
+$router->get('staff/{id}/access','Api\v1\AccessRoleController@assignedRoles');
+
+$router->post('generalParameterGroup', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
+$router->get('generalParameterGroup[/{id}]', 'Api\v1\GeneralParameterController@listGeneralParameterGroup');
+$router->put('generalParameter/{id}', 'Api\v1\GeneralParameterController@updateGeneralParameter');
+$router->delete('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameterGroup');
+$router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameter');
 

@@ -16,7 +16,7 @@ class Helper
 
     public static function dateGroup($data, $date_field)
     {
-        $res =  $data->groupBy(function ($result, $key) use ($date_field) {
+        $res =  $data->sortBy($date_field)->groupBy(function ($result, $key) use ($date_field) {
             $dt = Carbon::parse($result->{$date_field});
             return $result->{$date_field};
         });
@@ -28,5 +28,12 @@ class Helper
             array_push($patientData, $patient);
         }
         return $patientData;
+    }
+
+    public static function date($date)
+    {
+        $date = Carbon::createFromTimestamp($date)->format('Y-m-d H:i:s');
+
+        return $date;
     }
 }

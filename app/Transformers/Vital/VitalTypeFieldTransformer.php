@@ -13,7 +13,7 @@ class VitalTypeFieldTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-			'id' => $data->id,
+			'id' => $data->vitalFieldId,
 			'field' => $data->VitalField->name,
 		];
 	}
