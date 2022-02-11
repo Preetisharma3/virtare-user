@@ -287,11 +287,10 @@ class StaffService
         }
     }
 
-    public function deleteStaffRole($request, $id)
+    public function deleteStaffRole($request,$staffId, $id)
     {
         try {
-            UserRole::where('id', $id)->delete();
-
+            UserRole::where([['staffId',$staffId],['id', $id]])->delete();
             return response()->json(['message' => "Deleted Successfully"]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
