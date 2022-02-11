@@ -24,7 +24,8 @@ class CreateGetPatientConditionProcedure extends Migration
         LEFT JOIN globalCodes ON patientConditions.conditionId=globalCodes.id
         LEFT JOIN patients
         ON `patientConditions`.patientId=patients.id 
-        WHERE  (patientConditions.patientId = patientIdx);
+        WHERE  (patientConditions.patientId = patientIdx)
+        AND (patientConditions.isDelete=0);
         END;";
         DB::unprepared($procedure);
     }
