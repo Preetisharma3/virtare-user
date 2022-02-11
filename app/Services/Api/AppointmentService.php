@@ -16,24 +16,24 @@ use App\Transformers\Appointment\AppointmentTransformer;
 use App\Transformers\Appointment\AppointmentDataTransformer;
 use App\Transformers\Appointment\AppointmentListTransformer;
 use App\Transformers\Appointment\AppointmentSearchTransformer;
+use Exception;
+use Symfony\Component\HttpKernel\DataCollector\TimeDataCollector;
 
 class AppointmentService
 {
 
     public function addAppointment($request)
     {
-        if (Auth::user()) {
-
+        try {
             $input = [
-                'udid' => Str::random(10),
+                'udid' => Str::uuid()->toString(),
                 'appointmentTypeId' => $request->appointmentTypeId,
-                'startDate' => date("Y-m-d", $request->startDate),
-                'startTime' => date("H:i:s", $request->startDate),
+                'startDateTime' => date("Y-m-d H:i:s", $request->startDate),
                 'durationId' => $request->durationId,
                 'note' => $request->note,
                 'createdBy' => Auth::user()->id,
             ];
-            if (Auth::user()->roleId == 4) {
+            if (Auth::user()->patient) {
                 $patientData = Patient::where('userId', Auth::user()->id)->first();
                 $entity = [
                     'staffId' => $request->staffId,
@@ -47,73 +47,73 @@ class AppointmentService
                 ];
             }
             $data = array_merge($entity, $input);
-        } else {
-            $input = [
-                'udid' => Str::random(10),
-                'appointmentTypeId' => $request->appointmentTypeId,
-                'startDate' => date("Y-m-d", $request->startDate),
-                'startTime' => date("H:i:s", $request->startDate),
-                'durationId' => $request->durationId,
-                'note' => $request->note,
-                'createdBy' => 1,
+            Appointment::create($data);
+            $patientData = Patient::where('id', $data['patientId'])->first();
+            $staffData = Staff::where('id', $data['staffId'])->first();
+            $timeLine = [
+                'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for'.' '. $patientData->firstName.' '. $patientData->lastName.' '.'Added with'.' '.$staffData->firstName.' '. $staffData->lastName, 'type' => 1,
+                'createdBy' => 1, 'udid' => Str::uuid()->toString()
             ];
-            $entity = [
-                'staffId' => $request->staffId,
-                'patientId' => $request->patientId,
-            ];
-
-            $data = array_merge($entity, $input);
+            PatientTimeLine::create($timeLine);
+            return response()->json(['message' => 'created successfully']);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
         }
-        Appointment::create($data);
-
-        $patientData = Patient::where('id', $data['patientId'])->first();
-        $staffData = Staff::where('id', $data['staffId'])->first();
-        $timeLine = [
-            'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for'.' '. $patientData->firstName.' '. $patientData->lastName.' '.'Added with'.' '.$staffData->firstName.' '. $staffData->lastName, 'type' => 1,
-            'createdBy' => 1, 'udid' => Str::uuid()->toString()
-        ];
-        PatientTimeLine::create($timeLine);
-        return response()->json(['message' => 'created successfully']);
+       
     }
 
     public function appointmentList($request)
     {
-        $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDate', '>=', Carbon::today()]])->get();
-        $results = Helper::dateGroup($data, 'startDate');
-        return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
+        try {
+            $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::today()]])->get();
+            $results = Helper::dateGroup($data, 'startDateTime');
+            return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
     }
 
-    public function futureAppointment($request)
-    {
-        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDate', '>=', Carbon::today())->get();
-        return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
-    }
+  
 
     public function newAppointments()
     {
-        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->latest('createdAt')->take(3)->get();
-        return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
+        try {
+            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->latest('createdAt')->take(3)->get();
+            return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
     }
 
     public function todayAppointment($request)
     {
-        if (auth()->user()->patient) {
-
-            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', auth()->user()->patient->id], ['startDate', Carbon::today()]])->get();
-        } else {
-
-            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDate', Carbon::today())->get();
+        try {
+            if (auth()->user()) {
+                $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', auth()->user()->patient->id], ['startDateTime', Carbon::today()]])->get();
+            } else {
+                $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where('startDateTime', Carbon::today())->get();
+            }
+            return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
         }
-        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
     }
 
     public function appointmentSearch($request)
     {
-        $fromDate = date("Y-m-d", $request->fromDate);
-        $toDate = date("Y-m-d", $request->toDate);
-        $data = DB::select(
-            'CALL appointmentList("' . $fromDate . '","' . $toDate . '")',
-        );
+        try{
+        $fromDate='';
+        $toDate='';
+        $fromDate = date("Y-m-d H:i:s", $request->fromDate);
+        if(!empty( $request->toDate)){
+            $toDate = date("Y-m-d H:i:s", $request->toDate);
+        }
+            $data = DB::select(
+                'CALL appointmentList("' . $fromDate . '","' . $toDate . '")',
+            );
         return fractal()->collection($data)->transformWith(new AppointmentSearchTransformer())->toArray();
+        }catch(Exception $e){
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
     }
 }

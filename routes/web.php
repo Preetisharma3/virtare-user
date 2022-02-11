@@ -34,7 +34,6 @@ $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
-    $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
 
     $router->post('family', 'Api\v1\PatientController@createFamily');
     $router->put('family/{id}', 'Api\v1\PatientController@createFamily');
@@ -50,9 +49,15 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('patient/device', 'Api\v1\PatientController@createPatientDevice');
     $router->put('patient/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
     $router->get('patient/device', 'Api\v1\PatientController@listPatientDevice');
+    $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
+
+    $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
+    $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
+    $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
+    $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
+    $router->get('appointment/search','Api\v1\AppointmentController@appointmentSearch');
 });
-$router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
-$router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
+
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
 $router->get('getScreenAction', 'Api\v1\ScreenActionController@getScreenAction');
 $router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');
@@ -122,9 +127,8 @@ $router->get('patient/{id}/timeLine', 'Api\v1\PatientController@listPatientTimel
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
 $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
 $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
-$router->get('appointment/search', 'Api\v1\AppointmentController@appointmentSearch');
-$router->get('appointment/future', 'Api\v1\AppointmentController@futureAppointment');
-$router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
+
+
 $router->post('task', 'Api\v1\TaskController@addTask');
 $router->get('task', 'Api\v1\TaskController@listTask');
 $router->get('task/priority', 'Api\v1\TaskController@priorityTask');
@@ -155,9 +159,7 @@ $router->get('inQueue', 'Api\v1\CommunicationController@inQueue');
 $router->get('goingOn', 'Api\v1\CommunicationController@goingOn');
 $router->get('completed', 'Api\v1\CommunicationController@completed');
 $router->get('staffCallCount', 'Api\v1\CommunicationController@callCountPerStaff');
-$router->get('futureAppointment', 'Api\v1\AppointmentController@futureAppointment');
-$router->get('newAppointment', 'Api\v1\AppointmentController@newAppointments');
-$router->get('todayAppointment', 'Api\v1\AppointmentController@todayAppointment');
+
 $router->get('patientList', 'Api\v1\PatientController@listPatient');
 $router->post('patientReferals/{id}', 'Api\v1\PatientController@createPatientReferals');
 $router->post('patientPhysician/{id}', 'Api\v1\PatientController@createPatientPhysician');
