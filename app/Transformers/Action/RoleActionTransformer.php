@@ -20,7 +20,6 @@ class RoleActionTransformer extends TransformerAbstract
     
     public function transform($data): array
     {
-       // dd($data);
         return [
 			    'name'=>$data->name,
                 'controller'=>$data->controller,

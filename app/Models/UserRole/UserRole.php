@@ -2,6 +2,7 @@
 
 namespace App\Models\UserRole;
 
+use App\Models\AccessRole\AccessRole;
 use App\Models\Role\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +21,6 @@ class UserRole extends Model
 
     public function roles()
     {
-        return $this->belongsTo(Role::class, 'roleId');
+        return $this->belongsTo(AccessRole::class, 'accessRoleId');
     }
 }

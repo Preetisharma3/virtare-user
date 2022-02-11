@@ -50,7 +50,7 @@ class RolePermissionService
            } 
     }
 
-    public function editRole($request,$id)
+    public function listingRole($request,$id)
     {
         $data = AccessRole::where('id', $id)->get();
         return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
@@ -112,7 +112,7 @@ class RolePermissionService
         try{
             $id = $request->id;
             $data = RolePermission::where('accessRoleId',$id)->with('role','action')->get();
-            $array  = ['role'=>fractal()->collection($data)->transformWith(new RolePermissionTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()];
+            $array  = ['role' => fractal()->collection($data)->transformWith(new RolePermissionTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()];
             return $array;
         }catch(Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);    
