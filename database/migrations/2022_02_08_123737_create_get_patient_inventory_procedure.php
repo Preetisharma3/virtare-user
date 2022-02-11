@@ -17,10 +17,10 @@ class CreateGetPatientInventoryProcedure extends Migration
         $procedure = "DROP PROCEDURE IF EXISTS `getPatientInventory`;";
         DB::unprepared($procedure);
         $procedure = "
-        CREATE PROCEDURE `getPatientInventory`(In idx INT)
+        CREATE PROCEDURE `getPatientInventory`(In idx VARCHAR(50))
         BEGIN
         SELECT patientInventories.id AS patientInventoryId, patientInventories.udid AS patientInventoryUdid,patientInventories.isAdded AS patientInventoryIsAdded,patientInventories.inventoryId AS inventoryId,patientInventories.patientId AS PatientId,
-        inventories.serialNumber,inventories.macAddress,inventories.isAvailable,inventories.isActive AS inventoryIsActive,deviceModels.modelName,globalCodes.name AS deviceType
+        inventories.serialNumber,inventories.macAddress,inventories.isAvailable,inventories.isActive AS inventoryIsActive,deviceModels.modelName,globalCodes.name AS deviceType,patientInventories.isAdded,patientInventories.isActive,globalCodes.name AS deviceType
         FROM patientInventories
         LEFT JOIN inventories
         ON patientInventories.inventoryId=inventories.id
@@ -31,7 +31,7 @@ class CreateGetPatientInventoryProcedure extends Migration
         LEFT JOIN globalCodes
         ON deviceModels.deviceTypeId=globalCodes.id
         WHERE patientInventories.patientId=patientIdx AND
-        (patientInventories.id=idx OR idx='');
+        (patientInventories.udid=idx OR idx='');
         END;";
         DB::unprepared($procedure);
     }

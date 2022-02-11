@@ -14,11 +14,11 @@ class PatientInsuranceTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id' => $data->udid,
+            'id' => $data->patientInsuranceUdid,
             'insuranceNumber' => $data->insuranceNumber,
             'expirationDate' => $data->expirationDate,
-            'insuranceName' => $data->insuranceName->name,
-            'insuranceType' => $data->insuranceType->name,
+            'insuranceName' => $data->insuranceName,
+            'insuranceType' => $data->insuranceType,
         ];
     }
 }

@@ -17,7 +17,7 @@ class CreateGetPatientProgramProcedure extends Migration
         $procedure = "DROP PROCEDURE IF EXISTS `getPatientProgram`;";
         DB::unprepared($procedure);
         $procedure = "
-        CREATE  PROCEDURE `getPatientProgram` (IN `idx` INT,IN `patientIdx` INT)  
+        CREATE  PROCEDURE `getPatientProgram` (IN `idx` VARCHAR(50),IN `patientIdx` INT)  
         BEGIN
         SELECT patientPrograms.id AS patientProgramId,patientPrograms.udid AS patientProgramUdid,patientPrograms.onboardingScheduleDate,patientPrograms.dischargeDate,patientPrograms.isActive,patientPrograms.createdAt,globalCodes.name
         FROM patientPrograms 
@@ -28,7 +28,7 @@ class CreateGetPatientProgramProcedure extends Migration
         LEFT JOIN patients
         ON `patientPrograms`.patientId=patients.id 
         WHERE  (patientPrograms.patientId = patientIdx) 
-        AND (patientPrograms.id = idx OR idx = '');
+        AND (patientPrograms.udid = idx OR idx = '');
         END;";
         DB::unprepared($procedure);
     }

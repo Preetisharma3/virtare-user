@@ -17,15 +17,16 @@ class CreateGetPatientReferalProcedure extends Migration
         $procedure = "DROP PROCEDURE IF EXISTS `getPatientReferal`";
         DB::unprepared($procedure);
         $procedure =
-        "CREATE PROCEDURE `getPatientReferal`(In patientIdx INT,IN typeVital VARCHAR(20))
+        "CREATE PROCEDURE `getPatientReferal`(IN idx VARCHAR(50),In patientIdx INT)
         BEGIN
-        SELECT patientReferals.id AS patientReferalId,patientReferals.udid AS patientReferalUdid,patientReferals.name,patientReferals.phoneNumber,patientReferals.email,patientReferals.patientId AS patientReferalPatientId,patientReferals.fax from patientReferals
+        SELECT patientReferals.id AS patientReferalId,patientReferals.udid AS patientReferalUdid,patientReferals.name,patientReferals.phoneNumber,patientReferals.email,patientReferals.patientId AS patientReferalPatientId,patientReferals.fax,globalCodes.name AS designation
+        from patientReferals
         LEFT JOIN globalCodes
         ON patientReferals.designationId=globalCodes.id
         LEFT JOIN patients
         ON `patientReferals`.patientId=patients.id 
         WHERE  (patientReferals.patientId = patientIdx) 
-        AND (patientReferals.id = idx OR idx = '');
+        AND (patientReferals.udid = idx OR idx = '');
         END;";
         DB::unprepared($procedure);
     }

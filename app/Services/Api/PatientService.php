@@ -507,8 +507,11 @@ class PatientService
                         'name' => $request->input('name'), 'udid' => $udid
                     ];
                     $patient = PatientPhysician::create($input);
-                    $getPatient = PatientPhysician::where('id', $patient->id)->with('patient', 'designation', 'user')->first();
-                    $userdata = fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
+                    $getPatient = PatientPhysician::where('id', $patient->id)->first();
+                    $result = DB::select(
+                        "CALL getPatientPhysician('" . $getPatient->udid . "','" . $patientId . "')"
+                    );
+                    $userdata = fractal()->collection($result)->transformWith(new PatientPhysicianTransformer())->toArray();
                     $message = ['message' => 'created successfully'];
                 } else {
                     $usersId = PatientPhysician::where('udid', $physicianId)->first();
@@ -523,8 +526,10 @@ class PatientService
                         'name' => $request->input('name'),
                     ];
                     $patient = PatientPhysician::where('udid', $physicianId)->update($input);
-                    $getPatient = PatientPhysician::where('udid', $physicianId)->with('patient', 'designation', 'user')->first();
-                    $userdata = fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
+                    $result = DB::select(
+                        "CALL getPatientPhysician('" . $physicianId . "','" . $patientId . "')"
+                    );
+                    $userdata = fractal()->collection($result)->transformWith(new PatientPhysicianTransformer())->toArray();
                     $message = ['message' => 'update successfully'];
                 }
             } else {
@@ -543,8 +548,11 @@ class PatientService
                         'name' => $request->input('name'), 'udid' => $udid
                     ];
                     $patient = PatientPhysician::create($input);
-                    $getPatient = PatientPhysician::where('id', $patient->id)->with('patient', 'designation', 'user')->first();
-                    $userdata = fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
+                    $getPatient = PatientPhysician::where('id', $patient->id)->first();
+                    $result = DB::select(
+                        "CALL getPatientPhysician('" . $getPatient->udid . "','" . $patientId . "')"
+                    );
+                    $userdata = fractal()->collection($result)->transformWith(new PatientPhysicianTransformer())->toArray();
                     $message = ['message' => 'created successfully'];
                 } else {
                     $usersId = PatientPhysician::where('udid', $physicianId)->first();
@@ -559,8 +567,10 @@ class PatientService
                         'name' => $request->input('name'),
                     ];
                     $patient = PatientPhysician::where('udid', $physicianId)->update($input);
-                    $getPatient = PatientPhysician::where('udid', $physicianId)->with('patient', 'designation', 'user')->first();
-                    $userdata = fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
+                    $result = DB::select(
+                        "CALL getPatientPhysician('" . $physicianId . "','" . $patientId . "')"
+                    );
+                    $userdata = fractal()->collection($result)->transformWith(new PatientPhysicianTransformer())->toArray();
                     $message = ['message' => 'update successfully'];
                 }
             }
@@ -1035,16 +1045,20 @@ class PatientService
                         'history' => $request->input('history'), 'patientId' => $patientId,  'createdBy' => Auth::id(), 'udid' => $udid
                     ];
                     $patient = PatientMedicalHistory::create($input);
-                    $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient')->first();
-                    $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                    $result = DB::select(
+                        "CALL getPatientMedicalHistory('" . $patient->udid . "','" . $patientId . "')"
+                    );
+                    $userdata = fractal()->collection($result)->transformWith(new PatientMedicalTransformer())->toArray();
                     $message = ['message' => 'created successfully'];
                 } else {
                     $input = [
                         'history' => $request->input('history'), 'updatedBy' => Auth::id()
                     ];
                     $patient = PatientMedicalHistory::where('udid', $medicalHistoryId)->update($input);
-                    $getPatient = PatientMedicalHistory::where('udid', $medicalHistoryId)->with('patient')->first();
-                    $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                    $result = DB::select(
+                        "CALL getPatientMedicalHistory('" . $medicalHistoryId . "','" . $patientId . "')"
+                    );
+                    $userdata = fractal()->collection($result)->transformWith(new PatientMedicalTransformer())->toArray();
                     $message = ['message' => 'updated successfully'];
                 }
             } else {
@@ -1056,20 +1070,25 @@ class PatientService
                         'history' => $request->input('history'), 'patientId' => $patientId,  'createdBy' => 1, 'udid' => $udid
                     ];
                     $patient = PatientMedicalHistory::create($input);
-                    $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient')->first();
-                    $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                    $patientData = PatientMedicalHistory::where('id',$patient->id)->first();
+                    
+                    $result = DB::select(
+                        "CALL getPatientMedicalHistory('" . $patientData->udid . "','" . $patientId . "')"
+                    );
+                    $userdata = fractal()->collection($result)->transformWith(new PatientMedicalTransformer())->toArray();
                     $message = ['message' => 'created successfully'];
                 } else {
                     $input = [
                         'history' => $request->input('history'), 'updatedBy' => 1
                     ];
                     $patient = PatientMedicalHistory::where('udid', $medicalHistoryId)->update($input);
-                    $getPatient = PatientMedicalHistory::where('udid', $medicalHistoryId)->with('patient')->first();
-                    $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                    $result = DB::select(
+                        "CALL getPatientMedicalHistory('" . $medicalHistoryId . "','" . $patientId . "')"
+                    );
+                    $userdata = fractal()->collection($result)->transformWith(new PatientMedicalTransformer())->toArray();
                     $message = ['message' => 'updated successfully'];
                 }
             }
-
             DB::commit();
             $endData = array_merge($message, $userdata);
             return $endData;
@@ -1089,23 +1108,30 @@ class PatientService
                 $patient = Patient::where('userId', $userId)->first();
                 $patientId = $patient->id;
                 if ($medicalHistoryId) {
-                    $getPatient = PatientMedicalHistory::where('udid', $medicalHistoryId)->with('patient')->first();
-                    return fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                    $result = DB::select(
+                        "CALL getPatientMedicalHistory('" . $medicalHistoryId . "','" . $patientId . "')"
+                    );
                 } else {
-                    $getPatient = PatientMedicalHistory::where('patientId', $patientId)->with('patient')->get();
-                    return fractal()->collection($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                    $result = DB::select(
+                        "CALL getPatientMedicalHistory('" . '' . "','" . $patientId . "')"
+                    );
                 }
             } else {
-                if ($medicalHistoryId) {
-                    $getPatient = PatientMedicalHistory::where('udid', $medicalHistoryId)->with('patient')->first();
-                    return fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
-                } else {
-                    $patient = Patient::where('udid', $id)->first();
+                $patient = Patient::where('udid', $id)->first();
                     $patientId = $patient->id;
-                    $getPatient = PatientMedicalHistory::where('patientId', $id)->with('patient')->get();
-                    return fractal()->collection($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                if ($medicalHistoryId) {
+                    $result = DB::select(
+                        "CALL getPatientMedicalHistory('" . $medicalHistoryId . "','" . $patientId . "')"
+                    );
+                } else {
+                    
+                    $result = DB::select(
+                        "CALL getPatientMedicalHistory('" . '' . "','" . $patientId . "')"
+                    );
                 }
             }
+            return fractal()->collection($result)->transformWith(new PatientMedicalTransformer())->toArray();
+
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -1207,23 +1233,29 @@ class PatientService
                 $patient = Patient::where('userId', $userId)->first();
                 $patientId = $patient->id;
                 if ($medicalRoutineId) {
-                    $getPatient = PatientMedicalRoutine::where('udid', $medicalRoutineId)->with('patient')->first();
-                    return fractal()->item($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
+                    $result = DB::select(
+                        "CALL getPatientMedicalRoutine('" . $medicalRoutineId . "','" . $patientId . "')"
+                    );
                 } else {
-                    $getPatient = PatientMedicalRoutine::where('patientId', $patientId)->with('patient')->get();
-                    return fractal()->collection($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
+                    $result = DB::select(
+                        "CALL getPatientMedicalRoutine('" . '' . "','" . $patientId . "')"
+                    );
                 }
             } else {
-                if ($medicalRoutineId) {
-                    $getPatient = PatientMedicalRoutine::where('udid', $medicalRoutineId)->with('patient')->first();
-                    return fractal()->item($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
-                } else {
-                    $patient = Patient::where('udid', $id)->first();
+                $patient = Patient::where('udid', $id)->first();
                     $patientId = $patient->id;
-                    $getPatient = PatientMedicalRoutine::where('patientId', $patientId)->with('patient')->get();
-                    return fractal()->collection($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
+                if ($medicalRoutineId) {
+                    $result = DB::select(
+                        "CALL getPatientMedicalRoutine('" . $medicalRoutineId . "','" . $patientId . "')"
+                    );
+                } else {
+                    $result = DB::select(
+                        "CALL getPatientMedicalRoutine('" . '' . "','" . $patientId . "')"
+                    );
                 }
             }
+            return fractal()->collection($result)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
+
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -1304,28 +1336,35 @@ class PatientService
     {
         try {
             if (!$id) {
-                if ($insuranceId) {
-                    $getPatient = PatientInsurance::where('udid', $insuranceId)->with('patient', 'insuranceName', 'insuranceType')->first();
-                    return fractal()->item($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
-                } else {
-                    $user = User::where('id', Auth::id())->first();
+                $user = User::where('id', Auth::id())->first();
                     $userId = $user->id;
                     $patient = Patient::where('userId', $userId)->first();
                     $patientId = $patient->id;
-                    $getPatient = PatientInsurance::where('patientId', $patientId)->with('patient', 'insuranceName', 'insuranceType')->get();
-                    return fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
+                if ($insuranceId) {
+                    $result = DB::select(
+                        "CALL getPatientInsurance('" . $insuranceId . "','" . $patientId . "')"
+                    );
+                } else {
+                    
+                    $result = DB::select(
+                        "CALL getPatientInsurance('" . '' . "','" . $patientId . "')"
+                    );
                 }
             } else {
-                if ($insuranceId) {
-                    $getPatient = PatientInsurance::where('udid', $insuranceId)->with('patient', 'insuranceName', 'insuranceType')->first();
-                    return fractal()->item($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
-                } else {
-                    $patient = Patient::where('udid', $id)->first();
+                $patient = Patient::where('udid', $id)->first();
                     $patientId = $patient->id;
-                    $getPatient = PatientInsurance::where('patientId', $patientId)->with('patient', 'insuranceName', 'insuranceType')->get();
-                    return fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
+                if ($insuranceId) {
+                    $result = DB::select(
+                        "CALL getPatientInsurance('" . $insuranceId . "','" . $patientId . "')"
+                    );
+                } else {
+                    
+                    $result = DB::select(
+                        "CALL getPatientInsurance('" . '' . "','" . $patientId . "')"
+                    );
                 }
             }
+            return fractal()->collection($result)->transformWith(new PatientInsuranceTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
