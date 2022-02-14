@@ -66,6 +66,7 @@ class TaskService
             'description' => $request->description,
             'taskStatusId' => $request->taskStatus,
             'priorityId' => $request->priority,
+            'updatedBy'=>auth()->user()->id
         ];
         Task::where('id', $id)->update(
             $input

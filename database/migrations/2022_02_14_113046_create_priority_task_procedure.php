@@ -24,7 +24,7 @@ class CreatePriorityTaskProcedure extends Migration
             COUNT(tasks.id)
         )
     ) AS total,
-    IF(tasks.priorityId = 72,'#0FB5C2','#FF6061') AS color,
+    IF(globalCodes.id = 70,'#E63049',(IF(globalCodes.id = 71,'#269B8F','#4690FF'))) AS color,
     globalCodes.name AS text
 FROM
     tasks
