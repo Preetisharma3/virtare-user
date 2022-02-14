@@ -73,6 +73,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->patch('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
     $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
 
+    // Task Routes
+    $router->post('task', 'Api\v1\TaskController@addTask');
+    $router->get('task', 'Api\v1\TaskController@listTask');
+    $router->get('task/priority', 'Api\v1\TaskController@priorityTask');
+    $router->get('task/status', 'Api\v1\TaskController@statusTask');
+    
     // Dashboard Routes
     $router->get('patient/chart', 'Api\v1\TimelineController@patientTotal');
     $router->get('patient/count', 'Api\v1\DashboardController@patientCount');
