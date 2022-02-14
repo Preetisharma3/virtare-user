@@ -52,9 +52,13 @@ class TaskService
     // Task List According to statuses
     public function statusTask($request)
     {
-        $data = DB::select(
+        $tasks = DB::select(
             'CALL taskStatusCount()',
         );
+        $total = DB::select(
+            'CALL totalTasksCount()'
+        );
+        $data=array_merge($tasks,$total);
         return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
