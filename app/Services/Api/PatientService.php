@@ -725,7 +725,6 @@ class PatientService
         }
     }
 
-    // List Patient Vitals
     public function patientVitalList($request, $id)
     {
         try {
@@ -756,6 +755,10 @@ class PatientService
     }
     }
 
+    public function latest($request,$id,$vitalType){
+        $data = PatientVital::where('patientId',auth()->user()->patient->id)->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
+        return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
+    }
     // Delete Patient Vitals
     public function patientVitalDelete($request, $id, $vitalId)
     {

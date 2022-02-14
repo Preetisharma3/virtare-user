@@ -135,6 +135,12 @@ class PatientController extends Controller
     return (new PatientService)->patientVitalList($request,$id);
   }
 
+  public function latest(Request $request,$id=null,$vitalType = null)
+  {
+    return (new PatientService)->latest($request,$id,$vitalType);
+  }
+
+
   public function deletePatientVital(Request $request, $id, $vitalId = null)
   {
     return (new PatientService)->patientVitalDelete($request, $id, $vitalId);

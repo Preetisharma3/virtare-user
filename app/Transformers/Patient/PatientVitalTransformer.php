@@ -14,7 +14,7 @@ class PatientVitalTransformer extends TransformerAbstract
 	{
 		return [
 			'id' => $data->id,
-			'vitalField' => $data->vitalField?$data->vitalField:@$data->vitalField->name,
+			'vitalField' => @$data->vitalFieldNames->name?$data->vitalFieldNames->name:@$data->vitalField,
 			'value' => $data->value,
 			'units'=>$data->units,
 			'takeTime'=>strtotime($data->takeTime),
