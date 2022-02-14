@@ -15,7 +15,7 @@ class RemoveColumnsToPatientsTable extends Migration
     {
         Schema::table('patients', function (Blueprint $table) {
             $table->dropForeign('patients_genderId_foreign');
-            
+            $table->dropColumn('genderId');
             $table->dropForeign('patients_otherLanguageId_foreign');
             $table->dropColumn('otherLanguageId');
             $table->dropForeign('patients_languageId_foreign');
