@@ -32,11 +32,14 @@ $router->get('/linkstorage', function () use ($router) {
 $router->post('login', 'Api\v1\AuthController@login');
 $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
+
 // Auth Routes
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
+
 // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
+
 // team Routes
     $router->get('team', 'Api\v1\TeamController@all');
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
@@ -52,6 +55,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('patient/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
     $router->get('patient/device', 'Api\v1\PatientController@listPatientDevice');
     $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
+
 // appointment Routes
     $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
     $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
@@ -65,6 +69,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('communication/type', 'Api\v1\CommunicationController@messageType');
     $router->post('communication', 'Api\v1\CommunicationController@addCommunication');
     $router->get('communication', 'Api\v1\CommunicationController@getCommunication');
+    
 // Global Codes Routes
     $router->get('globalCodeCategory[/{id}]', 'Api\v1\GlobalCodeController@globalCodeCategory');
     $router->get('globalCode/{id}', 'Api\v1\GlobalCodeController@globalCode');
@@ -82,6 +87,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('inventory/{id}', 'Api\v1\InventoryController@update');
     $router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
     $router->get('model', 'Api\v1\InventoryController@getModels');
+
+// Task Routes
+    $router->post('task', 'Api\v1\TaskController@addTask');
+    $router->get('task', 'Api\v1\TaskController@listTask');
+    $router->get('task/priority', 'Api\v1\TaskController@priorityTask');
+    $router->get('task/status', 'Api\v1\TaskController@statusTask');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -145,10 +156,7 @@ $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
 $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
 
 
-$router->post('task', 'Api\v1\TaskController@addTask');
-$router->get('task', 'Api\v1\TaskController@listTask');
-$router->get('task/priority', 'Api\v1\TaskController@priorityTask');
-$router->get('task/status', 'Api\v1\TaskController@statusTask');
+
 $router->get('widget', 'Api\v1\WidgetController@getWidget');
 $router->put('widget/{id}', 'Api\v1\WidgetController@updateWidget');
 $router->get('widget/assign', 'Api\v1\WidgetController@getassignedWidget');
