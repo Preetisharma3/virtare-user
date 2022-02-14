@@ -30,9 +30,5 @@ class PatientVital extends Model
         return $this->belongsTo(Patient::class,'patientId');
     }
 
-    public function vital()
-	{
-		return $this->hasMany(PatientVital::class, 'patientId')->whereRaw('id IN (select MAX(id) FROM patientVitals GROUP BY vitalFieldId)')
-        ->orderBy('createdAt','desc');
-	}
+    
 }
