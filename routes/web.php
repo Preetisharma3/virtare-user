@@ -53,6 +53,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/device', 'Api\v1\PatientController@listPatientDevice');
     $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
     $router->post('patient/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
+    $router->get('patient/timeLog', 'Api\v1\PatientController@listPatientTimeLog');
     // appointment Routes
     $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
     $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');

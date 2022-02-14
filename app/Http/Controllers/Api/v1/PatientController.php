@@ -215,6 +215,11 @@ class PatientController extends Controller
     return (new PatientService)->patientTimeLogAdd($request,$id);
   } 
 
+  public function listPatientTimeLog(Request $request,$id=null)
+  {
+    return (new PatientService)->patientTimeLogList($request,$id);
+  } 
+
 
 
 

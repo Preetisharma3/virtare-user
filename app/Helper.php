@@ -36,4 +36,10 @@ class Helper
 
         return $date;
     }
+    public static function time($date)
+    {
+        $date = Carbon::createFromTimestamp($date)->format('H:i:s');
+
+        return $date;
+    }
 }

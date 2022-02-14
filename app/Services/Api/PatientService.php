@@ -4,49 +4,46 @@ namespace App\Services\Api;
 
 use Exception;
 use App\Helper;
-use App\Models\Device\DeviceModel;
-use Carbon\Carbon;
 use App\Models\Tag\Tag;
 use App\Models\User\User;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
+use App\Models\Vital\VitalField;
 use App\Models\Document\Document;
-use App\Models\GlobalCode\GlobalCode;
+use App\Models\Device\DeviceModel;
 use Illuminate\Support\Facades\DB;
 use App\Models\Inventory\Inventory;
 use App\Models\Patient\PatientFlag;
 use App\Models\Patient\PatientVital;
+use App\Models\Vital\VitalTypeField;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\GlobalCode\GlobalCode;
 use App\Models\Patient\PatientDevice;
 use App\Models\Patient\PatientProgram;
 use App\Models\Patient\PatientReferal;
+use App\Models\Patient\PatientTimeLog;
 use App\Models\Patient\PatientTimeLine;
 use App\Models\Patient\PatientCondition;
 use App\Models\Patient\PatientInsurance;
 use App\Models\Patient\PatientInventory;
 use App\Models\Patient\PatientPhysician;
-use PhpParser\Node\Expr\AssignOp\Concat;
 use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
-use App\Models\Patient\PatientTimeLog;
-use App\Models\Vital\VitalField;
-use App\Models\Vital\VitalTypeField;
 use App\Transformers\Patient\PatientTransformer;
-use App\Transformers\Inventory\InventoryTransformer;
 use App\Transformers\Patient\PatientVitalTransformer;
 use App\Transformers\Patient\PatientDeviceTransformer;
 use App\Transformers\Patient\PatientMedicalTransformer;
 use App\Transformers\Patient\PatientProgramTransformer;
 use App\Transformers\Patient\PatientReferalTransformer;
+use App\Transformers\Patient\PatientTimeLogTransformer;
 use App\Transformers\Patient\PatientTimelineTransformer;
 use App\Transformers\Patient\PatientConditionTransformer;
 use App\Transformers\Patient\PatientInsuranceTransformer;
 use App\Transformers\Patient\PatientInventoryTransformer;
 use App\Transformers\Patient\PatientPhysicianTransformer;
-use PhpParser\Node\Expr\BinaryOp\Concat as BinaryOpConcat;
 use App\Transformers\Patient\PatientMedicalRoutineTransformer;
 
 class PatientService
@@ -1094,16 +1091,28 @@ class PatientService
         DB::beginTransaction();
         try {
             $dateConvert = Helper::date($request->input('date'));
+            $timeConvert = Helper::time($request->input('timeAmount'));
             $input = [
                 'categoryId' => $request->input('category'), 'loggedId' => $request->input('loggedBy'), 'udid'=>Str::uuid()->toString(),
                 'performedId' => $request->input('performedBy'), 'date' => $dateConvert, 'timeAmount' => $request->input('timeAmount'), 
                 'createdBy' => Auth::id()
             ];
-            PatientTimeLog::create($input);
+            $data=PatientTimeLog::create($input);
             DB::commit();
             return response()->json(['message' => 'created successfully']);
         } catch (Exception $e) {
             DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // List Patient TimeLog
+    public function patientTimeLogList($request, $id)
+    {
+        try {
+            $getPatient = PatientTimeLog::with('category','logged','performed')->get();
+            return fractal()->collection($getPatient)->transformWith(new PatientTimeLogTransformer())->toArray();
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
