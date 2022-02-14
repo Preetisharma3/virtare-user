@@ -5,7 +5,6 @@ namespace App\Services\Api;
 use App\Models\Module\Module;
 use App\Models\Permission\Permission;
 use App\Models\Role\AccessRole;
-use App\Models\Role\Role;
 use App\Models\RolePermission\RolePermission;
 use Exception;
 use Illuminate\Support\Str;
@@ -50,7 +49,7 @@ class RolePermissionService
            } 
     }
 
-    public function editRole($request,$id)
+    public function listingRole($request,$id)
     {
         $data = AccessRole::where('id', $id)->get();
         return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
@@ -60,8 +59,9 @@ class RolePermissionService
     {
         try{
             $role = [
-                'roles' => $request->input('roles'),
-                'roleDescription' => $request->input('roleDescription'),
+                'roles' => $request->input('name'),
+                'roleDescription' => $request->input('description'),
+                'roleTypeId' => $request->input('roleTypeId'),
                 'isActive' => $request->input('isActive'),
             ];
         AccessRole::where('id',$id)->update($role);
@@ -111,8 +111,8 @@ class RolePermissionService
     {
         try{
             $id = $request->id;
-            $data = RolePermission::where('accessRoleId',$id)->with('role','action')->get();
-            $array  = ['role'=>fractal()->collection($data)->transformWith(new RolePermissionTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()];
+            $data = RolePermission::where('accessRoleId',$id)->with('role','action')->groupBy('accessRoleId')->get();
+            $array  = ['role' => fractal()->collection($data)->transformWith(new RolePermissionTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()];
             return $array;
         }catch(Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);    

@@ -5,6 +5,7 @@ namespace App\Transformers\RolePermission;
 use App\Transformers\Screen\ScreenTransformer;
 use App\Transformers\Action\ActionTransformer;
 use App\Transformers\Module\ModuleTransformer;
+use App\Transformers\Module\PermissionModuleTransformer;
 use League\Fractal\TransformerAbstract;
 
 
@@ -38,8 +39,7 @@ class RolePermissionTransformer extends TransformerAbstract
         return [
                 "name" => $data->role->roles,
                 "description"=>$data->role->roleDescription,
-                'actions'=> fractal()->item($data->action)->transformWith(new ActionTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray(),
-                
-        ];
+                "module"=> [fractal()->item($data->action->screen->module)->transformWith(new PermissionModuleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()],
+          ];
     }
 }
