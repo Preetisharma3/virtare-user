@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Transformers\Task\TaskTransformer;
 use App\Transformers\Task\TaskStatusTransformer;
 use App\Transformers\Task\TaskPriorityTransformer;
+use App\Transformers\Patient\PatientCountTransformer;
 
 class TaskService
 {
@@ -39,14 +40,18 @@ class TaskService
 
     // Task List According to priorities
     public function priorityTask($request){
-        $data =Task::select('priorityId', DB::raw('count(*) as count'))->groupBy('priorityId')->get();
-        return fractal()->collection($data)->transformWith(new TaskPriorityTransformer())->toArray();
+        $data = DB::select(
+            'CALL taskPriorityCount()',
+        );
+        return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
     // Task List According to statuses
     public function statusTask($request){
-        $data =Task::select('taskStatusId', DB::raw('count(*) as count'))->groupBy('taskStatusId')->get();
-        return fractal()->collection($data)->transformWith(new TaskStatusTransformer())->toArray();
+        $data = DB::select(
+            'CALL taskStatusCount()',
+        );
+        return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
     
