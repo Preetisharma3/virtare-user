@@ -729,22 +729,26 @@ class PatientService
     public function patientVitalList($request, $id)
     {
         try {
-            if ($id) {
-                $result = DB::select(
-                    "CALL getPatientVital('" . $id . "','" . $request->type . "')"
-                );
-            } else {
-                $userId = Auth::id();
-                $patient = Patient::where('userId', $userId)->first();
-                $patientId = $patient->id;
-                $result = DB::select(
-                    "CALL getPatientVital('" . $patientId . "','" . $request->type . "')"
-                );
-            }
-            return fractal()->collection($result)->transformWith(new PatientVitalTransformer())->toArray();
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+        $type = '';
+        $fromDate = '';
+        $toDate = '';
+        $patientIdx = $id;
+        if (!empty($request->toDate)) {
+            $toDate = date("Y-m-d H:i:s", $request->toDate);
         }
+        if(!empty($request->fromDate)){
+            $fromDate = date("Y-m-d H:i:s", $request->fromDate);
+        }
+        if(!empty($request->type)){
+            $type = $request->type;
+        }
+        $data = DB::select(
+            'CALL getPatientVital("' . $patientIdx . '","' . $fromDate . '","' . $toDate . '","' . $type . '")',
+        );
+        return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
+    } catch (Exception $e) {
+        return response()->json(['message' => $e->getMessage()],  500);
+    }
     }
 
     // Delete Patient Vitals
