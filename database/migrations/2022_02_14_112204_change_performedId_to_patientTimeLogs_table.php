@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangePerformedByToPatientTimeLogsTable extends Migration
+class ChangePerformedIdToPatientTimeLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class ChangePerformedByToPatientTimeLogsTable extends Migration
     {
         Schema::table('patientTimeLogs', function (Blueprint $table) {
             $table->bigInteger('performedId')->unsigned()->change();
-            $table->foreign('performedId')->references('id')->on('staffs')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('performedId')->references('id')->on('staffs')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -27,7 +27,8 @@ class ChangePerformedByToPatientTimeLogsTable extends Migration
     public function down()
     {
         Schema::table('patientTimeLogs', function (Blueprint $table) {
-            $table->dropColumn('performedId');
+            $table->bigInteger('performedId')->unsigned();
+            $table->foreign('performedId')->references('id')->on('patients')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 }
