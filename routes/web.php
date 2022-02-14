@@ -53,11 +53,14 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/device', 'Api\v1\PatientController@listPatientDevice');
     $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
     $router->get('patient/vital/{vitalType}','Api\v1\PatientController@latest');
+    $router->post('patient/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
+    $router->get('patient/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
+    $router->put('patient/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
+    $router->delete('patient/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
 
 // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
-    $router->post('patient/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
-    $router->get('patient/timeLog', 'Api\v1\PatientController@listPatientTimeLog');
+    
     // appointment Routes
     $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
     $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');

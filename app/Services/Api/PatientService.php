@@ -188,7 +188,7 @@ class PatientService
                     'otherLanguage',
                     'flags.flag'
                 )->first();
-                
+
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
                 $message = ['message' => 'update successfully'];
             }
@@ -728,35 +728,36 @@ class PatientService
     public function patientVitalList($request, $id)
     {
         try {
-        $type = '';
-        $fromDate = '';
-        $toDate = '';
-        $patientIdx = '';
-        if (!empty($request->toDate)) {
-            $toDate = date("Y-m-d H:i:s", $request->toDate);
+            $type = '';
+            $fromDate = '';
+            $toDate = '';
+            $patientIdx = '';
+            if (!empty($request->toDate)) {
+                $toDate = date("Y-m-d H:i:s", $request->toDate);
+            }
+            if (!empty($request->fromDate)) {
+                $fromDate = date("Y-m-d H:i:s", $request->fromDate);
+            }
+            if (!empty($request->type)) {
+                $type = $request->type;
+            }
+            if (empty($patientIdx)) {
+                $patientIdx = auth()->user()->patient->id;
+            } elseif (!empty($patientIdx)) {
+                $patientIdx = $id;
+            }
+            $data = DB::select(
+                'CALL getPatientVital("' . $patientIdx . '","' . $fromDate . '","' . $toDate . '","' . $type . '")',
+            );
+            return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
         }
-        if(!empty($request->fromDate)){
-            $fromDate = date("Y-m-d H:i:s", $request->fromDate);
-        }
-        if(!empty($request->type)){
-            $type = $request->type;
-        }
-        if(empty($patientIdx)){
-            $patientIdx = auth()->user()->patient->id;
-        }elseif(!empty($patientIdx)){
-            $patientIdx = $id;
-        }
-        $data = DB::select(
-            'CALL getPatientVital("' . $patientIdx . '","' . $fromDate . '","' . $toDate . '","' . $type . '")',
-        );
-        return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
-    } catch (Exception $e) {
-        return response()->json(['message' => $e->getMessage()],  500);
-    }
     }
 
-    public function latest($request,$id,$vitalType){
-        $data = PatientVital::where('patientId',auth()->user()->patient->id)->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
+    public function latest($request, $id, $vitalType)
+    {
+        $data = PatientVital::where('patientId', auth()->user()->patient->id)->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
         return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
     }
     // Delete Patient Vitals
@@ -1098,20 +1099,47 @@ class PatientService
         }
     }
 
-    public function patientTimeLogAdd($request, $id)
+    public function patientTimeLogAdd($request, $id, $timelogId)
     {
         DB::beginTransaction();
         try {
-            $dateConvert = Helper::date($request->input('date'));
-            $timeConvert = Helper::time($request->input('timeAmount'));
-            $input = [
-                'categoryId' => $request->input('category'), 'loggedId' => $request->input('loggedBy'), 'udid'=>Str::uuid()->toString(),
-                'performedId' => $request->input('performedBy'), 'date' => $dateConvert, 'timeAmount' => $request->input('timeAmount'), 
-                'createdBy' => Auth::id()
-            ];
-            $data=PatientTimeLog::create($input);
+            if (!$timelogId) {
+                $dateConvert = Helper::date($request->input('date'));
+                $timeConvert = Helper::time($request->input('timeAmount'));
+                $input = [
+                    'categoryId' => $request->input('category'), 'loggedId' => $request->input('loggedBy'), 'udid' => Str::uuid()->toString(),
+                    'performedId' => $request->input('performedBy'), 'date' => $dateConvert, 'timeAmount' => $timeConvert,
+                    'createdBy' => Auth::id()
+                ];
+                $data = PatientTimeLog::create($input);
+                $data = response()->json(['message' => 'created successfully']);
+            } else {
+                $dateConvert = Helper::date($request->input('date'));
+                $timeConvert = Helper::time($request->input('timeAmount'));
+
+                $timeLog = array();
+                if (!empty($request->category)) {
+                    $timeLog['categoryId'] = $request->category;
+                }
+                if (!empty($request->loggedBy)) {
+                    $timeLog['loggedId'] = $request->loggedBy;
+                }
+                if (!empty($request->performedBy)) {
+                    $timeLog['performedId'] = $request->performedBy;
+                }
+                if (!empty($request->date)) {
+                    $timeLog['date'] = $dateConvert;
+                }
+                if (!empty($request->timeAmount)) {
+                    $timeLog['timeAmount'] = $timeConvert;
+                }
+                $timeLog['updatedBy'] = Auth::id();
+                $data = PatientTimeLog::where('udid', $timelogId)->update($timeLog);
+                $data = response()->json(['message' => 'updated successfully']);
+            }
+
             DB::commit();
-            return response()->json(['message' => 'created successfully']);
+            return $data;
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -1119,12 +1147,34 @@ class PatientService
     }
 
     // List Patient TimeLog
-    public function patientTimeLogList($request, $id)
+    public function patientTimeLogList($request, $id, $timelogId)
     {
         try {
-            $getPatient = PatientTimeLog::with('category','logged','performed')->get();
-            return fractal()->collection($getPatient)->transformWith(new PatientTimeLogTransformer())->toArray();
+            if(!$timelogId){
+                $getPatient = PatientTimeLog::with('category', 'logged', 'performed')->get();
+                return fractal()->collection($getPatient)->transformWith(new PatientTimeLogTransformer())->toArray();
+            }else{
+                $getPatient = PatientTimeLog::where('udid',$timelogId)->with('category', 'logged', 'performed')->first();
+            return fractal()->item($getPatient)->transformWith(new PatientTimeLogTransformer())->toArray();
+            }
+            
         } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Delete Patient TimeLog
+    public function patientTimeLogDelete($request, $id, $timelogId)
+    {
+        DB::beginTransaction();
+        try {
+            $data = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
+            PatientTimeLog::where('udid', $timelogId)->update($data);
+            PatientTimeLog::where('udid', $timelogId)->delete();
+            DB::commit();
+            return response()->json(['message' => 'delete successfully']);
+        } catch (Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
