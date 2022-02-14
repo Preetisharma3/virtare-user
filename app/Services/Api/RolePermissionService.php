@@ -21,7 +21,7 @@ class RolePermissionService
     public function roleList($request)
     {
         try{
-            $data = AccessRole::all();
+            $data = AccessRole::with('roleType')->get();
             return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
         }catch(Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);    
