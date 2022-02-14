@@ -32,16 +32,16 @@ $router->get('/linkstorage', function () use ($router) {
 $router->post('login', 'Api\v1\AuthController@login');
 $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
-// Auth Routes
+    // Auth Routes
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
-// Staff Routes   
+    // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
-// team Routes
+    // team Routes
     $router->get('team', 'Api\v1\TeamController@all');
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
-  
-// patient Routes
+
+    // patient Routes
     $router->post('family', 'Api\v1\PatientController@createFamily');
     $router->put('family/{id}', 'Api\v1\PatientController@createFamily');
     $router->get('patientInventory', 'Api\v1\PatientController@listingPatientInventory');
@@ -51,39 +51,51 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('patient/device', 'Api\v1\PatientController@createPatientDevice');
     $router->put('patient/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
     $router->get('patient/device', 'Api\v1\PatientController@listPatientDevice');
-    // $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
     $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
 
 // appointment Routes
+    // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
+    $router->post('patient/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
+    // appointment Routes
     $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
     $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
     $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
     $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
-    $router->get('appointment/search','Api\v1\AppointmentController@appointmentSearch');
-    $router->get('appointment/summary','Api\v1\TimelineController@appointmentTotal');
-// Communication Routes
+    $router->get('appointment/search', 'Api\v1\AppointmentController@appointmentSearch');
+    $router->get('appointment/summary', 'Api\v1\TimelineController@appointmentTotal');
+    // Communication Routes
     $router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');
     $router->get('communication/search', 'Api\v1\CommunicationController@searchCommunication');
     $router->get('communication/type', 'Api\v1\CommunicationController@messageType');
     $router->post('communication', 'Api\v1\CommunicationController@addCommunication');
     $router->get('communication', 'Api\v1\CommunicationController@getCommunication');
-// Global Codes Routes
+    // Global Codes Routes
     $router->get('globalCodeCategory[/{id}]', 'Api\v1\GlobalCodeController@globalCodeCategory');
     $router->get('globalCode/{id}', 'Api\v1\GlobalCodeController@globalCode');
     $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
     $router->patch('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
     $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');
 
-// Dashboard Routes
-    $router->get('patient/chart', 'Api\v1\TimelineController@patientTotal');    
+    // Task Routes
+    $router->post('task', 'Api\v1\TaskController@addTask');
+    $router->get('task', 'Api\v1\TaskController@listTask');
+    $router->get('task/priority', 'Api\v1\TaskController@priorityTask');
+    $router->get('task/status', 'Api\v1\TaskController@statusTask');
+    
+    // Dashboard Routes
+    $router->get('patient/chart', 'Api\v1\TimelineController@patientTotal');
     $router->get('patient/count', 'Api\v1\DashboardController@patientCount');
 
-// Inventory Routes
+    // Inventory Routes
     $router->post('inventory/{id}', 'Api\v1\InventoryController@store');
     $router->get('inventory', 'Api\v1\InventoryController@index');
     $router->put('inventory/{id}', 'Api\v1\InventoryController@update');
     $router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
     $router->get('model', 'Api\v1\InventoryController@getModels');
+
+    // Note Route
+    $router->post('{entity}/notes', 'Api\v1\NoteController@addNote');
+    $router->get('{entity}/notes', 'Api\v1\NoteController@listNote');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -146,10 +158,7 @@ $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
 $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
 
 
-$router->post('task', 'Api\v1\TaskController@addTask');
-$router->get('task', 'Api\v1\TaskController@listTask');
-$router->get('task/priority', 'Api\v1\TaskController@priorityTask');
-$router->get('task/status', 'Api\v1\TaskController@statusTask');
+
 $router->get('widget', 'Api\v1\WidgetController@getWidget');
 $router->put('widget/{id}', 'Api\v1\WidgetController@updateWidget');
 $router->get('widget/assign', 'Api\v1\WidgetController@getassignedWidget');
@@ -222,11 +231,15 @@ $router->post('rolePermission/{id}', 'Api\v1\RolePermissionController@createRole
 $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
 $router->get('rolePermissionList', 'Api\v1\RolePermissionController@rolePermissionList');
 
-$router->get('role','Api\v1\AccessRoleController@index');
-$router->get('staff/{id}/access','Api\v1\AccessRoleController@assignedRoles');
+$router->get('role', 'Api\v1\AccessRoleController@index');
+$router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
 
 $router->post('generalParameterGroup', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
 $router->get('generalParameterGroup[/{id}]', 'Api\v1\GeneralParameterController@listGeneralParameterGroup');
 $router->put('generalParameter/{id}', 'Api\v1\GeneralParameterController@updateGeneralParameter');
 $router->delete('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameterGroup');
 $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameter');
+
+$router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
+$router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
+

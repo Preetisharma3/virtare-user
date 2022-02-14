@@ -31,6 +31,7 @@ use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
+use App\Models\Patient\PatientTimeLog;
 use App\Models\Vital\VitalField;
 use App\Models\Vital\VitalTypeField;
 use App\Transformers\Patient\PatientTransformer;
@@ -164,7 +165,7 @@ class PatientService
                 //Updated Family in patientFamilyMember Table
                 $familyMember = [
                     'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
-                    'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' =>json_encode(array($request->input('familyContactTime'))) ,
+                    'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => json_encode(array($request->input('familyContactTime'))),
                     'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
                     'updatedBy' => 1,
                 ];
@@ -190,6 +191,7 @@ class PatientService
                     'otherLanguage',
                     'flags.flag'
                 )->first();
+                
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
                 $message = ['message' => 'update successfully'];
             }
@@ -481,7 +483,7 @@ class PatientService
             if (!$programId) {
                 $udid = Str::uuid()->toString();
                 $input = [
-                    'programtId' => $request->input('program'), 'onboardingScheduleDate' =>  date("Y-m-d", $request->input('onboardingScheduleDate')), 'dischargeDate' => date("Y-m-d",$request->input('dischargeDate')),
+                    'programtId' => $request->input('program'), 'onboardingScheduleDate' =>  date("Y-m-d", $request->input('onboardingScheduleDate')), 'dischargeDate' => date("Y-m-d", $request->input('dischargeDate')),
                     'patientId' => $id, 'createdBy' => 1, 'isActive' => $request->input('status'), 'udid' => $udid
                 ];
                 $patient = PatientProgram::create($input);
@@ -490,7 +492,7 @@ class PatientService
                 $message = ['message' => 'created successfully'];
             } else {
                 $input = [
-                    'programtId' => $request->input('program'), 'onboardingScheduleDate' => date("Y-m-d",$request->input('onboardingScheduleDate')), 'dischargeDate' => date("Y-m-d",$request->input('dischargeDate')),
+                    'programtId' => $request->input('program'), 'onboardingScheduleDate' => date("Y-m-d", $request->input('onboardingScheduleDate')), 'dischargeDate' => date("Y-m-d", $request->input('dischargeDate')),
                     'updatedBy' => 1, 'isActive' => $request->input('status')
                 ];
                 $patient = PatientProgram::where('id', $programId)->update($input);
@@ -557,7 +559,7 @@ class PatientService
                 $deviceType = $device->name;
 
                 $timeLine = [
-                    'patientId' => $patientData->id, 'heading' => 'Device Assigned', 'title' => $deviceType . ' ' . ' Device Assigned to ' . ' ' . $patientData->firstName. ' ' . $patientData->lastName, 'type' => 1,
+                    'patientId' => $patientData->id, 'heading' => 'Device Assigned', 'title' => $deviceType . ' ' . ' Device Assigned to ' . ' ' . $patientData->firstName . ' ' . $patientData->lastName, 'type' => 1,
                     'createdBy' => 1, 'udid' => Str::uuid()->toString()
                 ];
                 PatientTimeLine::create($timeLine);
@@ -615,7 +617,7 @@ class PatientService
             $deviceType = $device->name;
 
             $timeLine = [
-                'patientId' => $patientData->id, 'heading' => 'Device Removed', 'title' => $deviceType . ' ' . ' Device Removed from ' . ' ' . $patientData->firstName. ' ' . $patientData->lastName, 'type' => 1,
+                'patientId' => $patientData->id, 'heading' => 'Device Removed', 'title' => $deviceType . ' ' . ' Device Removed from ' . ' ' . $patientData->firstName . ' ' . $patientData->lastName, 'type' => 1,
                 'createdBy' => 1, 'udid' => Str::uuid()->toString()
             ];
             PatientTimeLine::create($timeLine);
@@ -705,7 +707,7 @@ class PatientService
                     $device = GlobalCode::where('id', $type->vitalTypeId)->first();
 
                     $timeLine = [
-                        'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' . $patientData->lastName. ' ' .
+                        'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' . $patientData->lastName . ' ' .
                             'Submit' . ' ' . $device->name . ' ' . 'Reading' . ' ' . $vitalField->name . ',' . $vital['value'], 'type' => 1,
                         'createdBy' => 1, 'udid' => Str::uuid()->toString()
                     ];
@@ -841,7 +843,7 @@ class PatientService
                 $udid = Str::uuid()->toString();
                 $input = [
                     'medicine' => $request->input('medicine'), 'frequency' => $request->input('frequency'),  'createdBy' => 1,
-                    'startDate' =>date("Y-m-d",$request->input('startDate')), 'endDate' => date("Y-m-d",$request->input('endDate')), 'patientId' => $id, 'udid' => $udid
+                    'startDate' => date("Y-m-d", $request->input('startDate')), 'endDate' => date("Y-m-d", $request->input('endDate')), 'patientId' => $id, 'udid' => $udid
                 ];
                 $patient = PatientMedicalRoutine::create($input);
                 $getPatient = PatientMedicalRoutine::where('id', $patient->id)->with('patient')->first();
@@ -988,7 +990,7 @@ class PatientService
             $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
             $deviceType = $device->name;
             $timeLine = [
-                'patientId' => $patientData->id, 'heading' => 'Inventory Assigned', 'title' => $deviceType . ' ' . 'Linked to' . ' ' . $patientData->firstName.' '.$patientData->lastName, 'type' => 1,
+                'patientId' => $patientData->id, 'heading' => 'Inventory Assigned', 'title' => $deviceType . ' ' . 'Linked to' . ' ' . $patientData->firstName . ' ' . $patientData->lastName, 'type' => 1,
                 'createdBy' => 1, 'udid' => Str::uuid()->toString()
             ];
             PatientTimeLine::create($timeLine);
@@ -1011,7 +1013,7 @@ class PatientService
     {
         DB::beginTransaction();
         try {
-            if(!$id){
+            if (!$id) {
                 $userId = Auth::id();
                 $patient = Patient::where('userId', $userId)->first();
                 $patientId = $patient->id;
@@ -1032,7 +1034,7 @@ class PatientService
                     $userdata = fractal()->item($getPatient)->transformWith(new PatientDeviceTransformer())->toArray();
                     $message = ['message' => 'updated successfully'];
                 }
-            }else{
+            } else {
                 if (!$deviceId) {
                     $udid = Str::uuid()->toString();
                     $device = [
@@ -1064,16 +1066,15 @@ class PatientService
     public function patientDeviceList($request, $id)
     {
         try {
-            if(!$id){
+            if (!$id) {
                 $userId = Auth::id();
                 $patient = Patient::where('userId', $userId)->first();
                 $patientId = $patient->id;
                 $getPatient = PatientDevice::where('patientId', $patientId)->with('patient')->get();
-            }else{
+            } else {
                 $getPatient = PatientDevice::where('patientId', $id)->with('patient')->get();
             }
             return fractal()->collection($getPatient)->transformWith(new PatientDeviceTransformer())->toArray();
-            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -1088,6 +1089,25 @@ class PatientService
             $getPatient = PatientTimeLine::where('patientId', $patientId)->with('patient')->orderBy('id', 'DESC')->get();
             return fractal()->collection($getPatient)->transformWith(new PatientTimelineTransformer())->toArray();
         } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function patientTimeLogAdd($request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $dateConvert = Helper::date($request->input('date'));
+            $input = [
+                'categoryId' => $request->input('category'), 'loggedId' => $request->input('loggedBy'), 'udid'=>Str::uuid()->toString(),
+                'performedId' => $request->input('performedBy'), 'date' => $dateConvert, 'timeAmount' => $request->input('timeAmount'), 
+                'createdBy' => Auth::id()
+            ];
+            PatientTimeLog::create($input);
+            DB::commit();
+            return response()->json(['message' => 'created successfully']);
+        } catch (Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
