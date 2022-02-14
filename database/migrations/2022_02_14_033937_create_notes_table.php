@@ -24,7 +24,7 @@ class CreateNotesTable extends Migration
             $table->foreign('type')->references('id')->on('globalCodes')->onDelete('cascade')->onUpdate('cascade');
             $table->text('note');
             $table->bigInteger('referenceId')->unsigned();
-            $table->foreign('referanceId')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('referenceId')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('entityType')->nullable();
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
