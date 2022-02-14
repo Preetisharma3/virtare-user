@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeEmailToUsersTable extends Migration
+class ChangeRoleIdToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +14,8 @@ class ChangeEmailToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('email')->nullable()->change();
-            $table->string('password')->nullable()->change();
-            $table->string('roleId')->nullable()->change();
-            $table->string('profilePhoto')->nullable()->change();
-            $table->string('emailVerify')->nullable()->change();
+            $table->bigInteger('roleId')->nullable()->unsigned()->change();
+            $table->foreign('roleId')->references('id')->on('roles')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -30,11 +27,8 @@ class ChangeEmailToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('email');
-            $table->dropColumn('password');
+            $table->dropForeign('users_roleId_foreign');
             $table->dropColumn('roleId');
-            $table->dropColumn('profilePhoto');
-            $table->dropColumn('emailVerify');
         });
     }
 }

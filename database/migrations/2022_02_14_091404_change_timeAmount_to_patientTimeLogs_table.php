@@ -26,7 +26,7 @@ class ChangeTimeAmountToPatientTimeLogsTable extends Migration
     public function down()
     {
         Schema::table('patientTimeLogs', function (Blueprint $table) {
-            $table->time('timeAmount')->change();
+            $table->string('timeAmount');
 
         });
     }
