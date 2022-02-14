@@ -48,11 +48,9 @@ class PatientTransformer extends TransformerAbstract
             'flagName' => 'jhj',
             'flagColor' => 'fhghg',
             'medicalRecordNumber'=>(!empty($data->medicalRecordNumber))?$data->medicalRecordNumber:'',
-
             'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? str_replace("public","",URL::to('/')).'/'.$data->user->profilePhoto : "",
-
-            'patientFamilyMember' => fractal()->item($data->family)->transformWith(new PatientFamilyMemberTransformer())->toArray(),
-            'emergencyContact' => fractal()->item($data->emergency)->transformWith(new PatientFamilyMemberTransformer())->toArray(),
+            'patientFamilyMember' =>$data->family? fractal()->item($data->family)->transformWith(new PatientFamilyMemberTransformer())->toArray():[],
+            'emergencyContact' => $data->emergency?fractal()->item($data->emergency)->transformWith(new PatientFamilyMemberTransformer())->toArray():[],
             'patientFlags' => $data->flags ? fractal()->collection($data->flags)->transformWith(new PatientFlagTransformer())->toArray() : [],
             'patientVitals'=> $data->vitals ?fractal()->collection($data->vital)->transformWith(new PatientVitalTransformer())->toArray(): [],
 
