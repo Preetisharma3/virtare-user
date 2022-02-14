@@ -2,8 +2,8 @@
 
 namespace App\Models\Patient;
 
-use App\Models\GlobalCode\GlobalCode;
 use App\Models\Vital\VitalField;
+use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,4 +29,10 @@ class PatientVital extends Model
     {
         return $this->belongsTo(Patient::class,'patientId');
     }
+
+    public function vital()
+	{
+		return $this->hasMany(PatientVital::class, 'patientId')->whereRaw('id IN (select MAX(id) FROM patientVitals GROUP BY vitalFieldId)')
+        ->orderBy('createdAt','desc');
+	}
 }
