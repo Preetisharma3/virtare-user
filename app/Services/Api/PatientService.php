@@ -673,7 +673,7 @@ class PatientService
                     ];
                     PatientTimeLine::create($timeLine);
                     $result = DB::select(
-                        "CALL getPatientVital('" . $id . "','" . $request->type . "')"
+                        "CALL patientVitalList('" . $id . "','" . $request->type . "')"
                     );
                 }
             } else {
@@ -714,7 +714,7 @@ class PatientService
                     ];
                     PatientTimeLine::create($timeLine);
                     $result = DB::select(
-                        "CALL getPatientVital('" . $patientId . "','" . $request->type . "')"
+                        "CALL patientVitalList('" . $patientId . "','" . $request->type . "')"
                     );
                 }
             }
