@@ -39,10 +39,9 @@ class AppointmentService
                     'staffId' => $request->staffId,
                     'patientId' => $patientData->id,
                 ];
-            } else {
-                $staffData = Staff::where('userId', Auth::user()->id)->first();
+            } elseif(!auth()->user()->patient) {
                 $entity = [
-                    'staffId' => $staffData->id,
+                    'staffId' => $request->staffId,
                     'patientId' => $request->patientId,
                 ];
             }
