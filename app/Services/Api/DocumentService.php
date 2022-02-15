@@ -5,6 +5,7 @@ namespace App\Services\Api;
 use Exception;
 use App\Models\Tag\Tag;
 use Illuminate\Support\Str;
+use App\Models\Patient\Patient;
 use App\Models\Document\Document;
 use Illuminate\Support\Facades\DB;
 use App\Transformers\Document\DocumentTransformer;
@@ -70,7 +71,8 @@ class DocumentService
     {
         try {
             if ($request->latest) {
-                $getDocument = Document::where('entityType', $entity)->with('documentType', 'tag.tags')->latest()->first();
+                $patientId=Patient::where('udid',$id)->first();
+                $getDocument = Document::where([['referanceId',$patientId],['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->first();
                     return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
             } else {
                 if ($documentId) {
