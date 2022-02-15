@@ -136,4 +136,18 @@ class TaskService
         return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
     }
 
+    public function taskPerStaff(){
+        $tasks = DB::select(
+            'CALL taskPerStaff()',
+        );
+        return fractal()->item($tasks)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+    }
+
+    public function taskPerCategory(){
+        $tasks = DB::select(
+            'CALL taskPerCategory()',
+        );
+        return fractal()->item($tasks)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+    }
+
 }

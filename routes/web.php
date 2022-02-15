@@ -89,6 +89,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('task/{id}','Api\v1\TaskController@updateTask');
     $router->delete('task/{id}','Api\v1\TaskController@deleteTask');
     $router->get('task/{id}','Api\v1\TaskController@taskById');
+    $router->get('task/staff','Api\v1\TaskController@taskPerStaff');
+    $router->get('task/category','Api\v1\TaskController@taskPerCategory');
 
     // Dashboard Routes
     $router->get('patient/chart', 'Api\v1\TimelineController@patientTotal');
