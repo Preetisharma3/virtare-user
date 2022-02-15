@@ -3,6 +3,7 @@
 namespace App\Transformers\Task;
 
 use League\Fractal\TransformerAbstract;
+use App\Transformers\Task\TaskAssignedTransformer;
 
 
 class TaskTransformer extends TransformerAbstract
@@ -34,11 +35,13 @@ class TaskTransformer extends TransformerAbstract
     {
         return[
            'id'=>$data->id,
-           'taskName'=>$data->title,
+           'title'=>$data->title,
+           'description'=>$data->description,
            'taskStatus'=>$data->taskStatus->name,
-           'priority'=>$data->priority->name, 
-           'category'=>$data->taskCategoryId,
+           'priority'=>$data->priority->name,
+           'category'=>$data->taskCategory  ? fractal()->collection($data->taskCategory)->transformWith(new TaskCategoryTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
            'dueDate'=>$data->dueDate,
+           'assignedTo'=>$data->assignedTo  ? fractal()->collection($data->assignedTo)->transformWith(new TaskAssignedTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() :array(),
            'assignedBy'=>$data->user->email,
            'status'=>$data->isActive? True:False
         ];
