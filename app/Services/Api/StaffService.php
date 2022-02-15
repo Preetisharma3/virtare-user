@@ -45,7 +45,6 @@ class StaffService
                 'specializationId' => $request->specializationId,
                 'designationId' => $request->designationId,
                 'networkId' => $request->networkId,
-                'providerId' => $request->providerId,
                 'roleId' => 3,
                 'createdBy' => 1
             ];
