@@ -10,4 +10,8 @@ class Provider extends Model
 	protected $table = 'providers';
     use HasFactory;
 	protected $guarded = [];
+
+	const DELETED_AT = 'deletedAt';
+    const CREATED_AT = 'createdAt';
+    const UPDATED_AT = 'updatedAt';
 }

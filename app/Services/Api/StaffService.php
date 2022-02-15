@@ -8,16 +8,13 @@ use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use App\Models\UserRole\UserRole;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use App\Models\StaffContact\StaffContact;
-use App\Transformers\User\UserTransformer;
 use App\Transformers\Staff\StaffTransformer;
 use App\Transformers\Staff\StaffRoleTransformer;
 use App\Models\StaffAvailability\StaffAvailability;
 use App\Transformers\Staff\StaffContactTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
 use App\Transformers\Staff\StaffAvailabilityTransformer;
-use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 
 class StaffService
