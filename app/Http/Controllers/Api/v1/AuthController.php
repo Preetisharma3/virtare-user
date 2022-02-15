@@ -9,6 +9,7 @@ use App\Services\Api\LoginService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Login\LoginTransformer;
+use App\Services\Api\PushNotificationService;
 use App\Transformers\Login\LoginPatientTransformer;
 
 class AuthController extends Controller
@@ -27,10 +28,18 @@ class AuthController extends Controller
   public function login(request $request)
   {
     if ($token = $this->jwt->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
-      $user = User::where('email', $request->email)->with('roles','staff','patient')->firstOrFail();
+      $deviceToken = $request->deviceToken;
+      $deviceType = $request->deviceType;
+      if($request->deviceType == 'ios'){
+          $pushNotification = new PushNotificationService();
+          $deviceToken = $pushNotification->ios_token($deviceToken);
+      }
         User::where('id', Auth::id())->update([
+          "deviceToken"=>$deviceToken,
+          "deviceType"=>$deviceType,
           "updatedBy" => Auth::id()
         ]);
+        $user = User::where('email', $request->email)->with('roles','staff','patient')->firstOrFail();
         $data = array(
           'token' => $token,
           'user' => $user

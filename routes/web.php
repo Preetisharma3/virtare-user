@@ -109,6 +109,11 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     //Family Member
     $router->get('familyMember/patient[/{id}]','Api\v1\FamilyMemberController@listPatient');
+
+    //Push Notification
+
+    $router->get('notification', 'Api\v1\PushNotificationController@notificationShow');
+
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
