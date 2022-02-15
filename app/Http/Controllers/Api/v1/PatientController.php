@@ -135,6 +135,12 @@ class PatientController extends Controller
     return (new PatientService)->patientVitalList($request,$id);
   }
 
+  public function latest(Request $request,$id=null,$vitalType = null)
+  {
+    return (new PatientService)->latest($request,$id,$vitalType);
+  }
+
+
   public function deletePatientVital(Request $request, $id, $vitalId = null)
   {
     return (new PatientService)->patientVitalDelete($request, $id, $vitalId);
@@ -195,12 +201,12 @@ class PatientController extends Controller
     return (new PatientService)->inventoryUpdate($request,$id);
   }
 
-  public function createPatientDevice(Request $request,$id,$deviceId=null)
+  public function createPatientDevice(Request $request,$id=null,$deviceId=null)
   {
     return (new PatientService)->patientDeviceCreate($request,$id,$deviceId);
   }
 
-  public function listPatientDevice(Request $request,$id)
+  public function listPatientDevice(Request $request,$id=null)
   {
     return (new PatientService)->patientDeviceList($request,$id);
   }
@@ -208,20 +214,22 @@ class PatientController extends Controller
   public function listPatientTimeline(Request $request,$id)
   {
     return (new PatientService)->patientTimelineList($request,$id);
-  }  
+  } 
+  
+  public function addPatientTimeLog(Request $request,$id=null, $timelogId=null)
+  {
+    return (new PatientService)->patientTimeLogAdd($request,$id, $timelogId);
+  } 
 
+  public function listPatientTimeLog(Request $request,$id=null, $timelogId=null)
+  {
+    return (new PatientService)->patientTimeLogList($request,$id, $timelogId);
+  } 
 
-
-
-
-
-
-
-
-
-
-
-
+  public function deletePatientTimeLog(Request $request,$id=null, $timelogId)
+  {
+    return (new PatientService)->patientTimeLogDelete($request,$id, $timelogId);
+  } 
 
 
 

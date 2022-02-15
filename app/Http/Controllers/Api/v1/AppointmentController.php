@@ -9,11 +9,6 @@ use App\Http\Requests\Appointment\AppointmentRequest;
 
 class AppointmentController extends Controller
 {
-  public function futureAppointment(Request $request)
-  {
-    return (new AppointmentService)->futureAppointment($request);
-  }
-
   public function newAppointments(Request $request)
   {
     return (new AppointmentService)->newAppointments($request);

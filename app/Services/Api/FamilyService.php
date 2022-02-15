@@ -50,7 +50,7 @@ class FamilyService
                 //updated Family in patientFamilyMember Table
                 $familyMember = [
                     'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),
-                    'contactTypeId' => json_encode($request->input('contactType')), 'contactTimeId' => $request->input('contactTime'),
+                    'contactTypeId' => json_encode($request->input('contactType')), 'contactTimeId' => json_encode($request->input('contactTime')),
                     'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'),
                     'updatedBy' => Auth::id(),
                 ];

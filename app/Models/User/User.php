@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Role\Role;
 use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
+use App\Models\Patient\PatientFamilyMember;
 use Illuminate\Auth\Authenticatable;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
@@ -55,6 +56,12 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
     public function patient()
 	{
 		return $this->belongsTo(Patient::class,'id','userId');
+	}
+
+
+    public function familyMember()
+	{
+		return $this->belongsTo(PatientFamilyMember::class,'id','userId');
 	}
 
     public function getJWTIdentifier()
