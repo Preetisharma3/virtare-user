@@ -211,7 +211,7 @@ class PatientController extends Controller
     return (new PatientService)->patientDeviceList($request,$id);
   }
 
-  public function listPatientTimeline(Request $request,$id)
+  public function listPatientTimeline(Request $request,$id=null)
   {
     return (new PatientService)->patientTimelineList($request,$id);
   } 
