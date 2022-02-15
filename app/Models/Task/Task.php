@@ -23,7 +23,7 @@ class Task extends Model
 
     public function taskCategory()
     {
-        return $this->belongsTo(GlobalCode::class, 'taskCategoryId');
+        return $this->hasMany(TaskCategory::class, 'taskId');
     }
 
     public function priority()
@@ -31,9 +31,9 @@ class Task extends Model
         return $this->belongsTo(GlobalCode::class, 'priorityId');
     }
 
-    public function staff()
+    public function assignedTo()
     {
-        return $this->belongsTo(Staff::class, 'assignedTo');
+        return $this->hasMany(TaskAssignedTo::class, 'taskId');
     }
 
     public function user()

@@ -88,6 +88,14 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('task/priority', 'Api\v1\TaskController@priorityTask');
     $router->get('task/status', 'Api\v1\TaskController@statusTask');
 
+    $router->get('task/staff','Api\v1\TaskController@taskPerStaff');
+    $router->get('task/category','Api\v1\TaskController@taskPerCategory');
+
+    $router->put('task/{id}','Api\v1\TaskController@updateTask');
+    $router->delete('task/{id}','Api\v1\TaskController@deleteTask');
+    $router->get('task/{id}','Api\v1\TaskController@taskById');
+    
+
     // Dashboard Routes
     $router->get('patient/chart', 'Api\v1\TimelineController@patientTotal');
     $router->get('patient/count', 'Api\v1\DashboardController@patientCount');
@@ -102,6 +110,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // Note Route
     $router->post('{entity}/notes', 'Api\v1\NoteController@addNote');
     $router->get('{entity}/notes', 'Api\v1\NoteController@listNote');
+
+    //Family Member
+    $router->get('familyMember/patient[/{id}]','Api\v1\FamilyMemberController@listPatient');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');

@@ -24,6 +24,7 @@ class CreateTaskStatusProcedure extends Migration
             COUNT(tasks.id)
         )
     ) AS total,
+    IF(globalCodes.id = 61,'#267DFF',(IF(globalCodes.id = 62,'#FF6061','#62CFD7'))) AS color,
     globalCodes.name AS text
 FROM
     tasks

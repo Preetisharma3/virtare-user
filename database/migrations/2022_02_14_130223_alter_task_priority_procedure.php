@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePriorityTaskProcedure extends Migration
+class AlterTaskPriorityProcedure extends Migration
 {
     /**
      * Run the migrations.
@@ -44,6 +44,6 @@ GROUP BY
      */
     public function down()
     {
-        Schema::dropIfExists('priority_task_procedure');
+        //
     }
 }

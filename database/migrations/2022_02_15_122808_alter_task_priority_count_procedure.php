@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePriorityTaskProcedure extends Migration
+class AlterTaskPriorityCountProcedure extends Migration
 {
     /**
      * Run the migrations.
@@ -30,12 +30,11 @@ FROM
     tasks
 RIGHT JOIN globalCodes ON tasks.priorityId = globalCodes.id
 WHERE
-    globalCodes.globalCodeCategoryId = 7
+    globalCodes.globalCodeCategoryId = 7 AND tasks.deletedAt IS NULL
 GROUP BY
     globalCodes.id;
         END;";
-        DB::unprepared($procedure);
-    }
+        DB::unprepared($procedure);    }
 
     /**
      * Reverse the migrations.
@@ -44,6 +43,6 @@ GROUP BY
      */
     public function down()
     {
-        Schema::dropIfExists('priority_task_procedure');
+        //
     }
 }
