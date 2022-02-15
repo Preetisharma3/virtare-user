@@ -33,7 +33,7 @@ class TaskCategoryTransformer extends TransformerAbstract
     public function transform($data)
     {
         return[
-           'id'=>$data->id,
+           'id'=>$data->taskCategory->id,
            'taskid'=>$data->taskId,
            'taskCategory'=>$data->taskCategory->name,
         ];
