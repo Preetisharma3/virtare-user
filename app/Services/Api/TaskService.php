@@ -62,10 +62,10 @@ class TaskService
     public function listTask($request)
     {
         if ($request->latest) {
-            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'staff', 'user')->latest()->first();
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->first();
             return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
         } else {
-            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'staff', 'user')->get();
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->get();
             return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
         }
 
@@ -134,6 +134,20 @@ class TaskService
     {
         $data = Task::where('id', $id)->first();
         return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
+    }
+
+    public function taskPerStaff(){
+        $tasks = DB::select(
+            'CALL taskPerStaff()',
+        );
+        return fractal()->item($tasks)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+    }
+
+    public function taskPerCategory(){
+        $tasks = DB::select(
+            'CALL taskPerCategory()',
+        );
+        return fractal()->item($tasks)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
 }
