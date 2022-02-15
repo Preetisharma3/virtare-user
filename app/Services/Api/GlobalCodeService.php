@@ -6,14 +6,8 @@ use Exception;
 use Illuminate\Support\Str;
 use App\Models\GlobalCode\GlobalCode;
 use App\Models\GlobalCode\GlobalCodeCategory;
-use App\Models\Patient\Patient;
-use App\Models\Patient\PatientCondition;
-use App\Models\Patient\PatientFlag;
-use App\Models\Patient\PatientInsurance;
-use App\Models\Patient\PatientProgram;
 use App\Transformers\GlobalCode\GlobalCodeTransformer;
 use App\Transformers\GlobalCode\GlobalCodeCategoryTransformer;
-use Symfony\Component\Console\Input\Input;
 
 class GlobalCodeService
 {
@@ -47,7 +41,6 @@ class GlobalCodeService
           }
      }
 
-
      public function globalCodeCreate($request)
      {
           try {
@@ -70,8 +63,6 @@ class GlobalCodeService
                return response()->json(['message' => $e->getMessage()],  500);
           }
      }
-
-
 
      public function globalCodeUpdate($request, $id)
      {
@@ -100,7 +91,6 @@ class GlobalCodeService
                return response()->json(['message' => $e->getMessage()],  500);
           }
      }
-
 
      public function globalCodeDelete($request, $id)
      {

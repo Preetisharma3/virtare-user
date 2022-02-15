@@ -69,20 +69,17 @@ class DocumentService
     public function documentList($request, $entity, $id, $documentId)
     {
         try {
-            if ($documentId) {
-                if ($entity == 'patient') {
-                    $getDocument = Document::where([['id', $documentId], ['entityType', 'patient']])->with('documentType', 'tag.tags')->first();
-                } elseif ($entity == 'staff') {
-                    $getDocument = Document::where([['id', $documentId], ['entityType', 'staff']])->with('documentType', 'tag.tags')->first();
-                }
-                return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
+            if ($request->latest) {
+                $getDocument = Document::where('entityType', $entity)->with('documentType', 'tag.tags')->latest()->first();
+                    return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
             } else {
-                if ($entity == 'patient') {
-                    $getDocument = Document::where([['referanceId', $id], ['entityType', 'patient']])->with('documentType', 'tag.tags')->get();
-                } elseif ($entity == 'staff') {
-                    $getDocument = Document::where([['referanceId', $id], ['entityType', 'staff']])->with('documentType', 'tag.tags')->get();
+                if ($documentId) {
+                    $getDocument = Document::where([['id', $documentId], ['entityType', $entity]])->with('documentType', 'tag.tags')->first();
+                    return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
+                } else {
+                    $getDocument = Document::where([['referanceId', $id], ['entityType', $entity]])->with('documentType', 'tag.tags')->get();
+                    return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
                 }
-                return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);

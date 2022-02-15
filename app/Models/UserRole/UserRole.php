@@ -13,6 +13,8 @@ class UserRole extends Model
     use SoftDeletes;
     protected $softDelete = true;
     const DELETED_AT = 'deletedAt';
+    const CREATED_AT = 'createdAt';
+    const UPDATED_AT = 'updatedAt';
     public $timestamps = false;
     protected $table = 'userRoles';
     use HasFactory;

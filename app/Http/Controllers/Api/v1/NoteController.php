@@ -18,6 +18,5 @@ class NoteController extends Controller
 
         return (new NoteService)->noteList($request, $entity, $id);
     }
-
    
 }

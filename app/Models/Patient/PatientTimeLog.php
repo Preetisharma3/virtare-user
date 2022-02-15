@@ -33,7 +33,7 @@ class PatientTimeLog extends Model
 
    public function performed()
    {
-       return $this->hasOne(Staff::class,'id','loggedId');
+       return $this->hasOne(Staff::class,'id','performedId');
    }
     
 }

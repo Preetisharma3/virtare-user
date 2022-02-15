@@ -161,7 +161,10 @@ $router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientControlle
 $router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevice');
 $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
 $router->get('patient/{id}/device', 'Api\v1\PatientController@listPatientDevice');
-$router->get('patient/{id}/timeLine', 'Api\v1\PatientController@listPatientTimeline');
+$router->post('patient/{id}/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
+    $router->get('patient/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
+    $router->put('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
+    $router->delete('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
 
 
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
