@@ -12,6 +12,9 @@ class InventoryTransformer extends TransformerAbstract
 
     public function transform($data): array
     {
+        if(empty($data)){
+            return [];
+        }
         return [
             'id' => $data->id,
             'deviceType' => (!empty($data->model->deviceType->name)) ? $data->model->deviceType->name : $data->deviceType,
