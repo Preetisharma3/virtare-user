@@ -21,6 +21,9 @@ class NoteTransformer extends TransformerAbstract
 
     public function transform($data): array
     {
+        if(empty($data)){
+            return [];
+        }
         return [
             'id' => $data->udid,
             'date' => strtotime($data->date),

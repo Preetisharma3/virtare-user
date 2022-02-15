@@ -12,6 +12,9 @@ class PatientTimeLogTransformer extends TransformerAbstract
 
 	public function transform($data): array
 	{
+		if(empty($data)){
+            return [];
+        }
 		return [
 			'id'=>$data->udid,
             'categoryId'=>$data->categoryId,
