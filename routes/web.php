@@ -104,6 +104,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // Note Route
     $router->post('{entity}/notes', 'Api\v1\NoteController@addNote');
     $router->get('{entity}/notes', 'Api\v1\NoteController@listNote');
+
+    //Family Member
+    $router->get('familyMember/patient[/{id}]','Api\v1\FamilyMemberController@listPatient');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
