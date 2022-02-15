@@ -34,6 +34,9 @@ class DocumentTransformer extends TransformerAbstract
      */
     public function transform($data): array
     {
+        if(empty($data)){
+            return [];
+        }
         return [
             'id'=>$data->id,
 			'name'=>$data->name,

@@ -3,9 +3,9 @@
 namespace App\Transformers\Task;
 
 use League\Fractal\TransformerAbstract;
- 
 
-class TaskPriorityTransformer extends TransformerAbstract
+
+class TaskCategoryTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -32,9 +32,10 @@ class TaskPriorityTransformer extends TransformerAbstract
      */
     public function transform($data)
     {
-        return[ 
-            'taskPriority'=> $data->priority->name,
-            'count'=>$data->count
+        return[
+           'id'=>$data->taskCategory->id,
+           'taskid'=>$data->taskId,
+           'taskCategory'=>$data->taskCategory->name,
         ];
       
     }

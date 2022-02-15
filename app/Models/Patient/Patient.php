@@ -4,9 +4,13 @@ namespace App\Models\Patient;
 
 use App\Models\User\User;
 use App\Models\Vital\VitalField;
+use Illuminate\Support\Facades\DB;
 use App\Models\Patient\PatientFlag;
+use App\Models\Patient\PatientVital;
 use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Patient\PatientCondition;
+use App\Models\Patient\PatientInventory;
 use App\Models\Patient\PatientFamilyMember;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Patient\PatientEmergencyContact;
@@ -17,6 +21,8 @@ class Patient extends Model
     use SoftDeletes;
     protected $softDelete = true;
     const DELETED_AT = 'deletedAt';
+    const CREATED_AT = 'createdAt';
+    const UPDATED_AT = 'updatedAt';
     public $timestamps = false;
     protected $table = 'patients';
     use HasFactory;
@@ -104,6 +110,12 @@ class Patient extends Model
     public function inventories()
 	{
 		return $this->hasMany(PatientInventory::class, 'patientId');
+	}
+
+    public function vital()
+	{
+		return $this->hasMany(PatientVital::class, 'patientId')->whereRaw('id IN (select MAX(id) FROM patientVitals GROUP BY vitalFieldId)')
+        ->orderBy('createdAt','desc');
 	}
 
 
