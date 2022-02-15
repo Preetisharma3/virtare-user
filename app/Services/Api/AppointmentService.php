@@ -65,7 +65,7 @@ class AppointmentService
         try {
             if ($request->latest) {
                 $patientId=Patient::where('udid',$request->id)->first();
-                $data = Appointment::where([['patientId', $patientId->id], ['startDateTime', '>=', Carbon::today()]])->first();
+                $data = Appointment::where([['patientId', $patientId->id], ['startDateTime', '>=', Carbon::today()]])->latest()->first();
                 return fractal()->item($data)->transformWith(new AppointmentDataTransformer())->toArray();
             } else {
                 $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::today()]])->get();
