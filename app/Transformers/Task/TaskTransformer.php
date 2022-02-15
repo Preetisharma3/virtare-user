@@ -34,11 +34,12 @@ class TaskTransformer extends TransformerAbstract
     {
         return[
            'id'=>$data->id,
-           'taskName'=>$data->title,
+           'title'=>$data->title,
            'taskStatus'=>$data->taskStatus->name,
            'priority'=>$data->priority->name, 
-           'category'=>$data->taskCategoryId,
-           'dueDate'=>$data->dueDate,
+           'taskCategory'=>$data->taskCategoryId,
+           'assignedTo'=>$data->assignedTo,
+           'dueDate'=>strtotime($data->dueDate),
            'assignedBy'=>$data->user->email,
            'status'=>$data->isActive? True:False
         ];

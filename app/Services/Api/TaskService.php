@@ -2,6 +2,7 @@
 
 namespace App\Services\Api;
 
+use Exception;
 use App\Models\Task\Task;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -58,7 +59,7 @@ class TaskService
         $total = DB::select(
             'CALL totalTasksCount()'
         );
-        $data=array_merge($tasks,$total);
+        $data = array_merge($tasks, $total);
         return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
@@ -70,7 +71,7 @@ class TaskService
             'description' => $request->description,
             'taskStatusId' => $request->taskStatus,
             'priorityId' => $request->priority,
-            'updatedBy'=>auth()->user()->id
+            'updatedBy' => auth()->user()->id
         ];
         Task::where('id', $id)->update(
             $input
@@ -85,14 +86,21 @@ class TaskService
         return $endData;
     }
 
-    public function deletedTask($id)
+    public function deleteTask($id)
     {
-        Task::where('id',$id)->delete();
-        return response()->json(['message'=>'Deleted Successfully']);
+        try {
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            Task::where('id',$id)->update($data);
+            Task::where('id',$id)->delete();
+            return response()->json(['message' => 'delete successfully']);
+       } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+       }
     }
 
-    public function taskById($id){
-        $data = Task::where('id',$id)->first();
+    public function taskById($id)
+    {
+        $data = Task::where('id', $id)->first();
         return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
     }
 }

@@ -37,8 +37,8 @@ class TaskController extends Controller
         return (new TaskService)->taskById($id);
     }
 
-    public function deletedTask(request $request, $id)
-    {
-        return (new TaskService)->deletedTask($request, $id);
+    public function deleteTask($id)
+    { 
+        return (new TaskService)->deleteTask($id);
     }
 }
