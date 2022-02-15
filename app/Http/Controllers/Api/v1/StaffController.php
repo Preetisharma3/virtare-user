@@ -25,7 +25,7 @@ class StaffController extends Controller
         return (new StaffService)->listStaff($request);
     }
 
-    public function updateStaff(Request $request,$id)
+    public function updateStaff(Request $request, $id)
     {
         return (new StaffService)->updateStaff($request, $id); 
     }
@@ -40,14 +40,14 @@ class StaffController extends Controller
         return (new StaffService)->listStaffContact($request, $id);
     }
 
-    public function updateStaffContact(Request $request , $id)
+    public function updateStaffContact(Request $request , $id, $staffId)
     {
-        return (new StaffService)->updateStaffContact($request, $id);
+        return (new StaffService)->updateStaffContact($request, $id, $staffId);
     }
 
-    public function deleteStaffContact(Request $request, $id)
+    public function deleteStaffContact(Request $request, $id, $staffId)
     {
-        return (new StaffService)->deleteStaffContact($request, $id);  
+        return (new StaffService)->deleteStaffContact($request, $id, $staffId);  
     }
 
     public function addStaffAvailability(Request $request , $id)
@@ -60,14 +60,14 @@ class StaffController extends Controller
         return (new StaffService)->listStaffAvailability($request,$id);
     }
 
-    public function updateStaffAvailability(Request $request , $id)
+    public function updateStaffAvailability(Request $request , $id, $staffId)
     {
-        return (new StaffService)->updateStaffAvailability($request, $id); 
+        return (new StaffService)->updateStaffAvailability($request, $id, $staffId); 
     }
 
-    public function deleteStaffAvailability(Request $request, $id)
+    public function deleteStaffAvailability(Request $request, $id, $staffId)
     {
-        return (new StaffService)->deleteStaffAvailability($request, $id);  
+        return (new StaffService)->deleteStaffAvailability($request, $id, $staffId);  
     }
 
     public function addStaffRole(Request $request, $id)
@@ -80,9 +80,9 @@ class StaffController extends Controller
         return (new StaffService)->listStaffRole($request,$id);
     }
 
-    public function updateStaffRole(Request $request , $id)
+    public function updateStaffRole(Request $request , $id, $staffId)
     {
-        return (new StaffService)->updateStaffRole($request, $id); 
+        return (new StaffService)->updateStaffRole($request, $id, $staffId); 
     }
 
     public function deleteStaffRole(Request $request ,$staffId, $id)
