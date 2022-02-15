@@ -1111,14 +1111,9 @@ class PatientService
     public function patientTimelineList($request, $id)
     {
         try {
-            if(!$id){
-                $patient = auth()->user()->patient->id;
-                $getPatient = PatientTimeLine::where('patientId', $patient)->with('patient')->orderBy('id', 'DESC')->get();
-            }else{
                 $patient = Patient::where('udid', $id)->first();
                 $patientId = $patient->id;
                 $getPatient = PatientTimeLine::where('patientId', $patientId)->with('patient')->orderBy('id', 'DESC')->get();
-            }
             return fractal()->collection($getPatient)->transformWith(new PatientTimelineTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
@@ -1132,7 +1127,7 @@ class PatientService
             if (!$timelogId) {
                 $dateConvert = Helper::date($request->input('date'));
                 $timeConvert = Helper::time($request->input('timeAmount'));
-                $patientId = Patient::where('udid', $id)->first();
+                $patientId = Patient::where('udid', $request->id)->first();
                 $input = [
                     'categoryId' => $request->input('category'), 'loggedId' => $request->input('loggedBy'), 'udid' => Str::uuid()->toString(),
                     'performedId' => $request->input('performedBy'), 'date' => $dateConvert, 'timeAmount' => $timeConvert,

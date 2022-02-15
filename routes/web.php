@@ -53,6 +53,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/device', 'Api\v1\PatientController@listPatientDevice');
     $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
     $router->get('patient/vital/{vitalType}', 'Api\v1\PatientController@latest');
+    $router->get('patient/timeLine', 'Api\v1\PatientController@listPatientTimeline');
     $router->post('patient/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
     $router->get('patient/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
     $router->put('patient/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
@@ -170,6 +171,7 @@ $router->post('patient/{id}/timeLog', 'Api\v1\PatientController@addPatientTimeLo
 $router->get('patient/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
 $router->put('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
 $router->delete('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
+$router->get('patient/{id}/timeLine', 'Api\v1\PatientController@listPatientTimeline');
 
 
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
