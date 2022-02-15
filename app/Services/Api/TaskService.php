@@ -62,10 +62,10 @@ class TaskService
     public function listTask($request)
     {
         if ($request->latest) {
-            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'staff', 'user')->latest()->first();
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->first();
             return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
         } else {
-            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'staff', 'user')->get();
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->get();
             return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
         }
 
