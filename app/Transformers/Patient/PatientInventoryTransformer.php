@@ -13,6 +13,9 @@ class PatientInventoryTransformer extends TransformerAbstract
 
     public function transform($data): array
     {
+        if(empty($data)){
+            return [];
+        }
         $inventory = fractal()->item($data->inventory)->transformWith(new InventoryTransformer())->toArray();
 
 
