@@ -37,6 +37,7 @@ class FamilyPatientTransformer extends TransformerAbstract
            'id'=>$data->patientId,
            'name'=> ucfirst($data->patients->firstName).' '.ucfirst($data->patients->lastName),
            'dob'=>$data->patients->dob,
+           'relation'=>$data->relation->name,
            'gender'=>$data->patients->gender->name,
            'language'=>$data->patients->language->name,
            'phoneNumber'=>$data->patients->phoneNumber,
@@ -48,6 +49,7 @@ class FamilyPatientTransformer extends TransformerAbstract
            'appartment'=>$data->patients->appartment,
            'address'=>$data->patients->address,
            'isDeviceAdded'=>$data->patients->isDeviceAdded,
+           'isPrimary'=>$data->isPrimary,
            'isActive'=>$data->patients->isActive        ,
 		];
     }
