@@ -233,6 +233,16 @@ class PatientController extends Controller
     return (new PatientService)->patientTimeLogDelete($request,$entityType,$id, $timelogId);
   } 
 
+  public function addPatientFlag(Request $request,$id=null)
+  {
+    return (new PatientService)->patientFlagAdd($request,$id);
+  } 
+
+  public function listPatientFlag(Request $request,$id=null,$flagId=null)
+  {
+    return (new PatientService)->patientFlagList($request,$id,$flagId);
+  } 
+
 
 
 
