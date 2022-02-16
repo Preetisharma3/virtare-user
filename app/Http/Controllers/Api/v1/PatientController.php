@@ -218,19 +218,19 @@ class PatientController extends Controller
     return (new PatientService)->patientTimelineList($request,$id);
   } 
   
-  public function addPatientTimeLog(Request $request,$id=null, $timelogId=null)
+  public function addPatientTimeLog(Request $request,$entityType,$id=null, $timelogId=null)
   {
-    return (new PatientService)->patientTimeLogAdd($request,$id, $timelogId);
+    return (new PatientService)->patientTimeLogAdd($request,$entityType,$id, $timelogId);
   } 
 
-  public function listPatientTimeLog(Request $request,$id=null, $timelogId=null)
+  public function listPatientTimeLog(Request $request,$entityType,$id=null, $timelogId=null)
   {
-    return (new PatientService)->patientTimeLogList($request,$id, $timelogId);
+    return (new PatientService)->patientTimeLogList($request,$entityType,$id, $timelogId);
   } 
 
-  public function deletePatientTimeLog(Request $request,$id=null, $timelogId)
+  public function deletePatientTimeLog(Request $request,$entityType,$id=null, $timelogId)
   {
-    return (new PatientService)->patientTimeLogDelete($request,$id, $timelogId);
+    return (new PatientService)->patientTimeLogDelete($request,$entityType,$id, $timelogId);
   } 
 
 

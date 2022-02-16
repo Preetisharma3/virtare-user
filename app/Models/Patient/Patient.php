@@ -2,6 +2,7 @@
 
 namespace App\Models\Patient;
 
+use App\Models\Note\Note;
 use App\Models\User\User;
 use App\Models\Vital\VitalField;
 use Illuminate\Support\Facades\DB;
@@ -117,6 +118,11 @@ class Patient extends Model
 		return $this->hasMany(PatientVital::class, 'patientId')->whereRaw('id IN (select MAX(id) FROM patientVitals GROUP BY vitalFieldId)')
         ->orderBy('createdAt','desc');
 	}
+
+    public function notes()
+   {
+       return $this->belongsTo(Note::class,'id');
+   }
 
 
 }

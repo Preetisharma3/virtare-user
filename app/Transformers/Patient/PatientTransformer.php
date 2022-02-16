@@ -24,7 +24,7 @@ class PatientTransformer extends TransformerAbstract
             'name' => ucfirst($data->firstName),
             'middleName' => (!empty($data->middleName))?ucfirst($data->middleName):'',
             'lastName' => ucfirst($data->lastName),
-            'fullName'=>ucfirst($data->firstName).' '.ucfirst($data->middleName).' '.ucfirst($data->lastName),
+            'patientFullName'=>ucfirst($data->firstName).' '.ucfirst($data->middleName).' '.ucfirst($data->lastName),
             'dob' => $data->dob,
             'gender' => (!empty($data->gender->name))?$data->gender->name:'',
             'language' => (!empty($data->language->name))?$data->language->name:'',

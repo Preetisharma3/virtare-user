@@ -35,5 +35,10 @@ class PatientTimeLog extends Model
    {
        return $this->hasOne(Staff::class,'id','performedId');
    }
+
+   public function patient()
+   {
+       return $this->hasOne(Patient::class,'id','patientId');
+   }
     
 }

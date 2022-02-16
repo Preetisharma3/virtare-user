@@ -54,11 +54,15 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
     $router->get('patient/vital/{vitalType}', 'Api\v1\PatientController@latest');
     $router->get('patient/vitalNew', 'Api\v1\PatientController@vital');
-    $router->get('patient/timeLine', 'Api\v1\PatientController@listPatientTimeline');
-    $router->post('patient/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
-    $router->get('patient/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
-    $router->put('patient/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
-    $router->delete('patient/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
+    $router->post('{entityType}/{id}/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
+    $router->get('{entityType}/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
+    $router->put('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
+    $router->delete('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
+
+
+
+    $router->get('timeLog[/{id}]', 'Api\v1\TimeLogController@listTimeLog');
+    $router->delete('timeLog/{id}', 'Api\v1\TimeLogController@deleteTimeLog');
 
     // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
@@ -76,6 +80,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('communication/type', 'Api\v1\CommunicationController@messageType');
     $router->post('communication', 'Api\v1\CommunicationController@addCommunication');
     $router->get('communication', 'Api\v1\CommunicationController@getCommunication');
+
     // Global Codes Routes
     $router->get('globalCodeCategory[/{id}]', 'Api\v1\GlobalCodeController@globalCodeCategory');
     $router->get('globalCode/{id}', 'Api\v1\GlobalCodeController@globalCode');

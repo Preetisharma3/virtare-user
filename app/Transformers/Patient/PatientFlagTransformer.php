@@ -16,10 +16,12 @@ class PatientFlagTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-            'id'=>$data->id,
-            'patientId'=>$data->patientId,
+            'id'=>(!empty($data->id))?$data->id:$data->patientFlagId,
+            'patientId'=>(!empty($data->patientId))?$data->patientId:$data->patientFlagPatientId,
 			'icon'=>(!empty($data->icon))&&(!is_null($data->icon)) ? URL::to('/').'/'.$data->icon : "",
-            'flags'=> fractal()->item($data->flag)->transformWith(new FlagTransformer())->toArray(),
+            'flags'=> (!empty($data->flag))?fractal()->item($data->flag)->transformWith(new FlagTransformer())->toArray():'',
+			'flagName'=>(!empty($data->flagName))?$data->flagName:',',
+			'flagName'=>(!empty($data->flagColor))?$data->flagColor:',',
 		];
 	}
 

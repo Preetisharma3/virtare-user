@@ -25,6 +25,8 @@ class PatientTimeLogTransformer extends TransformerAbstract
             'performedBy'=>$data->performed->firstName,
             'date'=>strtotime($data->date),
             'timeAmount'=>strtotime($data->timeAmount),
+            'flag'=>'#FFB21E',
+            'notes'=>$data->patient->notes->note
 		];
 	}
 }
