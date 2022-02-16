@@ -62,6 +62,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
 
     $router->get('timeLog[/{id}]', 'Api\v1\TimeLogController@listTimeLog');
+    $router->put('timeLog/{id}', 'Api\v1\TimeLogController@updateTimeLog');
     $router->delete('timeLog/{id}', 'Api\v1\TimeLogController@deleteTimeLog');
 
     // appointment Routes

@@ -14,7 +14,12 @@ class TimeLogController extends Controller
         return (new TimeLogService)->timeLogList($request,$id);
     }
 
-    public function deleteTimeLog(Request $request,$id=null)
+    public function updateTimeLog(Request $request,$id)
+    {
+        return (new TimeLogService)->timeLogUpdate($request,$id);
+    }
+
+    public function deleteTimeLog(Request $request,$id)
     {
         return (new TimeLogService)->timeLogDelete($request,$id);
     }
