@@ -180,7 +180,7 @@ class PatientService
                             $familyMember = [
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => json_encode(array($request->input('familyContactTime'))),
-                                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
+                                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
                                 'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1
                             ];
                             PatientFamilyMember::create($familyMember);
@@ -195,11 +195,11 @@ class PatientService
                             $familyMember = [
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => json_encode(array($request->input('familyContactTime'))),
-                                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
+                                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
                                 'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString()
                             ];
                             if (!empty($familyMember)) {
-                                PatientFamilyMember::create($familyMember);
+                                $patientFamily = PatientFamilyMember::create($familyMember);
                             }
                         }
                     }
@@ -217,10 +217,10 @@ class PatientService
                     if (!empty($request->input('emergencyEmail'))) {
                         $emergencyContact = [
                             'fullName' => $request->input('emergencyFullName'), 'phoneNumber' => $request->input('emergencyPhoneNumber'), 'contactTypeId' => json_encode($request->input('emergencyContactType')),
-                            'contactTimeId' => json_encode(array($request->input('emergencyContactTime'))), 'genderId' => $request->input('emergencyGender'), 'patientId' => $newData->id,
+                            'contactTimeId' => json_encode(array($request->input('emergencyContactTime'))), 'genderId' => $request->input('emergencyGender'), 'patientId' => $id,
                             'createdBy' => Auth::id(), 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily'), 'udid' => Str::uuid()->toString()
                         ];
-                        PatientEmergencyContact::create($emergencyContact);
+                        $emergency = PatientEmergencyContact::create($emergencyContact);
                     }
                 }
                 $getPatient = Patient::where('id', $id)->with(
@@ -833,16 +833,10 @@ class PatientService
         } elseif (!empty($patientIdx)) {
             $patientIdx = $id;
         }
-        $data = DB::select(
-            "CALL patientVitalList('" . $patientIdx . "','" . ' ' . "')"
+        $result = DB::select(
+            "CALL getVitals('" . $patientIdx . "','" . $request->type . "')"
         );
-        $flag = DB::select(
-            'CALL getPatientFlags("' . $patientIdx . '")',
-        );
-        $vital= fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
-        $flags= fractal()->collection($flag)->transformWith(new PatientFlagTransformer())->toArray();
-        $endResult=array_merge($vital,$flags);
-        return $endResult;
+        return fractal()->collection($result)->transformWith(new PatientVitalTransformer())->toArray();
     }
 
     public function latest($request, $id, $vitalType)
@@ -1187,7 +1181,7 @@ class PatientService
     }
 
     // Add TimeLog
-    public function patientTimeLogAdd($request,$entityType, $id, $timelogId)
+    public function patientTimeLogAdd($request, $entityType, $id, $timelogId)
     {
         DB::beginTransaction();
         try {
@@ -1269,6 +1263,44 @@ class PatientService
             return response()->json(['message' => 'delete successfully']);
         } catch (Exception $e) {
             DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Add Patient Flags
+    public function patientFlagAdd($request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $patientId = Patient::where('udid', $id)->first();
+            $udid = Str::uuid()->toString();
+            $input = ['udid' => $udid, 'patientId' => $patientId->id, 'flagId' => $request->input('flag'), 'icon' => $request->input('icon')];
+            $flag = PatientFlag::create($input);
+            $data = PatientFlag::where('id', $flag->id)->first();
+            $userdata = fractal()->item($data)->transformWith(new PatientFlagTransformer())->toArray();
+            $message = ['message' => 'created successfully'];
+            DB::commit();
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // List Patient TimeLog
+    public function patientFlagList($request, $id, $flagId)
+    {
+        try {
+            if (!$flagId) {
+                $patientId=Patient::where('udid',$id)->first();
+                $getPatient = PatientFlag::where('patientId',$patientId->id)->with('flag')->get();
+                return fractal()->collection($getPatient)->transformWith(new PatientFlagTransformer())->toArray();
+            } else {
+                $getPatient = PatientFlag::where('udid', $flagId)->with('flag')->first();
+                return fractal()->item($getPatient)->transformWith(new PatientFlagTransformer())->toArray();
+            }
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }

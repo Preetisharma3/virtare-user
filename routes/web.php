@@ -58,7 +58,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('{entityType}/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
     $router->put('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
     $router->delete('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
-
+    $router->post('patient/{id}/flag', 'Api\v1\PatientController@addPatientFlag');
+    $router->get('patient/{id}/flag[/{flagId}]', 'Api\v1\PatientController@listPatientFlag');
 
 
     $router->get('timeLog[/{id}]', 'Api\v1\TimeLogController@listTimeLog');
@@ -131,9 +132,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
 
     //Contact Us Routes
-     $router->post('requestCall', 'Api\v1\ContactController@index');
-     $router->post('contactText', 'Api\v1\ContactController@contactMessage');
-     $router->post('contactMail', 'Api\v1\ContactController@contactEmail');
+    $router->post('requestCall', 'Api\v1\ContactController@index');
+    $router->post('contactText', 'Api\v1\ContactController@contactMessage');
+    $router->post('contactMail', 'Api\v1\ContactController@contactEmail');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');

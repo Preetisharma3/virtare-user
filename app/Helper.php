@@ -3,6 +3,8 @@
 namespace App;
 
 use Carbon\Carbon;
+use App\Models\Staff\Staff;
+use App\Models\Patient\Patient;
 
 
 class Helper
@@ -41,5 +43,15 @@ class Helper
         $date = Carbon::createFromTimestamp($date)->format('H:i:s');
 
         return $date;
+    }
+
+    public static function entity($entity, $id)
+    {
+        if ($entity == 'patient') {
+            $data=Patient::where('udid', $id)->first();
+        } elseif ($entity == 'staff') {
+            $data=Staff::where('udid', $id)->first();
+        }
+        return $data->id;
     }
 }
