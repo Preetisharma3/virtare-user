@@ -38,6 +38,10 @@ class PatientFamilyMember extends Model
     {
         return $this->hasOne(GlobalCode::class, 'id', 'genderId');
     }
+    public function language()
+    {
+        return $this->belongsTo(GlobalCode::class, 'languageId');
+    }
 
     public function contactType()
     {
@@ -61,4 +65,8 @@ class PatientFamilyMember extends Model
 	{
 		return Carbon::parse($dateOfBirth)->age;
 	}
+
+    public function patients(){
+        return $this->belongsTo(Patient::class,'patientId');
+    }
 }
