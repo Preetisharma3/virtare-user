@@ -41,7 +41,9 @@ class UserTransformer extends TransformerAbstract
 			'specialization'=>@$user->staff->specialization->name? @$user->staff->specialization->name:'',
 			'designation'=>@$user->staff->designation->name ? @$user->staff->designation->name:'',
 			'contact_no'=>@$user->staff->phoneNumber ? @$user->staff->phoneNumber : @$user->familyMember->phoneNumber,
-			'relation'=>@$user->familyMember->relation->name ?  @$user->familyMember->relation->name:''
+			'relation'=>@$user->familyMember->relation->name ?  @$user->familyMember->relation->name:'',
+			'deviceType'=>$user->deviceType,
+			'deviceToken'=>$user->deviceToken,
 
 		];
 	}
