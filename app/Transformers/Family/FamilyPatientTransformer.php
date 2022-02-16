@@ -41,6 +41,7 @@ class FamilyPatientTransformer extends TransformerAbstract
            'gender'=>$data->patients->gender->name,
            'language'=>$data->patients->language->name,
            'phoneNumber'=>$data->patients->phoneNumber,
+           'profilePhoto'=>$data->patients->user->profilePhoto,
            'medicalRecordNumber'=>$data->patients->medicalRecordNumber,
            'country'=>$data->patients->country->name,
            'state'=>$data->patients->state->name,
@@ -50,7 +51,7 @@ class FamilyPatientTransformer extends TransformerAbstract
            'address'=>$data->patients->address,
            'isDeviceAdded'=>$data->patients->isDeviceAdded,
            'isPrimary'=>$data->isPrimary,
-           'isActive'=>$data->patients->isActive        ,
+           'isActive'=>$data->patients->isActive,
 		];
     }
 }
