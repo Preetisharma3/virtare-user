@@ -123,6 +123,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('send-message[/{id}]', 'Api\v1\ConversationController@conversationMessage');
     $router->get('get-conversation[/{id}]', 'Api\v1\ConversationController@showConversation');
     $router->get('latest-message[/{id}]', 'Api\v1\ConversationController@latestMessage');
+
+
+    //Contact Us Routes
+     $router->post('requestCall', 'Api\v1\ContactController@index');
+     $router->post('contactText', 'Api\v1\ContactController@contactMessage');
+     $router->post('contactMail', 'Api\v1\ContactController@contactEmail');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
