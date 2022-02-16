@@ -285,3 +285,6 @@ $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@dele
 
 $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
 $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
+
+// FAQ Routes
+$router->get('faq', 'Api\v1\FaqController');
