@@ -58,6 +58,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('{entityType}/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
     $router->put('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
     $router->delete('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
+    $router->get('patient/{id}/goal[/{goalId}]','Api\v1\PatientGoalController@index');
+    $router->get('patient/goal[/{goalId}]','Api\v1\PatientGoalController@index');
 
 
 
