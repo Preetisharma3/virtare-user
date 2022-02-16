@@ -90,9 +90,9 @@ class AppointmentService
     {
         try {
             if (auth()->user()->patient) {
-                $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', auth()->user()->patient->id], ['startDateTime', Carbon::today()]])->get();
+                $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', auth()->user()->patient->id]])->whereDate('startDateTime', '=', Carbon::today())->get();
             } elseif (auth()->user()->staff) {
-                $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['staffId', auth()->user()->staff->id], ['startDateTime', Carbon::today()]])->get();
+                $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['staffId', auth()->user()->staff->id]])->whereDate('startDateTime', '=', Carbon::today())->get();
             }
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
         } catch (Exception $e) {
