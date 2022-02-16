@@ -20,7 +20,7 @@ class NoteService
             $dataConvert = Helper::date($request->input('date'));
             $input = [
                 'date' => $dataConvert, 'categoryId' => $request->input('category'), 'type' => $request->input('type'),
-                'note' => $request->input('note'), 'udid' => Str::uuid()->toString(), 'createdBy' => $userId, 'referenceId' => $patientId->id, 'entityType' => $request->input('entityType')
+                'note' => $request->input('note'), 'udid' => Str::uuid()->toString(), 'createdBy' => $userId, 'referenceId' => $patientId->userId, 'entityType' => $request->input('entityType')
             ];
             Note::create($input);
             return response()->json(['message' => 'Created Successfully'], 200);
