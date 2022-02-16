@@ -53,6 +53,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/device', 'Api\v1\PatientController@listPatientDevice');
     $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
     $router->get('patient/vital/{vitalType}', 'Api\v1\PatientController@latest');
+    $router->get('patient/vitalNew', 'Api\v1\PatientController@vital');
     $router->get('patient/timeLine', 'Api\v1\PatientController@listPatientTimeline');
     $router->post('patient/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
     $router->get('patient/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
@@ -125,7 +126,7 @@ $router->get('patient/abnormal', 'Api\v1\DashboardController@abnormalPatients');
 $router->get('patient/critical', 'Api\v1\DashboardController@criticalPatients');
 $router->get('patient/condition', 'Api\v1\DashboardController@patientCondition');
 $router->post('patient', 'Api\v1\PatientController@createPatient');
-$router->put('patient/{id}/familyMember/{familyMemberId}/emergency[/{emergencyId}]', 'Api\v1\PatientController@updatePatient');
+$router->put('patient/{id}', 'Api\v1\PatientController@updatePatient');
 $router->get('patient[/{id}]', 'Api\v1\PatientController@listPatient');
 $router->delete('patient/{id}', 'Api\v1\PatientController@deletePatient');
 $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientCondition');

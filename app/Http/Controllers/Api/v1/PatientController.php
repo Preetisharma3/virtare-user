@@ -7,12 +7,9 @@ use App\Services\Api\FamilyService;
 use App\Http\Controllers\Controller;
 use App\Services\Api\PatientService;
 use App\Http\Requests\Patient\PatientRequest;
-use App\Http\Requests\Patient\PatientVitalRequest;
 use App\Http\Requests\Patient\PatientProgramRequest;
 use App\Http\Requests\Patient\PatientReferalRequest;
 use App\Http\Requests\Patient\PatientConditionRequest;
-use App\Http\Requests\Patient\PatientInsuranceRequest;
-use App\Http\Requests\Patient\PatientInventoryRequest;
 use App\Http\Requests\Patient\PatientPhysicianRequest;
 use App\Http\Requests\Patient\PatientMedicalHistoryRequest;
 use App\Http\Requests\Patient\PatientMedicalRoutineRequest;
@@ -25,9 +22,9 @@ class PatientController extends Controller
     return (new PatientService)->patientCreate($request, $id, $familyMemberId, $emergencyId);
   }
 
-  public function updatePatient(Request $request, $id = null, $familyMemberId = null, $emergencyId = null)
+  public function updatePatient(Request $request, $id)
   {
-    return (new PatientService)->patientCreate($request, $id, $familyMemberId, $emergencyId);
+    return (new PatientService)->patientCreate($request, $id);
   }
 
   public function listPatient(Request $request, $id = null)
@@ -133,6 +130,11 @@ class PatientController extends Controller
   public function listPatientVital(Request $request,$id=null)
   {
     return (new PatientService)->patientVitalList($request,$id);
+  }
+
+  public function vital(Request $request,$id=null)
+  {
+    return (new PatientService)->vitalList($request,$id);
   }
 
   public function latest(Request $request,$id=null,$vitalType = null)
