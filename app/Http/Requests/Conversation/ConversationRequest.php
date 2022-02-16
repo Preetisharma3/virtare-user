@@ -24,16 +24,14 @@ class ConversationRequest extends FormRequest
     public function rules()
     {
         return [
-            'staffId' => 'required',
-            'type' => 'required',
+            'receiverId'=> 'required'
         ];
     }
 
     public function messages()
     {
         return [
-            'staffId.required' => 'Staff Id must be required',
-            'type.required' => 'type must be required',
+            'receiverId.required' => 'Receiver  must be required',
         ];
     }
 }

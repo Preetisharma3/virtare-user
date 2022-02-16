@@ -52,15 +52,15 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('patient/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
     $router->get('patient/device', 'Api\v1\PatientController@listPatientDevice');
     $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
-    $router->get('patient/vital/{vitalType}','Api\v1\PatientController@latest');
+    $router->get('patient/vital/{vitalType}', 'Api\v1\PatientController@latest');
     $router->post('patient/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
     $router->get('patient/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
     $router->put('patient/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
     $router->delete('patient/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
 
-// appointment Routes
+    // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
-    
+
     // appointment Routes
     $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
     $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
@@ -86,11 +86,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('task', 'Api\v1\TaskController@listTask');
     $router->get('task/priority', 'Api\v1\TaskController@priorityTask');
     $router->get('task/status', 'Api\v1\TaskController@statusTask');
-    $router->put('task/{id}','Api\v1\TaskController@updateTask');
-    $router->delete('task/{id}','Api\v1\TaskController@deleteTask');
-    $router->get('task/{id}','Api\v1\TaskController@taskById');
-    $router->get('task/staff','Api\v1\TaskController@taskPerStaff');
-    $router->get('task/category','Api\v1\TaskController@taskPerCategory');
+    $router->get('task/staff', 'Api\v1\TaskController@taskPerStaff');
+    $router->get('task/category', 'Api\v1\TaskController@taskPerCategory');
+    $router->put('task/{id}', 'Api\v1\TaskController@updateTask');
+    $router->delete('task/{id}', 'Api\v1\TaskController@deleteTask');
+    $router->get('task/{id}', 'Api\v1\TaskController@taskById');
+
 
     // Dashboard Routes
     $router->get('patient/chart', 'Api\v1\TimelineController@patientTotal');
@@ -108,12 +109,18 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('{entity}/notes', 'Api\v1\NoteController@listNote');
 
     //Family Member
-    $router->get('familyMember/patient[/{id}]','Api\v1\FamilyMemberController@listPatient');
+    $router->get('familyMember/patient[/{id}]', 'Api\v1\FamilyMemberController@listPatient');
 
     //Push Notification
 
     $router->get('notification', 'Api\v1\PushNotificationController@notificationShow');
 
+    // Conversation Routes
+    $router->get('conversation/list[/{id}]', 'Api\v1\ConversationController@allConversation');
+    $router->get('conversation[/{id}]', 'Api\v1\ConversationController@conversation');
+    $router->post('send-message[/{id}]', 'Api\v1\ConversationController@conversationMessage');
+    $router->get('get-conversation[/{id}]', 'Api\v1\ConversationController@showConversation');
+    $router->get('latest-message[/{id}]', 'Api\v1\ConversationController@latestMessage');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -169,9 +176,9 @@ $router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevi
 $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
 $router->get('patient/{id}/device', 'Api\v1\PatientController@listPatientDevice');
 $router->post('patient/{id}/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
-    $router->get('patient/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
-    $router->put('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
-    $router->delete('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
+$router->get('patient/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
+$router->put('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
+$router->delete('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
 
 
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
@@ -263,4 +270,3 @@ $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@dele
 
 $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
 $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
-

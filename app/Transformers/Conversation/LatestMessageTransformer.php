@@ -5,7 +5,7 @@ namespace App\Transformers\Conversation;
 use League\Fractal\TransformerAbstract;
 
 
-class ConversationTransformer extends TransformerAbstract
+class LatestMessageTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -34,12 +34,11 @@ class ConversationTransformer extends TransformerAbstract
     {
         return [
             'id' => $data->id,
-            'conversationId' => $data->conversationId,
             'senderId' => $data->senderId,
+            'isRead' => $data->isRead,
+            'conversationId' => $data->conversationId,
             'message' => $data->message,
             'type' => $data->type,
-            'isRead' => $data->isRead,
-            "createdAt"=>$data->createdAt,
         ];
     }
 }

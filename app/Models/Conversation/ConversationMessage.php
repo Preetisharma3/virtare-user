@@ -14,7 +14,7 @@ class ConversationMessage extends Model
     const CREATED_AT = 'createdAt';
     const UPDATED_AT = 'updatedAt';
     public $timestamps = false;
-	protected $table = 'conversationMessages';
+	protected $table = 'messages';
     use HasFactory;
 	protected $guarded = [];
 }

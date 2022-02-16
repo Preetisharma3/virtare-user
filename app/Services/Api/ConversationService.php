@@ -4,10 +4,12 @@ namespace App\Services\Api;
 
 use Exception;
 use App\Helper;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Conversation\Conversation;
 use App\Models\Conversation\ConversationMessage;
 use App\Transformers\Conversation\ConversationTransformer;
+use App\Transformers\Conversation\LatestMessageTransformer;
 use App\Transformers\Conversation\ConversationListTransformer;
 
 
@@ -23,14 +25,15 @@ class ConversationService
             $data = Conversation::where([['senderId', $senderId], ['receiverId', $receiverId]])->exists();
             if ($data == false) {
                 $input = array(
-                    'senderId' => Auth::id(),
+                    'udid'=>Str::uuid()->toString(),
+                    'senderId' => Auth::id(),   
                     'receiverId' => $request->receiverId,
                     "createdBy" => Auth::id(),
                 );
                 $conversation = Conversation::create($input);
                 return fractal()->item($conversation)->transformWith(new ConversationListTransformer(true))->toArray();
             } elseif ($data == true) {
-                $conversation = Conversation::where([['senderId', $senderId], ['receiverId', $receiverId]])->first();
+                $conversation = Conversation::where([['senderId', $senderId], ['receiverId', $receiverId]])->with('sender','receiver')->first();
                 return fractal()->item($conversation)->transformWith(new ConversationListTransformer(true))->toArray();
             } else {
                 return response()->json(['message' => trans('messages.unauthenticated')], 401);
@@ -93,22 +96,10 @@ class ConversationService
 
         try {
             $conversationId = $request->conversationId;
-                $data = ConversationMessage::where([['is_read', 0], ['conversation_id', $conversation_id], ['sender_id', "!=", auth()->user()->id]]);
-                    if ($notPrimary->userAuthorization[0]->message == '1') {
-                        $user_id = $id;
-                        $conversation_id = $request->conversation_id;
-                        $input = Conversation::where([['user_id', $user_id], ['id', $conversation_id]])->exists();
-                        if ($input == true) {
-                            $data = ConversationMessage::where([['is_read', 0], ['conversation_id', $conversation_id], ['sender_id', "!=", $user_id]]);
-                        } else {
-                            return response()->json(['message' => trans('messages.unauthenticated')]);
-                        }
-                    } else {
-                        return response()->json(['message' => trans('messages.unauthenticated')], 401);
-                    }
-            $newdata = $data->get();
-            $data->update(['isRead' => 1]);
-            return fractal()->collection($newdata)->transformWith(new LatestMessageTransformer)->toArray();
+                $data = ConversationMessage::where([['isRead', 0], ['conversationId', $conversationId], ['senderId', "!=", auth()->user()->id]]);
+                $newdata = $data->get();
+                $data->update(['isRead' => 1]);
+                return fractal()->collection($newdata)->transformWith(new LatestMessageTransformer)->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
