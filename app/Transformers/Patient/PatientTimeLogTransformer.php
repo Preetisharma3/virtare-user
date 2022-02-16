@@ -26,7 +26,7 @@ class PatientTimeLogTransformer extends TransformerAbstract
             'date'=>strtotime($data->date),
             'timeAmount'=>strtotime($data->timeAmount),
             'flag'=>'#FFB21E',
-            'notes'=>$data->patient->notes->note
+            'notes'=>(!empty($data->patient->notes->note))?$data->patient->notes->note:''
 		];
 	}
 }
