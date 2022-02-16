@@ -32,7 +32,7 @@ class CreatePatientGoalsTable extends Migration
             $table->timestamp('createdAt')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updatedAt')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('deletedAt')->nullable();
-        });
+        }); 
     }
 
     /**
