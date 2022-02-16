@@ -14,19 +14,4 @@ class PushNotificationController extends Controller
     {
         return (new PushNotificationService)->showNotification($request);
     }
-
-    // public function index(){
-    //     $users = User::whereNotNull('deviceToken')->where('deviceToken',"!=","")->get();
-    //     return view('notification',compact('users'));
-    // }
-    // public function send(NotificationSendRequest $request){
-        
-    //     $data = array(
-    //                     "title" => $request->title,
-    //                     "body" =>$request->message,
-    //                     "type" =>$request->type,
-    //     );
-    //     $notification = (new PushNotificationService)->send_notification($request->user,$data);
-    //     return redirect()->to('notification')->with('message', 'Send Successfully');
-    // }
 }

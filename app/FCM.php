@@ -40,14 +40,14 @@ class FCM
     {
 
 
-        $server_key = env("FCM_SERVER_KEY");
+        $serverKey = env("FCM_SERVER_KEY");
 
         $headers = [
-            'Authorization' => 'key=' . $server_key,
+            'Authorization' => 'key=' . $serverKey,
             'Content-Type'  => 'application/json',
         ];
         $fields = [
-            'registration_ids' => $this->device_id,
+            'registration_ids' => $this->deviceId,
             'content-available' => true,
             'priority' => 'high',
             'notification' => $this->notification,

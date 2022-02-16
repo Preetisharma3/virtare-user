@@ -50,7 +50,7 @@ class PushNotificationService
         }
     }
 
-    public function showNotification($request)
+    public function  showNotification($request)
     {
         try {
             $notification = Notification::where('userId', Auth::id())->orderBy("id","DESC")->get();
@@ -72,10 +72,10 @@ class PushNotificationService
     
     public function ios_token($deviceToken)
     {
-        $server_key = env("FCM_SERVER_KEY");
+        $serverKey = env("FCM_SERVER_KEY");
 
         $headers = [
-            'Authorization' => 'key=' . $server_key,
+            'Authorization' => 'key=' . $serverKey,
             'Content-Type'  => 'application/json',
         ];
         $fields = [
