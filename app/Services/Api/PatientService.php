@@ -1275,6 +1275,9 @@ class PatientService
             $patientId = Patient::where('udid', $id)->first();
             $udid = Str::uuid()->toString();
             $input = ['udid' => $udid, 'patientId' => $patientId->id, 'flagId' => $request->input('flag'), 'icon' => $request->input('icon')];
+            $flags=['deletedBy'=>Auth::id(),'isActive'=>0,'isDelete'=>1];
+            PatientFlag::where('patientId',$patientId)->update($flags);
+            PatientFlag::where('patientId',$patientId)->delete();
             $flag = PatientFlag::create($input);
             $data = PatientFlag::where('id', $flag->id)->first();
             $userdata = fractal()->item($data)->transformWith(new PatientFlagTransformer())->toArray();
