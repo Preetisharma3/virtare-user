@@ -14,13 +14,13 @@ class TeamController extends Controller
         return (new TeamService)->team($request,$patientId, $type, $id);
     }
 
-    public function all(Request $request,$patientId)
+    public function all(Request $request,$patientId  = null)
     {
         return  [
             "data" => [
-                "staff" => (new TeamService)->team($request,$patientId = null, "staff", null),
-                "physician" => (new TeamService)->team($request,$patientId = null, "physician", null),
-                "familyMember" => (new TeamService)->team($request,$patientId = null,"familyMember", null)
+                "staff" => (new TeamService)->team($request,$patientId, "staff", null),
+                "physician" => (new TeamService)->team($request,$patientId , "physician", null),
+                "familyMember" => (new TeamService)->team($request,$patientId ,"familyMember", null)
             ]
         ];
     }
