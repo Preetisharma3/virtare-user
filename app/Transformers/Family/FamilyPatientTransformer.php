@@ -2,6 +2,7 @@
 
 namespace App\Transformers\Family;
 
+use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\GlobalCode\GlobalCodeTransformer;
 
@@ -41,7 +42,7 @@ class FamilyPatientTransformer extends TransformerAbstract
            'gender'=>$data->patients->gender->name,
            'language'=>$data->patients->language->name,
            'phoneNumber'=>$data->patients->phoneNumber,
-           'profilePhoto'=>$data->patients->user->profilePhoto,
+           'profilePhoto'=>(!empty($data->patients->user->profilePhoto))&&(!is_null($data->patients->user->profilePhoto)) ? str_replace("public","",URL::to('/')).'/'.$data->patients->user->profilePhoto : "",
            'medicalRecordNumber'=>$data->patients->medicalRecordNumber,
            'country'=>$data->patients->country->name,
            'state'=>$data->patients->state->name,
