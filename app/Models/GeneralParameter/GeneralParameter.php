@@ -2,6 +2,7 @@
 
 namespace App\Models\GeneralParameter;
 
+use App\Models\Vital\VitalField;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,5 +22,10 @@ class GeneralParameter extends Model
     public function generalParameterGroup()
     {
         return $this->hasOne(GeneralParameterGroup::class,'id','generalParameterGroupId');
+    }
+
+    public function vitalField()
+    {
+        return $this->belongsTo(VitalField::class,'vitalFieldId');
     }
 }
