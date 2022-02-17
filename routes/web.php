@@ -39,7 +39,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
     // team Routes
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
-    //$router->get('team[/{patientId}]', 'Api\v1\TeamController@all');
+    $router->get('team', 'Api\v1\TeamController@all');
     //$router->get('team/{patientId}/{type}[/{id}]', 'Api\v1\TeamController@team');
     
 
