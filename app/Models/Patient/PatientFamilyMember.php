@@ -31,7 +31,7 @@ class PatientFamilyMember extends Model
 
     public function patient()
     {
-        return $this->belongsTo(Patient::class,'id');
+        return $this->belongsTo(Patient::class,'patientId');
     }
 
     public function gender()
