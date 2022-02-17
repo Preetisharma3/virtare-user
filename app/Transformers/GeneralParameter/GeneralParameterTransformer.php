@@ -17,6 +17,7 @@ class GeneralParameterTransformer extends TransformerAbstract
             'udid'=>$data->udid,
             'generalParameterGroup'=>$data->generalParameterGroup->name,
             'type'=>$data->vitalFieldId,
+            'vitalFieldName'=>$data->vitalField->name,
             'highLimit'=>$data->highLimit,
             'lowLimit'=>$data->lowLimit
         ];
