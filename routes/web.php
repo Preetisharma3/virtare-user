@@ -63,6 +63,17 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     $router->post('patient/{id}/flag', 'Api\v1\PatientController@addPatientFlag');
     $router->get('patient/{id}/flag[/{flagId}]', 'Api\v1\PatientController@listPatientFlag');
+    $router->get('patient/{id}/task', 'Api\v1\TaskController@listTask');
+    $router->post('patient/{id}/staff', 'Api\v1\PatientController@latest');
+    $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
+    $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
+
+
+    // Patient Staff Routes
+    $router->post('patient/{id}/staff', 'Api\v1\PatientStaffController@assignStaff');
+    $router->get('patient/{id}/staff[/{StaffI}]', 'Api\v1\PatientStaffController@assignStaff');
+    $router->put('patient/{id}/staff', 'Api\v1\PatientStaffController@assignStaff');
+    $router->delete('patient/{id}/staff', 'Api\v1\PatientStaffController@assignStaff');
 
 
     $router->get('timeLog[/{id}]', 'Api\v1\TimeLogController@listTimeLog');
@@ -118,9 +129,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
     $router->get('model', 'Api\v1\InventoryController@getModels');
 
-    // Note Route
-    $router->post('{entity}/notes', 'Api\v1\NoteController@addNote');
-    $router->get('{entity}/notes', 'Api\v1\NoteController@listNote');
 
     //Family Member
     $router->get('familyMember/patient[/{id}]', 'Api\v1\FamilyMemberController@listPatient');

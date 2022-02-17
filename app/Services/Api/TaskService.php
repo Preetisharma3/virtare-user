@@ -55,10 +55,7 @@ class TaskService
        $data = array_merge($message,$result);
        return $data;
     }
-
- 
          
-
     public function listTask($request)
     {
         if ($request->latest) {
