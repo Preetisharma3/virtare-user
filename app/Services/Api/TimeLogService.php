@@ -5,6 +5,7 @@ namespace App\Services\Api;
 use Exception;
 use App\Helper;
 use App\Models\Note\Note;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Patient\PatientTimeLog;
@@ -19,6 +20,8 @@ class TimeLogService
             return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->toArray();
         } else {
             $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed')->first();
+            dd($data);
+
             return fractal()->item($data)->transformWith(new PatientTimeLogTransformer())->toArray();
         }
     }
@@ -28,11 +31,17 @@ class TimeLogService
         DB::beginTransaction();
         try {
             $time = Helper::time($request->input('timeAmount'));
-            $noteData = ['note' => $request->input('note')];
-            Note::where('id', $request->input('noteId'))->update($noteData);
+            if ($request->input('noteId')) {
+                $noteData = ['note' => $request->input('note'),'updatedBy'=>Auth::id()];
+                Note::where('id', $request->input('noteId'))->update($noteData);
+            } else {
+                $noteData = ['note' => $request->input('note'), 'entityType' => $request->entityType, 'referenceId' => $request->input('patient'),
+            'udid'=>Str::uuid()->toString(),'createdBy'=>Auth::id()];
+                Note::create($noteData);
+            }
             $input = ['performedId' => $request->input('staff'), 'patientId' => $request->input('patient'), 'timeAmount' => $time, 'updatedBy' => Auth::id()];
             PatientTimeLog::where('udid', $id)->update($input);
-            $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed')->first();
+            $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed', 'patient.notes')->first();
             $userdata = fractal()->item($data)->transformWith(new PatientTimeLogTransformer())->toArray();
             $message = ['message' => 'updated successfully'];
             DB::commit();

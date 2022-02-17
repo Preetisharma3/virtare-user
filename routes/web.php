@@ -72,9 +72,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Patient Staff Routes
     $router->post('patient/{id}/staff', 'Api\v1\PatientStaffController@assignStaff');
-    $router->get('patient/{id}/staff[/{StaffI}]', 'Api\v1\PatientStaffController@assignStaff');
-    $router->put('patient/{id}/staff', 'Api\v1\PatientStaffController@assignStaff');
-    $router->delete('patient/{id}/staff', 'Api\v1\PatientStaffController@assignStaff');
+    $router->get('patient/{id}/staff[/{StaffId}]', 'Api\v1\PatientStaffController@getAssignStaff');
+    $router->put('patient/{id}/staff/{patientStaffId}', 'Api\v1\PatientStaffController@assignStaff');
+    $router->delete('patient/{id}/staff', 'Api\v1\PatientStaffController@deleteAssignStaff');
 
 
     $router->get('timeLog[/{id}]', 'Api\v1\TimeLogController@listTimeLog');
