@@ -16,7 +16,7 @@ class NoteService
     {
         try {
             $userId = Auth::id();
-            $patientId=Patient::where('udid',$request->id)->first();
+            $patientId=Patient::where('udid',$id)->first();
             $dataConvert = Helper::date($request->input('date'));
             $input = [
                 'date' => $dataConvert, 'categoryId' => $request->input('category'), 'type' => $request->input('type'),
@@ -33,8 +33,8 @@ class NoteService
     {
         try {
             if($request->latest){
-                $patientId=Patient::where('udid',$request->id)->first();
-                $note = Note::where([['referenceId',$patientId->id],['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->first();
+                $patientId=Patient::where('udid',$id)->first();
+                $note = Note::where([['referenceId',$patientId->userId],['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->first();
                 return fractal()->item($note)->transformWith(new NoteTransformer())->toArray();
             }else{
                 $note = Note::where('entityType', $entity)->with('typeName', 'category')->get();

@@ -136,6 +136,7 @@ class PatientService
             } else {
                 $usersId = Patient::where('id', $id)->first();
                 $uId = $usersId->userId;
+
                 // Updated Ptient details in User Table
                 $user = [
                     'email' => $request->input('email'),
@@ -153,10 +154,9 @@ class PatientService
                     'address' => $request->input('address'), 'updatedBy' => Auth::id(), 'height' => $request->input('height'), 'weight' => $request->input('weight')
                 ];
                 $newData = Patient::where('id', $id)->update($patient);
-
                 // Updated family in user Table
-                if ($request->familyMemberId) {
-                    $usersId = PatientFamilyMember::where('id', $request->familyMemberId)->first();
+                if ($request->input('familyMemberId')) {
+                    $usersId = PatientFamilyMember::where('id', $request->input('familyMemberId'))->first();
                     $familyId = $usersId->userId;
                     $familyMemberUser = [
                         'email' => $request->input('familyEmail'),
@@ -206,13 +206,13 @@ class PatientService
                 }
 
                 //Updated emergency contact in PatientEmergencyContact table
-                if ($request->emergencyId) {
+                if ($request->input('emergencyId')) {
                     $emergencyContact = [
                         'fullName' => $request->input('emergencyFullName'), 'phoneNumber' => $request->input('emergencyPhoneNumber'), 'contactTypeId' => json_encode($request->input('emergencyContactType')),
                         'contactTimeId' => json_encode(array($request->input('emergencyContactTime'))), 'genderId' => $request->input('emergencyGender'),
                         'updatedBy' => Auth::id(), 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily')
                     ];
-                    PatientEmergencyContact::where('id', $request->emergencyId)->update($emergencyContact);
+                    $emg = PatientEmergencyContact::where('id', $request->emergencyId)->update($emergencyContact);
                 } else {
                     if (!empty($request->input('emergencyEmail'))) {
                         $emergencyContact = [
@@ -1250,8 +1250,14 @@ class PatientService
                 return fractal()->item($timeLog)->transformWith(new PatientTimeLogTransformer())->toArray();
             } else {
                 if (!$timelogId) {
-                    $getPatient = PatientTimeLog::with('category', 'logged', 'performed')->get();
-                    return fractal()->collection($getPatient)->transformWith(new PatientTimeLogTransformer())->toArray();
+                    if($id){
+                        $patientId = Patient::where('udid', $id)->first();
+                       $getPatient = PatientTimeLog::where('patientId', $patientId->id)->with('category', 'logged', 'performed')->get();
+                        return fractal()->collection($getPatient)->transformWith(new PatientTimeLogTransformer())->toArray();
+                    }else{
+                        $getPatient = PatientTimeLog::with('category', 'logged', 'performed')->get();
+                        return fractal()->collection($getPatient)->transformWith(new PatientTimeLogTransformer())->toArray();
+                    }
                 } else {
                     $getPatient = PatientTimeLog::where('udid', $timelogId)->with('category', 'logged', 'performed')->first();
                     return fractal()->item($getPatient)->transformWith(new PatientTimeLogTransformer())->toArray();
@@ -1263,7 +1269,7 @@ class PatientService
     }
 
     // Delete Patient TimeLog
-    public function patientTimeLogDelete($request, $id, $timelogId)
+    public function patientTimeLogDelete($request, $entity, $id, $timelogId)
     {
         DB::beginTransaction();
         try {
