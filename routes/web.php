@@ -66,9 +66,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
     $router->get('appointment/search', 'Api\v1\AppointmentController@appointmentSearch');
     $router->get('appointment/summary', 'Api\v1\TimelineController@appointmentTotal');
+    $router->get('appointment/{id}/today', 'Api\v1\AppointmentController@todayAppointment');
+    $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
     $router->get('appointment[/{id}]', 'Api\v1\AppointmentController@appointmentList');
     $router->post('appointment[/{id}]', 'Api\v1\AppointmentController@addAppointment');
-    $router->get('appointment/{id}/today', 'Api\v1\AppointmentController@todayAppointment');
     
     // Communication Routes
     $router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');
