@@ -1220,7 +1220,6 @@ class PatientService
                 $data = PatientTimeLog::where('udid', $timelogId)->update($timeLog);
                 $data = response()->json(['message' => 'updated successfully']);
             }
-
             DB::commit();
             return $data;
         } catch (Exception $e) {
@@ -1230,12 +1229,13 @@ class PatientService
     }
 
     // List Patient TimeLog
-    public function patientTimeLogList($request, $id, $timelogId)
+    public function patientTimeLogList($request,$entity, $id, $timelogId)
     {
         try {
             if ($request->latest) {
                 $patientId = Patient::where('udid', $id)->first();
                 $timeLog = PatientTimeLog::where('patientId', $patientId->id)->with('category', 'logged', 'performed')->latest()->first();
+               
                 return fractal()->item($timeLog)->transformWith(new PatientTimeLogTransformer())->toArray();
             } else {
                 if (!$timelogId) {
