@@ -794,10 +794,21 @@ class PatientService
     public function patientVitalList($request, $id)
     {
         try {
+            if ($id) {
+                $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $id]])->get();
+                if ($familyMember == true) {
+                    $patientIdx = $id;
+                } else {
+                    return response()->json(['message' => 'unauthorized']);
+                }
+            } elseif (!$id) {
+                $patientIdx = '';
+            } else {
+                return response()->json(['message' => 'unauthorized']);
+            }
             $type = '';
             $fromDate = '';
             $toDate = '';
-            $patientIdx = '';
             if (!empty($request->toDate)) {
                 $toDate = date("Y-m-d H:i:s", $request->toDate);
             }
