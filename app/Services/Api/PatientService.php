@@ -1094,6 +1094,10 @@ class PatientService
                 'createdBy' => 1, 'udid' => Str::uuid()->toString()
             ];
             PatientTimeLine::create($timeLine);
+
+            $patient = ['isDeviceAdded' => 1];
+            Patient::where('id', $patientData->id)->update($patient);
+
             $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             $message = ['message' => 'updated successfully'];
