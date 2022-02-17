@@ -20,8 +20,6 @@ class TimeLogService
             return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->toArray();
         } else {
             $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed')->first();
-            dd($data);
-
             return fractal()->item($data)->transformWith(new PatientTimeLogTransformer())->toArray();
         }
     }

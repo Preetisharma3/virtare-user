@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 
 class TeamController extends Controller
 {
-    public function team(Request $request,$patientId = null,$type,$id = null){
+    public function team(Request $request,$type,$patientId = null,$id = null){
         return (new TeamService)->team($request,$patientId, $type, $id);
     }
 
