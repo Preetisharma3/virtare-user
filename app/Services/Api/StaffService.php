@@ -5,6 +5,7 @@ namespace App\Services\Api;
 use Exception;
 use App\Models\User\User;
 use App\Models\Staff\Staff;
+use App\Models\Staff\StaffProvider\StaffProvider;
 use Illuminate\Support\Str;
 use App\Models\UserRole\UserRole;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,10 @@ use App\Transformers\Staff\StaffRoleTransformer;
 use App\Models\StaffAvailability\StaffAvailability;
 use App\Transformers\Staff\StaffContactTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
+use App\Transformers\Provider\ProviderTransformer;
 use App\Transformers\Staff\StaffAvailabilityTransformer;
+use App\Transformers\Staff\StaffProviderTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 
 class StaffService
@@ -136,7 +140,7 @@ class StaffService
         }
     }
 
-    public function updateStaffContact($request, $id)
+    public function updateStaffContact($request, $staffId, $id)
     {
         try {
             $staffContact = [
@@ -145,7 +149,7 @@ class StaffService
                 'email' => $request->input('email'),
                 'phoneNumber' => $request->input('phoneNumber'),
             ];
-            StaffContact::where('id', $id)->update($staffContact);
+            StaffContact::where([['staffId',$staffId],['id', $id]])->update($staffContact);
             $staffContactData = StaffContact::where('id', $id)->first();
             $message = ["message" => "Updated Successfully"];
             $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
@@ -156,11 +160,11 @@ class StaffService
         }
     }
 
-    public function deleteStaffContact($request, $id)
+    public function deleteStaffContact($request, $staffId, $id)
     {
         try {
-            if(!empty($request->id)){
-                StaffContact::where('staffId', $id)->delete();
+            if(!empty($request->staffId)){
+                StaffContact::where([['staffId',$staffId],['id', $id]])->delete();
 
                 return response()->json(['message' => "Deleted Successfully"]);
             }else{
@@ -201,14 +205,15 @@ class StaffService
         }
     }
 
-    public function updateStaffAvailability($request, $id)
+    public function updateStaffAvailability($request, $staffId, $id)
     {
         try {
             $staffAvailability = [
+                'udid' => Str::random(10),
                 'startTime' => $request->input('startTime'),
                 'endTime' => $request->input('endTime'),
             ];
-            StaffAvailability::where('id', $id)->update($staffAvailability);
+            StaffAvailability::where([['staffId',$staffId],['id', $id]])->update($staffAvailability);
             $staffAvailability = StaffAvailability::where('id', $id)->first();
             $message = ["message" => "Updated Successfully"];
             $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
@@ -219,45 +224,34 @@ class StaffService
         }
     }
 
-    public function deleteStaffAvailability($request, $id)
+    public function deleteStaffAvailability($request, $staffId, $id)
     {
         try {
-            StaffAvailability::where('staffId', $id)->delete();
+            StaffAvailability::where([['staffId',$staffId],['id', $id]])->delete();
 
             return response()->json(['message' => "Deleted Successfully"]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+   
     public function addStaffRole($request, $id)
     {
-        $roles = $request->roles;
-        foreach($roles as $roleId)
-        {
-            $role = [
-                'udid' => Str::random(10),
-                'staffId' => $id,
-                'accessRoleId' => $roleId,
-                
-            ];
-            UserRole::create($role);
+        try {
+            $roles = $request->roles;
+            foreach($roles as $roleId)
+            {
+                $udid = Str::random(10);
+                $staffId = $id;
+                $accessRoleId = $roleId;
+                DB::select('CALL createstaffRole("' . $udid . '","' . $staffId . '","' . $accessRoleId . '")');
+            }
+            
+            return response()->json(['message' => "created Successfully"]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
-        
-        return response()->json(['message' => "created Successfully"]);
     }
-
-    // public function addStaffRole($request, $id)
-    // {
-    //     try {
-    //         $udid = Str::random(10);
-    //         $staffId = $id;
-    //         $roleId = $request->roleId;
-    //         DB::select('CALL createstaffRole("' . $udid . '","' . $staffId . '","' . $roleId . '")');
-    //         return response()->json(['message' => "created Successfully"]);
-    //     } catch (Exception $e) {
-    //         return response()->json(['message' => $e->getMessage()], 500);
-    //     }
-    // }
 
     public function listStaffRole($request,$id)
     {
@@ -269,14 +263,14 @@ class StaffService
         }
     }
 
-    public function updateStaffRole($request, $id)
+    public function updateStaffRole($request, $staffId, $id)
     {
         try {
             $staffRole = [
                 'userId' => $request->input('userId'),
                 'roleId' => $request->input('roleId'),
             ];
-            UserRole::where('id', $id)->update($staffRole);
+            UserRole::where([['staffId',$staffId],['id', $id]])->update($staffRole);
             return response()->json(['message' => "Updated Successfully"]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -287,6 +281,62 @@ class StaffService
     {
         try {
             UserRole::where([['staffId',$staffId],['id', $id]])->delete();
+            return response()->json(['message' => "Deleted Successfully"]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function addStaffProvider($request,$id)
+    {
+        try{
+             $providers = $request->providers;
+             foreach($providers as $providerId){
+
+                $udid = Str::random(10);
+                $providerId = $providerId;
+                $staffId  = $id;
+                DB::select('CALL createStaffProvider("' . $udid . '","' . $staffId . '","' . $providerId . '")');
+             }
+             return response()->json(['message' => "created Successfully"]);
+        } catch (Exception $e){
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function listStaffProvider($request,$id)
+    {
+        try {
+            $staffProvider = StaffProvider::where('staffId',$id)->with('providers')->get();
+            return fractal()->collection($staffProvider)->transformWith(new StaffProviderTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function updateStaffProvider($request, $staffId, $id)
+    {
+        try {
+            $providers = $request->providers;
+            foreach($providers as $providerId){
+
+               $staffProvider=[
+                   'udid' => Str::random(10),
+                   'providerId' => $providerId,
+                   'staffId' => $staffId,
+                ];
+                StaffProvider::where([['staffId',$staffId],['id', $id]])->update($staffProvider);
+            }
+            return response()->json(['message' => "Updated Successfully"]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteStaffProvider($request,$staffId, $id)
+    {
+        try {
+            StaffProvider::where([['staffId',$staffId],['id', $id]])->delete();
             return response()->json(['message' => "Deleted Successfully"]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
