@@ -37,6 +37,7 @@ class UserPatientTransformer extends TransformerAbstract
 			'dateOfBirth' => date("m/d/Y",strtotime($user->patient->dob)),
 			'height' => @$user->patient->height,
 			'contactNo' => @$user->patient->phoneNumber,
+			'isDeviceAdded' => @$user->patient->isDeviceAdded,
 			'house_no' => @$user->patient->appartment,
 			'profile_photo' => (!empty($user->profilePhoto))&&(!is_null($user->profilePhoto)) ? str_replace("public", "", URL::to('/')).'/'.$user->profilePhoto : "",
 			'city' => @$user->patient->city,

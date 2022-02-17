@@ -20,7 +20,7 @@ class GeneralParameterGroup extends Model
 
     public function generalParameter()
     {
-        return $this->hasMany(GeneralParameter::class,'id');
+        return $this->hasMany(GeneralParameter::class,'generalParameterGroupId');
     }
     
 }
