@@ -794,10 +794,21 @@ class PatientService
     public function patientVitalList($request, $id)
     {
         try {
+            if ($id) {
+                $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $id]])->get();
+                if ($familyMember == true) {
+                    $patientIdx = $id;
+                } else {
+                    return response()->json(['message' => 'unauthorized']);
+                }
+            } elseif (!$id) {
+                $patientIdx = '';
+            } else {
+                return response()->json(['message' => 'unauthorized']);
+            }
             $type = '';
             $fromDate = '';
             $toDate = '';
-            $patientIdx = '';
             if (!empty($request->toDate)) {
                 $toDate = date("Y-m-d H:i:s", $request->toDate);
             }
@@ -1229,13 +1240,13 @@ class PatientService
     }
 
     // List Patient TimeLog
-    public function patientTimeLogList($request,$entity, $id, $timelogId)
+    public function patientTimeLogList($request, $entity, $id, $timelogId)
     {
         try {
             if ($request->latest) {
                 $patientId = Patient::where('udid', $id)->first();
                 $timeLog = PatientTimeLog::where('patientId', $patientId->id)->with('category', 'logged', 'performed')->latest()->first();
-               
+
                 return fractal()->item($timeLog)->transformWith(new PatientTimeLogTransformer())->toArray();
             } else {
                 if (!$timelogId) {
@@ -1275,9 +1286,9 @@ class PatientService
             $patientId = Patient::where('udid', $id)->first();
             $udid = Str::uuid()->toString();
             $input = ['udid' => $udid, 'patientId' => $patientId->id, 'flagId' => $request->input('flag'), 'icon' => $request->input('icon')];
-            $flags=['deletedBy'=>Auth::id(),'isActive'=>0,'isDelete'=>1];
-            PatientFlag::where('patientId',$patientId)->update($flags);
-            PatientFlag::where('patientId',$patientId)->delete();
+            $flags = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
+            PatientFlag::where('patientId', $patientId)->update($flags);
+            PatientFlag::where('patientId', $patientId)->delete();
             $flag = PatientFlag::create($input);
             $data = PatientFlag::where('id', $flag->id)->first();
             $userdata = fractal()->item($data)->transformWith(new PatientFlagTransformer())->toArray();
@@ -1296,8 +1307,8 @@ class PatientService
     {
         try {
             if (!$flagId) {
-                $patientId=Patient::where('udid',$id)->first();
-                $getPatient = PatientFlag::where('patientId',$patientId->id)->with('flag')->get();
+                $patientId = Patient::where('udid', $id)->first();
+                $getPatient = PatientFlag::where('patientId', $patientId->id)->with('flag')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientFlagTransformer())->toArray();
             } else {
                 $getPatient = PatientFlag::where('udid', $flagId)->with('flag')->first();
