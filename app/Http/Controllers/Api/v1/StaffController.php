@@ -40,14 +40,14 @@ class StaffController extends Controller
         return (new StaffService)->listStaffContact($request, $id);
     }
 
-    public function updateStaffContact(Request $request , $id, $staffId)
+    public function updateStaffContact(Request $request , $staffId,$id)
     {
-        return (new StaffService)->updateStaffContact($request, $id, $staffId);
+        return (new StaffService)->updateStaffContact($request, $staffId,$id);
     }
 
-    public function deleteStaffContact(Request $request, $id, $staffId)
+    public function deleteStaffContact(Request $request, $staffId,$id)
     {
-        return (new StaffService)->deleteStaffContact($request, $id, $staffId);  
+        return (new StaffService)->deleteStaffContact($request, $staffId,$id);  
     }
 
     public function addStaffAvailability(Request $request , $id)
@@ -60,14 +60,14 @@ class StaffController extends Controller
         return (new StaffService)->listStaffAvailability($request,$id);
     }
 
-    public function updateStaffAvailability(Request $request , $id, $staffId)
+    public function updateStaffAvailability(Request $request , $staffId,$id)
     {
-        return (new StaffService)->updateStaffAvailability($request, $id, $staffId); 
+        return (new StaffService)->updateStaffAvailability($request, $staffId,$id); 
     }
 
-    public function deleteStaffAvailability(Request $request, $id, $staffId)
+    public function deleteStaffAvailability(Request $request, $staffId,$id)
     {
-        return (new StaffService)->deleteStaffAvailability($request, $id, $staffId);  
+        return (new StaffService)->deleteStaffAvailability($request, $staffId,$id);  
     }
 
     public function addStaffRole(Request $request, $id)
@@ -80,14 +80,34 @@ class StaffController extends Controller
         return (new StaffService)->listStaffRole($request,$id);
     }
 
-    public function updateStaffRole(Request $request , $id, $staffId)
+    public function updateStaffRole(Request $request , $staffId,$id)
     {
-        return (new StaffService)->updateStaffRole($request, $id, $staffId); 
+        return (new StaffService)->updateStaffRole($request, $staffId,$id); 
     }
 
     public function deleteStaffRole(Request $request ,$staffId, $id)
     {
         return (new StaffService)->deleteStaffRole($request,$staffId, $id); 
+    }
+
+    public function addStaffProvider(Request $request, $id)
+    {
+        return (new StaffService)->addStaffProvider($request,$id);
+    }
+
+    public function listStaffProvider(Request $request,$id)
+    {
+        return (new StaffService)->listStaffProvider($request,$id);
+    }
+
+    public function updateStaffProvider(Request $request , $staffId,$id )
+    {
+        return (new StaffService)->updateStaffProvider($request , $staffId,$id); 
+    }
+
+    public function deleteStaffProvider(Request $request , $staffId,$id)
+    {
+        return (new StaffService)->deleteStaffProvider($request , $staffId,$id);
     }
 
     public function specializationCount()
