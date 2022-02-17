@@ -70,10 +70,10 @@ class DocumentService
             if ($request->latest) {
                 $patientId = Patient::where('udid', $request->id)->first();
                 if ($patientId) {
-                    $getDocument = Document::where([['referanceId', $patientId->id], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->first();
+                    $getDocument = Document::where([['referanceId', $patientId->userId], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->first();
                 } else {
                     $patientId = Patient::where('id', $id)->first();
-                    $getDocument = Document::where([['referanceId', $patientId], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->first();
+                    $getDocument = Document::where([['referanceId', $patientId->userId], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->first();
                 }
 
                 return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
@@ -83,7 +83,7 @@ class DocumentService
                     $getDocument = Document::where([['id', $documentId], ['entityType', $entity]])->with('documentType', 'tag.tags')->first();
                     return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
                 } else {
-                    $getDocument = Document::where([['referanceId', $patientId->id], ['entityType', $entity]])->with('documentType', 'tag.tags')->get();
+                    $getDocument = Document::where([['referanceId', $patientId->userId], ['entityType', $entity]])->with('documentType', 'tag.tags')->get();
                     return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
                 }
             }
