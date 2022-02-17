@@ -6,6 +6,7 @@ use Exception;
 use App\Helper;
 use App\Models\Note\Note;
 use Illuminate\Support\Str;
+use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Patient\PatientTimeLog;
@@ -30,11 +31,14 @@ class TimeLogService
         try {
             $time = Helper::time($request->input('timeAmount'));
             if ($request->input('noteId')) {
-                $noteData = ['note' => $request->input('note'),'updatedBy'=>Auth::id()];
+                $noteData = ['note' => $request->input('note'), 'updatedBy' => Auth::id()];
                 Note::where('id', $request->input('noteId'))->update($noteData);
             } else {
-                $noteData = ['note' => $request->input('note'), 'entityType' => 'patient', 'referenceId' => $request->input('patient'),
-            'udid'=>Str::uuid()->toString(),'createdBy'=>Auth::id(),'categoryId'=>155,'type'=>153];
+                $patientId=Patient::where('id',$request->input('patient'))->first();
+                $noteData = [
+                    'note' => $request->input('note'), 'entityType' => 'patient', 'referenceId' => $patientId->userId,
+                    'udid' => Str::uuid()->toString(), 'createdBy' => Auth::id(), 'categoryId' => 155, 'type' => 153
+                ];
                 Note::create($noteData);
             }
             $input = ['performedId' => $request->input('staff'), 'patientId' => $request->input('patient'), 'timeAmount' => $time, 'updatedBy' => Auth::id()];
