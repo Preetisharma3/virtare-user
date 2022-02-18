@@ -21,8 +21,7 @@ class AlterAddRolePermissionProcedure extends Migration
         $createRolePermission = 
           "CREATE PROCEDURE  createRolePermission(IN udid varchar(255), IN accessRoleId int,IN actionId int) 
             BEGIN
-            INSERT INTO rolePermissions (udid,accessRoleId,actionId) 
-            values(udid,accessRoleId,actionId);
+            INSERT INTO rolePermissions (udid,accessRoleId,actionId) values(udid,accessRoleId,actionId);
             END;";
   
         DB::unprepared($createRolePermission);
