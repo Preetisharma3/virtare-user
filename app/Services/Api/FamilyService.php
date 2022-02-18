@@ -17,7 +17,7 @@ class FamilyService
     public function familyCreate($request, $id,$familyId)
     { 
         DB::beginTransaction();
-        // try {
+        try {
             if (!$familyId) {
                 $user=User::where('udid',$id)->first();
                 $usersId=Patient::where('userId',$user->id)->first();
@@ -66,9 +66,9 @@ class FamilyService
 
             $endData = array_merge($message, $userdata);
             return $endData;
-        // } catch (Exception $e) {
-        //     DB::rollback();
-        //     return response()->json(['message' => $e->getMessage()],  500);
-        // }
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
     }
 }
