@@ -203,6 +203,14 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // Note Routes
     $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
     $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
+
+
+    // Document Routes
+
+    $router->post('{entity}/{id}/document', 'Api\v1\DocumentController@createDocument');
+    $router->put('{entity}/{id}/document/{documentId}/tag[/{tagId}]', 'Api\v1\DocumentController@createDocument');
+    $router->get('{entity}/{id}/document[/{documentId}]', 'Api\v1\DocumentController@listDocument');
+    $router->delete('{entity}/{id}/document/{documentId}', 'Api\v1\DocumentController@deleteDocument');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -231,10 +239,6 @@ $router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
 $router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
 
 
-$router->post('{entity}/{id}/document', 'Api\v1\DocumentController@createDocument');
-$router->put('{entity}/{id}/document/{documentId}/tag[/{tagId}]', 'Api\v1\DocumentController@createDocument');
-$router->get('{entity}/{id}/document[/{documentId}]', 'Api\v1\DocumentController@listDocument');
-$router->delete('{entity}/{id}/document/{documentId}', 'Api\v1\DocumentController@deleteDocument');
 
 
 $router->post('file', 'Api\v1\FileController@createFile');

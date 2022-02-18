@@ -758,7 +758,7 @@ class PatientService
     {
         try {
             if ($id) {
-                $patient=Patient::where('udid',$id)->first();
+                $patient = Patient::where('udid', $id)->first();
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $patient->id]])->get();
                 if ($familyMember == true) {
                     $patientIdx = $id;

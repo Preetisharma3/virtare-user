@@ -122,24 +122,24 @@ class PatientController extends Controller
     return (new PatientService)->patientInventoryDelete($request, $id, $inventoryId);
   }
 
-  public function createPatientVital(Request $request,$id=null)
+  public function createPatientVital(Request $request, $id = null)
   {
-    return (new PatientService)->patientVitalCreate($request,$id);
+    return (new PatientService)->patientVitalCreate($request, $id);
   }
 
-  public function listPatientVital(Request $request,$id=null)
+  public function listPatientVital(Request $request, $id = null)
   {
-    return (new PatientService)->patientVitalList($request,$id);
+    return (new PatientService)->patientVitalList($request, $id);
   }
 
-  public function vital(Request $request,$id=null)
+  public function vital(Request $request, $id = null)
   {
-    return (new PatientService)->vitalList($request,$id);
+    return (new PatientService)->vitalList($request, $id);
   }
 
-  public function latest(Request $request,$id=null,$vitalType = null)
+  public function latest(Request $request, $id = null, $vitalType = null)
   {
-    return (new PatientService)->latest($request,$id,$vitalType);
+    return (new PatientService)->latest($request, $id, $vitalType);
   }
 
 
@@ -193,55 +193,55 @@ class PatientController extends Controller
     return (new PatientService)->patientInsuranceDelete($request, $id, $insuranceId);
   }
 
-  public function listingPatientInventory(Request $request,$id)
+  public function listingPatientInventory(Request $request, $id)
   {
-    return (new PatientService)->patientInventoryListing($request,$id);
+    return (new PatientService)->patientInventoryListing($request, $id);
   }
 
-  public function inventory(Request $request,$id)
+  public function inventory(Request $request, $id)
   {
-    return (new PatientService)->inventoryUpdate($request,$id);
+    return (new PatientService)->inventoryUpdate($request, $id);
   }
 
-  public function createPatientDevice(Request $request,$id,$deviceId=null)
+  public function createPatientDevice(Request $request, $id, $deviceId = null)
   {
-    return (new PatientService)->patientDeviceCreate($request,$id,$deviceId);
+    return (new PatientService)->patientDeviceCreate($request, $id, $deviceId);
   }
 
-  public function listPatientDevice(Request $request,$id,$deviceId=null)
+  public function listPatientDevice(Request $request, $id, $deviceId = null)
   {
-    return (new PatientService)->patientDeviceList($request,$id,$deviceId);
+    return (new PatientService)->patientDeviceList($request, $id, $deviceId);
   }
 
-  public function listPatientTimeline(Request $request,$id=null)
+  public function listPatientTimeline(Request $request, $id = null)
   {
-    return (new PatientService)->patientTimelineList($request,$id);
-  } 
-  
-  public function addPatientTimeLog(Request $request,$entityType,$id=null, $timelogId=null)
-  {
-    return (new PatientService)->patientTimeLogAdd($request,$entityType,$id, $timelogId);
-  } 
+    return (new PatientService)->patientTimelineList($request, $id);
+  }
 
-  public function listPatientTimeLog(Request $request,$entityType,$id=null, $timelogId=null)
+  public function addPatientTimeLog(Request $request, $entityType, $id = null, $timelogId = null)
   {
-    return (new PatientService)->patientTimeLogList($request,$entityType,$id, $timelogId);
-  } 
+    return (new PatientService)->patientTimeLogAdd($request, $entityType, $id, $timelogId);
+  }
 
-  public function deletePatientTimeLog(Request $request,$entityType,$id=null, $timelogId)
+  public function listPatientTimeLog(Request $request, $entityType, $id = null, $timelogId = null)
   {
-    return (new PatientService)->patientTimeLogDelete($request,$entityType,$id, $timelogId);
-  } 
+    return (new PatientService)->patientTimeLogList($request, $entityType, $id, $timelogId);
+  }
 
-  public function addPatientFlag(Request $request,$id=null)
+  public function deletePatientTimeLog(Request $request, $entityType, $id = null, $timelogId)
   {
-    return (new PatientService)->patientFlagAdd($request,$id);
-  } 
+    return (new PatientService)->patientTimeLogDelete($request, $entityType, $id, $timelogId);
+  }
 
-  public function listPatientFlag(Request $request,$id=null,$flagId=null)
+  public function addPatientFlag(Request $request, $id = null)
   {
-    return (new PatientService)->patientFlagList($request,$id,$flagId);
-  } 
+    return (new PatientService)->patientFlagAdd($request, $id);
+  }
+
+  public function listPatientFlag(Request $request, $id = null, $flagId = null)
+  {
+    return (new PatientService)->patientFlagList($request, $id, $flagId);
+  }
 
 
 
@@ -251,10 +251,8 @@ class PatientController extends Controller
 
 
   // Family 
-  public function createFamily(Request $request,$id=null)
+  public function createFamily(Request $request, $id = null)
   {
-    return (new FamilyService)->familyCreate($request,$id);
+    return (new FamilyService)->familyCreate($request, $id);
   }
-
- 
 }

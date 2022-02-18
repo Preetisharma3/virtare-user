@@ -5,16 +5,16 @@ namespace App;
 use Carbon\Carbon;
 use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
-
+use App\Models\Patient\PatientTimeLog;
 
 class Helper
 {
-  
-   public static function email($email)
+
+    public static function email($email)
     {
         return $email;
     }
-   
+
 
     public static function dateGroup($data, $date_field)
     {
@@ -48,9 +48,11 @@ class Helper
     public static function entity($entity, $id)
     {
         if ($entity == 'patient') {
-            $data=Patient::where('udid', $id)->first();
+            $data = Patient::where('udid', $id)->first();
         } elseif ($entity == 'staff') {
-            $data=Staff::where('udid', $id)->first();
+            $data = Staff::where('udid', $id)->first();
+        } elseif ($entity == 'auditlog') {
+            $data = PatientTimeLog::where('udid', $id)->first();
         }
         return $data->id;
     }
