@@ -310,3 +310,4 @@ $router->get('faq', 'Api\v1\FaqController');
 
 //freeswitch
 $router->get('freeswitch/directory', 'Freeswitch\DirectoryController@directory');
+$router->get('freeswitch/dialplan', 'Freeswitch\DirectoryController@dialplan');
