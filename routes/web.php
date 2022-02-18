@@ -201,6 +201,11 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('requestCall', 'Api\v1\ContactController@index');
     $router->post('contactText', 'Api\v1\ContactController@contactMessage');
     $router->post('contactMail', 'Api\v1\ContactController@contactEmail');
+
+
+    // Note Routes
+    $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
+    $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -248,11 +253,6 @@ $router->get('goingOn', 'Api\v1\CommunicationController@goingOn');
 $router->get('completed', 'Api\v1\CommunicationController@completed');
 $router->get('staffCallCount', 'Api\v1\CommunicationController@callCountPerStaff');
 
-$router->get('patientList', 'Api\v1\PatientController@listPatient');
-$router->post('patientReferals/{id}', 'Api\v1\PatientController@createPatientReferals');
-$router->post('patientPhysician/{id}', 'Api\v1\PatientController@createPatientPhysician');
-$router->post('patientProgram/{id}', 'Api\v1\PatientController@createPatientProgram');
-$router->post('patientVital/{id}', 'Api\v1\PatientController@createPatientVital');
 $router->post('module', 'Api\v1\ModuleController@createModule');
 $router->get('module', 'Api\v1\ModuleController@getModule');
 $router->post('screen', 'Api\v1\ScreenController@createScreen');
@@ -306,8 +306,6 @@ $router->put('generalParameter/{id}', 'Api\v1\GeneralParameterController@updateG
 $router->delete('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameterGroup');
 $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameter');
 
-$router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
-$router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
 
 // FAQ Routes
 $router->get('faq', 'Api\v1\FaqController');

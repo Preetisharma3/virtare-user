@@ -604,7 +604,7 @@ class PatientService
         try {
             if (!$inventoryId) {
                 $udid = Str::uuid()->toString();
-                $patientData = Patient::where('id', $id)->first();
+                $patientData = Patient::where('udid', $id)->first();
                 $input = [
                     'inventoryId' => $request->input('inventory'), 'patientId' => $patientData->id, 'createdBy' => 1, 'udid' => $udid
                 ];
