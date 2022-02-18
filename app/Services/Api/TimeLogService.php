@@ -34,9 +34,9 @@ class TimeLogService
                 $noteData = ['note' => $request->input('note'), 'updatedBy' => Auth::id()];
                 Note::where('id', $request->input('noteId'))->update($noteData);
             } else {
-                $time = PatientTimeLog::where('udid', $id)->first();
+                $timeLog = PatientTimeLog::where('udid', $id)->first();
                 $noteData = [
-                    'note' => $request->input('note'), 'entityType' => $request->input('entityType'), 'referenceId' => $time->id,
+                    'note' => $request->input('note'), 'entityType' => 'auditlog', 'referenceId' => $timeLog->id,
                     'udid' => Str::uuid()->toString(), 'createdBy' => Auth::id(), 'categoryId' => 155, 'type' => 153
                 ];
                 Note::create($noteData);
