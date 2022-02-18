@@ -55,7 +55,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/vitalNew', 'Api\v1\PatientController@vital');
     $router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevice');
     $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
-    $router->get('patient/{id}/device', 'Api\v1\PatientController@listPatientDevice');
+    $router->get('patient/{id}/device[/{deviceId}]', 'Api\v1\PatientController@listPatientDevice');
 
     $router->post('{entityType}/{id}/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
     $router->get('{entityType}/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
@@ -111,9 +111,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@createPatientInsurance');
     $router->get('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@listPatientInsurance');
     $router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
-    $router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevice');
-    $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
-    $router->get('patient/{id}/device', 'Api\v1\PatientController@listPatientDevice');
     $router->post('patient/{id}/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
     $router->get('patient/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
     $router->put('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
