@@ -46,16 +46,16 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // patient Routes
     $router->post('family', 'Api\v1\PatientController@createFamily');
     $router->put('family/{id}', 'Api\v1\PatientController@createFamily');
-    $router->get('patientInventory', 'Api\v1\PatientController@listingPatientInventory');
+    // $router->get('patient/{id}/inventory', 'Api\v1\PatientController@listingPatientInventory');
     $router->put('inventory/{id}/link', 'Api\v1\PatientController@inventory');
     $router->post('patient/vital', 'Api\v1\PatientController@createPatientVital');
     $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
     $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
     $router->get('patient/vital/{vitalType}', 'Api\v1\PatientController@latest');
     $router->get('patient/vitalNew', 'Api\v1\PatientController@vital');
-    $router->post('patient/device', 'Api\v1\PatientController@createPatientDevice');
-    $router->put('patient/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
-    $router->get('patient/device', 'Api\v1\PatientController@listPatientDevice');
+    $router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevice');
+    $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
+    $router->get('patient/{id}/device', 'Api\v1\PatientController@listPatientDevice');
 
     $router->post('{entityType}/{id}/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
     $router->get('{entityType}/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');

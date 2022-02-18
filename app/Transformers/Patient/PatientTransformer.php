@@ -18,7 +18,7 @@ class PatientTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id' => $data->id,
+            'id' => $data->udid,
             'udid'=>$data->udid,
             'firstName' => ucfirst($data->firstName),
             'name' => ucfirst($data->firstName),

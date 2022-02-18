@@ -14,7 +14,7 @@ class PatientReferalTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-			'id'=>$data->id,
+			'id'=>$data->udid,
 			'patientId'=>$data->patientId,
             'name'=>$data->name,
             'designation'=>$data->designation->name,

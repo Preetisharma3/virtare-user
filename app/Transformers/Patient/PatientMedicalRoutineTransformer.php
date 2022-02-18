@@ -13,7 +13,7 @@ class PatientMedicalRoutineTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id' => $data->id,
+            'id' => $data->udid,
             'patientId' => $data->patientId,
             'medicine' => $data->medicine,
             'frequency' => $data->frequency,

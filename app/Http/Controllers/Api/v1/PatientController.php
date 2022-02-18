@@ -193,9 +193,9 @@ class PatientController extends Controller
     return (new PatientService)->patientInsuranceDelete($request, $id, $insuranceId);
   }
 
-  public function listingPatientInventory(Request $request)
+  public function listingPatientInventory(Request $request,$id)
   {
-    return (new PatientService)->patientInventoryListing($request);
+    return (new PatientService)->patientInventoryListing($request,$id);
   }
 
   public function inventory(Request $request,$id)
@@ -203,7 +203,7 @@ class PatientController extends Controller
     return (new PatientService)->inventoryUpdate($request,$id);
   }
 
-  public function createPatientDevice(Request $request,$id=null,$deviceId=null)
+  public function createPatientDevice(Request $request,$id,$deviceId=null)
   {
     return (new PatientService)->patientDeviceCreate($request,$id,$deviceId);
   }

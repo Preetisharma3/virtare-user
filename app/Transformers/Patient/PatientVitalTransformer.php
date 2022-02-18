@@ -13,7 +13,7 @@ class PatientVitalTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-			'id' => $data->id,
+			'id' => $data->udid,
 			'vitalField' => @$data->vitalFieldNames->name?$data->vitalFieldNames->name:@$data->vitalField,
 			'value' => $data->value,
 			'units'=>$data->units,
