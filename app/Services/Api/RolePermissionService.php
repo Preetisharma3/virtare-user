@@ -22,8 +22,14 @@ class RolePermissionService
     public function roleList($request)
     {
         try{
-            $data = AccessRole::all();
-            return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
+            if($request->id){
+             $data = AccessRole::where('id',$request->id)->get();
+             return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
+            }else{
+                $data = AccessRole::all();
+                return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
+            }
+            
         }catch(Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);    
         } 
@@ -32,14 +38,13 @@ class RolePermissionService
     public function createRole($request)
     {
         try{
-            $role = [
-                'udid' => Str::random(10),
-                'roles' => $request->input('name'),
-                'roleDescription' => $request->input('description'),
-                'roleTypeId' => $request->input('roleTypeId'),
-            ];
-            AccessRole::create($role);
-            $role = AccessRole::where('udid', $role['udid'])->first();
+            $udid = Str::random(10);
+            $roles = $request->input('name');
+            $roleDescription = $request->input('description');
+            $roleTypeId = $request->input('roleTypeId');
+            DB::select('CALL createRole("' . $udid . '","' . $roles . '","' . $roleDescription . '","'.$roleTypeId.'")'); 
+            
+            $role = AccessRole::where('udid', $udid)->first();
             $message = ["message"=>"created Successfully"];
             $resp =  fractal()->item($role)->transformWith(new RoleListTransformer())->toArray();
             $endData = array_merge($message, $resp);
@@ -92,14 +97,11 @@ class RolePermissionService
         try{
             $action = $request->actions;
             foreach($action as $actionId ){
-                $rolePermission = [
-                    'udid' => Str::random(10),
-                    'accessRoleId' => $id,
-                    'actionId' => $actionId,
-                ];
-                RolePermission::create($rolePermission);
+                $udid = Str::random(10);
+                $accessRoleId = $id;
+                $actionId = $actionId;
+                DB::select('CALL createRolePermission("' . $udid . '","' . $accessRoleId . '","' . $actionId . '")'); 
             }
-            
             return response()->json(['message' =>"Created Successfully"]);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
