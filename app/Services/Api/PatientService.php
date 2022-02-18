@@ -684,7 +684,7 @@ class PatientService
             $data = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
             PatientInventory::where('udid', $inventoryId)->update($data);
             $patient = PatientInventory::where('udid', $inventoryId)->first();
-            $patientData = Patient::where('uid', $id)->first();
+            $patientData = Patient::where('udid', $id)->first();
             $inventory = Inventory::where('id', $patient->inventoryId)->first();
             $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
             $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
@@ -741,7 +741,7 @@ class PatientService
                 ];
                 PatientTimeLine::create($timeLine);
                 $result = DB::select(
-                    "CALL patientVitalList('" . $id . "','" . $request->type . "')"
+                    "CALL patientVitalList('" . $patientData->id . "','" . $request->type . "')"
                 );
             }
             $userdata = fractal()->collection($result)->transformWith(new PatientVitalTransformer())->toArray();
