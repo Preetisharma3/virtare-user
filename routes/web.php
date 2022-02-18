@@ -52,15 +52,16 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('patient/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
     $router->get('patient/device', 'Api\v1\PatientController@listPatientDevice');
     $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
-    $router->get('patient/vital/{vitalType}','Api\v1\PatientController@latest');
+    $router->get('patient/vital/{vitalType}', 'Api\v1\PatientController@latest');
+    $router->get('patient/timeLine', 'Api\v1\PatientController@listPatientTimeline');
     $router->post('patient/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
     $router->get('patient/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
     $router->put('patient/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
     $router->delete('patient/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
 
-// appointment Routes
+    // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
-    
+
     // appointment Routes
     $router->get('appointment', 'Api\v1\AppointmentController@appointmentList');
     $router->post('appointment', 'Api\v1\AppointmentController@addAppointment');
@@ -86,9 +87,14 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('task', 'Api\v1\TaskController@listTask');
     $router->get('task/priority', 'Api\v1\TaskController@priorityTask');
     $router->get('task/status', 'Api\v1\TaskController@statusTask');
+
+    $router->get('task/staff','Api\v1\TaskController@taskPerStaff');
+    $router->get('task/category','Api\v1\TaskController@taskPerCategory');
+
     $router->put('task/{id}','Api\v1\TaskController@updateTask');
     $router->delete('task/{id}','Api\v1\TaskController@deleteTask');
     $router->get('task/{id}','Api\v1\TaskController@taskById');
+    
 
     // Dashboard Routes
     $router->get('patient/chart', 'Api\v1\TimelineController@patientTotal');
@@ -161,6 +167,10 @@ $router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientControlle
 $router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevice');
 $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
 $router->get('patient/{id}/device', 'Api\v1\PatientController@listPatientDevice');
+$router->post('patient/{id}/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
+$router->get('patient/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
+$router->put('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
+$router->delete('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
 $router->get('patient/{id}/timeLine', 'Api\v1\PatientController@listPatientTimeline');
 
 
@@ -239,12 +249,12 @@ $router->get('provider', 'Api\v1\ProviderController@index');
 
 $router->post('role', 'Api\v1\RolePermissionController@createRole');
 $router->get('roleList', 'Api\v1\RolePermissionController@roleList');
-$router->get('role/{id}', 'Api\v1\RolePermissionController@editRole');
+$router->get('role/{id}', 'Api\v1\RolePermissionController@listingRole');
 $router->put('role/{id}', 'Api\v1\RolePermissionController@updateRole');
 $router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
 $router->post('rolePermission/{id}', 'Api\v1\RolePermissionController@createRolePermission');
 $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
-$router->get('rolePermissionList', 'Api\v1\RolePermissionController@rolePermissionList');
+$router->get('rolePermission', 'Api\v1\RolePermissionController@rolePermissionList');
 
 $router->get('role', 'Api\v1\AccessRoleController@index');
 $router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
@@ -257,4 +267,3 @@ $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@dele
 
 $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
 $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
-

@@ -41,4 +41,12 @@ class TaskController extends Controller
     { 
         return (new TaskService)->deleteTask($id);
     }
+
+    public function taskPerStaff(){
+        return (new TaskService)->taskPerStaff();
+    }
+
+    public function taskPerCategory(){
+        return (new TaskService)->taskPerCategory();
+    }
 }

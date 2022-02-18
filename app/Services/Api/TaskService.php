@@ -10,8 +10,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Task\TaskTransformer;
-use App\Transformers\Task\TaskStatusTransformer;
-use App\Transformers\Task\TaskPriorityTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
 
 class TaskService
@@ -25,6 +23,7 @@ class TaskService
             'description' => $request->description,
             'startDate' => date("Y-m-d H:i:s", $request->startDate),
             'dueDate' => date("Y-m-d H:i:s", $request->dueDate),
+
             'taskTypeId' => 69,
             'priorityId' => $request->priority,
             'taskStatusId' => $request->taskStatus,
@@ -57,10 +56,19 @@ class TaskService
        return $data;
     }
 
-    public function listTask()
+ 
+         
+
+    public function listTask($request)
     {
-        $data = Task::all();
-        return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
+        if ($request->latest) {
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->first();
+            return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
+        } else {
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->get();
+            return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
+        }
+
     }
 
     // Task List According to priorities
@@ -75,7 +83,9 @@ class TaskService
     // Task List According to statuses
     public function statusTask($request)
     {
+
         $tasks = DB::select(
+
             'CALL taskStatusCount()',
         );
         $total = DB::select(
@@ -125,4 +135,19 @@ class TaskService
         $data = Task::where('id', $id)->first();
         return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
     }
+
+    public function taskPerStaff(){
+        $tasks = DB::select(
+            'CALL taskPerStaff()',
+        );
+        return fractal()->item($tasks)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+    }
+
+    public function taskPerCategory(){
+        $tasks = DB::select(
+            'CALL taskPerCategory()',
+        );
+        return fractal()->item($tasks)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+    }
+
 }

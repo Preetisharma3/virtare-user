@@ -17,7 +17,6 @@ use App\Transformers\Appointment\AppointmentDataTransformer;
 use App\Transformers\Appointment\AppointmentListTransformer;
 use App\Transformers\Appointment\AppointmentSearchTransformer;
 use Exception;
-use Symfony\Component\HttpKernel\DataCollector\TimeDataCollector;
 
 class AppointmentService
 {
@@ -50,7 +49,7 @@ class AppointmentService
             $patientData = Patient::where('id', $data['patientId'])->first();
             $staffData = Staff::where('id', $data['staffId'])->first();
             $timeLine = [
-                'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for'.' '. $patientData->firstName.' '. $patientData->lastName.' '.'Added with'.' '.$staffData->firstName.' '. $staffData->lastName, 'type' => 1,
+                'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for' . ' ' . $patientData->firstName . ' ' . $patientData->lastName . ' ' . 'Added with' . ' ' . $staffData->firstName . ' ' . $staffData->lastName, 'type' => 1,
                 'createdBy' => 1, 'udid' => Str::uuid()->toString()
             ];
             PatientTimeLine::create($timeLine);
@@ -58,21 +57,24 @@ class AppointmentService
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
-       
     }
 
     public function appointmentList($request)
     {
         try {
-            $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::today()]])->get();
-            $results = Helper::dateGroup($data, 'startDateTime');
-            return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
+            if ($request->latest) {
+                $patientId=Patient::where('udid',$request->id)->first();
+                $data = Appointment::where([['patientId', $patientId->id], ['startDateTime', '>=', Carbon::today()]])->latest()->first();
+                return fractal()->item($data)->transformWith(new AppointmentDataTransformer())->toArray();
+            } else {
+                $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::today()]])->get();
+                $results = Helper::dateGroup($data, 'startDateTime');
+                return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
+            }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
-
-
 
     public function newAppointments()
     {
@@ -89,8 +91,8 @@ class AppointmentService
         try {
             if (auth()->user()->patient) {
                 $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', auth()->user()->patient->id], ['startDateTime', Carbon::today()]])->get();
-            } elseif(auth()->user()->staff) {
-                $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['staffId', auth()->user()->staff->id],['startDateTime', Carbon::today()]])->get();
+            } elseif (auth()->user()->staff) {
+                $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['staffId', auth()->user()->staff->id], ['startDateTime', Carbon::today()]])->get();
             }
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
         } catch (Exception $e) {
@@ -101,13 +103,12 @@ class AppointmentService
     public function appointmentSearch($request)
     {
         try {
-            
             $fromDate = time();
             $toDate = '';
             if (!empty($request->toDate)) {
                 $toDate = date("Y-m-d H:i:s", $request->toDate);
             }
-            if(!empty($request->fromDate)){
+            if (!empty($request->fromDate)) {
                 $fromDate = date("Y-m-d H:i:s", $request->fromDate);
             }
             $data = DB::select(
