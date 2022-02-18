@@ -172,10 +172,12 @@ $router->get('patient/{id}/condition[/{conditionId}]', 'Api\v1\PatientController
 $router->post('staff', 'Api\v1\StaffController@addStaff');
 $router->get('staff', 'Api\v1\StaffController@listStaff');
 $router->put('staff/{id}', 'Api\v1\StaffController@updateStaff');
+
 $router->post('patient/{id}/referals', 'Api\v1\PatientController@createPatientReferals');
 $router->put('patient/{id}/referals/{referalsId}', 'Api\v1\PatientController@updatePatientReferals');
 $router->get('patient/{id}/referals[/{referalsId}]', 'Api\v1\PatientController@listPatientReferals');
 $router->delete('patient/{id}/referals/{referalsId}', 'Api\v1\PatientController@deletePatientReferals');
+
 $router->post('patient/{id}/physician', 'Api\v1\PatientController@createPatientPhysician');
 $router->put('patient/{id}/physician/{physicianId}', 'Api\v1\PatientController@updatePatientPhysician');
 $router->get('patient/{id}/physician[/{physicianId}]', 'Api\v1\PatientController@listPatientPhysician');
@@ -305,3 +307,6 @@ $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
 
 // FAQ Routes
 $router->get('faq', 'Api\v1\FaqController');
+
+//freeswitch
+$router->get('freeswitch/directory', 'Freeswitch\DirectoryController@directory');
