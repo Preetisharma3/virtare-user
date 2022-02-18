@@ -3,8 +3,10 @@
 namespace App\Models\Patient;
 ;
 
-use App\Models\GlobalCode\GlobalCode;
+use App\Models\Note\Note;
 use App\Models\Staff\Staff;
+use App\Models\Patient\Patient;
+use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,5 +42,11 @@ class PatientTimeLog extends Model
    {
        return $this->hasOne(Patient::class,'id','patientId');
    }
+
+   public function notes()
+   {
+       return $this->hasOne(Note::class,'referenceId');
+   }
+
     
 }

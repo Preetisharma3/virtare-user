@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use App\Models\Patient\PatientStaff;
 use Illuminate\Support\Facades\Auth;
-use App\Transformers\Note\NoteTransformer;
 use App\Transformers\Patient\PatientStaffTransformer;
 
 class PatientStaffService
@@ -40,7 +39,6 @@ class PatientStaffService
                 return fractal()->item($getPatient)->transformWith(new PatientStaffTransformer())->toArray();
             } else {
                 $patientId = PatientStaff::where('udid', $id)->with('patient', 'staff')->first();
-                dd($patientId);
                 $getPatient = PatientStaff::where('patientId', $patientId->id)->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientStaffTransformer())->toArray();
             }

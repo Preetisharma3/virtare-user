@@ -30,8 +30,8 @@ class PatientTimeLogTransformer extends TransformerAbstract
             'staff'=>$data->performed->firstName,
             'staffId'=>$data->performedId,
             'flag'=>'#FFB21E',
-            'note'=>(!empty($data->patient->notes->note))?$data->patient->notes->note:'',
-            'noteId'=>(!empty($data->patient->notes->id))?$data->patient->notes->id:''
+            'note'=>(!empty($data->notes->note))?$data->notes->note:'',
+            'noteId'=>(!empty($data->notes->id))?$data->notes->id:''
 		];
 	}
 }

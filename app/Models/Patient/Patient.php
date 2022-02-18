@@ -121,7 +121,7 @@ class Patient extends Model
 
     public function notes()
    {
-       return $this->belongsTo(Note::class,'id');
+       return $this->hasMany(Note::class,'referenceId');
    }
 
 

@@ -17,10 +17,10 @@ class TimeLogService
     public function timeLogList($request, $id)
     {
         if (!$id) {
-            $data = PatientTimeLog::with('category', 'logged', 'performed')->get();
+            $data = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->get();
             return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->toArray();
         } else {
-            $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed')->first();
+            $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed', 'notes')->first();
             return fractal()->item($data)->transformWith(new PatientTimeLogTransformer())->toArray();
         }
     }
@@ -34,9 +34,9 @@ class TimeLogService
                 $noteData = ['note' => $request->input('note'), 'updatedBy' => Auth::id()];
                 Note::where('id', $request->input('noteId'))->update($noteData);
             } else {
-                $patientId=Patient::where('id',$request->input('patient'))->first();
+                $time = PatientTimeLog::where('udid', $id)->first();
                 $noteData = [
-                    'note' => $request->input('note'), 'entityType' => 'patient', 'referenceId' => $patientId->userId,
+                    'note' => $request->input('note'), 'entityType' => $request->input('entityType'), 'referenceId' => $time->id,
                     'udid' => Str::uuid()->toString(), 'createdBy' => Auth::id(), 'categoryId' => 155, 'type' => 153
                 ];
                 Note::create($noteData);
