@@ -829,11 +829,6 @@ class PatientService
             $data = DB::select(
                 'CALL getPatientVital("' . $patientIdx . '","' . $fromDate . '","' . $toDate . '","' . $type . '")',
             );
-            // $flag= DB::select(
-            //     'CALL getPatientVital("' . '' . '","' . $patientIdx . '")',
-            // );
-            // $result=array_merge($data,$flag);
-            // dd($result);
             return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);

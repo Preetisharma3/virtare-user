@@ -16,6 +16,7 @@ class PatientDeviceTransformer extends TransformerAbstract
 		return [
 			'id'=>$data->id,
 			'otherDevice' => $data->otherDevice->name,
+			'otherDeviceId' => $data->otherDevice->id,
             'status'=>$data->status,
             'patientId'=>$data->patientId
 		];

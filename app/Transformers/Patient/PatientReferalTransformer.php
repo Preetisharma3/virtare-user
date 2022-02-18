@@ -18,6 +18,7 @@ class PatientReferalTransformer extends TransformerAbstract
 			'patientId'=>$data->patientId,
             'name'=>$data->name,
             'designation'=>$data->designation->name,
+            'designationId'=>$data->designation->id,
             'phoneNumber'=>$data->phoneNumber,
             'email'=>$data->email,
             'fax'=>$data->fax,
