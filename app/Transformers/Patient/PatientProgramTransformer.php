@@ -16,6 +16,7 @@ class PatientProgramTransformer extends TransformerAbstract
 		return [
 			'id'=>$data->id,
             'program'=>$data->program->type->name,
+            'programId'=>$data->program->type->id,
             'patientId'=>$data->patientId,
             'onboardingScheduleDate'=>strtotime($data->onboardingScheduleDate),
             'dischargeDate'=>strtotime($data->dischargeDate),

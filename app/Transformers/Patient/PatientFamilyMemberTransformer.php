@@ -20,6 +20,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'patientId'=>(!empty($data->patientId))?$data->patientId:'',
 				'fullName' =>(!empty($data->fullName))?ucfirst($data->fullName):'',
 				'gender' => (!empty($data->gender->name))?$data->gender->name:'',
+				'genderId' => (!empty($data->gender->id))?$data->gender->id:'',
 				'phoneNumber' => (!empty($data->phoneNumber))?$data->phoneNumber:'',
 				'contactType' => (!empty($data->contactTypeId))?$data->contactTypeId:'',
 				'contactTime' => (!empty($data->contactTime->name))?$data->contactTime->name:'',
