@@ -24,7 +24,7 @@ class AddPatientStaffIdProcedureAppointmentList extends Migration
                 globalCodes.name as duration,
                 appointments.startDateTime as startTime,
                 staffs.udid as staff_id,
-                patient.udid as patient_id,
+                patients.udid as patient_id,
                 CONCAT(staffs.firstName,' ',staffs.lastName) as staff,
                 CONCAT(patients.firstName,' ',patients.lastName) as patient
                 FROM    appointments 
@@ -42,7 +42,7 @@ class AddPatientStaffIdProcedureAppointmentList extends Migration
                 globalCodes.name as duration,
                 appointments.startDateTime as startTime,
                 staffs.udid as staff_id,
-                patient.udid as patient_id,
+                patients.udid as patient_id,
                 CONCAT(staffs.firstName,' ',staffs.lastName) as staff,
                 CONCAT(patients.firstName,' ',patients.lastName) as patient
                 FROM    appointments 
