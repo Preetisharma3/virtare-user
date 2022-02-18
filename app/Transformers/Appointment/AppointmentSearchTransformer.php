@@ -21,7 +21,9 @@ class AppointmentSearchTransformer extends TransformerAbstract
             "appointmentType"=>$data->appointmentType,
             'time'=>strtotime($data->startDate),
             "patient"=>$data->patient,
-            "staff"=>$data->staff 
+            "staff"=>$data->staff ,
+            "patient_id"=>$data->patient_id,
+            "staff_id"=>$data->staff_id 
         ];
     }
 }
