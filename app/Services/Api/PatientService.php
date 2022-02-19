@@ -829,11 +829,6 @@ class PatientService
             $data = DB::select(
                 'CALL getPatientVital("' . $patientIdx . '","' . $fromDate . '","' . $toDate . '","' . $type . '")',
             );
-            // $flag= DB::select(
-            //     'CALL getPatientVital("' . '' . '","' . $patientIdx . '")',
-            // );
-            // $result=array_merge($data,$flag);
-            // dd($result);
             return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
@@ -1215,7 +1210,7 @@ class PatientService
                 $data = PatientTimeLog::create($input);
                 if ($request->input('note')) {
                     $note = [
-                        'note' => $request->input('note'), 'entityType' => $request->input('entityType'), 'referenceId' => $data->id, 'udid' => Str::uuid()->toString(), 'createdBy' => Auth::id()
+                        'note' => $request->input('note'), 'entityType' => 'auditlog', 'referenceId' => $data->id, 'udid' => Str::uuid()->toString(), 'createdBy' => Auth::id()
                     ];
                     Note::create($note);
                 }
