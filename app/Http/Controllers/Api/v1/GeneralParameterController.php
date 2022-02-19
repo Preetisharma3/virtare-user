@@ -9,9 +9,9 @@ use App\Services\Api\GeneralParameterService;
 class GeneralParameterController extends Controller
 {
     
-    public function addGeneralParameterGroup(Request $request)
+    public function addGeneralParameterGroup(Request $request,$id=null)
     {
-        return (new GeneralParameterService)->generalParameterAdd($request);
+        return (new GeneralParameterService)->generalParameterAdd($request,$id);
     }
 
     public function listGeneralParameterGroup(Request $request,$id=null)
@@ -19,10 +19,11 @@ class GeneralParameterController extends Controller
         return (new GeneralParameterService)->generalParameterGroupList($request,$id);
     }
 
-    public function updateGeneralParameter(Request $request,$id)
+    public function listGeneralParameter(Request $request,$id)
     {
-        return (new GeneralParameterService)->generalParameterUpdate($request,$id);
+        return (new GeneralParameterService)->generalParameterList($request,$id);
     }
+
 
     public function deleteGeneralParameterGroup(Request $request,$id)
     {

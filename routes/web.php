@@ -41,7 +41,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
     $router->get('team', 'Api\v1\TeamController@all');
     //$router->get('team/{patientId}/{type}[/{id}]', 'Api\v1\TeamController@team');
-    
+
 
     // patient Routes
     $router->post('patient/{id}/family', 'Api\v1\PatientController@createFamily');
@@ -61,8 +61,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('{entityType}/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
     $router->put('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
     $router->delete('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
-    $router->get('patient/{id}/goal[/{goalId}]','Api\v1\PatientGoalController@index');
-    $router->get('patient/goal[/{goalId}]','Api\v1\PatientGoalController@index');
+    $router->get('patient/{id}/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
+    $router->get('patient/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
 
     $router->post('patient/{id}/flag', 'Api\v1\PatientController@addPatientFlag');
     $router->get('patient/{id}/flag[/{flagId}]', 'Api\v1\PatientController@listPatientFlag');
@@ -94,7 +94,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
     $router->get('appointment[/{id}]', 'Api\v1\AppointmentController@appointmentList');
     $router->post('appointment[/{id}]', 'Api\v1\AppointmentController@addAppointment');
-    
+
     // Communication Routes
     $router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');
     $router->get('communication/search', 'Api\v1\CommunicationController@searchCommunication');
@@ -152,6 +152,14 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('requestCall', 'Api\v1\ContactController@index');
     $router->post('contactText', 'Api\v1\ContactController@contactMessage');
     $router->post('contactMail', 'Api\v1\ContactController@contactEmail');
+
+    // General Parameter Routes
+    $router->post('generalParameterGroup', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
+    $router->get('generalParameterGroup[/{id}]', 'Api\v1\GeneralParameterController@listGeneralParameterGroup');
+    $router->get('generalParameter/{id}', 'Api\v1\GeneralParameterController@listGeneralParameter');
+    $router->put('generalParameter/{id}', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
+    $router->delete('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameterGroup');
+    $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameter');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -300,11 +308,6 @@ $router->get('rolePermissionList', 'Api\v1\RolePermissionController@rolePermissi
 $router->get('role', 'Api\v1\AccessRoleController@index');
 $router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
 
-$router->post('generalParameterGroup', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
-$router->get('generalParameterGroup[/{id}]', 'Api\v1\GeneralParameterController@listGeneralParameterGroup');
-$router->put('generalParameter/{id}', 'Api\v1\GeneralParameterController@updateGeneralParameter');
-$router->delete('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameterGroup');
-$router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameter');
 
 $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
 $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');

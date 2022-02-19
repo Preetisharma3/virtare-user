@@ -2,8 +2,10 @@
 
 namespace App\Models\GeneralParameter;
 
+use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\GeneralParameter\GeneralParameter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class GeneralParameterGroup extends Model
@@ -14,13 +16,17 @@ class GeneralParameterGroup extends Model
     const CREATED_AT = 'createdAt';
     const UPDATED_AT = 'updatedAt';
     public $timestamps = false;
-	protected $table = 'generalParameterGroups';
+    protected $table = 'generalParameterGroups';
     use HasFactory;
-	protected $guarded = [];
+    protected $guarded = [];
 
     public function generalParameter()
     {
-        return $this->hasMany(GeneralParameter::class,'generalParameterGroupId');
+        return $this->hasMany(GeneralParameter::class, 'generalParameterGroupId');
     }
-    
+
+    public function deviceType()
+    {
+        return $this->hasOne(GlobalCode::class, 'id','deviceTypeId');
+    }
 }

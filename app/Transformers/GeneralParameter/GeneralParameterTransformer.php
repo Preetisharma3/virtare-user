@@ -13,7 +13,7 @@ class GeneralParameterTransformer extends TransformerAbstract
     public function transform($data): array
     { 
         return [
-            'id' => $data->id,
+            'id' => $data->udid,
             'udid'=>$data->udid,
             'generalParameterGroup'=>$data->generalParameterGroup->name,
             'type'=>$data->vitalFieldId,
