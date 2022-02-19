@@ -28,6 +28,7 @@ class UserTransformer extends TransformerAbstract
 		return [
 			'id'=>$user->id,
 			'uuid' => $user->udid,
+			'sip_id' => "UR".$user->id,
 			'roleId' => $this->showData ? fractal()->item($user->roles)->transformWith(new RoleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
 			'name'=>@$user->staff->firstName.' '.@$user->staff->lastName?@$user->staff->firstName.' '.@$user->staff->lastName:@$user->familyMember->fullName,
 			'username'=>$user->email,
