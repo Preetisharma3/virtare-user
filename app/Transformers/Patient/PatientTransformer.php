@@ -20,7 +20,7 @@ class PatientTransformer extends TransformerAbstract
         return [
             'id' => $data->id,
             'udid'=>$data->udid,
-            'sip_id' => "UR".$data->user->id,
+            'sipId' => "UR".$data->user->id,
             'firstName' => ucfirst($data->firstName),
             'name' => ucfirst($data->firstName),
             'middleName' => (!empty($data->middleName))?ucfirst($data->middleName):'',

@@ -27,7 +27,7 @@ class UserPatientTransformer extends TransformerAbstract
 		return [
 			'id'=>$user->id,
 			'uuid' => $user->udid,
-			'sip_id' => "UR".$user->id,
+			'sipId' => "UR".$user->id,
 			'initials' => ucfirst($user->patient->initials()),
 			'name'=>ucfirst($user->patient->firstName).' '.ucfirst($user->patient->lastName),
 			'username' => $user->email,
