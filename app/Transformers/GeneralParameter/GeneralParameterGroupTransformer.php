@@ -13,7 +13,7 @@ class GeneralParameterGroupTransformer extends TransformerAbstract
     public function transform($data): array
     { 
         return [
-            'id' => $data->udid,
+            'id' => $data->id,
             'udid'=>$data->udid,
             'name'=>$data->name,
             'deviceType'=>(!empty($data->deviceType->name))?$data->deviceType->name:'',

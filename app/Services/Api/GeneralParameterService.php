@@ -32,12 +32,12 @@ class GeneralParameterService
                 $userdata = fractal()->item($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
                 $message = ['message' => 'created successfully'];
             }else{
-                $groupData=GeneralParameterGroup::where('udid',$id)->first();
+                $groupData=GeneralParameterGroup::where('id',$id)->first();
                 $input = [
                     'vitalFieldId' =>$request->input('type'),'highLimit' => $request->input('highLimit'), 'lowLimit' => $request->input('lowLimit'), 'updatedBy' => Auth::id()
                 ];
-                GeneralParameter::where('udid', $id)->update($input);
-                $data = GeneralParameter::where('udid', $id)->with('generalParameterGroup')->first();
+                GeneralParameter::where('id', $id)->update($input);
+                $data = GeneralParameter::where('id', $id)->with('generalParameterGroup')->first();
                 $userdata = fractal()->item($data)->transformWith(new GeneralParameterTransformer())->toArray();
                 $message = ['message' => 'updated successfully'];
             }
@@ -58,7 +58,7 @@ class GeneralParameterService
                 $data = GeneralParameterGroup::with('generalParameter')->orderBy('createdAt','DESC')->get();
                 return fractal()->collection($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
             } else {
-                $data = GeneralParameterGroup::where('udid', $id)->with('generalParameter')->first();
+                $data = GeneralParameterGroup::where('id', $id)->with('generalParameter')->first();
                 return fractal()->item($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
             }
             DB::commit();
@@ -76,7 +76,7 @@ class GeneralParameterService
                 $data = GeneralParameter::with('generalParameterGroup')->orderBy('createdAt','DESC')->get();
                 return fractal()->collection($data)->transformWith(new GeneralParameterTransformer())->toArray();
             } else {
-                $data = GeneralParameter::where('udid', $id)->with('generalParameterGroup')->first();
+                $data = GeneralParameter::where('id', $id)->with('generalParameterGroup')->first();
                 return fractal()->item($data)->transformWith(new GeneralParameterTransformer())->toArray();
             }
             DB::commit();
@@ -94,9 +94,9 @@ class GeneralParameterService
             $input = [
                 'deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0
             ];
-            GeneralParameterGroup::where('udid', $id)->update($input);
+            GeneralParameterGroup::where('id', $id)->update($input);
             GeneralParameter::where('generalParameterGroupId', $id)->update($input);
-            GeneralParameterGroup::where('udid', $id)->delete();
+            GeneralParameterGroup::where('id', $id)->delete();
             GeneralParameter::where('generalParameterGroupId', $id)->delete();
             DB::commit();
             return response()->json(['message' => 'deleted successfully']);
@@ -113,8 +113,8 @@ class GeneralParameterService
             $input = [
                 'deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0
             ];
-            GeneralParameter::where('udid', $id)->update($input);
-            GeneralParameter::where('udid', $id)->delete();
+            GeneralParameter::where('id', $id)->update($input);
+            GeneralParameter::where('id', $id)->delete();
             DB::commit();
             return response()->json(['message' => 'deleted successfully']);
         } catch (Exception $e) {
