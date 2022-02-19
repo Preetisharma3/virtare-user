@@ -17,9 +17,9 @@ use App\Http\Requests\Patient\PatientMedicalRoutineRequest;
 class PatientController extends Controller
 {
 
-  public function createPatient(PatientRequest $request, $id = null, $familyMemberId = null, $emergencyId = null)
+  public function createPatient(PatientRequest $request, $id)
   {
-    return (new PatientService)->patientCreate($request, $id, $familyMemberId, $emergencyId);
+    return (new PatientService)->patientCreate($request, $id);
   }
 
   public function updatePatient(Request $request, $id)

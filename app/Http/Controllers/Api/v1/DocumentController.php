@@ -8,9 +8,9 @@ use App\Services\Api\DocumentService;
 
 class DocumentController extends Controller
 {
-    public function createDocument(Request $request, $entity, $id, $documentId = null, $tagId = null)
+    public function createDocument(Request $request, $entity, $id, $documentId = null)
     {
-        return (new DocumentService)->documentCreate($request, $entity, $id, $documentId, $tagId);
+        return (new DocumentService)->documentCreate($request, $entity, $id, $documentId);
     }
 
     public function listDocument(Request $request, $entity, $id, $documentId = null)

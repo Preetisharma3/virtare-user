@@ -54,7 +54,7 @@ class PatientService
     public function patientCreate($request, $id)
     {
         DB::beginTransaction();
-        // try {
+        try {
         if (!$id) {
             // Added Ptient details in User Table
             $user = [
@@ -246,10 +246,10 @@ class PatientService
         DB::commit();
         $endData = array_merge($message, $userdata);
         return $endData;
-        // } catch (Exception $e) {
-        //     DB::rollback();
-        //     return response()->json(['message' => $e->getMessage()],  500);
-        // }
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
     }
 
     // Patient Listing

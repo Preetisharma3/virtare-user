@@ -68,8 +68,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/{id}/flag[/{flagId}]', 'Api\v1\PatientController@listPatientFlag');
     $router->get('patient/{id}/task', 'Api\v1\TaskController@listTask');
     $router->post('patient/{id}/staff', 'Api\v1\PatientController@latest');
-    $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
-    $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
 
     $router->post('patient', 'Api\v1\PatientController@createPatient');
     $router->put('patient/{id}', 'Api\v1\PatientController@updatePatient');
@@ -202,13 +200,13 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Note Routes
     $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
-    $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
+    $router->get('{entity}/{id}/notes[/{noteId}]', 'Api\v1\NoteController@listNote');
 
 
     // Document Routes
 
     $router->post('{entity}/{id}/document', 'Api\v1\DocumentController@createDocument');
-    $router->put('{entity}/{id}/document/{documentId}/tag[/{tagId}]', 'Api\v1\DocumentController@createDocument');
+    $router->put('{entity}/{id}/document/{documentId}', 'Api\v1\DocumentController@createDocument');
     $router->get('{entity}/{id}/document[/{documentId}]', 'Api\v1\DocumentController@listDocument');
     $router->delete('{entity}/{id}/document/{documentId}', 'Api\v1\DocumentController@deleteDocument');
 });
