@@ -46,7 +46,7 @@ class CommunicationService
             'createdBy' => $data->createdBy,
             'udid' => $udid
         ]);
-        return response()->json(['message' => 'created Successfully'], 200);
+        return response()->json(['message' => trans('message.created_succesfully')], 200);
     }
 
     // get Communication
@@ -78,14 +78,14 @@ class CommunicationService
     //Call Status API's
     public function callStatus()
     {
-        $data = CommunicationCallRecord::with('status')->select('callStatusId', DB::raw('count(*) as count'))->groupBy('callStatusId')->get();
+        $data = CommunicationCallRecord::with('status')->select('callStatusId', DB::raw('count(*) as count'))->groupBy('callStatusId')->orderBy('createdAt','DESC')->get();
         return fractal()->collection($data)->transformWith(new CallStatusTransformer())->toArray();
     }
 
     // calls Per Staff API
     public function callCountPerStaff()
     {
-        $data = CommunicationCallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->get();
+        $data = CommunicationCallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->orderBy('createdAt','DESC')->get();
         return fractal()->collection($data)->transformWith(new CallRecordTransformer())->toArray();
     }
 

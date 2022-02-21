@@ -3,7 +3,6 @@
 namespace App\Services\Api;
 
 use Exception;
-use App\Helper;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Conversation\Conversation;
@@ -24,21 +23,21 @@ class ConversationService
             if (!$id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
-                    return response()->json(['message' => 'unauthorized']);
+                    return response()->json(['message' => trans('messages.unauthorized')],401);
                 } else {
                     $senderId = auth()->user()->id;
                 }
             } elseif ($id == auth()->user()->id) {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthorized')],401);
             } elseif ($id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
                     $senderId = $id;
                 } else {
-                    return response()->json(['message' => 'unauthorized']);
+                    return response()->json(['message' => trans('messages.unauthorized')],401);
                 }
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthorized')],401);
             }
             $receiverId = $request->receiverId;
             $data = Conversation::where([['senderId', $senderId], ['receiverId', $receiverId]])->exists();
@@ -82,21 +81,21 @@ class ConversationService
             if (!$id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
-                    return response()->json(['message' => 'unauthorized']);
+                    return response()->json(['message' => trans('messages.unauthorized')],401);
                 } else {
                     $senderId = auth()->user()->id;
                 }
             } elseif ($id == auth()->user()->id) {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthorized')],401);
             } elseif ($id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
                     $senderId = $id;
                 } else {
-                    return response()->json(['message' => 'unauthorized']);
+                    return response()->json(['message' => trans('messages.unauthorized')],401);
                 }
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthorized')],401);
             }
             $input = array(
                 'conversationId' => $request->conversationId,
@@ -120,28 +119,28 @@ class ConversationService
             if (!$id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
-                    return response()->json(['message' => 'unauthorized']);
+                    return response()->json(['message' => trans('messages.unauthorized')],401);
                 } else {
                     $senderId = auth()->user()->id;
                 }
             } elseif ($id == auth()->user()->id) {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthorized')],401);
             } elseif ($id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
                     $senderId = $id;
                 } else {
-                    return response()->json(['message' => 'unauthorized']);
+                    return response()->json(['message' => trans('messages.unauthorized')],401);
                 }
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthorized')],401);
             }
             $conversationId = $request->conversationId;
             $input = Conversation::where([['receiverId', $senderId], ['id', $conversationId]])->orWhere([['senderId', $senderId], ['id', $conversationId]])->exists();
             if ($input == true) {
                 $data = ConversationMessage::where([['conversationId', $conversationId]])->get();
             } else {
-                return response()->json(['message' => trans('messages.unauthenticated')]);
+                return response()->json(['message' => trans('messages.unauthenticated')],401);
             }
             return fractal()->collection($data)->transformWith(new ConversationTransformer)->toArray();
         } catch (Exception $e) {
@@ -156,21 +155,21 @@ class ConversationService
             if (!$id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
-                    return response()->json(['message' => 'unauthorized']);
+                    return response()->json(['message' => trans('messages.unauthorized')],401);
                 } else {
                     $senderId = auth()->user()->id;
                 }
             } elseif ($id == auth()->user()->id) {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthorized')],401);
             } elseif ($id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
                     $senderId = $id;
                 } else {
-                    return response()->json(['message' => 'unauthorized']);
+                    return response()->json(['message' => trans('messages.unauthorized')],401);
                 }
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthorized')],401);
             }
             $conversationId = $request->conversationId;
             $data = ConversationMessage::where([['isRead', 0], ['conversationId', $conversationId], ['senderId', "!=", $senderId]]);

@@ -17,7 +17,10 @@ return [
     'not_found' => "Data not found.",
     'vital_add' => "Vitals Added Successfully.",
     'created_succesfully' => "Created Successfully.",
+    'updated_succesfully' => "Updated Successfully.",
+    'deleted_succesfully' => "Deleted Successfully.",
     'date_exist'=> "la fecha ya existe",
     'notification'=>"Notification sent successfully.",
-    'udid'=>"This device is already Mapped,Please Contact Admin."
+    'udid'=>"This device is already Mapped,Please Contact Admin.",
+    'unauthorized'=>'unauthorized',
 ];
