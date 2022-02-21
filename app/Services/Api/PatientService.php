@@ -844,7 +844,7 @@ class PatientService
     public function latest($request, $id, $vitalType)
     {
         if (!$id) {
-            $patientId = auth()->user()->id;
+            $patientId = auth()->user()->patient->id;
         } elseif ($id) {
             $patientId = $id;
         } else {
