@@ -11,9 +11,10 @@ class DirectoryController extends Controller
     public function directory(Request $request)
     {
         $users = User::all();
+        header('Content-Type: text/xml');
         ?><document type="freeswitch/xml">
                 <section name="directory">
-                    <domain name="example.com">
+                    <domain name="51.81.193.156">
                         <params>
                             <param name="dial-string" value="{presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(${dialed_user}@${dialed_domain})}"/>
                         </params>
@@ -36,7 +37,7 @@ class DirectoryController extends Controller
                                         </params>
                                         <variables>
                                             <variable name="accountcode" value="UR<?php echo $user->id; ?>"/>
-                                            <variable name="user_context" value="public"/>
+                                            <variable name="user_context" value="default"/>
                                             <variable name="effective_caller_id_name" value="<?php echo $name; ?>"/>
                                             <variable name="effective_caller_id_number" value="UR<?php echo $user->id; ?>"/>
                                             <variable name="outbound_caller_id_name" value="<?php echo $name; ?>"/>
