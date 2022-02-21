@@ -8,7 +8,7 @@ use App\Services\Api\NotificationService;
 
 class NotificationController extends Controller
 {
-    public function getNotification(){
-        return (new NotificationService)->getNotification();
+    public function notif(){
+        return (new NotificationService)->notif();
     }
 }
