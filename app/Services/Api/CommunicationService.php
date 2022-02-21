@@ -3,10 +3,12 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Helper;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Communication\Communication;
 use App\Models\Communication\CommunicationMessage;
 use App\Models\Communication\CommunicationCallRecord;
@@ -24,14 +26,15 @@ class CommunicationService
     public function addCommunication($request)
     {
         $udid = Str::uuid()->toString();
+        $reference=Helper::entity($request->input('entityType'),$request->input('referenceId'));
         $input = [
             'from' => $request->from,
-            'referenceId' => $request->referenceId,
+            'referenceId' => $reference,
             'messageTypeId' => $request->messageTypeId,
             'subject' => $request->subject,
             'priorityId' => $request->priorityId,
             'messageCategoryId' => $request->messageCategoryId,
-            'createdBy' => 1,
+            'createdBy' => Auth::id(),
             'entityType' => $request->entityType,
             'udid' => $udid
         ];
