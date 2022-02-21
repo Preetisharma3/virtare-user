@@ -34,7 +34,11 @@ class ConversationListTransformer extends TransformerAbstract
     {
         return [
             'id' => $data->id,
+            'senderId'=>$data->senderId,
+            'senderProfilePhoto'=>$data->sender->profilePhoto,
             'sender' => $data->sender->patient ? $data->sender->patient->firstName . ' ' . $data->sender->patient->lastName : $data->sender->staff->firstName . ' ' . $data->sender->staff->lastName,
+            'receiverId'=>$data->receiverId,
+            'receiverProfilePhoto'=>$data->receiver->profilePhoto,
             'receiver' => $data->receiver->patient ? $data->receiver->patient->firstName . ' ' . $data->receiver->patient->lastName : $data->receiver->staff->firstName . ' ' . $data->receiver->staff->lastName,
             'message' => (!empty($data->conversationMessages->last()->message)) ? $data->conversationMessages->last()->message : '',
             'type' => (!empty($data->conversationMessages->last()->type)) ? $data->conversationMessages->last()->type : '',
