@@ -777,16 +777,17 @@ class PatientService
                         'createdBy' => 1, 'udid' => Str::uuid()->toString()
                     ];
                     PatientTimeLine::create($timeLine);
-                    $result = DB::select(
-                        "CALL patientVitalList('" . $patientId . "','" . $request->type . "')"
-                    );
+                    // $result = DB::select(
+                    //     "CALL patientVitalList('" . $patientId . "','" . $request->type . "')"
+                    // );
+
                 }
             }
-            $userdata = fractal()->collection($result)->transformWith(new PatientVitalTransformer())->toArray();
+            // $userdata = fractal()->collection($result)->transformWith(new PatientVitalTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             DB::commit();
-            $endData = array_merge($message, $userdata);
-            return $endData;
+            // $endData = array_merge($message, $userdata);
+            return $message;
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -850,7 +851,14 @@ class PatientService
 
     public function latest($request, $id, $vitalType)
     {
-        $data = PatientVital::where('patientId', auth()->user()->patient->id)->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
+        if (!$id) {
+            $patientId = auth()->user()->id;
+        } elseif ($id) {
+            $patientId = $id;
+        } else {
+            return response()->json(['message' => 'unauthorized']);
+        }
+        $data = PatientVital::where('patientId', $patientId)->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
         return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
     }
 
