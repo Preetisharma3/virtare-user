@@ -32,7 +32,7 @@ class TaskService
         ];
         $task = Task::create($input);
         $taskCategoryId = $request->taskCategory;
-        foreach($taskCategoryId as $taskCategory){
+        foreach ($taskCategoryId as $taskCategory) {
             $taskCate = [
                 'taskId' => $task->id,
                 'taskcategoryId' => $taskCategory,
@@ -40,34 +40,33 @@ class TaskService
             TaskCategory::create($taskCate);
         }
         $assignedToId = $request->assignedTo;
-        foreach($assignedToId as $assignedTo){
-            $assigne=Helper::entity($request->input('entity'),$assignedTo);
+        foreach ($assignedToId as $assignedTo) {
+            $assigne = Helper::entity($request->input('entity'), $assignedTo);
             $assigned = [
-                'taskId'=>$task->id,
-                'assignedTo'=>$assigne,
-                'entityType'=>$request->entityType
+                'taskId' => $task->id,
+                'assignedTo' => $assigne,
+                'entityType' => $request->entityType
             ];
             TaskAssignedTo::create($assigned);
         }
-        
-        $taskData =  Task::where('id',$task->id)->with('assignedTo.assigned','assignedTo.patient')->first();
-       $message = ['message' => 'Created Successfully'];
-       $result =fractal()->item($taskData)->transformWith(new TaskTransformer())->toArray();
 
-       $data = array_merge($message,$result);
-       return $data;
+        $taskData =  Task::where('id', $task->id)->with('assignedTo.assigned', 'assignedTo.patient')->first();
+        $message = ['message' => 'Created Successfully'];
+        $result = fractal()->item($taskData)->transformWith(new TaskTransformer())->toArray();
+
+        $data = array_merge($message, $result);
+        return $data;
     }
-         
+
     public function listTask($request)
     {
         if ($request->latest) {
             $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->first();
             return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
         } else {
-            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->get();
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->orderBy('createdAt','DESC')->get();
             return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
         }
-
     }
 
     // Task List According to priorities
@@ -121,12 +120,12 @@ class TaskService
     {
         try {
             $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
-            Task::where('id',$id)->update($data);
-            Task::where('id',$id)->delete();
+            Task::where('id', $id)->update($data);
+            Task::where('id', $id)->delete();
             return response()->json(['message' => 'delete successfully']);
-       } catch (Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
-       }
+        }
     }
 
     public function taskById($id)
@@ -135,18 +134,19 @@ class TaskService
         return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
     }
 
-    public function taskPerStaff(){
+    public function taskPerStaff()
+    {
         $tasks = DB::select(
             'CALL taskPerStaff()',
         );
         return fractal()->item($tasks)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
-    public function taskPerCategory(){
+    public function taskPerCategory()
+    {
         $tasks = DB::select(
             'CALL taskPerCategory()',
         );
         return fractal()->item($tasks)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
-
 }

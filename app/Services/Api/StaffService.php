@@ -15,10 +15,8 @@ use App\Transformers\Staff\StaffRoleTransformer;
 use App\Models\StaffAvailability\StaffAvailability;
 use App\Transformers\Staff\StaffContactTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
-use App\Transformers\Provider\ProviderTransformer;
 use App\Transformers\Staff\StaffAvailabilityTransformer;
 use App\Transformers\Staff\StaffProviderTransformer;
-use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 
 class StaffService

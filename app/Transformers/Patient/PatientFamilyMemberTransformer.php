@@ -25,9 +25,8 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'contactTimeId' => (!empty($data->contactTimeId))?$data->contactTimeId:'',
 				'relation' => (!empty($data->relation->name))?$data->relation->name:'',
 				'relationId' => (!empty($data->relationId))?$data->relationId:'',
-				'email' => (!empty($data->user->email))?$data->user->email:'',
 				'isPrimary'=>(!empty($data->isPrimary))?$data->isPrimary:'',
-				'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
+				'user' =>$data->user? fractal()->item($data->user)->transformWith(new UserTransformer())->toArray():[],
 			];
 	}
 }
