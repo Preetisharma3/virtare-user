@@ -158,7 +158,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('generalParameterGroup', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
     $router->get('generalParameterGroup[/{id}]', 'Api\v1\GeneralParameterController@listGeneralParameterGroup');
     $router->get('generalParameter/{id}', 'Api\v1\GeneralParameterController@listGeneralParameter');
-    $router->put('generalParameter/{id}', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
+    $router->put('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
     $router->delete('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameterGroup');
     $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameter');
 });
