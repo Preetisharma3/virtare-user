@@ -20,7 +20,7 @@ class Helper
     {
         $res =  $data->sortBy($date_field)->groupBy(function ($result, $key) use ($date_field) {
             $dt = Carbon::parse($result->{$date_field});
-            return $result->{$date_field};
+            return $dt->format('Y-m-d');
         });
         $patientData = array();
         foreach ($res as $key => $value) {
