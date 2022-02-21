@@ -6,6 +6,7 @@ use Exception;
 use App\Helper;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
@@ -62,8 +63,9 @@ class CommunicationService
     public function addCallRecord($request)
     {
         $udid = Str::uuid()->toString();
+        $patient=Patient::where('udid',$request->patient)->first();
         $input = [
-            'patientId' => $request->patient,
+            'patientId' => $patient->id,
             'staffId' => $request->staff,
             'callStatusId' => $request->callStatus,
             'createdBy' => 1,

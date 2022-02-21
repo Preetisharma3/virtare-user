@@ -3,11 +3,12 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Helper;
 use App\Models\Task\Task;
-use App\Models\Task\TaskAssignedTo;
-use App\Models\Task\TaskCategory;
 use Illuminate\Support\Str;
+use App\Models\Task\TaskCategory;
 use Illuminate\Support\Facades\DB;
+use App\Models\Task\TaskAssignedTo;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Task\TaskTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
@@ -40,9 +41,10 @@ class TaskService
         }
         $assignedToId = $request->assignedTo;
         foreach($assignedToId as $assignedTo){
+            $assigne=Helper::entity($request->input('entity'),$assignedTo);
             $assigned = [
                 'taskId'=>$task->id,
-                'assignedTo'=>$assignedTo,
+                'assignedTo'=>$assigne,
                 'entityType'=>$request->entityType
             ];
             TaskAssignedTo::create($assigned);

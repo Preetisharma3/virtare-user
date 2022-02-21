@@ -40,16 +40,18 @@ class AppointmentService
                     'patientId' => $patientData->id,
                 ];
             } elseif (auth()->user()->staff) {
+                $patient = Patient::where('udid', $request->input('patientId'))->first();
                 $entity = [
                     'staffId' => $request->staffId,
-                    'patientId' => $request->patientId,
+                    'patientId' => $patient->id,
                 ];
             } elseif ($id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
+                    $patient = Patient::where('udid', $id)->first();
                     $entity = [
                         'staffId' => $request->staffId,
-                        'patientId' => $id,
+                        'patientId' => $patient->id,
                     ];
                 } else {
                     return response()->json(['message' => 'unauthorized']);
