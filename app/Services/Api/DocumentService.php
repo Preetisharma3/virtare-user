@@ -36,7 +36,7 @@ class DocumentService
                 }
                 $getDocument = Document::where([['id', $document->id], ['entityType', $entity]])->with('documentType', 'tag.tags')->first();
                 $userdata = fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = response()->json(['message' => trans('messages.created_succesfully')]);
             } else {
                 $input = [
                     'name' => $request->input('name'), 'filePath' => $request->input('document'), 'documentTypeId' => $request->input('type'),
@@ -57,7 +57,7 @@ class DocumentService
                 }
                 $getDocument = Document::where([['udid', $documentId], ['entityType', $entity]])->with('documentType', 'tag.tags')->first();
                 $userdata = fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $message = response()->json(['message' => trans('messages.updated_succesfully')]);
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
@@ -104,7 +104,7 @@ class DocumentService
                 tag::where('documentId', $documentId)->delete();
             }
             DB::commit();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deleted_succesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);

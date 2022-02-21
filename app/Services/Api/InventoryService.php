@@ -68,7 +68,7 @@ class InventoryService
     {
         try {
             DB::select('CALL deleteInventory(' . $id . ')');
-            return response()->json(['message' => 'deleted successfully'], 200);
+            return response()->json(['message' => trans('messages.deleted_succesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

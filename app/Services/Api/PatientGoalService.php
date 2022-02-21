@@ -12,13 +12,13 @@ class PatientGoalService
     {
         if ($id) {
             if ($goalId) {
-                $patient=Patient::where('udid',$id)->first();
+                $patient = Patient::where('udid', $id)->first();
                 $data = PatientGoal::where([['patientId', $patient->id], ['id', $goalId]])->get();
             } elseif (!$goalId) {
-                $patient=Patient::where('udid',$id)->first();
+                $patient = Patient::where('udid', $id)->first();
                 $data = PatientGoal::where('patientId', $patient->id)->get();
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthorized')],401);
             }
         } elseif (!$id) {
             if ($goalId) {
@@ -26,7 +26,7 @@ class PatientGoalService
             } elseif (!$goalId) {
                 $data = PatientGoal::where('patientId', auth()->user()->patient->id)->get();
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthorized')],401);
             }
         }
         return  fractal()->collection($data)->transformWith(new PatientGoalTransformer())->toArray();

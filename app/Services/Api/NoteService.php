@@ -23,7 +23,7 @@ class NoteService
                 'note' => $request->input('note'), 'udid' => Str::uuid()->toString(), 'createdBy' => $userId, 'referenceId' => $referenceId, 'entityType' => $request->input('entityType')
             ];
             Note::create($input);
-            return response()->json(['message' => 'Created Successfully'], 200);
+            return response()->json(['message' => trans('messages.created_succesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

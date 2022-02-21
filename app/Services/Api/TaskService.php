@@ -49,11 +49,9 @@ class TaskService
             ];
             TaskAssignedTo::create($assigned);
         }
-
         $taskData =  Task::where('id', $task->id)->with('assignedTo.assigned', 'assignedTo.patient')->first();
-        $message = ['message' => 'Created Successfully'];
+        $message = ['message' => trans('messages.created_succesfully')];
         $result = fractal()->item($taskData)->transformWith(new TaskTransformer())->toArray();
-
         $data = array_merge($message, $result);
         return $data;
     }
@@ -81,9 +79,7 @@ class TaskService
     // Task List According to statuses
     public function statusTask($request)
     {
-
         $tasks = DB::select(
-
             'CALL taskStatusCount()',
         );
         $total = DB::select(
@@ -92,7 +88,6 @@ class TaskService
         $data = array_merge($tasks, $total);
         return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
-
 
     public function updateTask($request, $id)
     {
@@ -107,7 +102,7 @@ class TaskService
             $input
         );
         $updatedData = Task::where('id', $id)->first();
-        $message = ['message' => 'Updated Successfully'];
+        $message = ['message' => trans('messages.updated_succesfully')];
         $result =  fractal()->item($updatedData)->transformWith(new TaskTransformer())->toArray();
         $endData = array_merge(
             $message,
@@ -122,7 +117,7 @@ class TaskService
             $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
             Task::where('id', $id)->update($data);
             Task::where('id', $id)->delete();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deleted_succesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }

@@ -18,9 +18,9 @@ return [
     'updated_succesfully' => "Actualizado con éxito",
     'created_succesfully' => "Creado con éxito.",
     'deleted_succesfully' => "Borrado exitosamente.",
-    'date_exist'=> " la fecha ya existe",
-    'notification'=>"notificación enviado con éxito.",
-    'udid'=>"Este dispositivo ya está asignado, comuníquese con el administrador",
-    'unauthorized'=>'No autorizada',
-
+    'date_exist' => " la fecha ya existe",
+    'notification' => "notificación enviado con éxito.",
+    'udid' => "Este dispositivo ya está asignado, comuníquese con el administrador",
+    'unauthorized' => 'No autorizada',
+    'error' => 'Algo salió mal',
 ];

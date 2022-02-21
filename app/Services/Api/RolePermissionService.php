@@ -3,18 +3,13 @@
 namespace App\Services\Api;
 
 use App\Models\Module\Module;
-use App\Models\Permission\Permission;
 use App\Models\Role\AccessRole;
-use App\Models\Role\Role;
 use App\Models\RolePermission\RolePermission;
 use Exception;
 use Illuminate\Support\Str;
-use App\Transformers\Role\RoleTransformer;
 use App\Transformers\Role\RoleListTransformer;
 use App\Transformers\RolePermission\PermissionTransformer;
 use App\Transformers\RolePermission\RolePermissionTransformer;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class RolePermissionService
 {
@@ -40,11 +35,10 @@ class RolePermissionService
             ];
             AccessRole::create($role);
             $role = AccessRole::where('udid', $role['udid'])->first();
-            $message = ["message"=>"created Successfully"];
+            $message = ["message"=>trans('messages.created_succesfully')];            
             $resp =  fractal()->item($role)->transformWith(new RoleListTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
-
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
            } 
@@ -66,7 +60,7 @@ class RolePermissionService
             ];
         AccessRole::where('id',$id)->update($role);
             $roleData = AccessRole::where('id', $id)->first();
-            $message = ["message"=>"Updated Successfully"];
+            $message = ["message"=>trans('messages.updated_succesfully')];
             $resp =  fractal()->item($roleData)->transformWith(new RoleListTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
@@ -79,8 +73,7 @@ class RolePermissionService
     {
         try{
             AccessRole::where('id',$id)->delete();
-
-            return response()->json(['message' =>"Deleted Successfully"]);
+            return response()->json(['message' => trans('messages.deleted_succesfully')], 200);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);   
         }
@@ -99,8 +92,7 @@ class RolePermissionService
                 ];
                 RolePermission::create($rolePermission);
             }
-            
-            return response()->json(['message' =>"Created Successfully"]);
+            return response()->json(['message' =>trans('messages.created_succesfully')]);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
            }
@@ -118,7 +110,6 @@ class RolePermissionService
             return response()->json(['message' => $e->getMessage()], 500);    
         }
     }
-
 
     public function permissionsList($request)
     {

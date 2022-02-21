@@ -56,7 +56,7 @@ class GlobalCodeService
                })->where('id', $global->id)->with('globalCodeCategory')->first();
                $category = GlobalCodeCategory::where('id', $data->globalCodeCategoryId);
                $userdata = fractal()->item($data)->transformWith(new GlobalCodeTransformer())->toArray();
-               $message = ['message' => 'created successfully'];
+               $message = ['message' => trans('messages.created_succesfully')];
                $endData = array_merge($message, $userdata);
                return $endData;
           } catch (Exception $e) {
@@ -68,16 +68,16 @@ class GlobalCodeService
      {
           try {
                $globalCode = array();
-               if(!empty($request->globalcodecategory)){
+               if (!empty($request->globalcodecategory)) {
                     $globalCode['globalCodeCategoryId'] = $request->globalcodecategory;
                }
-               if(!empty($request->name)){
+               if (!empty($request->name)) {
                     $globalCode['name'] = $request->name;
                }
-               if(!empty($request->description)){
+               if (!empty($request->description)) {
                     $globalCode['description'] = $request->description;
                }
-               if(isset($request->status)){
+               if (isset($request->status)) {
                     $globalCode['isActive'] = $request->status;
                }
                $globalCode['updatedBy'] = 1;

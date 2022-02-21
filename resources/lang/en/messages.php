@@ -19,8 +19,9 @@ return [
     'created_succesfully' => "Created Successfully.",
     'updated_succesfully' => "Updated Successfully.",
     'deleted_succesfully' => "Deleted Successfully.",
-    'date_exist'=> "la fecha ya existe",
-    'notification'=>"Notification sent successfully.",
-    'udid'=>"This device is already Mapped,Please Contact Admin.",
-    'unauthorized'=>'unauthorized',
+    'date_exist' => "la fecha ya existe",
+    'notification' => "Notification sent successfully.",
+    'udid' => "This device is already Mapped,Please Contact Admin.",
+    'unauthorized' => 'unauthorized',
+    'error' => 'Something Went Wrong',
 ];
