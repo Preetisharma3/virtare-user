@@ -778,8 +778,8 @@ class PatientService
             $userdata = fractal()->item($result)->transformWith(new PatientVitalTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             DB::commit();
-            $endData = array_merge($message, $userdata);
-            return $endData;
+            // $endData = array_merge($message, $userdata);
+            return $message;
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -843,7 +843,14 @@ class PatientService
 
     public function latest($request, $id, $vitalType)
     {
-        $data = PatientVital::where('patientId', auth()->user()->patient->id)->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
+        if (!$id) {
+            $patientId = auth()->user()->id;
+        } elseif ($id) {
+            $patientId = $id;
+        } else {
+            return response()->json(['message' => 'unauthorized']);
+        }
+        $data = PatientVital::where('patientId', $patientId)->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
         return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
     }
 
