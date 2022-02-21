@@ -300,12 +300,12 @@ $router->get('provider', 'Api\v1\ProviderController@index');
 
 $router->post('role', 'Api\v1\RolePermissionController@createRole');
 $router->get('roleList', 'Api\v1\RolePermissionController@roleList');
-$router->get('role/{id}', 'Api\v1\RolePermissionController@editRole');
+$router->get('role/{id}', 'Api\v1\RolePermissionController@listingRole');
 $router->put('role/{id}', 'Api\v1\RolePermissionController@updateRole');
 $router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
 $router->post('rolePermission/{id}', 'Api\v1\RolePermissionController@createRolePermission');
 $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
-$router->get('rolePermissionList', 'Api\v1\RolePermissionController@rolePermissionList');
+$router->get('rolePermission', 'Api\v1\RolePermissionController@rolePermissionList');
 
 $router->get('role', 'Api\v1\AccessRoleController@index');
 $router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
@@ -314,9 +314,17 @@ $router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
 $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
 $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
 
+<<<<<<< HEAD
+$router->get('cptCode','Api\v1\CPTCodeController@listCPTCode');
+$router->post('cptCode','Api\v1\CPTCodeController@createCPTCode');
+$router->put('cptCode/{id}','Api\v1\CPTCodeController@updateCPTCode');
+$router->delete('cptCode/{id}','Api\v1\CPTCodeController@deleteCPTCode');
+$router->get('duration/{id}','Api\v1\CPTCodeController@duration');
+=======
 // FAQ Routes
 $router->get('faq', 'Api\v1\FaqController');
 
 //freeswitch
 $router->get('freeswitch/directory', 'Freeswitch\DirectoryController@directory');
 $router->get('freeswitch/dialplan', 'Freeswitch\DirectoryController@dialplan');
+>>>>>>> main

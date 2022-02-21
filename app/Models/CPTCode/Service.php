@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Models\Role;
+namespace App\Models\CPTCode;
 
-use App\Models\GlobalCode\GlobalCode;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class AccessRole extends Model
+class Service extends Model
 {
     use SoftDeletes;
     protected $softDelete = true;
@@ -15,12 +14,7 @@ class AccessRole extends Model
     const CREATED_AT = 'createdAt';
     const UPDATED_AT = 'updatedAt';
     public $timestamps = false;
-    protected $table = 'accessRoles';
+    protected $table = 'services';
     use HasFactory;
     protected $guarded = [];
-
-    public function roleType()
-    {
-        return $this->belongsTo(GlobalCode::class,'roleTypeId');
-    }
 }
