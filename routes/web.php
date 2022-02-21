@@ -38,8 +38,11 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
      // team Routes
-     $router->get('team[/{patientId}]', 'Api\v1\TeamController@all');
-     $router->get('team/{patientId}/{type}[/{id}]', 'Api\v1\TeamController@team');
+     $router->get('team', 'Api\v1\TeamController@all');
+     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
+    //  FamilyMember Login Team Routes
+     $router->get('patient/{patientId}/team', 'Api\v1\TeamController@all');
+     $router->get('patient/{patientId}/team/{type}[/{id}]', 'Api\v1\TeamController@team');
 
     // patient Routes
     $router->post('patient/{id}/family', 'Api\v1\PatientController@createFamily');
