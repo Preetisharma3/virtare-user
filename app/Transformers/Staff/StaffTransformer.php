@@ -47,7 +47,8 @@ class StaffTransformer extends TransformerAbstract
     {
         return [
             'id' => $data->id,
-            'user_id' => $data->userId,
+            'user_id' => $data->userId,            
+            'sipId' => "UR".$data->userId,
             'title' => $data->firstName,
             'summary' => $data->summary ? $data->summary : '',
             'fullName' => $data->firstName . ' ' . $data->lastName,

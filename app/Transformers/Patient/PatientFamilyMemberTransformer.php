@@ -16,6 +16,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 	{
 			return [
 				'id' => $data->id,
+				'sipId' => "UR".$data->userId,
 				'udid' => $data->udid,
 				'patientId'=>(!empty($data->patientId))?$data->patientId:'',
 				'fullName' =>(!empty($data->fullName))?ucfirst($data->fullName):'',

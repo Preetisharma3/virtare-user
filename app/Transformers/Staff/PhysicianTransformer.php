@@ -45,6 +45,7 @@ class PhysicianTransformer extends TransformerAbstract
             'id'=>$data->id,
 			'patientId'=>$data->patientId,
             "user_id"=>$data->userId,
+            'sipId' => "UR".$data->userId,
             'uuid'=>$data->udid,
             'fullName'=>$data->name,
             'designation'=>$data->designation->name,
