@@ -55,8 +55,7 @@ class DirectoryController extends Controller
         <?php
         $contents = ob_get_contents();
         ob_end_clean();
-        //file_put_contents("directory.xml", $contents);
-        $directory = fopen("directory.xml", "w") or die("Unable to open file!");
+        $directory = fopen(base_path()."/public/directory.xml", "w") or die("Unable to open file!");
         fwrite($directory, $contents);
         fclose($directory);
     }
