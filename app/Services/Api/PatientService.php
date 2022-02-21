@@ -724,25 +724,21 @@ class PatientService
                         'deviceInfo' => json_encode($vital['deviceInfo'])
                     ];
                     $vitalData = PatientVital::create($data);
-
+                     $result= PatientVital::where('id',$vitalData->id)->first();
                     $patientData = Patient::where('id', $id)->first();
                     $vitalField = VitalField::where('id', $vitalData->vitalFieldId)->first();
                     $type = VitalTypeField::where('vitalFieldId', $vitalData->vitalFieldId)->first();
                     $device = GlobalCode::where('id', $type->vitalTypeId)->first();
-
                     $timeLine = [
                         'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' . $patientData->lastName . ' ' .
                             'Submit' . ' ' . $device->name . ' ' . 'Reading' . ' ' . $vitalField->name . ' ' . $vital['value'], 'type' => 1,
                         'createdBy' => 1, 'udid' => Str::uuid()->toString()
                     ];
                     PatientTimeLine::create($timeLine);
-                    $result = DB::select(
-                        "CALL patientVitalList('" . $id . "','" . $request->type . "')"
-                    );
+                    
                 }
             } else {
-                $userId = Auth::id();
-                $patient = Patient::where('userId', $userId)->first();
+                $patient = Patient::where('userId', Auth::user()->id)->first();
                 $patientId = $patient->id;
                 $udid = Str::uuid()->toString();
                 $dataVital = $request->vital;
@@ -752,7 +748,7 @@ class PatientService
                     $endTime = Helper::date($vital['endTime']);
                     $data = [
                         'vitalFieldId' => $vital['type'],
-                        'createdBy' => $userId,
+                        'createdBy' => Auth::id(),
                         'udid' => $udid,
                         'value' => $vital['value'],
                         'patientId' => $patientId,
@@ -766,23 +762,20 @@ class PatientService
                         'deviceInfo' => json_encode($vital['deviceInfo'])
                     ];
                     $vitalData = PatientVital::create($data);
+                    $result= PatientVital::where('id',$vitalData->id)->first();
                     $patientData = Patient::where('id', $patientId)->first();
                     $vitalField = VitalField::where('id', $vitalData->vitalFieldId)->first();
                     $type = VitalTypeField::where('vitalFieldId', $vitalData->vitalFieldId)->first();
                     $device = GlobalCode::where('id', $type->vitalTypeId)->first();
-
                     $timeLine = [
                         'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' . $patientData->lastName . ' ' .
                             'Submit' . ' ' . $device->name . ' ' . 'Reading' . ' ' . $vitalField->name . ',' . $vital['value'], 'type' => 1,
                         'createdBy' => 1, 'udid' => Str::uuid()->toString()
                     ];
                     PatientTimeLine::create($timeLine);
-                    $result = DB::select(
-                        "CALL patientVitalList('" . $patientId . "','" . $request->type . "')"
-                    );
                 }
             }
-            $userdata = fractal()->collection($result)->transformWith(new PatientVitalTransformer())->toArray();
+            $userdata = fractal()->item($result)->transformWith(new PatientVitalTransformer())->toArray();
             $message = ['message' => 'created successfully'];
             DB::commit();
             $endData = array_merge($message, $userdata);
