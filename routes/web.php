@@ -37,11 +37,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('logout', 'Api\v1\AuthController@logout');
     // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
-    // team Routes
-    $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
-    $router->get('team', 'Api\v1\TeamController@all');
-    //$router->get('team/{patientId}/{type}[/{id}]', 'Api\v1\TeamController@team');
-
+     // team Routes
+     $router->get('team', 'Api\v1\TeamController@all');
+     $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
+    //  FamilyMember Login Team Routes
+     $router->get('patient/{patientId}/team', 'Api\v1\TeamController@all');
+     $router->get('patient/{patientId}/team/{type}[/{id}]', 'Api\v1\TeamController@team');
 
     // patient Routes
     $router->post('patient/{id}/family', 'Api\v1\PatientController@createFamily');
@@ -51,6 +52,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('patient/vital', 'Api\v1\PatientController@createPatientVital');
     $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
     $router->get('patient/{id}/vital', 'Api\v1\PatientController@listPatientVital');
+    $router->get('patient/{id}/vital/{vitalType}', 'Api\v1\PatientController@latest');
     $router->get('patient/vital/{vitalType}', 'Api\v1\PatientController@latest');
     $router->get('patient/vitalNew', 'Api\v1\PatientController@vital');
     $router->post('patient/device', 'Api\v1\PatientController@createPatientDevice');
@@ -157,7 +159,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('generalParameterGroup', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
     $router->get('generalParameterGroup[/{id}]', 'Api\v1\GeneralParameterController@listGeneralParameterGroup');
     $router->get('generalParameter/{id}', 'Api\v1\GeneralParameterController@listGeneralParameter');
-    $router->put('generalParameter/{id}', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
+    $router->put('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
     $router->delete('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameterGroup');
     $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameter');
 });

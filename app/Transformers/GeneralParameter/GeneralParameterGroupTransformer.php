@@ -16,6 +16,7 @@ class GeneralParameterGroupTransformer extends TransformerAbstract
             'id'=>$data->udid,
             'name'=>$data->name,
             'deviceType'=>(!empty($data->deviceType->name))?$data->deviceType->name:'',
+            'deviceTypeId'=>(!empty($data->deviceType->id))?$data->deviceType->id:'',
             'generalparameter'=> fractal()->collection($data->generalParameter)->transformWith(new GeneralParameterTransformer())->toArray()
         ];
     }

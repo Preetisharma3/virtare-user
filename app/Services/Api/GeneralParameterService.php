@@ -18,7 +18,7 @@ class GeneralParameterService
         DB::beginTransaction();
         try {
             if (!$id) {
-                $group = ['name' => $request->input('generalParameterGroup'), 'deviceTypeId' => $request->input('deviceType'), 'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()];
+                $group = ['name' => $request->input('generalParameterGroup'), 'deviceTypeId' => $request->input('deviceTypeId'), 'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()];
                 $groupData = GeneralParameterGroup::create($group);
                 $parameter = $request->input('parameter');
                 foreach ($parameter as $value) {
@@ -32,12 +32,17 @@ class GeneralParameterService
                 $userdata = fractal()->item($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
                 $message = ['message' => 'created successfully'];
             } else {
-                $input = [
-                    'vitalFieldId' => $request->input('type'), 'highLimit' => $request->input('highLimit'), 'lowLimit' => $request->input('lowLimit'), 'updatedBy' => Auth::id()
-                ];
-                GeneralParameter::where('udid', $id)->update($input);
-                $data = GeneralParameter::where('udid', $id)->with('generalParameterGroup')->first();
-                $userdata = fractal()->item($data)->transformWith(new GeneralParameterTransformer())->toArray();
+                $group = ['name' => $request->input('generalParameterGroup'), 'updatedBy' => Auth::id(),];
+                $groupData = GeneralParameterGroup::where('udid', $id)->update($group);
+                $parameter = $request->input('parameter');
+                foreach ($parameter as $value) {
+                    $input = [
+                        'highLimit' => $value['highLimit'], 'lowLimit' => $value['lowLimit'], 'updatedBy' => Auth::id()
+                    ];
+                    GeneralParameter::where('udid', $value['parameterId'])->update($input);
+                }
+                $data = GeneralParameterGroup::where('udid', $id)->with('generalParameter')->first();
+                $userdata = fractal()->item($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
                 $message = ['message' => 'updated successfully'];
             }
             DB::commit();
