@@ -267,3 +267,9 @@ $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@dele
 
 $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
 $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
+
+$router->get('cptCode','Api\v1\CPTCodeController@listCPTCode');
+$router->post('cptCode','Api\v1\CPTCodeController@createCPTCode');
+$router->put('cptCode/{id}','Api\v1\CPTCodeController@updateCPTCode');
+$router->delete('cptCode/{id}','Api\v1\CPTCodeController@deleteCPTCode');
+$router->get('duration/{id}','Api\v1\CPTCodeController@duration');
