@@ -11,7 +11,8 @@ class DirectoryController extends Controller
     public function directory(Request $request)
     {
         $users = User::all();
-        header('Content-Type: text/xml');
+        ob_start();
+       
         ?><document type="freeswitch/xml">
                 <section name="directory">
                     <domain name="51.81.193.156">
@@ -52,6 +53,12 @@ class DirectoryController extends Controller
                 </section>
             </document>
         <?php
+        $contents = ob_get_contents();
+        ob_end_clean();
+        //file_put_contents("directory.xml", $contents);
+        $directory = fopen("directory.xml", "w") or die("Unable to open file!");
+        fwrite($directory, $contents);
+        fclose($directory);
     }
     public function dialplan(Request $request)
     {
