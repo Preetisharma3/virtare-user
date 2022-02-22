@@ -33,6 +33,7 @@ class RoleTransformer extends TransformerAbstract
     public function transform($data)
     {
         return[ 
+            'id'=>$data->udid,
             'name' => $data->roles,
         ];
       

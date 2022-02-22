@@ -33,8 +33,7 @@ class StaffContactTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id' => $data->id,
-            'udid'=>$data->udid,
+            'id' => $data->udid,
             'firstName' => $data->firstName,
             'lastName' => $data->lastName,
             'email' => $data->email,
