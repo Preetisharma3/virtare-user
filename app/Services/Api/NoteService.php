@@ -16,11 +16,11 @@ class NoteService
     {
         try {
             $userId = Auth::id();
-            $patientId=Patient::where('udid',$id)->first();
+            $referenceId = Helper::entity($entity, $id);
             $dataConvert = Helper::date($request->input('date'));
             $input = [
                 'date' => $dataConvert, 'categoryId' => $request->input('category'), 'type' => $request->input('type'),
-                'note' => $request->input('note'), 'udid' => Str::uuid()->toString(), 'createdBy' => $userId, 'referenceId' => $patientId->userId, 'entityType' => $request->input('entityType')
+                'note' => $request->input('note'), 'udid' => Str::uuid()->toString(), 'createdBy' => $userId, 'referenceId' => $referenceId, 'entityType' => $request->input('entityType')
             ];
             Note::create($input);
             return response()->json(['message' => 'Created Successfully'], 200);
@@ -32,11 +32,11 @@ class NoteService
     public function noteList($request, $entity, $id)
     {
         try {
-            if($request->latest){
-                $patientId=Patient::where('udid',$id)->first();
-                $note = Note::where([['referenceId',$patientId->userId],['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->first();
+            if ($request->latest) {
+                $referenceId = Helper::entity($entity, $id);
+                $note = Note::where([['referenceId', $referenceId], ['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->first();
                 return fractal()->item($note)->transformWith(new NoteTransformer())->toArray();
-            }else{
+            } else {
                 $note = Note::where('entityType', $entity)->with('typeName', 'category')->get();
                 return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
             }
@@ -44,5 +44,4 @@ class NoteService
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
-
 }
