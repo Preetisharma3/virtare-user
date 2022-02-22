@@ -115,10 +115,9 @@ class GeneralParameterService
         DB::beginTransaction();
         try {
             $input = [
-                'deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0
+                'updatedBy' => Auth::id(), 'highLimit' => '', 'lowLimit' => ''
             ];
             GeneralParameter::where('udid', $id)->update($input);
-            GeneralParameter::where('udid', $id)->delete();
             DB::commit();
             return response()->json(['message' => 'deleted successfully']);
         } catch (Exception $e) {
