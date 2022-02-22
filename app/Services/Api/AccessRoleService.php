@@ -31,7 +31,6 @@ class AccessRoleService
                 $staff = Helper::entity('staff', $staffId);
             } else {
                 $staffId = auth()->user()->staff->id;
-                $staff = Helper::entity('staff', $staffId);
             }
             $data = DB::select(
                 'CALL assignedRolesList(' . $staff . ')',
