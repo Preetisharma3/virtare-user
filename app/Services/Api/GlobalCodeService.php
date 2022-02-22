@@ -30,7 +30,7 @@ class GlobalCodeService
      {
           try {
                if (!$id) {
-                    $global = GlobalCode::get();
+                    $global = GlobalCode::where('predefined',0)->get();
                     return fractal()->collection($global)->transformWith(new GlobalCodeTransformer())->toArray();
                } else {
                     $global = GlobalCode::where('id', $id)->first();
@@ -49,7 +49,7 @@ class GlobalCodeService
                     'udid' => Str::uuid()->toString(), 'isActive' => $request->status
                ]);
                $global = GlobalCode::create($merge->only([
-                    'globalCodeCategoryId', 'name', 'description', 'createdBy', 'isActive', 'udid'
+                    'globalCodeCategoryId', 'name', 'description','predefined', 'createdBy', 'isActive', 'udid'
                ]));
                $data = GlobalCode::whereHas('globalCodeCategory', function ($q) use ($global) {
                     $q->where('id', $global->globalCodeCategoryId);
