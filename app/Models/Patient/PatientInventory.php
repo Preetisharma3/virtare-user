@@ -2,9 +2,11 @@
 
 namespace App\Models\Patient;
 
-use App\Models\GlobalCode\GlobalCode;
 use App\Models\Patient\Patient;
 use App\Models\Inventory\Inventory;
+use App\Models\Patient\PatientGoal;
+use App\Models\GlobalCode\GlobalCode;
+use App\Models\Vital\VitalTypeField;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +25,7 @@ class PatientInventory extends Model
 
     public function inventory()
     {
-        return $this->belongsTo(Inventory::class,'inventoryId');
+        return $this->belongsTo(Inventory::class, 'inventoryId');
     }
 
     public function deviceTypes()
@@ -35,4 +37,11 @@ class PatientInventory extends Model
     {
         return $this->belongsTo(Patient::class, 'patientId');
     }
+
+    public function patientGoal()
+    {
+        return $this->belongsTo(PatientGoal::class,'vitalFieldId');
+    }
+
+    
 }
