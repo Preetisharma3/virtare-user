@@ -248,6 +248,7 @@ class PatientService
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
+            Helper::updateFreeswitchUser();
             return $endData;
         } catch (Exception $e) {
             DB::rollback();

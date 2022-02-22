@@ -3,6 +3,7 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Helper;
 use App\Models\User\User;
 use App\Models\Staff\Staff;
 use App\Models\Staff\StaffProvider\StaffProvider;
@@ -52,6 +53,7 @@ class StaffService
             $message = ["message" => "created Successfully"];
             $resp =  fractal()->item($staffData)->transformWith(new StaffTransformer())->toArray();
             $endData = array_merge($message, $resp);
+            Helper::updateFreeswitchUser();
             return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
