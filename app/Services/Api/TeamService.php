@@ -32,7 +32,7 @@ class TeamService
                 $data = PatientPhysician::where([['patientId',auth()->user()->patient->id]])->paginate(5);
                 return fractal()->collection($data)->transformWith(new PhysicianTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             } else {
-                $data = PatientPhysician::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->first();
+                $data = PatientPhysician::where([['patientId', auth()->user()->patient->id], ['id', $id]])->first();
                 if (!empty($data)) {
                     return fractal()->item($data)->transformWith(new PhysicianTransformer(true))->toArray();
                 } else {
