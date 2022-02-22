@@ -33,7 +33,7 @@ $router->post('login', 'Api\v1\AuthController@login');
 $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     //Get notifications Routes
-    $router->get('getNotif','Api\v1\NotificationController@notif');
+    $router->get('appointment/notification','Api\v1\NotificationController@appointmentNotification');
 
     // Auth Routes
     $router->get('userProfile', 'Api\v1\UserController@userProfile');

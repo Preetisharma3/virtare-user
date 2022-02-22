@@ -8,7 +8,7 @@ use App\Services\Api\NotificationService;
 
 class NotificationController extends Controller
 {
-    public function notif(Request $request){
-        return (new NotificationService)->notif($request);
+    public function appointmentNotification(Request $request){
+        return (new NotificationService)->appointmentNotification($request);
     }
 }
