@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Transformers\Role;
+namespace App\Transformers\Dummy;
 
+use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
- 
+use App\Transformers\GlobalCode\GlobalCodeTransformer;
 
-class RoleListTransformer extends TransformerAbstract
+
+class DummyTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -30,15 +32,10 @@ class RoleListTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($data)
+    public function transform($data): array
     {
-        return[ 
-            'id' => $data->id,
-            'name' => $data->roles,
-            'roleDescription' => $data->roleDescription,
-            'roleType' =>$data->roleType->name,
-            'status' => $data->isActive,
-        ];
-      
+        return [
+        'id'=> $data->id
+		];
     }
 }

@@ -87,7 +87,8 @@ class PatientService
                         $familyMember = [
                             'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                             'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
-                            'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
+                            'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id, 'vital' => $request->input('vitalAuthorization'),
+                            'message' => $request->input('messageAuthorization'),
                             'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1
                         ];
                         PatientFamilyMember::create($familyMember);
@@ -103,7 +104,8 @@ class PatientService
                             'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                             'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                             'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
-                            'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString()
+                            'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(),'vital' => $request->input('vitalAuthorization'),
+                            'message' => $request->input('messageAuthorization'),
                         ];
                         if (!empty($familyMember)) {
                             PatientFamilyMember::create($familyMember);
@@ -171,7 +173,8 @@ class PatientService
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                         'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
-                        'updatedBy' => Auth::id(),
+                        'updatedBy' => Auth::id(),'vital' => $request->input('vitalAuthorization'),
+                        'message' => $request->input('messageAuthorization'),
                     ];
                     PatientFamilyMember::where('id', $request->familyMemberId)->update($familyMember);
                 } else {
@@ -183,7 +186,8 @@ class PatientService
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                                 'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
-                                'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1
+                                'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1,'vital' => $request->input('vitalAuthorization'),
+                                'message' => $request->input('messageAuthorization'),
                             ];
                             PatientFamilyMember::create($familyMember);
                         } else {
@@ -198,7 +202,8 @@ class PatientService
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                                 'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
-                                'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString()
+                                'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(),'vital' => $request->input('vitalAuthorization'),
+                                'message' => $request->input('messageAuthorization'),
                             ];
                             if (!empty($familyMember)) {
                                 $patientFamily = PatientFamilyMember::create($familyMember);
@@ -724,7 +729,7 @@ class PatientService
                         'deviceInfo' => json_encode($vital['deviceInfo'])
                     ];
                     $vitalData = PatientVital::create($data);
-                     $result= PatientVital::where('id',$vitalData->id)->first();
+                    $result = PatientVital::where('id', $vitalData->id)->first();
                     $patientData = Patient::where('id', $id)->first();
                     $vitalField = VitalField::where('id', $vitalData->vitalFieldId)->first();
                     $type = VitalTypeField::where('vitalFieldId', $vitalData->vitalFieldId)->first();
@@ -735,7 +740,6 @@ class PatientService
                         'createdBy' => 1, 'udid' => Str::uuid()->toString()
                     ];
                     PatientTimeLine::create($timeLine);
-                    
                 }
             } else {
                 $patient = Patient::where('userId', Auth::user()->id)->first();
@@ -762,7 +766,7 @@ class PatientService
                         'deviceInfo' => json_encode($vital['deviceInfo'])
                     ];
                     $vitalData = PatientVital::create($data);
-                    $result= PatientVital::where('id',$vitalData->id)->first();
+                    $result = PatientVital::where('id', $vitalData->id)->first();
                     $patientData = Patient::where('id', $patientId)->first();
                     $vitalField = VitalField::where('id', $vitalData->vitalFieldId)->first();
                     $type = VitalTypeField::where('vitalFieldId', $vitalData->vitalFieldId)->first();

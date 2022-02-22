@@ -46,4 +46,5 @@ class Appointment extends Model
     {
         return $this->belongsTo(GlobalCode::class, 'durationId');
     }
+
 }

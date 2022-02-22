@@ -39,7 +39,7 @@ class ConversationTransformer extends TransformerAbstract
             'message' => $data->message,
             'type' => $data->type,
             'isRead' => $data->isRead,
-            "createdAt"=>$data->createdAt,
+            "createdAt"=>strtotime($data->createdAt),
         ];
     }
 }
