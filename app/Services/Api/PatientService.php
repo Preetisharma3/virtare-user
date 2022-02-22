@@ -88,7 +88,7 @@ class PatientService
                             'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                             'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                             'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id, 'vital' => $request->input('vitalAuthorization'),
-                            'message' => $request->input('messageAuthorization'),
+                            'messages' => $request->input('messageAuthorization'),
                             'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1
                         ];
                         PatientFamilyMember::create($familyMember);
@@ -105,7 +105,7 @@ class PatientService
                             'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                             'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
                             'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(),'vital' => $request->input('vitalAuthorization'),
-                            'message' => $request->input('messageAuthorization'),
+                            'messages' => $request->input('messageAuthorization'),
                         ];
                         if (!empty($familyMember)) {
                             PatientFamilyMember::create($familyMember);
@@ -174,7 +174,7 @@ class PatientService
                         'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
                         'updatedBy' => Auth::id(),'vital' => $request->input('vitalAuthorization'),
-                        'message' => $request->input('messageAuthorization'),
+                        'messages' => $request->input('messageAuthorization'),
                     ];
                     PatientFamilyMember::where('id', $request->familyMemberId)->update($familyMember);
                 } else {
@@ -187,7 +187,7 @@ class PatientService
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                                 'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
                                 'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1,'vital' => $request->input('vitalAuthorization'),
-                                'message' => $request->input('messageAuthorization'),
+                                'messages' => $request->input('messageAuthorization'),
                             ];
                             PatientFamilyMember::create($familyMember);
                         } else {
@@ -203,7 +203,7 @@ class PatientService
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                                 'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
                                 'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(),'vital' => $request->input('vitalAuthorization'),
-                                'message' => $request->input('messageAuthorization'),
+                                'messages' => $request->input('messageAuthorization'),
                             ];
                             if (!empty($familyMember)) {
                                 $patientFamily = PatientFamilyMember::create($familyMember);
