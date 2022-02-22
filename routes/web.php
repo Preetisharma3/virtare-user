@@ -270,12 +270,12 @@ $router->get('screen', 'Api\v1\ScreenController@getScreen');
 
 $router->post('staff/{id}/contact', 'Api\v1\StaffController@addStaffContact');
 $router->get('staff/{id}/contact', 'Api\v1\StaffController@listStaffContact');
-$router->put('staff/{id}/contact/{staffId}', 'Api\v1\StaffController@updateStaffContact');
-$router->delete('staff/{id}/contact/{staffId}', 'Api\v1\StaffController@deleteStaffContact');
+$router->put('staff/{staffId}/contact/{id}', 'Api\v1\StaffController@updateStaffContact');
+$router->delete('staff/{staffId}/contact/{id}', 'Api\v1\StaffController@deleteStaffContact');
 $router->post('staff/{id}/availability', 'Api\v1\StaffController@addStaffAvailability');
 $router->get('staff/{id}/availability', 'Api\v1\StaffController@listStaffAvailability');
-$router->put('staff/{id}/availability/{staffId}', 'Api\v1\StaffController@updateStaffAvailability');
-$router->delete('staff/{id}/availability/{staffId}', 'Api\v1\StaffController@deleteStaffAvailability');
+$router->put('staff/{staffId}/availability/{id}', 'Api\v1\StaffController@updateStaffAvailability');
+$router->delete('staff/{staffId}/availability/{id}', 'Api\v1\StaffController@deleteStaffAvailability');
 $router->post('staff/{id}/role', 'Api\v1\StaffController@addStaffRole');
 $router->get('staff/{id}/role', 'Api\v1\StaffController@listStaffRole');
 $router->put('staff/{staffId}/role/{id}', 'Api\v1\StaffController@updateStaffRole');
