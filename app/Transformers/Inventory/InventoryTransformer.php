@@ -17,11 +17,13 @@ class InventoryTransformer extends TransformerAbstract
         }
         return [
             'id' => $data->id,
+            'deviceTypeId'=>$data->model->deviceType->id,
             'deviceType' => (!empty($data->model->deviceType->name)) ? $data->model->deviceType->name : $data->deviceType,
             'modelNumber' => $data->modelNumber ? $data->modelNumber : $data->model->modelName,
             'serialNumber' => $data->serialNumber,
             'macAddress' => $data->macAddress,
-            'status' => $data->isActive ? True : False
+            'status' => $data->isActive ? True : False,
+            'goals'=> $data->patientGoal ?  fractal()->item($data->inventory)->transformWith(new InventoryTransformer())->toArray():'',
         ];
     }
 }

@@ -11,4 +11,8 @@ class PatientGoalController extends Controller
     public function index(Request $request,$id = null,$goalId = null){
         return (new PatientGoalService)->index($request,$id,$goalId);
     }
+     
+    public function deviceTypeGoal(Request $request,$id = null,$goalId = null){
+        return (new PatientGoalService)->deviceTypeGoal($request,$id,$goalId);
+    }
 }
