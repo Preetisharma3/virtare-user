@@ -3,6 +3,7 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Helper;
 use Illuminate\Support\Facades\DB;
 use App\Transformers\AccessRoles\AccessRoleTransformer;
 use App\Transformers\AccessRoles\AssignedRolesTransformer;
@@ -27,12 +28,15 @@ class AccessRoleService
         try {
             if($id){
             $staffId = $id;
+            $staff=Helper::entity('staff',$staffId);
             }
             else{
                 $staffId = auth()->user()->staff->id;
+                $staff=Helper::entity('staff',$staffId);
+
             }
             $data = DB::select(
-                'CALL assignedRolesList('.$staffId.')',
+                'CALL assignedRolesList('.$staff.')',
             );
             return fractal()->collection($data)->transformWith(new AssignedRolesTransformer())->toArray();
         } catch (Exception $e) {
