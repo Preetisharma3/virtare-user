@@ -171,6 +171,8 @@ $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction')
 $router->get('getScreenAction', 'Api\v1\ScreenActionController@getScreenAction');
 
 
+$router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
+$router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
 
 $router->get('patient/condition/count', 'Api\v1\DashboardController@patientConditionCount');
 $router->get('patient/abnormal', 'Api\v1\DashboardController@abnormalPatients');
@@ -183,7 +185,7 @@ $router->delete('patient/{id}', 'Api\v1\PatientController@deletePatient');
 $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientCondition');
 $router->get('patient/{id}/condition[/{conditionId}]', 'Api\v1\PatientController@listPatientCondition');
 $router->post('staff', 'Api\v1\StaffController@addStaff');
-$router->get('staff', 'Api\v1\StaffController@listStaff');
+$router->get('staff[/{id}]', 'Api\v1\StaffController@listStaff');
 $router->put('staff/{id}', 'Api\v1\StaffController@updateStaff');
 
 $router->post('patient/{id}/referals', 'Api\v1\PatientController@createPatientReferals');
@@ -238,8 +240,6 @@ $router->get('widget', 'Api\v1\WidgetController@getWidget');
 $router->put('widget/{id}', 'Api\v1\WidgetController@updateWidget');
 $router->get('widget/assign', 'Api\v1\WidgetController@getassignedWidget');
 $router->get('program', 'Api\v1\ProgramController@listProgram');
-$router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
-$router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
 
 
 $router->post('{entity}/{id}/document', 'Api\v1\DocumentController@createDocument');

@@ -60,10 +60,15 @@ class StaffService
         }
     }
 
-    public function listStaff($request)
+    public function listStaff($request,$id)
     {
-        $data = Staff::with('roles', 'appointment')->get();
-        return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
+        if(!$id){
+            $data = Staff::with('roles', 'appointment')->get();
+            return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
+        }else{
+            $data = Staff::where('udid',$id)->with('roles', 'appointment')->first();
+            return fractal()->item($data)->transformWith(new StaffTransformer())->toArray();
+        }
     }
 
     public function updateStaff($request, $id)
