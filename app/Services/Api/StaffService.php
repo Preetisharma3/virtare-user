@@ -3,20 +3,21 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Helper;
 use App\Models\User\User;
 use App\Models\Staff\Staff;
-use App\Models\Staff\StaffProvider\StaffProvider;
 use Illuminate\Support\Str;
 use App\Models\UserRole\UserRole;
 use Illuminate\Support\Facades\DB;
 use App\Models\StaffContact\StaffContact;
 use App\Transformers\Staff\StaffTransformer;
 use App\Transformers\Staff\StaffRoleTransformer;
+use App\Models\Staff\StaffProvider\StaffProvider;
 use App\Models\StaffAvailability\StaffAvailability;
 use App\Transformers\Staff\StaffContactTransformer;
+use App\Transformers\Staff\StaffProviderTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
 use App\Transformers\Staff\StaffAvailabilityTransformer;
-use App\Transformers\Staff\StaffProviderTransformer;
 
 
 class StaffService
@@ -174,8 +175,10 @@ class StaffService
     {
         try {
             $udid = Str::random(10);
-            $startTime = $request->startTime;
-            $endTime = $request->endTime;
+            $timeStart=Helper::time($request->input('startTime'));
+            $timeEnd=Helper::time($request->input('endTime'));
+            $startTime = $timeStart;
+            $endTime = $timeEnd;
             $staffId = $id;
             DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');
             $staffAvailability = StaffAvailability::where('udid', $udid)->first();
@@ -201,10 +204,12 @@ class StaffService
     public function updateStaffAvailability($request, $staffId, $id)
     {
         try {
+            $timeStart=Helper::time($request->input('startTime'));
+            $timeEnd=Helper::time($request->input('endTime'));
             $staffAvailability = [
                 'udid' => Str::random(10),
-                'startTime' => $request->input('startTime'),
-                'endTime' => $request->input('endTime'),
+                'startTime' => $timeStart,
+                'endTime' => $timeEnd,
             ];
             StaffAvailability::where([['staffId', $staffId], ['id', $id]])->update($staffAvailability);
             $staffAvailability = StaffAvailability::where('id', $id)->first();

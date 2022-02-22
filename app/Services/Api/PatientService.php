@@ -536,8 +536,10 @@ class PatientService
             if (!$programId) {
                 $udid = Str::uuid()->toString();
                 $patientId = Patient::where('udid', $id)->first();
+                $onboardingScheduleDate = Helper::date($request->input('onboardingScheduleDate'));
+                $dischargeDate = Helper::date($request->input('dischargeDate'));
                 $input = [
-                    'programtId' => $request->input('program'), 'onboardingScheduleDate' =>  date("Y-m-d", $request->input('onboardingScheduleDate')), 'dischargeDate' => date("Y-m-d", $request->input('dischargeDate')),
+                    'programtId' => $request->input('program'), 'onboardingScheduleDate' => $onboardingScheduleDate, 'dischargeDate' => $dischargeDate,
                     'patientId' => $patientId->id, 'createdBy' => Auth::id(), 'isActive' => $request->input('status'), 'udid' => $udid
                 ];
                 $patient = PatientProgram::create($input);
@@ -545,8 +547,10 @@ class PatientService
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientProgramTransformer())->toArray();
                 $message = ['message' => trans('messages.created_succesfully')];
             } else {
+                $onboardingScheduleDate = Helper::date($request->input('onboardingScheduleDate'));
+                $dischargeDate = Helper::date($request->input('dischargeDate'));
                 $input = [
-                    'programtId' => $request->input('program'), 'onboardingScheduleDate' => date("Y-m-d", $request->input('onboardingScheduleDate')), 'dischargeDate' => date("Y-m-d", $request->input('dischargeDate')),
+                    'programtId' => $request->input('program'), 'onboardingScheduleDate' => $onboardingScheduleDate, 'dischargeDate' => $dischargeDate,
                     'updatedBy' => Auth::id(), 'isActive' => $request->input('status')
                 ];
                 $patient = PatientProgram::where('udid', $programId)->update($input);
@@ -973,8 +977,9 @@ class PatientService
             PatientInsurance::where('patientId', $patientId->id)->delete();
             $insurance = $request->input('insurance');
             foreach ($insurance as $value) {
+                $expirationDate = Helper::date($value['expirationDate']);
                 $input = [
-                    'insuranceNumber' => $value['insuranceNumber'], 'expirationDate' => $value['expirationDate'],  'createdBy' => Auth::id(),
+                    'insuranceNumber' => $value['insuranceNumber'], 'expirationDate' => $expirationDate,  'createdBy' => Auth::id(),
                     'insuranceNameId' => $value['insuranceName'], 'insuranceTypeId' => $value['insuranceType'], 'patientId' => $patientId->id, 'udid' => Str::uuid()->toString()
                 ];
                 $patient = PatientInsurance::create($input);

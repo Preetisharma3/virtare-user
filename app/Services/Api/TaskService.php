@@ -18,13 +18,14 @@ class TaskService
 
     public function addTask($request)
     {
+        $startDate = Helper::date($request->input('startDate'));
+        $dueDate = Helper::date($request->input('dueDate'));
         $input = [
             'udid' => Str::uuid()->toString(),
             'title' => $request->title,
             'description' => $request->description,
-            'startDate' => date("Y-m-d H:i:s", $request->startDate),
-            'dueDate' => date("Y-m-d H:i:s", $request->dueDate),
-
+            'startDate' => $startDate,
+            'dueDate' => $dueDate,
             'taskTypeId' => 69,
             'priorityId' => $request->priority,
             'taskStatusId' => $request->taskStatus,
@@ -62,7 +63,7 @@ class TaskService
             $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->first();
             return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
         } else {
-            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->orderBy('createdAt','DESC')->get();
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->orderBy('createdAt', 'DESC')->get();
             return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
         }
     }

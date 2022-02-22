@@ -25,10 +25,11 @@ class AppointmentService
     public function addAppointment($request, $id)
     {
         try {
+            $startDateTime = Helper::date($request->input('startDate'));
             $input = [
                 'udid' => Str::uuid()->toString(),
                 'appointmentTypeId' => $request->appointmentTypeId,
-                'startDateTime' => date("Y-m-d H:i:s", $request->startDate),
+                'startDateTime' => $startDateTime,
                 'durationId' => $request->durationId,
                 'note' => $request->note,
                 'createdBy' => Auth::user()->id,
@@ -141,10 +142,12 @@ class AppointmentService
             $fromDate = time();
             $toDate = '';
             if (!empty($request->toDate)) {
-                $toDate = date("Y-m-d H:i:s", $request->toDate);
+                $toDateFormate = Helper::date($request->input('toDate'));
+                $toDate = $toDateFormate;
             }
             if (!empty($request->fromDate)) {
-                $fromDate = date("Y-m-d H:i:s", $request->fromDate);
+                $fromDateFormate = Helper::date($request->input('fromDate'));
+                $fromDate = $fromDateFormate;
             }
             $data = DB::select(
                 'CALL appointmentList("' . $fromDate . '","' . $toDate . '")',
