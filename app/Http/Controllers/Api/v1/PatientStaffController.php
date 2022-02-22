@@ -8,15 +8,15 @@ use App\Services\Api\PatientStaffService;
 
 class PatientStaffController extends Controller
 {
-    public function assignStaff(Request $request,$id=null,$patientStaffId=null){
+    public function assignStaff(Request $request,$id,$patientStaffId=null){
         return (new PatientStaffService)->assignStaffToPatient($request,$id,$patientStaffId);
     }
 
-    public function getAssignStaff(Request $request,$id=null,$satffId=null){
-        return (new PatientStaffService)->getAssignStaffToPatient($request,$id,$satffId);
+    public function getAssignStaff(Request $request,$id, $patientStaffId=null){
+        return (new PatientStaffService)->getAssignStaffToPatient($request,$id, $patientStaffId);
     }
 
-    public function deleteAssignStaff(Request $request,$id=null,$patientStaffId){
+    public function deleteAssignStaff(Request $request,$id,$patientStaffId){
         return (new PatientStaffService)->deleteAssignStaffToPatient($request,$id,$patientStaffId);
     }
 }
