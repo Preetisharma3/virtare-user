@@ -30,7 +30,7 @@ class UserTransformer extends TransformerAbstract
 			'uuid' => $user->udid,
 			'sipId' => "UR".$user->id,
 			'roleId' => $this->showData ? fractal()->item($user->roles)->transformWith(new RoleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
-			'name'=>@$user->staff->firstName.' '.@$user->staff->lastName?@$user->staff->firstName.' '.@$user->staff->lastName:@$user->familyMember->fullName,
+			'name'=>@$user->staff ?@$user->staff->firstName.' '.@$user->staff->lastName:@$user->familyMember->fullName,
 			'username'=>$user->email,
 			'email'=>$user->email,
 			'profile_photo'=>(!empty($user->profilePhoto))&&(!is_null($user->profilePhoto)) ? str_replace("public", "", URL::to('/')).'/'.$user->profilePhoto : "",
