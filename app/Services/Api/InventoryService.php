@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Inventory\Inventory;
 use App\Transformers\Device\DeviceModelTransformer;
 use App\Transformers\Inventory\InventoryTransformer;
+use App\Transformers\Inventory\InventoryListTransformer;
 
 
 
@@ -38,7 +39,7 @@ class InventoryService
             $isAvailable = $request->isAvailable;
             $deviceType = $request->deviceType;
             $data = DB::select('CALL inventoryList("' . $isAvailable . '","' . $deviceType . '")');
-            return fractal()->collection($data)->transformWith(new InventoryTransformer())->toArray();
+            return fractal()->collection($data)->transformWith(new InventoryListTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
