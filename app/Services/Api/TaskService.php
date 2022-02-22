@@ -4,10 +4,11 @@ namespace App\Services\Api;
 
 use Exception;
 use App\Models\Task\Task;
-use App\Models\Task\TaskAssignedTo;
-use App\Models\Task\TaskCategory;
+use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
+use App\Models\Task\TaskCategory;
 use Illuminate\Support\Facades\DB;
+use App\Models\Task\TaskAssignedTo;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Task\TaskTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
@@ -23,7 +24,6 @@ class TaskService
             'description' => $request->description,
             'startDate' => date("Y-m-d H:i:s", $request->startDate),
             'dueDate' => date("Y-m-d H:i:s", $request->dueDate),
-
             'taskTypeId' => 69,
             'priorityId' => $request->priority,
             'taskStatusId' => $request->taskStatus,
@@ -39,15 +39,26 @@ class TaskService
             TaskCategory::create($taskCate);
         }
         $assignedToId = $request->assignedTo;
-        foreach($assignedToId as $assignedTo){
-            $assigned = [
-                'taskId'=>$task->id,
-                'assignedTo'=>$assignedTo,
-                'entityType'=>$request->entityType
-            ];
-            TaskAssignedTo::create($assigned);
+        if($request->entityType=='staff'){
+            foreach($assignedToId as $assignedTo){
+            $staff=Staff::where('udid',$assignedTo)->first();
+                $assigned = [
+                    'taskId'=>$task->id,
+                    'assignedTo'=>$staff->id,
+                    'entityType'=>$request->entityType
+                ];
+                TaskAssignedTo::create($assigned);
+            }
+        }else{
+            foreach($assignedToId as $assignedTo){
+                $assigned = [
+                    'taskId'=>$task->id,
+                    'assignedTo'=>$assignedTo,
+                    'entityType'=>$request->entityType
+                ];
+                TaskAssignedTo::create($assigned);
+            }
         }
-        
         $taskData =  Task::where('id',$task->id)->with('assignedTo.assigned','assignedTo.patient')->first();
        $message = ['message' => 'Created Successfully'];
        $result =fractal()->item($taskData)->transformWith(new TaskTransformer())->toArray();
