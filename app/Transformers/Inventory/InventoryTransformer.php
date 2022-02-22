@@ -2,7 +2,9 @@
 
 namespace App\Transformers\Inventory;
 
+use App\Models\Vital\VitalField;
 use League\Fractal\TransformerAbstract;
+use App\Transformers\Vital\VitalFieldTransformer;
 
 class InventoryTransformer extends TransformerAbstract
 {
@@ -23,7 +25,7 @@ class InventoryTransformer extends TransformerAbstract
             'serialNumber' => $data->serialNumber,
             'macAddress' => $data->macAddress,
             'status' => $data->isActive ? True : False,
-            'goals'=> $data->patientGoal ?  fractal()->item($data->inventory)->transformWith(new InventoryTransformer())->toArray():'',
+            'vitalField'=> $data->model->deviceType ?  fractal()->collection($data->model->deviceType->vitalFieldType)->transformWith(new VitalFieldTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray():'',
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Patient\Patient;
 use App\Models\Inventory\Inventory;
 use App\Models\Patient\PatientGoal;
 use App\Models\GlobalCode\GlobalCode;
+use App\Models\Vital\VitalTypeField;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,4 +42,6 @@ class PatientInventory extends Model
     {
         return $this->belongsTo(PatientGoal::class,'vitalFieldId');
     }
+
+    
 }
