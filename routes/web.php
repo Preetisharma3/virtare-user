@@ -68,7 +68,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
     $router->get('patient/{id}/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
     $router->get('patient/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
-    $router->get('patients/goal','Api\v1\PatientGoalController@deviceTypeGoal');
 
     $router->post('patient/{id}/flag', 'Api\v1\PatientController@addPatientFlag');
     $router->get('patient/{id}/flag[/{flagId}]', 'Api\v1\PatientController@listPatientFlag');
