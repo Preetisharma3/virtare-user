@@ -26,17 +26,15 @@ class AccessRoleService
     public function assignedRoles($id)
     {
         try {
-            if($id){
-            $staffId = $id;
-            $staff=Helper::entity('staff',$staffId);
-            }
-            else{
+            if ($id) {
+                $staffId = $id;
+                $staff = Helper::entity('staff', $staffId);
+            } else {
                 $staffId = auth()->user()->staff->id;
-                $staff=Helper::entity('staff',$staffId);
-
+                $staff = Helper::entity('staff', $staffId);
             }
             $data = DB::select(
-                'CALL assignedRolesList('.$staff.')',
+                'CALL assignedRolesList(' . $staff . ')',
             );
             return fractal()->collection($data)->transformWith(new AssignedRolesTransformer())->toArray();
         } catch (Exception $e) {
