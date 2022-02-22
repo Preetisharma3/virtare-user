@@ -35,20 +35,23 @@ class AppointmentService
             ];
             if (Auth::user()->patient) {
                 $patientData = Patient::where('userId', Auth::user()->id)->first();
+                $staff = Staff::where('udid', $request->staffId)->first();
                 $entity = [
-                    'staffId' => $request->staffId,
+                    'staffId' => $staff->id,
                     'patientId' => $patientData->id,
                 ];
             } elseif (auth()->user()->staff) {
+                $staff = Staff::where('udid', $request->staffId)->first();
                 $entity = [
-                    'staffId' => $request->staffId,
+                    'staffId' => $staff->id,
                     'patientId' => $request->patientId,
                 ];
             } elseif ($id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
+                $staff = Staff::where('udid', $request->staffId)->first();
                     $entity = [
-                        'staffId' => $request->staffId,
+                        'staffId' => $staff->id,
                         'patientId' => $id,
                     ];
                 } else {
