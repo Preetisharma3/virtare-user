@@ -32,10 +32,4 @@ class PatientGoalService
         }
         return  fractal()->collection($data)->transformWith(new PatientGoalTransformer())->toArray();
     }
-
-    public function deviceTypeGoal($request, $id, $inventoryId)
-    {
-        $getPatient = PatientInventory::where('patientId', auth()->user()->patient->id)->with('patient', 'inventory', 'deviceTypes','patientGoal')->get();
-        return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
-    }
 }
