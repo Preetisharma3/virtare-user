@@ -20,7 +20,7 @@ class TeamService
                 $data = Staff::where('roleId', 3)->paginate(5);
                 return fractal()->collection($data)->transformWith(new StaffTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             } else {
-                $data = Staff::where([['roleId', 3], ['id', $id]])->with('user')->first();
+                $data = Staff::where([['roleId', 3], ['udid', $id]])->with('user')->first();
                 if (!empty($data)) {
                     return fractal()->item($data)->transformWith(new StaffTransformer(true))->toArray();
                 } else {
@@ -32,8 +32,7 @@ class TeamService
                 $data = PatientPhysician::where([['patientId',auth()->user()->patient->id]])->paginate(5);
                 return fractal()->collection($data)->transformWith(new PhysicianTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             } else {
-                
-                $data = PatientPhysician::where([['patientId', auth()->user()->patient->id], ['id', $id]])->first();
+                $data = PatientPhysician::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->first();
                 if (!empty($data)) {
                     return fractal()->item($data)->transformWith(new PhysicianTransformer(true))->toArray();
                 } else {
@@ -59,7 +58,7 @@ class TeamService
                 $data = Staff::where('roleId', 3)->paginate(5);
                 return fractal()->collection($data)->transformWith(new StaffTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             } else {
-                $data = Staff::where([['roleId', 3], ['id', $id]])->with('user')->first();
+                $data = Staff::where([['roleId', 3], ['udid', $id]])->with('user')->first();
                 if (!empty($data)) {
                     return fractal()->item($data)->transformWith(new StaffTransformer(true))->toArray();
                 } else {
