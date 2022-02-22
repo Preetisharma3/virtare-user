@@ -317,7 +317,7 @@ $router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
 $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
 $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
 
-
+//cpt code
 $router->get('cptCode','Api\v1\CPTCodeController@listCPTCode');
 $router->post('cptCode','Api\v1\CPTCodeController@createCPTCode');
 $router->put('cptCode/{id}','Api\v1\CPTCodeController@updateCPTCode');
@@ -328,3 +328,9 @@ $router->get('faq', 'Api\v1\FaqController');
 //freeswitch
 $router->get('freeswitch/directory', 'Freeswitch\DirectoryController@directory');
 $router->get('freeswitch/dialplan', 'Freeswitch\DirectoryController@dialplan');
+
+//template
+$router->get('template','Api\v1\TemplateController@listTemplate');
+$router->post('template','Api\v1\TemplateController@createTemplate');
+$router->put('template/{id}','Api\v1\TemplateController@updateTemplate');
+$router->delete('template/{id}','Api\v1\TemplateController@deleteTemplate');
