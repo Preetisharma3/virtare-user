@@ -32,6 +32,9 @@ $router->get('/linkstorage', function () use ($router) {
 $router->post('login', 'Api\v1\AuthController@login');
 $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
+    //Get notifications Routes
+    $router->get('appointment/notification','Api\v1\NotificationController@appointmentNotification');
+
     // Auth Routes
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
