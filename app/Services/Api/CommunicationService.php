@@ -4,6 +4,7 @@ namespace App\Services\Api;
 
 use Exception;
 use Carbon\Carbon;
+use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -24,17 +25,35 @@ class CommunicationService
     public function addCommunication($request)
     {
         $udid = Str::uuid()->toString();
-        $input = [
-            'from' => $request->from,
-            'referenceId' => $request->referenceId,
-            'messageTypeId' => $request->messageTypeId,
-            'subject' => $request->subject,
-            'priorityId' => $request->priorityId,
-            'messageCategoryId' => $request->messageCategoryId,
-            'createdBy' => 1,
-            'entityType' => $request->entityType,
-            'udid' => $udid
-        ];
+        if($request->entityType=='staff'){
+            $staff=Staff::where('udid',$request->referenceId)->first();
+            $staffFrom=Staff::where('udid',$request->from)->first();
+            $input = [
+                'from' => $staffFrom->id,
+                'referenceId' => $staff->id,
+                'messageTypeId' => $request->messageTypeId,
+                'subject' => $request->subject,
+                'priorityId' => $request->priorityId,
+                'messageCategoryId' => $request->messageCategoryId,
+                'createdBy' => 1,
+                'entityType' => $request->entityType,
+                'udid' => $udid
+            ];
+        }else{
+            $staffFrom=Staff::where('udid',$request->from)->first();
+            $input = [
+                'from' => $staffFrom->id,
+                'referenceId' => $request->referenceId,
+                'messageTypeId' => $request->messageTypeId,
+                'subject' => $request->subject,
+                'priorityId' => $request->priorityId,
+                'messageCategoryId' => $request->messageCategoryId,
+                'createdBy' => 1,
+                'entityType' => $request->entityType,
+                'udid' => $udid
+            ];
+        }
+       
         $data = Communication::create($input);
         CommunicationMessage::create([
             'communicationId' => $data->id,
@@ -48,10 +67,8 @@ class CommunicationService
     // get Communication
     public function getCommunication($request)
     {
-
         $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')
             ->paginate(15, ['*'], 'page', $request->page);
-
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 
@@ -59,9 +76,10 @@ class CommunicationService
     public function addCallRecord($request)
     {
         $udid = Str::uuid()->toString();
+        $staffFrom=Staff::where('udid',$request->staff)->first();
         $input = [
             'patientId' => $request->patient,
-            'staffId' => $request->staff,
+            'staffId' => $staffFrom->id,
             'callStatusId' => $request->callStatus,
             'createdBy' => 1,
             'udid' => $udid
