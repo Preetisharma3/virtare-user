@@ -60,7 +60,7 @@ class GeneralParameterService
         DB::beginTransaction();
         try {
             if (!$id) {
-                $data = GeneralParameterGroup::with('generalParameter')->orderBy('createdAt', 'DESC')->paginate(5);
+                $data = GeneralParameterGroup::with('generalParameter')->orderBy('createdAt', 'DESC')->paginate(20);
                 return fractal()->collection($data)->transformWith(new GeneralParameterGroupTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             } else {
                 $data = GeneralParameterGroup::where('udid', $id)->with('generalParameter')->first();
