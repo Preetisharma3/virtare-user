@@ -19,6 +19,11 @@ use App\Transformers\Patient\PatientTransformer;
 |
 */
 
+/*
+*Bitrix APi routes
+*/
+$router->get("bitrix/deal/{patientId}",'Api\v1\PatientController@getBitrixDeals');
+
 
 $router->get('/linkstorage', function () use ($router) {
 
