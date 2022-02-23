@@ -11,14 +11,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Patient\PatientTimeLog;
 use App\Transformers\Patient\PatientTimeLogTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class TimeLogService
 {
     public function timeLogList($request, $id)
     {
         if (!$id) {
-            $data = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->get();
-            return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->toArray();
+            $data = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->paginate(5);
+            return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         } else {
             $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed', 'notes')->first();
             return fractal()->item($data)->transformWith(new PatientTimeLogTransformer())->toArray();
