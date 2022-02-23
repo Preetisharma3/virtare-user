@@ -47,6 +47,7 @@ use App\Transformers\Patient\PatientInsuranceTransformer;
 use App\Transformers\Patient\PatientInventoryTransformer;
 use App\Transformers\Patient\PatientPhysicianTransformer;
 use App\Transformers\Patient\PatientMedicalRoutineTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class PatientService
 {
@@ -290,8 +291,8 @@ class PatientService
                     'otherLanguage',
                     'flags.flag',
                     'inventories.inventory'
-                )->get();
-                return fractal()->collection($getPatient)->transformWith(new PatientTransformer())->toArray();
+                )->paginate(5);
+                return fractal()->collection($getPatient)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($getPatient))->toArray();
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
