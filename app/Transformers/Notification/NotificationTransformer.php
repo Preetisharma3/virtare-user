@@ -39,6 +39,7 @@ class NotificationTransformer extends TransformerAbstract
                "type"=>$data->notificationType->name,
                "Isread"=>$data->isRead,
                "time"=>date('H:i a',strtotime($data->createdAt)),
+               "entity"=>$data->entity,
             //    "created_user"=>fractal()->item($data->created_user)->transformWith(new UserTransformer(true))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray(),
                
         ];
