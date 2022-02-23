@@ -61,7 +61,7 @@ class CommunicationService
             'createdBy' => $data->createdBy,
             'udid' => $udid
         ]);
-        return response()->json(['message' => 'created Successfully'], 200);
+        return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
     }
 
     // get Communication
@@ -85,7 +85,7 @@ class CommunicationService
             'udid' => $udid
         ];
         CommunicationCallRecord::create($input);
-        return response()->json(['message' => 'created Successfully'], 200);
+        return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
     }
 
     //Call Status API's

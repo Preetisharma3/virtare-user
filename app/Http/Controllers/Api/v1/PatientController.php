@@ -13,6 +13,7 @@ use App\Http\Requests\Patient\PatientConditionRequest;
 use App\Http\Requests\Patient\PatientPhysicianRequest;
 use App\Http\Requests\Patient\PatientMedicalHistoryRequest;
 use App\Http\Requests\Patient\PatientMedicalRoutineRequest;
+use \App\Library\BitrixApi;
 
 class PatientController extends Controller
 {
@@ -254,6 +255,25 @@ class PatientController extends Controller
   public function createFamily(Request $request,$id,$familyId=null)
   {
     return (new FamilyService)->familyCreate($request,$id,$familyId);
+  }
+
+
+  // Bitrix APi functions
+  Public function getBitrixDeals(Request $request,$patientId)
+  {
+    if($patientId){
+
+      // get deal from the bitrix24 api
+      return BitrixApi::getDeal($patientId);
+
+    }else{
+
+      $json = array(
+        "error" => "Patient ID is Required."
+      );
+      
+      return json_encode($json);
+    }
   }
 
  

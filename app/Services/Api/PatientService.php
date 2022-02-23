@@ -104,7 +104,7 @@ class PatientService
                             'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                             'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                             'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
-                            'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(),'vital' => $request->input('vitalAuthorization'),
+                            'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => $request->input('vitalAuthorization'),
                             'messages' => $request->input('messageAuthorization'),
                         ];
                         if (!empty($familyMember)) {
@@ -135,7 +135,7 @@ class PatientService
                     'flags.flag'
                 )->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $usersId = Patient::where('id', $id)->first();
                 $uId = $usersId->userId;
@@ -173,7 +173,7 @@ class PatientService
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                         'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
-                        'updatedBy' => Auth::id(),'vital' => $request->input('vitalAuthorization'),
+                        'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
                         'messages' => $request->input('messageAuthorization'),
                     ];
                     PatientFamilyMember::where('id', $request->familyMemberId)->update($familyMember);
@@ -186,7 +186,7 @@ class PatientService
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                                 'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
-                                'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1,'vital' => $request->input('vitalAuthorization'),
+                                'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1, 'vital' => $request->input('vitalAuthorization'),
                                 'messages' => $request->input('messageAuthorization'),
                             ];
                             PatientFamilyMember::create($familyMember);
@@ -202,7 +202,7 @@ class PatientService
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                                 'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
-                                'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(),'vital' => $request->input('vitalAuthorization'),
+                                'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => $request->input('vitalAuthorization'),
                                 'messages' => $request->input('messageAuthorization'),
                             ];
                             if (!empty($familyMember)) {
@@ -244,7 +244,7 @@ class PatientService
                     'flags.flag'
                 )->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
-                $message = ['message' => 'update successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
@@ -331,7 +331,7 @@ class PatientService
                 $table->delete();
             }
             DB::commit();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -395,7 +395,7 @@ class PatientService
                 $patient = PatientReferal::create($input);
                 $getPatient = PatientReferal::where('id', $patient->id)->with('patient', 'designation')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $input = [
                     'name' => $request->input('name'), 'designationId' => $request->input('designation'), 'email' => $request->input('email'),
@@ -404,7 +404,7 @@ class PatientService
                 $patient = PatientReferal::where('id', $referalsId)->update($input);
                 $getPatient = PatientReferal::where('id', $referalsId)->with('patient', 'designation')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
-                $message = ['message' => 'update successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
@@ -440,7 +440,7 @@ class PatientService
             PatientReferal::find($referalsId)->update($data);
             PatientReferal::find($referalsId)->delete();
             DB::commit();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -467,7 +467,7 @@ class PatientService
                 $patient = PatientPhysician::create($input);
                 $getPatient = PatientPhysician::where('id', $patient->id)->with('patient', 'designation', 'user')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $usersId = PatientPhysician::where('id', $physicianId)->first();
                 $uId = $usersId->userId;
@@ -483,7 +483,7 @@ class PatientService
                 $patient = PatientPhysician::where('id', $physicianId)->update($input);
                 $getPatient = PatientPhysician::where('id', $physicianId)->with('patient', 'designation', 'user')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
-                $message = ['message' => 'update successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
@@ -519,7 +519,7 @@ class PatientService
             PatientPhysician::find($physicianId)->update($data);
             PatientPhysician::find($physicianId)->delete();
             DB::commit();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -540,7 +540,7 @@ class PatientService
                 $patient = PatientProgram::create($input);
                 $getPatient = PatientProgram::where('id', $patient->id)->with('patient', 'program')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientProgramTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $input = [
                     'programtId' => $request->input('program'), 'onboardingScheduleDate' => date("Y-m-d", $request->input('onboardingScheduleDate')), 'dischargeDate' => date("Y-m-d", $request->input('dischargeDate')),
@@ -549,7 +549,7 @@ class PatientService
                 $patient = PatientProgram::where('id', $programId)->update($input);
                 $getPatient = PatientProgram::where('id', $programId)->with('patient', 'program')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientProgramTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
@@ -585,7 +585,7 @@ class PatientService
             $program = PatientProgram::where('id', $programId)->update($data);
             $patient = PatientProgram::where('id', $programId)->delete();
             DB::commit();
-            return response()->json(['message' => 'deleted successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -615,7 +615,7 @@ class PatientService
                 PatientTimeLine::create($timeLine);
                 $getPatient = PatientInventory::where('id', $patient->id)->with('patient', 'inventory', 'deviceTypes')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $input = [
                     'isActive' => $request->input('status'),  'updatedBy' => 1,
@@ -623,7 +623,7 @@ class PatientService
                 $patient = PatientInventory::where('id', $inventoryId)->update($input);
                 $getPatient = PatientInventory::where('id', $inventoryId)->with('patient', 'inventory', 'deviceTypes')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
@@ -695,7 +695,7 @@ class PatientService
             PatientInventory::find($inventoryId)->delete();
 
             DB::commit();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -781,7 +781,7 @@ class PatientService
                 }
             }
             $userdata = fractal()->item($result)->transformWith(new PatientVitalTransformer())->toArray();
-            $message = ['message' => 'created successfully'];
+            $message = ['message' => trans('messages.createdSuccesfully')];
             DB::commit();
             // $endData = array_merge($message, $userdata);
             return $message;
@@ -800,12 +800,12 @@ class PatientService
                 if ($familyMember == true) {
                     $patientIdx = $id;
                 } else {
-                    return response()->json(['message' => 'unauthorized']);
+                    return response()->json(['message' => trans('messages.unauthenticated')], 401);
                 }
             } elseif (!$id) {
                 $patientIdx = '';
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }
             $type = '';
             $fromDate = '';
@@ -853,7 +853,7 @@ class PatientService
         } elseif ($id) {
             $patientId = $id;
         } else {
-            return response()->json(['message' => 'unauthorized']);
+            return response()->json(['message' => trans('messages.unauthenticated')], 401);
         }
         $data = PatientVital::where('patientId', $patientId)->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
         return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
@@ -868,7 +868,7 @@ class PatientService
             PatientVital::find($vitalId)->update($data);
             PatientVital::find($vitalId)->delete();
             DB::commit();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -888,7 +888,7 @@ class PatientService
                 $patient = PatientMedicalHistory::create($input);
                 $getPatient = PatientMedicalHistory::where('id', $patient->id)->with('patient')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $input = [
                     'history' => $request->input('history'), 'updatedBy' => 1
@@ -896,7 +896,7 @@ class PatientService
                 $patient = PatientMedicalHistory::where('id', $medicalHistoryId)->update($input);
                 $getPatient = PatientMedicalHistory::where('id', $medicalHistoryId)->with('patient')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
@@ -932,7 +932,7 @@ class PatientService
             PatientMedicalHistory::find($medicalHistoryId)->update($data);
             PatientMedicalHistory::find($medicalHistoryId)->delete();
             DB::commit();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -953,7 +953,7 @@ class PatientService
                 $patient = PatientMedicalRoutine::create($input);
                 $getPatient = PatientMedicalRoutine::where('id', $patient->id)->with('patient')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $input = [
                     'medicine' => $request->input('medicine'), 'frequency' => $request->input('frequency'),  'updatedBy' => 1,
@@ -962,7 +962,7 @@ class PatientService
                 $patient = PatientMedicalRoutine::where('id', $medicalRoutineId)->update($input);
                 $getPatient = PatientMedicalRoutine::where('id', $medicalRoutineId)->with('patient')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
@@ -998,7 +998,7 @@ class PatientService
             PatientMedicalRoutine::find($medicalRoutineId)->update($data);
             PatientMedicalRoutine::find($medicalRoutineId)->delete();
             DB::commit();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -1057,7 +1057,7 @@ class PatientService
             PatientInsurance::find($insuranceId)->update($data);
             PatientInsurance::find($insuranceId)->delete();
             DB::commit();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -1103,7 +1103,7 @@ class PatientService
 
             $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
-            $message = ['message' => 'updated successfully'];
+            $message = ['message' => trans('messages.updatedSuccesfully')];
             DB::commit();
             $endData = array_merge($message, $userdata);
             return $endData;
@@ -1137,7 +1137,7 @@ class PatientService
                     $patient = PatientDevice::where('id', $deviceId)->update($device);
                     $getPatient = PatientDevice::where('id', $deviceId)->with('patient', 'otherDevice')->first();
                     $userdata = fractal()->item($getPatient)->transformWith(new PatientDeviceTransformer())->toArray();
-                    $message = ['message' => 'updated successfully'];
+                    $message = ['message' => trans('messages.updatedSuccesfully')];
                 }
             } else {
                 if (!$deviceId) {
@@ -1155,7 +1155,7 @@ class PatientService
                     $patient = PatientDevice::where('id', $deviceId)->update($device);
                     $getPatient = PatientDevice::where('id', $deviceId)->with('patient', 'otherDevice')->first();
                     $userdata = fractal()->item($getPatient)->transformWith(new PatientDeviceTransformer())->toArray();
-                    $message = ['message' => 'updated successfully'];
+                    $message = ['message' => trans('messages.updatedSuccesfully')];
                 }
             }
             DB::commit();
@@ -1219,7 +1219,7 @@ class PatientService
                     ];
                     Note::create($note);
                 }
-                $data = response()->json(['message' => 'created successfully']);
+                $data = response()->json(['message' => trans('messages.createdSuccesfully')]);
             } else {
                 $dateConvert = Helper::date($request->input('date'));
                 $timeConvert = Helper::time($request->input('timeAmount'));
@@ -1253,7 +1253,7 @@ class PatientService
                     ];
                     $note = Note::create($noteData);
                 }
-                $data = response()->json(['message' => 'updated successfully']);
+                $data = response()->json(['message' => trans('messages.updatedSuccesfully')]);
             }
             DB::commit();
             return $data;
@@ -1301,7 +1301,7 @@ class PatientService
             PatientTimeLog::where('udid', $timelogId)->update($data);
             PatientTimeLog::where('udid', $timelogId)->delete();
             DB::commit();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -1322,7 +1322,7 @@ class PatientService
             $flag = PatientFlag::create($input);
             $data = PatientFlag::where('id', $flag->id)->first();
             $userdata = fractal()->item($data)->transformWith(new PatientFlagTransformer())->toArray();
-            $message = ['message' => 'created successfully'];
+            $message = ['message' => trans('messages.createdSuccesfully')];
             DB::commit();
             $endData = array_merge($message, $userdata);
             return $endData;

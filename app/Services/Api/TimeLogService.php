@@ -46,7 +46,7 @@ class TimeLogService
             PatientTimeLog::where('udid', $id)->update($input);
             $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed', 'patient.notes')->first();
             $userdata = fractal()->item($data)->transformWith(new PatientTimeLogTransformer())->toArray();
-            $message = ['message' => 'updated successfully'];
+            $message = ['message' => trans('messages.updatedSuccesfully')];
             DB::commit();
             $endData = array_merge($message, $userdata);
             return $endData;
@@ -61,6 +61,6 @@ class TimeLogService
         $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
         $data = PatientTimeLog::where('udid', $id)->update($input);
         PatientTimeLog::where('udid', $id)->delete();
-        return response()->json(['message' => 'deleted successfully']);
+        return response()->json(['message' => trans('messages.deletedSuccesfully')]);
     }
 }

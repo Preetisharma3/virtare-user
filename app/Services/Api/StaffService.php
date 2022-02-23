@@ -56,7 +56,7 @@ class StaffService
             ];
             $newData = Staff::create($staff);
             $staffData = Staff::where('id', $newData->id)->first();
-            $message = ["message" => "created Successfully"];
+            $message = ['message' => trans('messages.createdSuccesfully')];
             $resp =  fractal()->item($staffData)->transformWith(new StaffTransformer())->toArray();
             $endData = array_merge($message, $resp);
             Helper::updateFreeswitchUser();
@@ -102,7 +102,7 @@ class StaffService
         ];
         Staff::where('udid', $id)->update($staff);
         $staffData = Staff::where('udid', $id)->first();
-        $message = ["message" => "Updated Successfully"];
+        $message = ['message' => trans('messages.updatedSuccesfully')];
         $resp =  fractal()->item($staffData)->transformWith(new StaffTransformer())->toArray();
         $endData = array_merge($message, $resp);
         return $endData;
@@ -122,12 +122,12 @@ class StaffService
                 $staffId = $staff->id;
                 DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
                 $staffContactData = StaffContact::where('udid', $udid)->first();
-                $message = ["message" => "created Successfully"];
+                $message = ['message' => trans('messages.createdSuccesfully')];
                 $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
                 $endData = array_merge($message, $resp);
                 return $endData;
             } else {
-                return response()->json(['message' => 'Somethings Went Worng']);
+                return response()->json(['message' => trans('messages.unauthenticated')]);
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -142,7 +142,7 @@ class StaffService
                 $staffContact = StaffContact::where('staffId', $staff->id)->get();
                 return  fractal()->collection($staffContact)->transformWith(new StaffContactTransformer())->toArray();
             } else {
-                return response()->json(['message' => 'Somethings Went Worng']);
+                return response()->json(['message' => trans('messages.unauthenticated')]);
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -161,7 +161,7 @@ class StaffService
             $staff = Staff::where('udid', $staffId)->first();
             StaffContact::where([['staffId', $staff->id], ['udid', $id]])->update($staffContact);
             $staffContactData = StaffContact::where('udid', $id)->first();
-            $message = ["message" => "Updated Successfully"];
+            $message = ['message' => trans('messages.updatedSuccesfully')];
             $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
@@ -178,9 +178,9 @@ class StaffService
                 $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
                 StaffContact::where([['staffId', $staff->id], ['udid', $id]])->update($input);
                 StaffContact::where([['staffId', $staff->id], ['udid', $id]])->delete();
-                return response()->json(['message' => "Deleted Successfully"]);
+                return response()->json(['message' => trans('messages.deletedSuccesfully')]);
             } else {
-                return response()->json(['message' => 'Somethings Went Worng']);
+                return response()->json(['message' => trans('messages.unauthenticated')]);
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -198,7 +198,7 @@ class StaffService
             $staffId = $staff->id;
             DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');
             $staffAvailability = StaffAvailability::where('udid', $udid)->first();
-            $message = ["message" => "created Successfully"];
+            $message = ['message' => trans('messages.createdSuccesfully')];
             $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
@@ -228,7 +228,7 @@ class StaffService
             $staff = Staff::where('udid', $staffId)->first();
             StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->update($staffAvailability);
             $staffAvailability = StaffAvailability::where('udid', $id)->first();
-            $message = ["message" => "Updated Successfully"];
+            $message = ['message' => trans('messages.updatedSuccesfully')];
             $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
@@ -244,7 +244,7 @@ class StaffService
             $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
             StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->update($input);
             StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->delete();
-            return response()->json(['message' => "Deleted Successfully"]);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -261,7 +261,7 @@ class StaffService
                 $accessRoleId = $roleId;
                 DB::select('CALL createstaffRole("' . $udid . '","' . $staffId . '","' . $accessRoleId . '")');
             }
-            return response()->json(['message' => "created Successfully"]);
+            return response()->json(['message' => trans('messages.createdSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -287,7 +287,7 @@ class StaffService
             ];
             $staff = Staff::where('udid', $staffId)->first();
             UserRole::where([['staffId', $staff->id], ['udid', $id]])->update($staffRole);
-            return response()->json(['message' => "Updated Successfully"]);
+            return response()->json(['message' => trans('messages.updatedSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -300,7 +300,7 @@ class StaffService
             $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
             UserRole::where([['staffId', $staff->id], ['udid', $id]])->update($input);
             UserRole::where([['staffId', $staff->id], ['udid', $id]])->delete();
-            return response()->json(['message' => "Deleted Successfully"]);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -317,7 +317,7 @@ class StaffService
                 $staffId  = $staff->id;
                 DB::select('CALL createStaffProvider("' . $udid . '","' . $staffId . '","' . $providerId . '")');
             }
-            return response()->json(['message' => "created Successfully"]);
+            return response()->json(['message' => trans('messages.createdSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -346,7 +346,7 @@ class StaffService
                 ];
                 StaffProvider::where([['staffId', $staff->id], ['udid', $id]])->update($staffProvider);
             }
-            return response()->json(['message' => "Updated Successfully"]);
+            return response()->json(['message' => trans('messages.updatedSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -359,7 +359,7 @@ class StaffService
             $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
             StaffProvider::where([['staffId', $staff->id], ['udid', $id]])->update($input);
             StaffProvider::where([['staffId', $staff->id], ['udid', $id]])->delete();
-            return response()->json(['message' => "Deleted Successfully"]);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

@@ -32,7 +32,7 @@ class TemplateService
             ];
             $newtemplate = Template::create($template);
             $newtemplate = Template::where('udid', $newtemplate->udid)->first();
-            $message = ["message" => "created Successfully"];
+            $message = ['message' => trans('messages.createdSuccesfully')];
             $resp =  fractal()->item($newtemplate)->transformWith(new TemplateTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData; 
@@ -51,7 +51,7 @@ class TemplateService
             ];
             $newtemplate = Template::find($id)->update($template);
             $newtemplate = Template::where('id', $id)->first();
-            $message = ["message" => "updated Successfully"];
+            $message = ['message' => trans('messages.updatedSuccesfully')];
             $resp =  fractal()->item($newtemplate)->transformWith(new TemplateTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData; 
@@ -66,7 +66,7 @@ class TemplateService
             $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
             Template::find($id)->update($data);
             Template::find($id)->delete();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
        }
