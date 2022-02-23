@@ -22,7 +22,7 @@ class Notification extends Model
     protected $guarded = [];
 
     public function notificationType(){
-        return $this->belongsTo(GlobalCode::class, 'notificationTypeId');
+        return $this->belongsTo(GlobalCode::class, 'referenceId');
     }
 
     public function created_user(){

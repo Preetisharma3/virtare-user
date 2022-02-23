@@ -24,7 +24,8 @@ class NotificationService
                         'body' => 'Your Appointment is Scehduled.',
                         'title' => 'Appointment Reminder',
                         'userId' => $userId,
-                        'notificationTypeId' => 39,
+                        'entity'=>'Appointment',
+                        'referenceId' => 39,
                         'createdBy' => 1,
                     ]);
                 }
