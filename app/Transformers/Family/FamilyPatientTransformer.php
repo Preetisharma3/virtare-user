@@ -38,6 +38,8 @@ class FamilyPatientTransformer extends TransformerAbstract
             'id' => $data->patientId,
             'name' => ucfirst($data->patients->firstName) . ' ' . ucfirst($data->patients->lastName),
             'dob' => $data->patients->dob,
+            'email'=>$data->patients->user->email,
+            'nickname'=>$data->patients->nickName,
             'relation' => $data->relation ? $data->relation->name:'',
             'gender' => $data->patients->gender ? $data->patients->gender->name:'',
             'language' =>$data->patients->language ?  $data->patients->language->name:'',
