@@ -19,7 +19,7 @@ class ModuleService
                 'createdBy' => 1
             ];
              Module::create($module);
-           return response()->json(['message' =>'Created Successfully'],200);
+           return response()->json(['message' => trans('messages.createdSuccesfully')],200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

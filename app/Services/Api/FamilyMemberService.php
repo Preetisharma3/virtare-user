@@ -2,9 +2,7 @@
 
 namespace App\Services\Api;
 
-use App\Models\Patient\Patient;
 use App\Models\Patient\PatientFamilyMember;
-use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Family\FamilyPatientTransformer;
 
 class FamilyMemberService

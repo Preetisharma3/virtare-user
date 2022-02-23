@@ -44,7 +44,7 @@ class RolePermissionService
             DB::select('CALL createRole("' . $udid . '","' . $roles . '","' . $roleDescription . '","'.$roleTypeId.'")'); 
             
             $role = AccessRole::where('udid', $udid)->first();
-            $message = ["message"=>"created Successfully"];
+            $message = ['message' => trans('messages.createdSuccesfully')];
             $resp =  fractal()->item($role)->transformWith(new RoleListTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
@@ -71,7 +71,7 @@ class RolePermissionService
             DB::select('CALL updateRole("'.$id.'","' . $roles . '","' . $roleDescription . '","' . $roleTypeId . '","'.$isActive.'","'.$updatedBy.'")');
             
             $roleData = AccessRole::where('id', $id)->first();
-            $message = ["message"=>"Updated Successfully"];
+            $message = ['message' => trans('messages.updatedSuccesfully')];
             $resp =  fractal()->item($roleData)->transformWith(new RoleListTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
@@ -88,7 +88,7 @@ class RolePermissionService
             $deletedBy =2;
             $deletedAt = date('Y-m-d H:i:s');
             DB::select('CALL deleteRole("'.$id.'","'.$isDelete.'","'.$deletedBy.'","'.$deletedAt.'")');
-            return response()->json(['message' => 'deleted successfully'], 200);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -106,7 +106,7 @@ class RolePermissionService
                 DB::select('CALL createRolePermission("' . $udid . '","' . $accessRoleId . '","' . $actionId . '")'); 
             }
             
-            return response()->json(['message' =>"Created Successfully"]);
+            return response()->json(['message' => trans('messages.createdSuccesfully')]);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
            }

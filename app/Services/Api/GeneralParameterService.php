@@ -31,7 +31,7 @@ class GeneralParameterService
                 }
                 $data = GeneralParameterGroup::where('id', $groupData->id)->with('generalParameter')->first();
                 $userdata = fractal()->item($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $group = ['name' => $request->input('generalParameterGroup'), 'updatedBy' => Auth::id(),];
                 $groupData = GeneralParameterGroup::where('udid', $id)->update($group);
@@ -44,7 +44,7 @@ class GeneralParameterService
                 }
                 $data = GeneralParameterGroup::where('udid', $id)->with('generalParameter')->first();
                 $userdata = fractal()->item($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
@@ -104,7 +104,7 @@ class GeneralParameterService
             GeneralParameterGroup::where('udid', $id)->delete();
             GeneralParameter::where('generalParameterGroupId', $id)->delete();
             DB::commit();
-            return response()->json(['message' => 'deleted successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -120,7 +120,7 @@ class GeneralParameterService
             ];
             GeneralParameter::where('udid', $id)->update($input);
             DB::commit();
-            return response()->json(['message' => 'deleted successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);

@@ -19,7 +19,7 @@ class PatientGoalService
             } elseif (!$goalId) {
                 $data = PatientGoal::where('patientId', $id)->get();
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }
         } elseif (!$id) {
             if ($goalId) {
@@ -27,7 +27,7 @@ class PatientGoalService
             } elseif (!$goalId) {
                 $data = PatientGoal::where('patientId', auth()->user()->patient->id)->get();
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }
         }
         return  fractal()->collection($data)->transformWith(new PatientGoalTransformer())->toArray();

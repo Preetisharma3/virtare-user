@@ -27,7 +27,7 @@ class InventoryService
                 "CALL createInventories('" . $data . "')"
             );
 
-            return response()->json(['message' => 'Created Successfully'], 200);
+            return response()->json(['message' => trans('messages.createdSuccesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -55,7 +55,7 @@ class InventoryService
             $isActive = $request->isActive;
             $updatedBy = 1;
             DB::select('CALL updateInventory("' . $id . '","' . $deviceType . '","' . $modelNumber . '","' . $serialNumber . '","' . $macAddress . '","' . $isActive . '","' . $updatedBy . '")');
-            $message  = ['message' => 'updated successfully'];
+            $message  = ['message' => trans('messages.updatedSuccesfully')];
             $newData = Inventory::where('id', $id)->first();
             $data =  fractal()->item($newData)->transformWith(new InventoryTransformer())->toArray();
             $response = array_merge($message, $data);
@@ -69,7 +69,7 @@ class InventoryService
     {
         try {
             DB::select('CALL deleteInventory(' . $id . ')');
-            return response()->json(['message' => 'deleted successfully'], 200);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

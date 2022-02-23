@@ -56,7 +56,7 @@ class GlobalCodeService
                })->where('id', $global->id)->with('globalCodeCategory')->first();
                $category = GlobalCodeCategory::where('id', $data->globalCodeCategoryId);
                $userdata = fractal()->item($data)->transformWith(new GlobalCodeTransformer())->toArray();
-               $message = ['message' => 'created successfully'];
+               $message = ['message' => trans('messages.createdSuccesfully')];
                $endData = array_merge($message, $userdata);
                return $endData;
           } catch (Exception $e) {
@@ -84,7 +84,7 @@ class GlobalCodeService
                $global = GlobalCode::find($id)->update($globalCode);
                $data = GlobalCode::where('id', $id)->with('globalCodeCategory')->first();
                $userdata = fractal()->item($data)->transformWith(new GlobalCodeTransformer())->toArray();
-               $message = ['message' => 'updated successfully'];
+               $message = ['message' => trans('messages.updatedSuccesfully')];
                $endData = array_merge($message, $userdata);
                return $endData;
           } catch (Exception $e) {
@@ -98,7 +98,7 @@ class GlobalCodeService
                $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
                GlobalCode::find($id)->update($data);
                GlobalCode::find($id)->delete();
-               return response()->json(['message' => 'delete successfully']);
+               return response()->json(['message' => trans('messages.deletedSuccesfully')]);
           } catch (Exception $e) {
                return response()->json(['message' => $e->getMessage()],  500);
           }
