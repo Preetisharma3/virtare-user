@@ -12,6 +12,7 @@ use App\Models\Task\TaskAssignedTo;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Task\TaskTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class TaskService
 {
@@ -73,8 +74,8 @@ class TaskService
             $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->first();
             return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
         } else {
-            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->get();
-            return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->paginate(5);
+            return fractal()->collection($data)->transformWith(new TaskTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         }
 
     }
