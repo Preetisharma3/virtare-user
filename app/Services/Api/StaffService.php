@@ -4,6 +4,7 @@ namespace App\Services\Api;
 
 use Exception;
 use App\Helper;
+use Carbon\Carbon;
 use App\Models\User\User;
 use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
@@ -26,7 +27,8 @@ use App\Transformers\Staff\StaffAppointmentTransformer;
 use App\Transformers\Appointment\AppointmentTransformer;
 use App\Transformers\Staff\StaffAvailabilityTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
-
+use App\Transformers\Appointment\AppointmentDataTransformer;
+use App\Transformers\Appointment\AppointmentListTransformer;
 
 class StaffService
 {
@@ -405,7 +407,23 @@ class StaffService
         } else {
             $staffId = auth()->user()->staff->id;
         }
-        $data = Appointment::where('staffId', $staffId)->paginate(5);
-        return fractal()->collection($data)->transformWith(new AppointmentTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+        $data = Appointment::where([['staffId', $staffId], ['startDateTime', '>=', Carbon::today()]])->paginate(5);
+        $results = Helper::dateGroup($data, 'startDateTime');
+        return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
+
+    public function patientAppointment($id)
+    {
+        if ($id) {
+            $patient = Patient::where('udid', $id)->first();
+            $patientId = $patient->id;
+        } else {
+            $patientId = auth()->user()->patient->id;
+        }
+        $data = Appointment::where([['patientId', $patientId], ['startDateTime', '>=', Carbon::today()]])->paginate(5);
+        $results = Helper::dateGroup($data, 'startDateTime');
+        return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+    }
+
+
 }
