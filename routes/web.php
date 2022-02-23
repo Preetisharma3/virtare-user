@@ -40,6 +40,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('logout', 'Api\v1\AuthController@logout');
     // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
+    $router->get('staff/patient','Api\v1\StaffPatientController@patientList');
+    $router->get('staff/{id}/patient','Api\v1\StaffPatientController@patientList');
+    $router->get('staff/appointment','Api\v1\StaffPatientController@appointmentList');
+    $router->get('staff/{id}/appointment','Api\v1\StaffPatientController@appointmentList');
      // team Routes
      $router->get('team', 'Api\v1\TeamController@all');
      $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
