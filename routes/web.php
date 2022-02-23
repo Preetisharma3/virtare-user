@@ -98,9 +98,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     /*
     *Bitrix APi routes
     */
-    $router->get("bitrix/deal/{patientId}",'Api\v1\PatientController@getBitrixDealById');
-    $router->get("bitrix/all/deals",'Api\v1\PatientController@getAllBitrixDeals');
-    $router->get("bitrix_deals/findbyName/",'Api\v1\PatientController@getBitrixDealByName');
+    $router->get("bitrix/deal/{patientId}",'Api\v1\PatientController@getAllBitrixDeals');
+    $router->get("bitrix/deal",'Api\v1\PatientController@getAllBitrixDeals');
 
     // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
