@@ -16,7 +16,9 @@ return [
     'user_updated' => 'User has been updated successfully.',
     'not_found' => "Data not found.",
     'vital_add' => "Vitals Added Successfully.",
-    'created_succesfully' => "Created Successfully.",
+    'createdSuccesfully' => "Created Successfully",
+    'updatedSuccesfully' => "Updated Successfully",
+    'deletedSuccesfully' => "Deleted Successfully",
     'date_exist'=> "la fecha ya existe",
     'notification'=>"Notification sent successfully.",
     'udid'=>"This device is already Mapped,Please Contact Admin."
