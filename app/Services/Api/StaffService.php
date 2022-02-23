@@ -6,18 +6,24 @@ use Exception;
 use App\Helper;
 use App\Models\User\User;
 use App\Models\Staff\Staff;
-use App\Models\Staff\StaffProvider\StaffProvider;
 use Illuminate\Support\Str;
 use App\Models\UserRole\UserRole;
 use Illuminate\Support\Facades\DB;
+use App\Models\Patient\PatientStaff;
+use App\Models\Appointment\Appointment;
 use App\Models\StaffContact\StaffContact;
 use App\Transformers\Staff\StaffTransformer;
 use App\Transformers\Staff\StaffRoleTransformer;
+use App\Models\Staff\StaffProvider\StaffProvider;
 use App\Models\StaffAvailability\StaffAvailability;
 use App\Transformers\Staff\StaffContactTransformer;
-use App\Transformers\Patient\PatientCountTransformer;
-use App\Transformers\Staff\StaffAvailabilityTransformer;
+use App\Transformers\Staff\StaffPatientTransformer;
 use App\Transformers\Staff\StaffProviderTransformer;
+use App\Transformers\Patient\PatientCountTransformer;
+use App\Transformers\Staff\StaffAppointmentTransformer;
+use App\Transformers\Appointment\AppointmentTransformer;
+use App\Transformers\Staff\StaffAvailabilityTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 
 class StaffService
@@ -60,13 +66,13 @@ class StaffService
         }
     }
 
-    public function listStaff($request,$id)
+    public function listStaff($request, $id)
     {
-        if(!$id){
+        if (!$id) {
             $data = Staff::with('roles', 'appointment')->get();
             return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
-        }else{
-            $data = Staff::where('udid',$id)->with('roles', 'appointment')->first();
+        } else {
+            $data = Staff::where('udid', $id)->with('roles', 'appointment')->first();
             return fractal()->item($data)->transformWith(new StaffTransformer())->toArray();
         }
     }
@@ -169,7 +175,7 @@ class StaffService
         try {
             if (!empty($request->staffId)) {
                 $staff = Staff::where('udid', $staffId)->first();
-                $input=['deletedBy'=>1,'isActive'=>0,'isDelete'=>1];
+                $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
                 StaffContact::where([['staffId', $staff->id], ['udid', $id]])->update($input);
                 StaffContact::where([['staffId', $staff->id], ['udid', $id]])->delete();
                 return response()->json(['message' => "Deleted Successfully"]);
@@ -235,7 +241,7 @@ class StaffService
     {
         try {
             $staff = Staff::where('udid', $staffId)->first();
-            $input=['deletedBy'=>1,'isActive'=>0,'isDelete'=>1];
+            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
             StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->update($input);
             StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->delete();
             return response()->json(['message' => "Deleted Successfully"]);
@@ -291,7 +297,7 @@ class StaffService
     {
         try {
             $staff = Staff::where('udid', $staffId)->first();
-            $input=['deletedBy'=>1,'isActive'=>0,'isDelete'=>1];
+            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
             UserRole::where([['staffId', $staff->id], ['udid', $id]])->update($input);
             UserRole::where([['staffId', $staff->id], ['udid', $id]])->delete();
             return response()->json(['message' => "Deleted Successfully"]);
@@ -350,7 +356,7 @@ class StaffService
     {
         try {
             $staff = Staff::where('udid', $staffId)->first();
-            $input=['deletedBy'=>1,'isActive'=>0,'isDelete'=>1];
+            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
             StaffProvider::where([['staffId', $staff->id], ['udid', $id]])->update($input);
             StaffProvider::where([['staffId', $staff->id], ['udid', $id]])->delete();
             return response()->json(['message' => "Deleted Successfully"]);
@@ -373,5 +379,29 @@ class StaffService
             'CALL careCoordinatorNetworkCount()',
         );
         return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+    }
+
+    public function patientList($id)
+    {
+        if ($id) {
+            $staff = Staff::where('udid', $id)->first();
+            $staffId = $staff->id;
+        } else {
+            $staffId = auth()->user()->staff->id;
+        }
+        $data = PatientStaff::where('staffId', $staffId)->paginate(5);
+        return fractal()->collection($data)->transformWith(new StaffPatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+    }
+
+    public function appointmentList($id)
+    {
+        if ($id) {
+            $staff = Staff::where('udid', $id)->first();
+            $staffId = $staff->id;
+        } else {
+            $staffId = auth()->user()->staff->id;
+        }
+        $data = Appointment::where('staffId', $staffId)->paginate(5);
+        return fractal()->collection($data)->transformWith(new AppointmentTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 }
