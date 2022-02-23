@@ -6,6 +6,7 @@ use App\Models\User\User;
 use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Role\RoleTransformer;
+use App\Transformers\Contact\ContactTypeTransformer;
 
 class UserTransformer extends TransformerAbstract
 {
@@ -36,8 +37,8 @@ class UserTransformer extends TransformerAbstract
 			'email' => $user->email,
 			'profile_photo' => (!empty($user->profilePhoto)) && (!is_null($user->profilePhoto)) ? str_replace("public", "", URL::to('/')) . '/' . $user->profilePhoto : "",
 			'emailverified' => $user->emailVerify ? true : false,
-			'contactType' => @$user->familyMember->contactType->name ?  @$user->familyMember->contactType->name : '',
-			'contactTime' => @$user->familyMember->contactTime->name ?  @$user->familyMember->contactTime->name : '',
+			'contactType' => @$user->staff ? $user->staff->contactTypeId : $user->familyMember->contactTypeId,
+			'contactTime' => @$user->staff ?  @$user->staff->contactTime->name : @$user->familyMember->contactTime->name,
 			'gender' => @$user->staff->gender->name ? @$user->staff->gender->name : @$user->familyMember->gender->name,
 			'network' => @$user->staff->network->name ? @$user->staff->network->name : '',
 			'specialization' => @$user->staff->specialization->name ? @$user->staff->specialization->name : '',
