@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Document\DocumentRequest;
 use App\Services\Api\DocumentService;
 
 class DocumentController extends Controller
 {
-    public function createDocument(Request $request,$entity,$id,$documentId=null,$tagId=null)
+    public function createDocument(DocumentRequest $request,$entity,$id,$documentId=null,$tagId=null)
     {
         return (new DocumentService)->documentCreate( $request,$entity,$id,$documentId,$tagId);
     }
