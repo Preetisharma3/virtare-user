@@ -18,7 +18,7 @@ class TimeLogService
     public function timeLogList($request, $id)
     {
         if (!$id) {
-            $data = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->paginate(5);
+            $data = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->paginate(20);
             return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         } else {
             $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed', 'notes')->first();
