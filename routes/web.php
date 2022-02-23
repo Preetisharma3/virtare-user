@@ -19,11 +19,6 @@ use App\Transformers\Patient\PatientTransformer;
 |
 */
 
-/*
-*Bitrix APi routes
-*/
-$router->get("bitrix/deal/{patientId}",'Api\v1\PatientController@getBitrixDeals');
-
 
 $router->get('/linkstorage', function () use ($router) {
 
@@ -97,6 +92,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('timeLog/{id}', 'Api\v1\TimeLogController@updateTimeLog');
     $router->delete('timeLog/{id}', 'Api\v1\TimeLogController@deleteTimeLog');
 
+    // Bitrix APi routes
+    $router->get("bitrix/deal/{patientId}",'Api\v1\PatientController@getBitrixDeals');
+
+    
     // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
 
