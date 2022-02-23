@@ -68,11 +68,11 @@ class StaffService
 
     public function listStaff($request, $id)
     {
-        if (!$id) {
-            $data = Staff::with('roles', 'appointment')->get();
-            return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
-        } else {
-            $data = Staff::where('udid', $id)->with('roles', 'appointment')->first();
+        if(!$id){
+            $data = Staff::with('roles', 'appointment')->paginate(5);
+            return fractal()->collection($data)->transformWith(new StaffTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+        }else{
+            $data = Staff::where('udid',$id)->with('roles', 'appointment')->first();
             return fractal()->item($data)->transformWith(new StaffTransformer())->toArray();
         }
     }
