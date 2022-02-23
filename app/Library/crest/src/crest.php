@@ -55,13 +55,13 @@
 				);
 			}
 
-			static::setLog(
-				[
-					'request' => $_REQUEST,
-					'result' => $result
-				],
-				'installApp'
-			);
+			// static::setLog(
+			// 	[
+			// 		'request' => $_REQUEST,
+			// 		'result' => $result
+			// 	],
+			// 	'installApp'
+			// );
 			return $result;
 		}
 
@@ -168,29 +168,29 @@
 						$result[ 'error_information' ] = $info[ 'curl_error' ];
 					}
 
-					static::setLog(
-						[
-							'url'    => $url,
-							'info'   => $info,
-							'params' => $arParams,
-							'result' => $result
-						],
-						'callCurl'
-					);
+					// static::setLog(
+					// 	[
+					// 		'url'    => $url,
+					// 		'info'   => $info,
+					// 		'params' => $arParams,
+					// 		'result' => $result
+					// 	],
+					// 	'callCurl'
+					// );
 
 					return $result;
 				}
 				catch(Exception $e)
 				{
-					static::setLog(
-						[
-							'message' => $e->getMessage(),
-							'code' => $e->getCode(),
-							'trace' => $e->getTrace(),
-							'params' => $arParams
-						],
-						'exceptionCurl'
-					);
+					// static::setLog(
+					// 	[
+					// 		'message' => $e->getMessage(),
+					// 		'code' => $e->getCode(),
+					// 		'trace' => $e->getTrace(),
+					// 		'params' => $arParams
+					// 	],
+					// 	'exceptionCurl'
+					// );
 
 					return [
 						'error' => 'exception',
@@ -201,12 +201,12 @@
 			}
 			else
 			{
-				static::setLog(
-					[
-						'params' => $arParams
-					],
-					'emptySetting'
-				);
+				// static::setLog(
+				// 	[
+				// 		'params' => $arParams
+				// 	],
+				// 	'emptySetting'
+				// );
 			}
 
 			return [
