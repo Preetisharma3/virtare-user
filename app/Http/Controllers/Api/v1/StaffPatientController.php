@@ -18,4 +18,8 @@ class StaffPatientController extends Controller
     public function appointmentList($id = null){
         return (new StaffService)->appointmentList( $id);
     }
+
+    public function patientAppointment($id = null){
+        return (new StaffService)->patientAppointment( $id);
+    }
 }
