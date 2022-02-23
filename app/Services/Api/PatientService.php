@@ -1207,9 +1207,11 @@ class PatientService
                 $dateConvert = Helper::date($request->input('date'));
                 $timeConvert = Helper::time($request->input('timeAmount'));
                 $patientId = Patient::where('udid', $id)->first();
+                $performedBy = Helper::entity('staff',$request->input('performedBy'));
+               $loggedBy = Helper::entity('staff',$request->input('loggedBy'));
                 $input = [
-                    'categoryId' => $request->input('category'), 'loggedId' => $request->input('loggedBy'), 'udid' => Str::uuid()->toString(),
-                    'performedId' => $request->input('performedBy'), 'date' => $dateConvert, 'timeAmount' => $timeConvert,
+                    'categoryId' => $request->input('category'), 'loggedId' => $loggedBy, 'udid' => Str::uuid()->toString(),
+                    'performedId' => $performedBy, 'date' => $dateConvert, 'timeAmount' => $timeConvert,
                     'createdBy' => Auth::id(), 'patientId' => $patientId->id
                 ];
                 $data = PatientTimeLog::create($input);
