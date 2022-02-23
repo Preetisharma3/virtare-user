@@ -7,6 +7,7 @@ use App\Models\User\User;
 use App\Models\Vital\VitalField;
 use Illuminate\Support\Facades\DB;
 use App\Models\Patient\PatientFlag;
+use App\Models\Patient\PatientStaff;
 use App\Models\Patient\PatientVital;
 use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
@@ -89,7 +90,7 @@ class Patient extends Model
     public function vitals()
 	{
         $patentId = $this->id;
-		return $this->hasMany(PatientVital::class, 'patientId')->whereIn(\DB::raw('(patientVitals.takeTime,vitalFieldId)'), function ($query) use($patentId) {
+		return $this->hasMany(PatientVital::class, 'patientId')->whereIn(DB::raw('(patientVitals.takeTime,vitalFieldId)'), function ($query) use($patentId) {
             return $query->from('patientVitals')
                 ->selectRaw('max(`takeTime`),vitalFieldId')
                 ->where('patientId',$patentId)
@@ -111,6 +112,11 @@ class Patient extends Model
     public function inventories()
 	{
 		return $this->hasMany(PatientInventory::class, 'patientId');
+	}
+
+    public function patientStaff()
+	{
+		return $this->belongsTo(PatientStaff::class, 'id','patientId');
 	}
 
     public function vital()
