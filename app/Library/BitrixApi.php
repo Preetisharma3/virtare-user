@@ -11,7 +11,7 @@ class BitrixApi extends CRest{
                 'id' => $id,
                ]
            );
-            return json_encode($getDeal);
+            return $getDeal;
         }else{
             return false;
         }
@@ -22,10 +22,10 @@ class BitrixApi extends CRest{
             $getDeal = CRest::call(
                 'crm.deal.list',
                    [
-                    'filter' => array("TITLE" => $title)
+                    'filter' => array("%TITLE" => $title)
                    ]
            );
-            return json_encode($getDeal);
+            return $getDeal;
         }else{
             return false;
         }
@@ -37,9 +37,9 @@ class BitrixApi extends CRest{
                    []
                );
 
-            return json_encode($getDeal);
+            return $getDeal;
     }
- 
+
     function searchDeals($search_obj){
         if($search_obj){
             $getDeal = CRest::call(
@@ -48,7 +48,7 @@ class BitrixApi extends CRest{
                     'filter' => $search_obj,
                    ]
            );
-            return json_encode($getDeal);
+            return $getDeal;
         }else{
             return false;
         }

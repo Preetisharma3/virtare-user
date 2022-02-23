@@ -264,7 +264,8 @@ class PatientController extends Controller
     if($patientId){
 
       // get deal from the bitrix24 api
-      return BitrixApi::getDeal($patientId);
+      $response = BitrixApi::getDeal($patientId);
+      return response()->json($response, 200);
 
     }else{
 
@@ -276,28 +277,29 @@ class PatientController extends Controller
     }
   }
 
-  Public function getBitrixDealByName(Request $request)
-  {
-    $data = $request->all();
-    if($data["title"]){
-      // get deal from the bitrix24 api
-      return BitrixApi::getDealByName($data["title"]);
-
-    }else{
-
-      $json = array(
-        "error" => "Title is Required."
-      );
-      
-      return json_encode($json);
-    }
-  }
 
   // Bitrix APi for list all deals
-  Public function getAllBitrixDeals(Request $request)
+  Public function getAllBitrixDeals(Request $request,$patientId=null)
   {
       // get deal from the bitrix24 api
-      return BitrixApi::getAllDeal();
+    $data = $request->all();
+    if($patientId)
+    {
+      // get deal from the bitrix24 api
+      $response = BitrixApi::getDealById($patientId);
+      return response()->json($response, 200);
+    }
+    else if(isset($data["title"]))
+    {
+      // get deal by name from the bitrix24 api
+      $response = BitrixApi::getDealByName($data["title"]);
+      return response()->json($response, 200);
+    }
+    else
+    {
+      $response = BitrixApi::getAllDeal();
+      return response()->json($response, 200);
+    }
   }
 
  
