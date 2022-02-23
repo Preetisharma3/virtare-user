@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\GeneralParameter\GeneralParameter;
 use App\Models\GeneralParameter\GeneralParameterGroup;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\GeneralParameter\GeneralParameterTransformer;
 use App\Transformers\GeneralParameter\GeneralParameterGroupTransformer;
 
@@ -59,8 +60,8 @@ class GeneralParameterService
         DB::beginTransaction();
         try {
             if (!$id) {
-                $data = GeneralParameterGroup::with('generalParameter')->orderBy('createdAt', 'DESC')->get();
-                return fractal()->collection($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
+                $data = GeneralParameterGroup::with('generalParameter')->orderBy('createdAt', 'DESC')->paginate(5);
+                return fractal()->collection($data)->transformWith(new GeneralParameterGroupTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             } else {
                 $data = GeneralParameterGroup::where('udid', $id)->with('generalParameter')->first();
                 return fractal()->item($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
