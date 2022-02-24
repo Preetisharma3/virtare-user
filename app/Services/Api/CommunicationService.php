@@ -61,13 +61,13 @@ class CommunicationService
             'createdBy' => $data->createdBy,
             'udid' => $udid
         ]);
-        return response()->json(['message' => 'created Successfully'], 200);
+        return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
     }
 
     // get Communication
     public function getCommunication($request)
     {
-        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')
+        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt','DESC')
             ->paginate(15, ['*'], 'page', $request->page);
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
@@ -85,7 +85,7 @@ class CommunicationService
             'udid' => $udid
         ];
         CommunicationCallRecord::create($input);
-        return response()->json(['message' => 'created Successfully'], 200);
+        return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
     }
 
     //Call Status API's

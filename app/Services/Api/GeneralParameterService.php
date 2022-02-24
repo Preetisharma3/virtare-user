@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\GeneralParameter\GeneralParameter;
 use App\Models\GeneralParameter\GeneralParameterGroup;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\GeneralParameter\GeneralParameterTransformer;
 use App\Transformers\GeneralParameter\GeneralParameterGroupTransformer;
 
@@ -30,7 +31,7 @@ class GeneralParameterService
                 }
                 $data = GeneralParameterGroup::where('id', $groupData->id)->with('generalParameter')->first();
                 $userdata = fractal()->item($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $group = ['name' => $request->input('generalParameterGroup'), 'updatedBy' => Auth::id(),];
                 $groupData = GeneralParameterGroup::where('udid', $id)->update($group);
@@ -43,7 +44,7 @@ class GeneralParameterService
                 }
                 $data = GeneralParameterGroup::where('udid', $id)->with('generalParameter')->first();
                 $userdata = fractal()->item($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
@@ -59,8 +60,8 @@ class GeneralParameterService
         DB::beginTransaction();
         try {
             if (!$id) {
-                $data = GeneralParameterGroup::with('generalParameter')->orderBy('createdAt', 'DESC')->get();
-                return fractal()->collection($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
+                $data = GeneralParameterGroup::with('generalParameter')->orderBy('createdAt', 'DESC')->paginate(20);
+                return fractal()->collection($data)->transformWith(new GeneralParameterGroupTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             } else {
                 $data = GeneralParameterGroup::where('udid', $id)->with('generalParameter')->first();
                 return fractal()->item($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
@@ -103,7 +104,7 @@ class GeneralParameterService
             GeneralParameterGroup::where('udid', $id)->delete();
             GeneralParameter::where('generalParameterGroupId', $id)->delete();
             DB::commit();
-            return response()->json(['message' => 'deleted successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);
@@ -119,7 +120,7 @@ class GeneralParameterService
             ];
             GeneralParameter::where('udid', $id)->update($input);
             DB::commit();
-            return response()->json(['message' => 'deleted successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);

@@ -12,6 +12,7 @@ use App\Models\Task\TaskAssignedTo;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Task\TaskTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class TaskService
 {
@@ -60,9 +61,8 @@ class TaskService
             }
         }
         $taskData =  Task::where('id',$task->id)->with('assignedTo.assigned','assignedTo.patient')->first();
-       $message = ['message' => 'Created Successfully'];
+       $message = ['message' => trans('messages.createdSuccesfully')];
        $result =fractal()->item($taskData)->transformWith(new TaskTransformer())->toArray();
-
        $data = array_merge($message,$result);
        return $data;
     }
@@ -70,11 +70,11 @@ class TaskService
     public function listTask($request)
     {
         if ($request->latest) {
-            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->first();
-            return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
-        } else {
-            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->get();
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
             return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
+        } else {
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->paginate(20);
+            return fractal()->collection($data)->transformWith(new TaskTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         }
 
     }
@@ -117,7 +117,7 @@ class TaskService
             $input
         );
         $updatedData = Task::where('id', $id)->first();
-        $message = ['message' => 'Updated Successfully'];
+        $message = ['message' => trans('messages.updatedSuccesfully')];
         $result =  fractal()->item($updatedData)->transformWith(new TaskTransformer())->toArray();
         $endData = array_merge(
             $message,
@@ -132,7 +132,7 @@ class TaskService
             $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
             Task::where('id',$id)->update($data);
             Task::where('id',$id)->delete();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
        }

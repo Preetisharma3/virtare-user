@@ -40,6 +40,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('logout', 'Api\v1\AuthController@logout');
     // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
+    $router->get('staff/patient','Api\v1\StaffPatientController@patientList');
+    $router->get('staff/{id}/patient','Api\v1\StaffPatientController@patientList');
+    $router->get('staff/appointment','Api\v1\StaffPatientController@appointmentList');
+    $router->get('staff/{id}/appointment','Api\v1\StaffPatientController@appointmentList');
+    $router->get('patient/appointment','Api\v1\StaffPatientController@patientAppointment');
+    $router->get('patient/{id}/appointment','Api\v1\StaffPatientController@patientAppointment');
      // team Routes
      $router->get('team', 'Api\v1\TeamController@all');
      $router->get('team/{type}[/{id}]', 'Api\v1\TeamController@team');
@@ -87,6 +93,13 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('timeLog[/{id}]', 'Api\v1\TimeLogController@listTimeLog');
     $router->put('timeLog/{id}', 'Api\v1\TimeLogController@updateTimeLog');
     $router->delete('timeLog/{id}', 'Api\v1\TimeLogController@deleteTimeLog');
+
+
+    /*
+    *Bitrix APi routes
+    */
+    $router->get("bitrix/deal/{patientId}",'Api\v1\PatientController@getAllBitrixDeals');
+    $router->get("bitrix/deal",'Api\v1\PatientController@getAllBitrixDeals');
 
     // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
@@ -317,7 +330,7 @@ $router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
 $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
 $router->get('{entity}/{id}/notes', 'Api\v1\NoteController@listNote');
 
-
+//cpt code
 $router->get('cptCode','Api\v1\CPTCodeController@listCPTCode');
 $router->post('cptCode','Api\v1\CPTCodeController@createCPTCode');
 $router->put('cptCode/{id}','Api\v1\CPTCodeController@updateCPTCode');
@@ -328,3 +341,9 @@ $router->get('faq', 'Api\v1\FaqController');
 //freeswitch
 $router->get('freeswitch/directory', 'Freeswitch\DirectoryController@directory');
 $router->get('freeswitch/dialplan', 'Freeswitch\DirectoryController@dialplan');
+
+//template
+$router->get('template','Api\v1\TemplateController@listTemplate');
+$router->post('template','Api\v1\TemplateController@createTemplate');
+$router->put('template/{id}','Api\v1\TemplateController@updateTemplate');
+$router->delete('template/{id}','Api\v1\TemplateController@deleteTemplate');

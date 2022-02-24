@@ -23,7 +23,7 @@ class NoteService
                 'note' => $request->input('note'), 'udid' => Str::uuid()->toString(), 'createdBy' => $userId, 'referenceId' => $referenceId, 'entityType' => $request->input('entityType')
             ];
             Note::create($input);
-            return response()->json(['message' => 'Created Successfully'], 200);
+            return response()->json(['message' => trans('messages.createdSuccesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -34,8 +34,8 @@ class NoteService
         try {
             if ($request->latest) {
                 $referenceId = Helper::entity($entity, $id);
-                $note = Note::where([['referenceId', $referenceId], ['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->first();
-                return fractal()->item($note)->transformWith(new NoteTransformer())->toArray();
+                $note = Note::where([['referenceId', $referenceId], ['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->get();
+                return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
             } else {
                 $note = Note::where('entityType', $entity)->with('typeName', 'category')->get();
                 return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();

@@ -65,6 +65,7 @@ class StaffTransformer extends TransformerAbstract
             'gender' => $data->gender->name,
             'phoneNumber'=>$data->phoneNumber,
             'profile_photo' =>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
+            'profilePhoto' => (!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
             'network' => $data->network->name,
             'specialization' => $data->specialization->name,
             'createdAt' => strtotime($data->createdAt),

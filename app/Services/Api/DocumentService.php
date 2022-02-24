@@ -52,7 +52,7 @@ class DocumentService
                 }
                 $getDocument = Document::where([['id', $document->id], ['entityType', $entity]])->with('documentType', 'tag.tags')->first();
                 $userdata = fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $input = [
                     'name' => $request->input('name'), 'filePath' => $request->input('document'), 'documentTypeId' => $request->input('type'),
@@ -68,7 +68,8 @@ class DocumentService
                     $getDocument = Document::where([['id', $documentId], ['entityType', 'staff']])->with('documentType', 'tag.tags')->first();
                 }
                 $userdata = fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
+
             }
             DB::commit();
             $endData = array_merge($message, $userdata);
@@ -86,12 +87,12 @@ class DocumentService
             if ($request->latest) {
                 $patientId = Patient::where('udid', $request->id)->first();
                 if ($patientId) {
-                    $getDocument = Document::where([['referanceId', $patientId->userId], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->first();
+                    $getDocument = Document::where([['referanceId', $patientId->userId], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->get();
                 } else {
                     $patientId = Patient::where('id', $id)->first();
-                    $getDocument = Document::where([['referanceId', $patientId->userId], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->first();
+                    $getDocument = Document::where([['referanceId', $patientId->userId], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->get();
                 }
-                return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
+                return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
             } else {
                 if($entity=='staff'){
                     $staff=Helper::entity($entity,$id);
@@ -141,7 +142,7 @@ class DocumentService
                 tag::where('documentId', $documentId)->delete();
             }
             DB::commit();
-            return response()->json(['message' => 'delete successfully']);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['message' => $e->getMessage()],  500);

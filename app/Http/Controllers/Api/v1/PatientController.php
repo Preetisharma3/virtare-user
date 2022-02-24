@@ -13,6 +13,7 @@ use App\Http\Requests\Patient\PatientConditionRequest;
 use App\Http\Requests\Patient\PatientPhysicianRequest;
 use App\Http\Requests\Patient\PatientMedicalHistoryRequest;
 use App\Http\Requests\Patient\PatientMedicalRoutineRequest;
+use \App\Library\BitrixApi;
 
 class PatientController extends Controller
 {
@@ -254,6 +255,51 @@ class PatientController extends Controller
   public function createFamily(Request $request,$id,$familyId=null)
   {
     return (new FamilyService)->familyCreate($request,$id,$familyId);
+  }
+
+
+  // Bitrix APi for getting single deal
+  Public function getBitrixDealById(Request $request,$patientId)
+  {
+    if($patientId){
+
+      // get deal from the bitrix24 api
+      $response = BitrixApi::getDeal($patientId);
+      return response()->json($response, 200);
+
+    }else{
+
+      $json = array(
+        "error" => "Patient ID is Required."
+      );
+      
+      return json_encode($json);
+    }
+  }
+
+
+  // Bitrix APi for list all deals
+  Public function getAllBitrixDeals(Request $request,$patientId=null)
+  {
+      // get deal from the bitrix24 api
+    $data = $request->all();
+    if($patientId)
+    {
+      // get deal from the bitrix24 api
+      $response = BitrixApi::getDealById($patientId);
+      return response()->json($response, 200);
+    }
+    else if(isset($data["title"]))
+    {
+      // get deal by name from the bitrix24 api
+      $response = BitrixApi::getDealByName($data["title"]);
+      return response()->json($response, 200);
+    }
+    else
+    {
+      $response = BitrixApi::getAllDeal();
+      return response()->json($response, 200);
+    }
   }
 
  

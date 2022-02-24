@@ -11,14 +11,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Patient\PatientTimeLog;
 use App\Transformers\Patient\PatientTimeLogTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class TimeLogService
 {
     public function timeLogList($request, $id)
     {
         if (!$id) {
-            $data = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->get();
-            return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->toArray();
+            $data = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->paginate(20);
+            return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         } else {
             $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed', 'notes')->first();
             return fractal()->item($data)->transformWith(new PatientTimeLogTransformer())->toArray();
@@ -41,11 +42,11 @@ class TimeLogService
                 ];
                 Note::create($noteData);
             }
-            $input = ['performedId' => $request->input('staff'), 'patientId' => $request->input('patient'), 'timeAmount' => $time, 'updatedBy' => Auth::id()];
+            $input = ['performedId' => $request->input('staffId'), 'patientId' => $request->input('patient'), 'timeAmount' => $time, 'updatedBy' => Auth::id()];
             PatientTimeLog::where('udid', $id)->update($input);
             $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed', 'patient.notes')->first();
             $userdata = fractal()->item($data)->transformWith(new PatientTimeLogTransformer())->toArray();
-            $message = ['message' => 'updated successfully'];
+            $message = ['message' => trans('messages.updatedSuccesfully')];
             DB::commit();
             $endData = array_merge($message, $userdata);
             return $endData;
@@ -60,6 +61,6 @@ class TimeLogService
         $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
         $data = PatientTimeLog::where('udid', $id)->update($input);
         PatientTimeLog::where('udid', $id)->delete();
-        return response()->json(['message' => 'deleted successfully']);
+        return response()->json(['message' => trans('messages.deletedSuccesfully')]);
     }
 }

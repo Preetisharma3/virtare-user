@@ -20,12 +20,12 @@ class PatientStaffService
                 $staffId = Staff::where('udid', $request->input('staff'))->first();
                 $input = ['udid' => Str::uuid()->toString(), 'patientId' => $patientId->id, 'staffId' => $staffId->id, 'createdBy' => Auth::id()];
                 PatientStaff::create($input);
-                return response()->json(['message' => 'Created Successfully'], 200);
+                return response()->json(['message' => trans('messages.createdSuccesfully')], 200);
             } else {
                 $staffId = Staff::where('udid', $request->input('staff'))->first();
                 $input = ['staffId' => $staffId->id, 'updatedBy' => Auth::id()];
                 PatientStaff::where('udid', $patientStaffId)->update($input);
-                return response()->json(['message' => 'updated Successfully'], 200);
+                return response()->json(['message' => trans('messages.updatedSuccesfully')], 200);
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -54,7 +54,7 @@ class PatientStaffService
             $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
             PatientStaff::where('udid', $patientStaffId)->update($input);
             PatientStaff::where('udid', $patientStaffId)->delete();
-            return response()->json(['message' => 'deleted successfully'], 200);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

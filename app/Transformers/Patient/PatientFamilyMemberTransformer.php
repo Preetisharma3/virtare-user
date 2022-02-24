@@ -33,6 +33,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'vital'=>(!empty($data->vital))?$data->vital:0,
 				'message'=>(!empty($data->messages))?$data->messages:0,
 				'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
+				'profilePhoto'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
 			];
 	}
 }

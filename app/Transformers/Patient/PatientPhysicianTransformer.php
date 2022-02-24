@@ -25,6 +25,7 @@ class PatientPhysicianTransformer extends TransformerAbstract
             'fax'=>$data->fax,
             'sameAsReferal'=>$data->sameAsReferal,
 			'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
+			'profilePhoto'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
 		];
 	}
 }

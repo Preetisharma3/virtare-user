@@ -55,7 +55,7 @@ class AppointmentService
                         'patientId' => $id,
                     ];
                 } else {
-                    return response()->json(['message' => 'unauthorized']);
+                    return response()->json(['message' => trans('messages.unauthenticated')], 401);
                 }
             }
             $data = array_merge($entity, $input);
@@ -67,7 +67,7 @@ class AppointmentService
                 'createdBy' => 1, 'udid' => Str::uuid()->toString()
             ];
             PatientTimeLine::create($timeLine);
-            return response()->json(['message' => 'created successfully']);
+            return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -78,8 +78,8 @@ class AppointmentService
         if (!$id) {
             if ($request->latest) {
                 $patientId = Patient::where('udid', $request->id)->first();
-                $data = Appointment::where([['patientId', $patientId->id], ['startDateTime', '>=', Carbon::today()]])->latest()->first();
-                return fractal()->item($data)->transformWith(new AppointmentDataTransformer())->toArray();
+                $data = Appointment::where([['patientId', $patientId->id], ['startDateTime', '>=', Carbon::today()]])->latest()->get();
+                return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
             } else {
                 $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::today()]])->get();
                 $results = Helper::dateGroup($data, 'startDateTime');
@@ -98,7 +98,7 @@ class AppointmentService
                     return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
                 }
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }
         }
     }
@@ -127,7 +127,7 @@ class AppointmentService
                 if ($familyMember == true) {
                     $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $id]])->whereDate('startDateTime', '=', Carbon::today())->get();
                 } else {
-                    return response()->json(['message' => 'unauthorized']);
+                    return response()->json(['message' => trans('messages.unauthenticated')], 401);
                 }
             }
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();

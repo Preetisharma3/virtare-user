@@ -35,7 +35,7 @@ class CPTCodeService
             DB::select('CALL createCPTCode("' . $udid . '","' . $serviceId . '","' . $providerId . '","' . $name . '","' . $billingAmout . '","' . $description . '","'.$durationId.'")');
             
             $cptCodeData = CPTCode::where('udid', $udid)->first();
-            $message = ["message" => "created Successfully"];
+            $message = ['message' => trans('messages.createdSuccesfully')];
             $resp =  fractal()->item($cptCodeData)->transformWith(new CPTCodeTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData; 
@@ -57,7 +57,7 @@ class CPTCodeService
             $isActive = 1;
             DB::select('CALL updateCPTCode("'.$id.'","' . $serviceId . '","' . $providerId . '","' . $name . '","' . $billingAmout . '","' . $description . '","'.$durationId.'","'.$updatedBy.'","'.$isActive.'")');
             $cptCodeData = CPTCode::where('id', $id)->first();
-            $message = ["message" => "created Successfully"];
+            $message = ['message' => trans('messages.updatedSuccesfully')];
             $resp =  fractal()->item($cptCodeData)->transformWith(new CPTCodeTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData; 
@@ -70,7 +70,7 @@ class CPTCodeService
     {
         try {
             CPTCode::where('id', $id)->delete();
-            return response()->json(['message' => "Deleted Successfully"]);
+            return response()->json(['message' => trans('messages.deletedSuccesfully')],  200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

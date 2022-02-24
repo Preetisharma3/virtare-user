@@ -41,7 +41,7 @@ class FamilyService
                 $data = PatientFamilyMember::where('id', $familyData->id)->first();
 
                 $userdata = fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $patient = PatientFamilyMember::where('udid', $familyId)->first();
                 $usersId = $patient->userId;
@@ -60,7 +60,7 @@ class FamilyService
                 $familyData = PatientFamilyMember::where('udid',$familyId)->update($familyMember);
                 $data = PatientFamilyMember::where('udid', $familyId)->first();
                 $userdata = fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
 

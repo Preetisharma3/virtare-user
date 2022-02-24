@@ -2,14 +2,15 @@
 
 namespace App\Services\Api;
 
-use App\Models\Document\Document;
-use App\Models\Patient\Patient;
 use Exception;
 use App\Models\User\User;
 use App\Models\Staff\Staff;
-use App\Transformers\User\UserPatientTransformer;
+use App\Models\Patient\Patient;
+use App\Models\Document\Document;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\User\UserTransformer;
+use App\Transformers\User\UserPatientTransformer;
 
 class UserService
 {
@@ -39,7 +40,7 @@ class UserService
                     "updatedBy" => Auth::user()->id,
                 ]);
                 User::where('id', Auth::user()->id)->update([
-                    "profilePhoto"=>str_replace(\URL::to('/').'/', "", $request->path),
+                    "profilePhoto"=>str_replace(URL::to('/').'/', "", $request->path),
                 ]);
                 $user = User::where('udid', Auth::user()->udid)->first();
                 return fractal()->item($user)->transformWith(new UserPatientTransformer(true))->toArray();
@@ -49,7 +50,7 @@ class UserService
                     "updatedBy" => Auth::user()->id,
                 ]);
                 User::where('id', Auth::user()->id)->update([
-                    "profilePhoto"=>str_replace(\URL::to('/').'/', "", $request->path),
+                    "profilePhoto"=>str_replace(URL::to('/').'/', "", $request->path),
                 ]);
                 $user = User::where('udid', Auth::user()->udid)->first();
                 return fractal()->item($user)->transformWith(new UserTransformer(true))->toArray();

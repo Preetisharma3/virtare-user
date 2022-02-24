@@ -59,6 +59,7 @@ class PhysicianTransformer extends TransformerAbstract
             'phoneNumber'=>$data->phoneNumber,
 			'house_no' => $data->house_no,
 			'profile_photo' => (!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
+            'profilePhoto' => (!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
 			'city' => $data->city,
 			'state' => $data->state,
 			'country' => $data->country,
