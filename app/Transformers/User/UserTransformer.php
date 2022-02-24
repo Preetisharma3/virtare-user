@@ -38,7 +38,7 @@ class UserTransformer extends TransformerAbstract
 			'profile_photo' => (!empty($user->profilePhoto)) && (!is_null($user->profilePhoto)) ? str_replace("public", "", URL::to('/')) . '/' . $user->profilePhoto : "",
 			'profilePhoto' => (!empty($user->profilePhoto)) && (!is_null($user->profilePhoto)) ? str_replace("public", "", URL::to('/')) . '/' . $user->profilePhoto : "",
 			'emailverified' => $user->emailVerify ? true : false,
-			'contactType' => @$user->staff ? $user->staff->contactTypeId : $user->familyMember->contactTypeId,
+			'contactType' => @$user->staff ? @$user->staff->contactTypeId : @$user->familyMember->contactTypeId,
 			'contactTime' => @$user->staff ?  @$user->staff->contactTime->name : @$user->familyMember->contactTime->name,
 			'gender' => @$user->staff->gender->name ? @$user->staff->gender->name : @$user->familyMember->gender->name,
 			'network' => @$user->staff->network->name ? @$user->staff->network->name : '',
