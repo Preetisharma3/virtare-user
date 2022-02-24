@@ -30,7 +30,7 @@ class NoteTransformer extends TransformerAbstract
             'category' => $data->category->name,
             'type' => $data->typeName->name,
             'note' => $data->note,
-            'addedBy'=>$data->user->staff->firstName,
+            'addedBy'=>@$data->user->staff->firstName.' '.@$data->user->staff->lastName,
             'flag'=>'#39B5C2'
         ];
     }
