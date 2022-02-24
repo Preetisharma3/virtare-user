@@ -291,7 +291,7 @@ class PatientService
                     'otherLanguage',
                     'flags.flag',
                     'inventories.inventory'
-                )->paginate(20);
+                )->paginate(env('PER_PAGE',20));
                 return fractal()->collection($getPatient)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($getPatient))->toArray();
             }
         } catch (Exception $e) {
