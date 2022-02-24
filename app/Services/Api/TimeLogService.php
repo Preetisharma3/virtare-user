@@ -42,7 +42,7 @@ class TimeLogService
                 ];
                 Note::create($noteData);
             }
-            $input = ['performedId' => $request->input('staff'), 'patientId' => $request->input('patient'), 'timeAmount' => $time, 'updatedBy' => Auth::id()];
+            $input = ['performedId' => $request->input('performedId'), 'patientId' => $request->input('patientId'), 'timeAmount' => $time, 'updatedBy' => Auth::id()];
             PatientTimeLog::where('udid', $id)->update($input);
             $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed', 'patient.notes')->first();
             $userdata = fractal()->item($data)->transformWith(new PatientTimeLogTransformer())->toArray();
