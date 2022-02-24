@@ -26,6 +26,11 @@ class PatientVital extends Model
         return $this->hasOne(VitalField::class,'id','vitalFieldId');
     }
 
+    public function deviceType()
+    {
+        return $this->hasOne(GlobalCode::class,'id','deviceTypeId');
+    }
+
     public function patient()
     {
         return $this->belongsTo(Patient::class,'patientId');

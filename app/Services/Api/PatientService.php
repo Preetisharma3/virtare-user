@@ -678,23 +678,20 @@ class PatientService
     {
         DB::beginTransaction();
         try {
-            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
-            PatientInventory::find($inventoryId)->update($data);
-            $patient = PatientInventory::find($inventoryId)->first();
+            $patient = PatientInventory::where('id',$inventoryId)->first();
             $patientData = Patient::where('id', $id)->first();
-
             $inventory = Inventory::where('id', $patient->inventoryId)->first();
             $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
             $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
             $deviceType = $device->name;
-
             $timeLine = [
                 'patientId' => $patientData->id, 'heading' => 'Device Removed', 'title' => $deviceType . ' ' . ' Device Removed from ' . ' ' . $patientData->firstName . ' ' . $patientData->lastName, 'type' => 1,
                 'createdBy' => 1, 'udid' => Str::uuid()->toString()
             ];
             PatientTimeLine::create($timeLine);
+            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            PatientInventory::find($inventoryId)->update($data);
             PatientInventory::find($inventoryId)->delete();
-
             DB::commit();
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
@@ -717,6 +714,7 @@ class PatientService
                     $endTime = Helper::date($vital['endTime']);
                     $data = [
                         'vitalFieldId' => $vital['type'],
+                        'deviceTypeId' => $vital['deviceType'],
                         'createdBy' => 1,
                         'udid' => $udid,
                         'value' => $vital['value'],
@@ -754,6 +752,7 @@ class PatientService
                     $endTime = Helper::date($vital['endTime']);
                     $data = [
                         'vitalFieldId' => $vital['type'],
+                        'deviceTypeId' => $vital['deviceType'],
                         'createdBy' => Auth::id(),
                         'udid' => $udid,
                         'value' => $vital['value'],
@@ -820,6 +819,7 @@ class PatientService
             if (!empty($request->type)) {
                 $type = $request->type;
             }
+            
             if (empty($patientIdx)) {
                 $patientIdx = auth()->user()->patient->id;
             } elseif (!empty($patientIdx)) {
@@ -1351,4 +1351,71 @@ class PatientService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
+
+
+    // staff setup device
+
+    public function staffInventory($request, $id,$staffId)
+    {
+        DB::beginTransaction();
+        try {
+            if($staffId){
+                $inventory = ['isAdded' => 1];
+                PatientInventory::where('id', $id)->update($inventory);
+                $patient = PatientInventory::where('id', $id)->first();
+                $user = User::where('id', Auth::id())->first();
+                $userId = $user->id;
+                $patientData = Patient::where('userId', $userId)->first();
+                $inventory = Inventory::where('id', $patient->inventoryId)->first();
+                $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
+                $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
+                $deviceType = $device->name;
+                $timeLine = [
+                    'patientId' => $patientData->id, 'heading' => 'Inventory Assigned', 'title' => $deviceType . ' ' . 'Linked to' . ' ' . $patientData->firstName . ' ' . $patientData->lastName, 'type' => 1,
+                    'createdBy' => 1, 'udid' => Str::uuid()->toString()
+                ];
+                PatientTimeLine::create($timeLine);
+    
+                $patient = ['isDeviceAdded' => 1];
+                Patient::where('id', $patientData->id)->update($patient);
+    
+                $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
+                $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+                $message = ['message' => trans('messages.updatedSuccesfully')];
+                DB::commit();
+                $endData = array_merge($message, $userdata);
+                return $endData;
+            }else{
+                $inventory = ['isAdded' => 1];
+                PatientInventory::where('id', $id)->update($inventory);
+                $patient = PatientInventory::where('id', $id)->first();
+                $user = User::where('id', Auth::id())->first();
+                $userId = $user->id;
+                $patientData = Patient::where('userId', $userId)->first();
+                $inventory = Inventory::where('id', $patient->inventoryId)->first();
+                $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
+                $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
+                $deviceType = $device->name;
+                $timeLine = [
+                    'patientId' => $patientData->id, 'heading' => 'Inventory Assigned', 'title' => $deviceType . ' ' . 'Linked to' . ' ' . $patientData->firstName . ' ' . $patientData->lastName, 'type' => 1,
+                    'createdBy' => 1, 'udid' => Str::uuid()->toString()
+                ];
+                PatientTimeLine::create($timeLine);
+    
+                $patient = ['isDeviceAdded' => 1];
+                Patient::where('id', $patientData->id)->update($patient);
+    
+                $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
+                $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+                $message = ['message' => trans('messages.updatedSuccesfully')];
+                DB::commit();
+                $endData = array_merge($message, $userdata);
+                return $endData;
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
 }
