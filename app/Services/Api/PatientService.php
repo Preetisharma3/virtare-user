@@ -7,6 +7,7 @@ use App\Helper;
 use App\Models\Tag\Tag;
 use App\Models\Note\Note;
 use App\Models\User\User;
+use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use App\Models\Vital\VitalField;
@@ -46,8 +47,8 @@ use App\Transformers\Patient\PatientConditionTransformer;
 use App\Transformers\Patient\PatientInsuranceTransformer;
 use App\Transformers\Patient\PatientInventoryTransformer;
 use App\Transformers\Patient\PatientPhysicianTransformer;
-use App\Transformers\Patient\PatientMedicalRoutineTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use App\Transformers\Patient\PatientMedicalRoutineTransformer;
 
 class PatientService
 {
@@ -678,7 +679,7 @@ class PatientService
     {
         DB::beginTransaction();
         try {
-            $patient = PatientInventory::where('id',$inventoryId)->first();
+            $patient = PatientInventory::where('id', $inventoryId)->first();
             $patientData = Patient::where('id', $id)->first();
             $inventory = Inventory::where('id', $patient->inventoryId)->first();
             $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
@@ -819,7 +820,7 @@ class PatientService
             if (!empty($request->type)) {
                 $type = $request->type;
             }
-            
+
             if (empty($patientIdx)) {
                 $patientIdx = auth()->user()->patient->id;
             } elseif (!empty($patientIdx)) {
@@ -1087,21 +1088,34 @@ class PatientService
             PatientInventory::where('id', $id)->update($inventory);
             $patient = PatientInventory::where('id', $id)->first();
             $user = User::where('id', Auth::id())->first();
-            $userId = $user->id;
-            $patientData = Patient::where('userId', $userId)->first();
-            $inventory = Inventory::where('id', $patient->inventoryId)->first();
-            $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
-            $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
-            $deviceType = $device->name;
-            $timeLine = [
-                'patientId' => $patientData->id, 'heading' => 'Inventory Assigned', 'title' => $deviceType . ' ' . 'Linked to' . ' ' . $patientData->firstName . ' ' . $patientData->lastName, 'type' => 1,
-                'createdBy' => 1, 'udid' => Str::uuid()->toString()
-            ];
-            PatientTimeLine::create($timeLine);
-
-            $patient = ['isDeviceAdded' => 1];
-            Patient::where('id', $patientData->id)->update($patient);
-
+            $userId = $user->roleId;
+            if ($userId == 4) {
+                $patientData = Patient::where('userId', $userId)->first();
+                $inventory = Inventory::where('id', $patient->inventoryId)->first();
+                $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
+                $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
+                $deviceType = $device->name;
+                $timeLine = [
+                    'patientId' => $patientData->id, 'heading' => 'Inventory Assigned', 'title' => $deviceType . ' ' . 'Linked to' . ' ' . $patientData->firstName . ' ' . $patientData->lastName, 'type' => 1,
+                    'createdBy' => 1, 'udid' => Str::uuid()->toString()
+                ];
+                PatientTimeLine::create($timeLine);
+                $patient = ['isDeviceAdded' => 1];
+                Patient::where('id', $patientData->id)->update($patient);
+            } elseif ($userId == 3) {
+                $patientData = PatientInventory::where('id', $id)->first();
+                $inventory = Inventory::where('id', $patient->inventoryId)->first();
+                $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
+                $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
+                $deviceType = $device->name;
+                $timeLine = [
+                    'patientId' => $patientData->patientId, 'heading' => 'Inventory Assigned', 'title' => $deviceType . ' ' . 'Linked to' . ' ' . $patientData->firstName . ' ' . $patientData->lastName, 'type' => 1,
+                    'createdBy' => 1, 'udid' => Str::uuid()->toString()
+                ];
+                PatientTimeLine::create($timeLine);
+                $patient = ['isDeviceAdded' => 1];
+                Patient::where('id', $patientData->id)->update($patient);
+            }
             $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
             $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             $message = ['message' => trans('messages.updatedSuccesfully')];
@@ -1208,8 +1222,8 @@ class PatientService
                 $dateConvert = Helper::date($request->input('date'));
                 $timeConvert = Helper::time($request->input('timeAmount'));
                 $patientId = Patient::where('udid', $id)->first();
-                $performedBy = Helper::entity('staff',$request->input('performedBy'));
-               $loggedBy = Helper::entity('staff',$request->input('loggedBy'));
+                $performedBy = Helper::entity('staff', $request->input('performedBy'));
+                $loggedBy = Helper::entity('staff', $request->input('loggedBy'));
                 $input = [
                     'categoryId' => $request->input('category'), 'loggedId' => $loggedBy, 'udid' => Str::uuid()->toString(),
                     'performedId' => $performedBy, 'date' => $dateConvert, 'timeAmount' => $timeConvert,
@@ -1231,12 +1245,12 @@ class PatientService
                     $timeLog['categoryId'] = $request->category;
                 }
                 if (!empty($request->loggedBy)) {
-                    $loggedBy = Helper::entity('staff',$request->input('loggedBy'));
+                    $loggedBy = Helper::entity('staff', $request->input('loggedBy'));
                     $timeLog['loggedId'] = $loggedBy;
                 }
                 if (!empty($request->performedBy)) {
 
-                    $performedBy = Helper::entity('staff',$request->input('performedBy'));
+                    $performedBy = Helper::entity('staff', $request->input('performedBy'));
                     $timeLog['performedId'] = $performedBy;
                 }
                 if (!empty($request->date)) {
@@ -1357,11 +1371,11 @@ class PatientService
 
     // staff setup device
 
-    public function staffInventory($request, $id,$staffId)
+    public function staffInventory($request, $id, $staffId)
     {
         DB::beginTransaction();
         try {
-            if($staffId){
+            if ($staffId) {
                 $inventory = ['isAdded' => 1];
                 PatientInventory::where('id', $id)->update($inventory);
                 $patient = PatientInventory::where('id', $id)->first();
@@ -1377,17 +1391,17 @@ class PatientService
                     'createdBy' => 1, 'udid' => Str::uuid()->toString()
                 ];
                 PatientTimeLine::create($timeLine);
-    
+
                 $patient = ['isDeviceAdded' => 1];
                 Patient::where('id', $patientData->id)->update($patient);
-    
+
                 $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
                 $message = ['message' => trans('messages.updatedSuccesfully')];
                 DB::commit();
                 $endData = array_merge($message, $userdata);
                 return $endData;
-            }else{
+            } else {
                 $inventory = ['isAdded' => 1];
                 PatientInventory::where('id', $id)->update($inventory);
                 $patient = PatientInventory::where('id', $id)->first();
@@ -1403,10 +1417,10 @@ class PatientService
                     'createdBy' => 1, 'udid' => Str::uuid()->toString()
                 ];
                 PatientTimeLine::create($timeLine);
-    
+
                 $patient = ['isDeviceAdded' => 1];
                 Patient::where('id', $patientData->id)->update($patient);
-    
+
                 $getPatient = PatientInventory::where('id', $id)->with('patient', 'inventory', 'deviceTypes')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
                 $message = ['message' => trans('messages.updatedSuccesfully')];
@@ -1419,5 +1433,4 @@ class PatientService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
-
 }
