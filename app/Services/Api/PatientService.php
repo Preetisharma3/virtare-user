@@ -643,7 +643,7 @@ class PatientService
             if ($data) {
                 if ($request->latest) {
                     $getPatient = PatientInventory::where('patientId', $id)->with('patient', 'inventory', 'deviceTypes')->latest()->get();
-                    return fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+                    return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
                 } else {
                     if ($inventoryId) {
                         $getPatient = PatientInventory::where('id', $inventoryId)->with('patient', 'inventory', 'deviceTypes')->first();
@@ -657,7 +657,7 @@ class PatientService
                 if ($request->latest) {
                     $patientId = Patient::where('udid', $id)->first();
                     $getPatient = PatientInventory::where('patientId', $patientId->id)->with('patient', 'inventory', 'deviceTypes')->latest()->get();
-                    return fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+                    return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
                 } else {
                     if ($inventoryId) {
                         $getPatient = PatientInventory::where('id', $inventoryId)->with('patient', 'inventory', 'deviceTypes')->first();
@@ -1276,7 +1276,7 @@ class PatientService
             if ($request->latest) {
                 $patientId = Patient::where('udid', $id)->first();
                 $timeLog = PatientTimeLog::where('patientId', $patientId->id)->with('category', 'logged', 'performed', 'notes')->latest()->get();
-                return fractal()->item($timeLog)->transformWith(new PatientTimeLogTransformer())->toArray();
+                return fractal()->collection($timeLog)->transformWith(new PatientTimeLogTransformer())->toArray();
             } else {
                 if (!$timelogId) {
                     if ($id) {

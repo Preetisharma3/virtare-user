@@ -34,8 +34,8 @@ class NoteService
         try {
             if ($request->latest) {
                 $referenceId = Helper::entity($entity, $id);
-                $note = Note::where([['referenceId', $referenceId], ['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->get();
-                return fractal()->item($note)->transformWith(new NoteTransformer())->toArray();
+                $note = Note::where([['referenceId', $referenceId], ['entityType', $entity]])->with('typeName', 'category')->latest()->get();
+                return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
             } else {
                 $note = Note::where('entityType', $entity)->with('typeName', 'category')->get();
                 return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();

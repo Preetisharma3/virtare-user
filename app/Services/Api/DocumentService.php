@@ -92,7 +92,7 @@ class DocumentService
                     $patientId = Patient::where('id', $id)->first();
                     $getDocument = Document::where([['referanceId', $patientId->userId], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->get();
                 }
-                return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
+                return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
             } else {
                 if($entity=='staff'){
                     $staff=Helper::entity($entity,$id);
