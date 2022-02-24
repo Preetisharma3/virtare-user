@@ -1090,7 +1090,7 @@ class PatientService
             $user = User::where('id', Auth::id())->first();
             $userId = $user->roleId;
             if ($userId == 4) {
-                $patientData = Patient::where('userId', $userId)->first();
+                $patientData = Patient::where('userId', $user->id)->first();
                 $inventory = Inventory::where('id', $patient->inventoryId)->first();
                 $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
                 $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
