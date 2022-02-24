@@ -15,7 +15,7 @@ class AddDeviceTypeIdToPatientVitalsTable extends Migration
     {
         Schema::table('patientVitals', function (Blueprint $table) {
             $table->bigInteger('deviceTypeId')->unsigned()->after('units');
-            $table->foreign('deviceTypeId')->references('id')->on('globalCodes')->onDelete('cascade')->onUpdate('cascade');
+            //$table->foreign('deviceTypeId')->references('id')->on('globalCodes')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
