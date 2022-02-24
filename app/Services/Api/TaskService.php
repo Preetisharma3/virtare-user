@@ -73,7 +73,7 @@ class TaskService
             $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
             return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
         } else {
-            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->paginate(20);
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->paginate(env('PER_PAGE',20));
             return fractal()->collection($data)->transformWith(new TaskTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         }
 

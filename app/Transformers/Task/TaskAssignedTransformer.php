@@ -34,7 +34,7 @@ class TaskAssignedTransformer extends TransformerAbstract
     {
         if($data->entityType == 'staff'){
         return[
-           'id'=>$data->assigned->id,
+           'id'=>$data->assigned ? $data->assigned->id:'',
            'entityType'=>$data->entityType,
            'taskId'=>$data->taskId,
            'name'=>ucfirst($data->assigned->firstName).' '.ucfirst($data->assigned->lastName)
