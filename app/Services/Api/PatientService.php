@@ -642,7 +642,7 @@ class PatientService
             $data = Patient::where('id', $id)->first();
             if ($data) {
                 if ($request->latest) {
-                    $getPatient = PatientInventory::where('patientId', $id)->with('patient', 'inventory', 'deviceTypes')->latest()->first();
+                    $getPatient = PatientInventory::where('patientId', $id)->with('patient', 'inventory', 'deviceTypes')->latest()->get();
                     return fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
                 } else {
                     if ($inventoryId) {
@@ -656,7 +656,7 @@ class PatientService
             } else {
                 if ($request->latest) {
                     $patientId = Patient::where('udid', $id)->first();
-                    $getPatient = PatientInventory::where('patientId', $patientId->id)->with('patient', 'inventory', 'deviceTypes')->latest()->first();
+                    $getPatient = PatientInventory::where('patientId', $patientId->id)->with('patient', 'inventory', 'deviceTypes')->latest()->get();
                     return fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
                 } else {
                     if ($inventoryId) {
@@ -1275,8 +1275,7 @@ class PatientService
         try {
             if ($request->latest) {
                 $patientId = Patient::where('udid', $id)->first();
-                $timeLog = PatientTimeLog::where('patientId', $patientId->id)->with('category', 'logged', 'performed', 'notes')->latest()->first();
-
+                $timeLog = PatientTimeLog::where('patientId', $patientId->id)->with('category', 'logged', 'performed', 'notes')->latest()->get();
                 return fractal()->item($timeLog)->transformWith(new PatientTimeLogTransformer())->toArray();
             } else {
                 if (!$timelogId) {

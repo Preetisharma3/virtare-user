@@ -63,7 +63,6 @@ class TaskService
         $taskData =  Task::where('id',$task->id)->with('assignedTo.assigned','assignedTo.patient')->first();
        $message = ['message' => trans('messages.createdSuccesfully')];
        $result =fractal()->item($taskData)->transformWith(new TaskTransformer())->toArray();
-
        $data = array_merge($message,$result);
        return $data;
     }
@@ -71,7 +70,7 @@ class TaskService
     public function listTask($request)
     {
         if ($request->latest) {
-            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->first();
+            $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
             return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
         } else {
             $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->paginate(20);
