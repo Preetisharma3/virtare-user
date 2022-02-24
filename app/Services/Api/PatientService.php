@@ -1231,10 +1231,13 @@ class PatientService
                     $timeLog['categoryId'] = $request->category;
                 }
                 if (!empty($request->loggedBy)) {
-                    $timeLog['loggedId'] = $request->loggedBy;
+                    $loggedBy = Helper::entity('staff',$request->input('loggedBy'));
+                    $timeLog['loggedId'] = $loggedBy;
                 }
                 if (!empty($request->performedBy)) {
-                    $timeLog['performedId'] = $request->performedBy;
+
+                    $performedBy = Helper::entity('staff',$request->input('performedBy'));
+                    $timeLog['performedId'] = $performedBy;
                 }
                 if (!empty($request->date)) {
                     $timeLog['date'] = $dateConvert;

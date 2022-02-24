@@ -408,8 +408,7 @@ class StaffService
             $staffId = auth()->user()->staff->id;
         }
         $data = Appointment::where([['staffId', $staffId], ['startDateTime', '>=', Carbon::today()]])->paginate(5);
-        $results = Helper::dateGroup($data, 'startDateTime');
-        return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 
     public function patientAppointment($id)
@@ -421,8 +420,7 @@ class StaffService
             $patientId = auth()->user()->patient->id;
         }
         $data = Appointment::where('patientId', $patientId)->whereDate('startDateTime', '=', Carbon::today())->paginate(5);
-        $results = Helper::dateGroup($data, 'startDateTime');
-        return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 
 
