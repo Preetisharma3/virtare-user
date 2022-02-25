@@ -811,6 +811,7 @@ class PatientService
             $type = '';
             $fromDate = '';
             $toDate = '';
+            $deviceType = '';
             if (!empty($request->toDate)) {
                 $toDate = date("Y-m-d H:i:s", $request->toDate);
             }
@@ -820,14 +821,16 @@ class PatientService
             if (!empty($request->type)) {
                 $type = $request->type;
             }
-
+            if (!empty($request->deviceType)) {
+                $deviceType = $request->deviceType;
+            }
             if (empty($patientIdx)) {
                 $patientIdx = auth()->user()->patient->id;
             } elseif (!empty($patientIdx)) {
                 $patientIdx = $id;
             }
             $data = DB::select(
-                'CALL getPatientVital("' . $patientIdx . '","' . $fromDate . '","' . $toDate . '","' . $type . '")',
+                'CALL getPatientVital("' . $patientIdx . '","' . $fromDate . '","' . $toDate . '","' . $type . '","' . $deviceType . '")',
             );
             return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
         } catch (Exception $e) {
