@@ -80,8 +80,14 @@ class AppointmentService
     public function appointmentList($request, $id)
     {
         if (!$id) {
+            if($request->id){
+                $patient=Helper::entity('patient',$request->id);
+                $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::today()]])->orderBy('createdAt', 'DESC')->get();
+                $results = Helper::dateGroup($data, 'startDateTime');
+            }else{
                 $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::today()]])->orderBy('createdAt', 'DESC')->get();
                 $results = Helper::dateGroup($data, 'startDateTime');
+            }
                 return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
         } elseif ($id) {
             $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $id]])->exists();
