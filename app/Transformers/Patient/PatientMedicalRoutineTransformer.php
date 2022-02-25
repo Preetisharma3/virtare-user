@@ -17,8 +17,8 @@ class PatientMedicalRoutineTransformer extends TransformerAbstract
             'patientId' => $data->patientId,
             'medicine' => $data->medicine,
             'frequency' => $data->frequency,
-            'startDate' => $data->startDate,
-            'endDate' => $data->endDate,
+            'startDate' =>strtotime($data->startDate),
+            'endDate' => strtotime($data->endDate),
         ];
     }
 }

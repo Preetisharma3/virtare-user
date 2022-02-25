@@ -20,12 +20,12 @@ class StaffController extends Controller
         return (new StaffService)->addStaff( $request);
         
     }
-    public function listStaff(Request $request)
+    public function listStaff(Request $request,$id=null)
     {
-        return (new StaffService)->listStaff($request);
+        return (new StaffService)->listStaff($request,$id);
     }
 
-    public function updateStaff(Request $request,$id)
+    public function updateStaff(Request $request, $id)
     {
         return (new StaffService)->updateStaff($request, $id); 
     }
@@ -35,19 +35,19 @@ class StaffController extends Controller
         return (new StaffService)->addStaffContact($request, $id);
     }
 
-    public function listStaffContact(Request $request)
+    public function listStaffContact(Request $request, $id)
     {
-        return (new StaffService)->listStaffContact($request);
+        return (new StaffService)->listStaffContact($request, $id);
     }
 
-    public function updateStaffContact(Request $request , $id)
+    public function updateStaffContact(Request $request , $staffId,$id)
     {
-        return (new StaffService)->updateStaffContact($request, $id);
+        return (new StaffService)->updateStaffContact($request, $staffId,$id);
     }
 
-    public function deleteStaffContact(Request $request, $id)
+    public function deleteStaffContact(Request $request, $staffId,$id)
     {
-        return (new StaffService)->deleteStaffContact($request, $id);  
+        return (new StaffService)->deleteStaffContact($request, $staffId,$id);  
     }
 
     public function addStaffAvailability(Request $request , $id)
@@ -55,19 +55,19 @@ class StaffController extends Controller
         return (new StaffService)->addStaffAvailability($request, $id);
     }
 
-    public function listStaffAvailability(Request $request)
+    public function listStaffAvailability(Request $request,$id)
     {
-        return (new StaffService)->listStaffAvailability($request);
+        return (new StaffService)->listStaffAvailability($request,$id);
     }
 
-    public function updateStaffAvailability(Request $request , $id)
+    public function updateStaffAvailability(Request $request , $staffId,$id)
     {
-        return (new StaffService)->updateStaffAvailability($request, $id); 
+        return (new StaffService)->updateStaffAvailability($request, $staffId,$id); 
     }
 
-    public function deleteStaffAvailability(Request $request, $id)
+    public function deleteStaffAvailability(Request $request, $staffId,$id)
     {
-        return (new StaffService)->deleteStaffAvailability($request, $id);  
+        return (new StaffService)->deleteStaffAvailability($request, $staffId,$id);  
     }
 
     public function addStaffRole(Request $request, $id)
@@ -75,76 +75,49 @@ class StaffController extends Controller
         return (new StaffService)->addStaffRole($request, $id);
     }
 
-    public function listStaffRole(Request $request)
+    public function listStaffRole(Request $request,$id)
     {
-        return (new StaffService)->listStaffRole($request);
+        return (new StaffService)->listStaffRole($request,$id);
     }
 
-    public function updateStaffRole(Request $request , $id)
+    public function updateStaffRole(Request $request , $staffId,$id)
     {
-        return (new StaffService)->updateStaffRole($request, $id); 
+        return (new StaffService)->updateStaffRole($request, $staffId,$id); 
     }
 
-    public function deleteStaffRole(Request $request , $id)
+    public function deleteStaffRole(Request $request ,$staffId, $id)
     {
-        return (new StaffService)->deleteStaffRole($request, $id); 
+        return (new StaffService)->deleteStaffRole($request,$staffId, $id); 
     }
 
-    
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function addStaffProvider(Request $request, $id)
     {
-        //
+        return (new StaffService)->addStaffProvider($request,$id);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function listStaffProvider(Request $request,$id)
     {
-        //
+        return (new StaffService)->listStaffProvider($request,$id);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function updateStaffProvider(Request $request , $staffId,$id )
     {
-        //
+        return (new StaffService)->updateStaffProvider($request , $staffId,$id); 
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function deleteStaffProvider(Request $request , $staffId,$id)
     {
-        //
+        return (new StaffService)->deleteStaffProvider($request , $staffId,$id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function specializationCount()
     {
-        //
+        return (new StaffService)->specializationCount(); 
     }
+
+    public function networkCount()
+    {
+        return (new StaffService)->networkCount(); 
+    }
+
 }

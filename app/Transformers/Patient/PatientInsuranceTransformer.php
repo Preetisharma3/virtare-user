@@ -19,7 +19,9 @@ class PatientInsuranceTransformer extends TransformerAbstract
             'expirationDate' => $data->expirationDate,
             'patientId' => $data->patientId,
             'insuranceName' => $data->insuranceName->name,
+            'insuranceNameId' => $data->insuranceName->id,
             'insuranceType' => $data->insuranceType->name,
+            'insuranceTypeId' => $data->insuranceType->id,
         ];
     }
 }

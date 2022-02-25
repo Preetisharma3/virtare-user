@@ -34,6 +34,7 @@ class StaffRoleTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
+            'id'=>$data->udid,
             "role" => fractal()->item($data->roles)->transformWith(new RoleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray(),
 		];
     }

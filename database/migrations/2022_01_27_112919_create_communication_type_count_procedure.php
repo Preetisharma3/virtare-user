@@ -23,13 +23,8 @@ class CreateCommunicationTypeCountProcedure extends Migration
         FROM `communications` 
          JOIN globalCodes 
         ON communications.messageTypeId  = globalCodes.id 
-<<<<<<< HEAD
-       
         WHERE date(`communications`.`createdat`) = date
         AND
-=======
-        WHERE date(`communications`.`createdat`) = date AND
->>>>>>> main
         `communications`.`deletedat` IS NULL GROUP BY hour(communications.createdat),globalCodes.name;
         END;";
         DB::unprepared($procedure);

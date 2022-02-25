@@ -13,9 +13,8 @@ class AppointmentListTransformer extends TransformerAbstract
 
     public function transform($data): array
     {
-        // dd($data);
         return [
-            'date' => $data['year'],
+            'date' => strtotime($data['year']),
             'value' =>  fractal()->collection((object)$data['data'])->transformWith(new AppointmentDataTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray(),
         ];
     }

@@ -14,12 +14,16 @@ class AppointmentDataTransformer extends TransformerAbstract
 
     public function transform($data): array
     {
+        if(empty($data)){
+            return [];
+        }
         return [
-            "date"=>strtotime($data->startDate." ".$data->startTime),
-            "notes"=>$data->note,
-            'time'=>strtotime($data->startDate." ".$data->startTime),
-            "patient"=>$data->patient->firstName.''.$data->patient->lastName,
-            "staff"=>$data->staff != null ? fractal()->item($data->staff)->transformWith(new StaffTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array()
+            "date"=>strtotime(@$data->startDateTime),
+            "notes"=>@$data->note,
+            'time'=>strtotime(@$data->startDateTime),
+            'appointmentType'=>$data->appointmentType->name,
+            "patient"=>@$data->patient->firstName." ".@$data->patient->lastName,
+            "staff"=>@$data->staff != null ? fractal()->item($data->staff)->transformWith(new StaffTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array()
         ];
     }
 }

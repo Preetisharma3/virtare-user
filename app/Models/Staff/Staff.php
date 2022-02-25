@@ -16,6 +16,8 @@ class Staff extends Model
     use SoftDeletes;
     protected $softDelete = true;
     const DELETED_AT = 'deletedAt';
+    const CREATED_AT = 'createdAt';
+    const UPDATED_AT = 'updatedAt';
     public $timestamps = false;
 	protected $table = 'staffs';
     use HasFactory;
@@ -48,7 +50,7 @@ class Staff extends Model
 
 	public function appointment()
 	{
-		return $this->belongsTo(Appointment::class, 'id','staffId');
+		return $this->hasMany(Appointment::class,'staffId');
 	}
 
 	public function user()

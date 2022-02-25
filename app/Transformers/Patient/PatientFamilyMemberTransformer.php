@@ -14,33 +14,26 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 
 	public function transform($data): array
 	{
-		if($data->relation){
 			return [
 				'id' => $data->id,
-				'patientId'=>$data->patientId,
-				'fullName' => $data->fullName,
-				'gender' => $data->gender->name,
-				'phoneNumber' => $data->phoneNumber,
-				'contactType' => $data->contactTypeId,
-				'contactTime' => $data->contactTime->name,
-				'relation' => $data->relation->name,
-				'email' => $data->user->email,
+				'sipId' => "UR".$data->userId,
+				'udid' => $data->udid,
+				'patientId'=>(!empty($data->patientId))?$data->patientId:'',
+				'fullName' =>(!empty($data->fullName))?ucfirst($data->fullName):'',
+				'gender' => (!empty($data->gender->name))?$data->gender->name:'',
+				'genderId' => (!empty($data->gender->id))?$data->gender->id:'',
+				'phoneNumber' => (!empty($data->phoneNumber))?$data->phoneNumber:'',
+				'contactType' => (!empty($data->contactTypeId))?$data->contactTypeId:'',
+				'contactTime' => (!empty($data->contactTime->name))?$data->contactTime->name:'',
+				'contactTimeId' => (!empty($data->contactTimeId))?$data->contactTimeId:'',
+				'relation' => (!empty($data->relation->name))?$data->relation->name:'',
+				'relationId' => (!empty($data->relationId))?$data->relationId:'',
+				'email' => (!empty($data->user->email))?$data->user->email:'',
+				'isPrimary'=>(!empty($data->isPrimary))?$data->isPrimary:'',
+				'vital'=>(!empty($data->vital))?$data->vital:0,
+				'message'=>(!empty($data->messages))?$data->messages:0,
 				'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
+				'profilePhoto'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
 			];
-		}
-		else{
-			return [
-				'id' => $data->id,
-				'patientId'=>$data->patientId,
-				'fullName' => $data->fullName,
-				'gender' => $data->gender->name,
-				'phoneNumber' => $data->phoneNumber,
-				'contactType' => $data->contactTypeId,
-				'contactTime' => $data->contactTime->name,
-				'email' => $data->email,
-				'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
-			];
-		}
-		
 	}
 }

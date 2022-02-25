@@ -9,27 +9,22 @@ use App\Http\Requests\Appointment\AppointmentRequest;
 
 class AppointmentController extends Controller
 {
-  public function futureAppointment(Request $request)
-  {
-    return (new AppointmentService)->futureAppointment($request);
-  }
-
   public function newAppointments(Request $request)
   {
     return (new AppointmentService)->newAppointments($request);
   }
   
-  public function todayAppointment(Request $request)
+  public function todayAppointment(Request $request,$id = null)
   {
-    return (new AppointmentService)->todayAppointment($request);
+    return (new AppointmentService)->todayAppointment($request,$id);
   }
 
-  public function addAppointment(request $request){
-    return (new AppointmentService)->addAppointment($request);
+  public function addAppointment(request $request,$id = null){
+    return (new AppointmentService)->addAppointment($request,$id);
   }
 
-  public function appointmentList(request $request){
-    return (new AppointmentService)->appointmentList($request);
+  public function appointmentList(request $request,$id = null){
+    return (new AppointmentService)->appointmentList($request,$id);
   }
 
   public function appointmentSearch(request $request){

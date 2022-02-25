@@ -51,13 +51,11 @@ class StaffAvailabilityTransformer extends TransformerAbstract
      */
     public function transform($data): array
     {
-
             return [
-                'id'=>$data->id,
-                'staff_id'=>$data->staffId,
-                'start_time'=>$data->startTime,
-                'finish_time'=>$data->endTime
+                'id'=>$data->udid,
+                'staffId'=>$data->staffId,
+                'startTime'=>strtotime($data->startTime),
+                'endTime'=>strtotime($data->endTime)
             ];
-
     }
 }

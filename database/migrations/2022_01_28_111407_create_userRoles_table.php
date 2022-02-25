@@ -19,8 +19,9 @@ class CreateUserRolesTable extends Migration
             $table->string('udid');
             $table->bigInteger('userId')->unsigned()->nullable();
             $table->foreign('userId')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->bigInteger('roleId')->unsigned()->nullable();
-            $table->foreign('roleId')->references('id')->on('roles')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('roleId')->nullable();
+            $table->bigInteger('staffId')->unsigned()->nullable();
+            $table->foreign('staffId')->references('id')->on('staffs')->onDelete('cascade')->onUpdate('cascade');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();

@@ -9,6 +9,7 @@ use App\Services\Api\LoginService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Login\LoginTransformer;
+use App\Services\Api\PushNotificationService;
 use App\Transformers\Login\LoginPatientTransformer;
 
 class AuthController extends Controller
@@ -27,16 +28,23 @@ class AuthController extends Controller
   public function login(request $request)
   {
     if ($token = $this->jwt->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
-      $user = User::where('email', $request->email)->with('roles','staff','patient')->firstOrFail();
-      if ($user['roles']->roles == $request->role) {
+      $deviceToken = $request->deviceToken;
+      $deviceType = $request->deviceType;
+      if($request->deviceType == 'ios'){
+          $pushNotification = new PushNotificationService();
+          $deviceToken = $pushNotification->ios_token($deviceToken);
+      }
         User::where('id', Auth::id())->update([
+          "deviceToken"=>$deviceToken,
+          "deviceType"=>$deviceType,
           "updatedBy" => Auth::id()
         ]);
+        $user = User::where('email', $request->email)->with('roles','staff','patient')->firstOrFail();
         $data = array(
           'token' => $token,
           'user' => $user
         );
-        if($user['roles']->roles == 'Patient'){
+        if($user->roleId == 4){
           return fractal()->item($data)->transformWith(new LoginPatientTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
         }else{
           return fractal()->item($data)->transformWith(new LoginTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
@@ -44,9 +52,6 @@ class AuthController extends Controller
       } else {
         return response()->json(['message' => trans('messages.unauthenticated')], 401);
       }
-    } else {
-      return response()->json(['message' => trans('messages.login_fail')], 401);
-    }
   }
 
   public function logout(Request $request)

@@ -2,6 +2,7 @@
 
 namespace App\Transformers\Patient;
 
+use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Flag\FlagTransformer;
 
@@ -15,9 +16,12 @@ class PatientFlagTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-            'id'=>$data->id,
-            'patientId'=>$data->patientId,
-            'flags'=> fractal()->item($data->flag)->transformWith(new FlagTransformer())->toArray()
+            'id'=>(!empty($data->udid))?$data->udid:$data->patientFlagId,
+            'patientId'=>(!empty($data->patientId))?$data->patientId:$data->patientFlagPatientId,
+			'icon'=>(!empty($data->icon))&&(!is_null($data->icon)) ? URL::to('/').'/'.$data->icon : "",
+            'flags'=> (!empty($data->flag))?fractal()->item($data->flag)->transformWith(new FlagTransformer())->toArray():'',
+			'flagName'=>(!empty($data->flagName))?$data->flagName:',',
+			'flagColor'=>(!empty($data->flagColor))?$data->flagColor:',',
 		];
 	}
 

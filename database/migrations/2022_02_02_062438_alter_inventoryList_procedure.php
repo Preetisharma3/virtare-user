@@ -20,7 +20,7 @@ class AlterInventoryListProcedure extends Migration
         $procedure =
         "CREATE PROCEDURE `inventoryList`(IN isAvailable TINYINT,IN deviceType INT)
         BEGIN
-        SELECT * ,
+        SELECT inventories.* ,
             globalCodes.name as deviceType,
             inventories.udid as udid
             FROM inventories

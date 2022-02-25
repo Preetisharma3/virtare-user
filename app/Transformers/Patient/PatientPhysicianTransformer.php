@@ -19,11 +19,13 @@ class PatientPhysicianTransformer extends TransformerAbstract
 			'patientId'=>$data->patientId,
             'name'=>$data->name,
             'designation'=>$data->designation->name,
+            'designationId'=>$data->designation->id,
             'phoneNumber'=>$data->phoneNumber,
             'email'=>$data->user->email,
             'fax'=>$data->fax,
             'sameAsReferal'=>$data->sameAsReferal,
 			'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
+			'profilePhoto'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
 		];
 	}
 }
