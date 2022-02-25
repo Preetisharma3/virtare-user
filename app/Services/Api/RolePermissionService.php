@@ -2,18 +2,15 @@
 
 namespace App\Services\Api;
 
-use App\Models\Module\Module;
-use App\Models\Permission\Permission;
-use App\Models\Role\AccessRole;
-use App\Models\RolePermission\RolePermission;
 use Exception;
 use Illuminate\Support\Str;
-use App\Transformers\Role\RoleTransformer;
+use App\Models\Module\Module;
+use App\Models\Role\AccessRole;
+use Illuminate\Support\Facades\DB;
+use App\Models\RolePermission\RolePermission;
 use App\Transformers\Role\RoleListTransformer;
 use App\Transformers\RolePermission\PermissionTransformer;
 use App\Transformers\RolePermission\RolePermissionTransformer;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class RolePermissionService
 {
@@ -48,7 +45,6 @@ class RolePermissionService
             $resp =  fractal()->item($role)->transformWith(new RoleListTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
-
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
            } 
@@ -124,7 +120,6 @@ class RolePermissionService
             return response()->json(['message' => $e->getMessage()], 500);    
         }
     }
-
 
     public function permissionsList($request)
     {

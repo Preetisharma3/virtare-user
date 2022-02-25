@@ -3,6 +3,7 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Helper;
 use App\Models\Task\Task;
 use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
@@ -19,12 +20,14 @@ class TaskService
 
     public function addTask($request)
     {
+        $startDate = Helper::date($request->input('startDate'));
+        $dueDate = Helper::date($request->input('dueDate'));
         $input = [
             'udid' => Str::uuid()->toString(),
             'title' => $request->title,
             'description' => $request->description,
-            'startDate' => date("Y-m-d H:i:s", $request->startDate),
-            'dueDate' => date("Y-m-d H:i:s", $request->dueDate),
+            'startDate' => $startDate,
+            'dueDate' => $dueDate,
             'taskTypeId' => 69,
             'priorityId' => $request->priority,
             'taskStatusId' => $request->taskStatus,
@@ -32,7 +35,7 @@ class TaskService
         ];
         $task = Task::create($input);
         $taskCategoryId = $request->taskCategory;
-        foreach($taskCategoryId as $taskCategory){
+        foreach ($taskCategoryId as $taskCategory) {
             $taskCate = [
                 'taskId' => $task->id,
                 'taskcategoryId' => $taskCategory,
@@ -66,7 +69,7 @@ class TaskService
        $data = array_merge($message,$result);
        return $data;
     }
-         
+
     public function listTask($request)
     {
         if ($request->latest) {
@@ -76,7 +79,6 @@ class TaskService
             $data = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->paginate(env('PER_PAGE',20));
             return fractal()->collection($data)->transformWith(new TaskTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         }
-
     }
 
     // Task List According to priorities
@@ -91,9 +93,7 @@ class TaskService
     // Task List According to statuses
     public function statusTask($request)
     {
-
         $tasks = DB::select(
-
             'CALL taskStatusCount()',
         );
         $total = DB::select(
@@ -102,7 +102,6 @@ class TaskService
         $data = array_merge($tasks, $total);
         return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
-
 
     public function updateTask($request, $id)
     {
@@ -135,7 +134,7 @@ class TaskService
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
-       }
+        }
     }
 
     public function taskById($id)
@@ -144,18 +143,19 @@ class TaskService
         return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
     }
 
-    public function taskPerStaff(){
+    public function taskPerStaff()
+    {
         $tasks = DB::select(
             'CALL taskPerStaff()',
         );
         return fractal()->item($tasks)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
-    public function taskPerCategory(){
+    public function taskPerCategory()
+    {
         $tasks = DB::select(
             'CALL taskPerCategory()',
         );
         return fractal()->item($tasks)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
-
 }

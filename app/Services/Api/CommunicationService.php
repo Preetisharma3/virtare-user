@@ -3,11 +3,14 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Helper;
 use Carbon\Carbon;
 use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
+use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Communication\Communication;
 use App\Models\Communication\CommunicationMessage;
 use App\Models\Communication\CommunicationCallRecord;
@@ -91,14 +94,14 @@ class CommunicationService
     //Call Status API's
     public function callStatus()
     {
-        $data = CommunicationCallRecord::with('status')->select('callStatusId', DB::raw('count(*) as count'))->groupBy('callStatusId')->get();
+        $data = CommunicationCallRecord::with('status')->select('callStatusId', DB::raw('count(*) as count'))->groupBy('callStatusId')->orderBy('createdAt','DESC')->get();
         return fractal()->collection($data)->transformWith(new CallStatusTransformer())->toArray();
     }
 
     // calls Per Staff API
     public function callCountPerStaff()
     {
-        $data = CommunicationCallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->get();
+        $data = CommunicationCallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->orderBy('createdAt','DESC')->get();
         return fractal()->collection($data)->transformWith(new CallRecordTransformer())->toArray();
     }
 

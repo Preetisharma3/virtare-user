@@ -36,7 +36,7 @@ class FileService
                 $url = $request->path;
             }
             unlink(storage_path() . '/' . $url);
-            return response()->json(['message' => 'file_delete'],  200);
+            return response()->json(['message' => trans('messages.file_delete')],  200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }

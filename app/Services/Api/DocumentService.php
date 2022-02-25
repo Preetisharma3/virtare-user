@@ -16,7 +16,7 @@ use App\Transformers\Document\DocumentTransformer;
 class DocumentService
 {
     // Add Document
-    public function documentCreate($request, $entity, $id, $documentId, $tagId)
+    public function documentCreate($request, $entity, $id, $documentId)
     {
         DB::beginTransaction();
         try {
@@ -56,17 +56,22 @@ class DocumentService
             } else {
                 $input = [
                     'name' => $request->input('name'), 'filePath' => $request->input('document'), 'documentTypeId' => $request->input('type'),
-                    'updatedBy' => 1
+                    'updatedBy' => Auth::id()
                 ];
-                $document = Document::where('id', $documentId)->update($input);
+                $document = Document::where('udid', $documentId)->first();
+                $tagData = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
+                Tag::where('documentId', $document->id)->update($tagData);
+                Tag::where('documentId', $document->id)->delete();
+               
+                Document::where('udid', $documentId)->update($input);
                 $tags = $request->input('tags');
-                $tag = ['tag' => $tags, 'updatedBy' => 1,];
-                Tag::where('id', $tagId)->update($tag);
-                if ($entity == 'patient') {
-                    $getDocument = Document::where([['id', $documentId], ['entityType', 'patient']])->with('documentType', 'tag.tags')->first();
-                } elseif ($entity == 'staff') {
-                    $getDocument = Document::where([['id', $documentId], ['entityType', 'staff']])->with('documentType', 'tag.tags')->first();
+                foreach ($tags as $value) {
+                    $tag = [
+                        'tag' => $value, 'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString(), 'documentId' => $document->id
+                    ];
+                    Tag::create($tag);
                 }
+                $getDocument = Document::where([['udid', $documentId], ['entityType', $entity]])->with('documentType', 'tag.tags')->first();
                 $userdata = fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
                 $message = ['message' => trans('messages.updatedSuccesfully')];
 
@@ -129,11 +134,11 @@ class DocumentService
     {
         DB::beginTransaction();
         try {
-            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            $data = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
             if ($entity == 'patient') {
-                Document::where([['id', $documentId], ['entityType', 'patient']])->update($data);
+                Document::where([['udid', $documentId], ['entityType', 'patient']])->update($data);
                 tag::where('documentId', $documentId)->update($data);
-                Document::where([['id', $documentId], ['entityType', 'patient']])->delete();
+                Document::where([['udid', $documentId], ['entityType', 'patient']])->delete();
                 tag::where('documentId', $documentId)->delete();
             }
             DB::commit();

@@ -18,6 +18,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'id' => $data->id,
 				'sipId' => "UR".$data->userId,
 				'udid' => $data->udid,
+				'id' => $data->udid,
 				'patientId'=>(!empty($data->patientId))?$data->patientId:'',
 				'fullName' =>(!empty($data->fullName))?ucfirst($data->fullName):'',
 				'gender' => (!empty($data->gender->name))?$data->gender->name:'',
@@ -28,12 +29,10 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'contactTimeId' => (!empty($data->contactTimeId))?$data->contactTimeId:'',
 				'relation' => (!empty($data->relation->name))?$data->relation->name:'',
 				'relationId' => (!empty($data->relationId))?$data->relationId:'',
-				'email' => (!empty($data->user->email))?$data->user->email:'',
 				'isPrimary'=>(!empty($data->isPrimary))?$data->isPrimary:'',
 				'vital'=>(!empty($data->vital))?$data->vital:0,
 				'message'=>(!empty($data->messages))?$data->messages:0,
-				'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
-				'profilePhoto'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
+				'user' =>$data->user? fractal()->item($data->user)->transformWith(new UserTransformer())->toArray():[],
 			];
 	}
 }

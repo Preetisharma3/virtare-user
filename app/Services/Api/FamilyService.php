@@ -50,6 +50,7 @@ class FamilyService
                     'updatedBy' => Auth::id()
                 ];
                 $fam = User::where('id', $usersId)->update($familyMemberUser);
+
                 //updated Family in patientFamilyMember Table
                 $familyMember = [
                     'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),

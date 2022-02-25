@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use App\Models\UserRole\UserRole;
 use Illuminate\Support\Facades\DB;
-use App\Models\Patient\PatientStaff;
 use App\Models\Appointment\Appointment;
 use App\Models\StaffContact\StaffContact;
 use App\Transformers\Staff\StaffTransformer;
@@ -20,15 +19,11 @@ use App\Transformers\Staff\StaffRoleTransformer;
 use App\Models\Staff\StaffProvider\StaffProvider;
 use App\Models\StaffAvailability\StaffAvailability;
 use App\Transformers\Staff\StaffContactTransformer;
-use App\Transformers\Staff\StaffPatientTransformer;
 use App\Transformers\Staff\StaffProviderTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
-use App\Transformers\Staff\StaffAppointmentTransformer;
-use App\Transformers\Appointment\AppointmentTransformer;
 use App\Transformers\Staff\StaffAvailabilityTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\Appointment\AppointmentDataTransformer;
-use App\Transformers\Appointment\AppointmentListTransformer;
 
 class StaffService
 {
@@ -60,7 +55,7 @@ class StaffService
             ];
             $newData = Staff::create($staff);
             $staffData = Staff::where('id', $newData->id)->first();
-            $message = ["message" => "created Successfully"];
+            $message = ["message" => trans('messages.created_succesfully')];
             $resp =  fractal()->item($staffData)->transformWith(new StaffTransformer())->toArray();
             $endData = array_merge($message, $resp);
             Helper::updateFreeswitchUser();
@@ -112,7 +107,6 @@ class StaffService
         return $endData;
     }
 
-
     public function addStaffContact($request, $id)
     {
         try {
@@ -126,12 +120,12 @@ class StaffService
                 $staffId = $staff->id;
                 DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
                 $staffContactData = StaffContact::where('udid', $udid)->first();
-                $message = ["message" => "created Successfully"];
+                $message = ["message" => trans('messages.created_succesfully')];
                 $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
                 $endData = array_merge($message, $resp);
                 return $endData;
             } else {
-                return response()->json(['message' => 'Somethings Went Worng']);
+                return response()->json(['message' => trans('messages.error')]);
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -196,13 +190,14 @@ class StaffService
     {
         try {
             $udid = Str::random(10);
-            $startTime = $request->startTime;
-            $endTime = $request->endTime;
-            $staff = Staff::where('udid', $id)->first();
-            $staffId = $staff->id;
+            $timeStart=Helper::time($request->input('startTime'));
+            $timeEnd=Helper::time($request->input('endTime'));
+            $startTime = $timeStart;
+            $endTime = $timeEnd;
+            $staffId = $id;
             DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');
             $staffAvailability = StaffAvailability::where('udid', $udid)->first();
-            $message = ["message" => "created Successfully"];
+            $message = ["message" => trans('messages.created_succesfully')];
             $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
@@ -225,6 +220,8 @@ class StaffService
     public function updateStaffAvailability($request, $staffId, $id)
     {
         try {
+            $timeStart=Helper::time($request->input('startTime'));
+            $timeEnd=Helper::time($request->input('endTime'));
             $staffAvailability = [
                 'startTime' => $request->input('startTime'),
                 'endTime' => $request->input('endTime'),
@@ -265,7 +262,7 @@ class StaffService
                 $accessRoleId = $roleId;
                 DB::select('CALL createstaffRole("' . $udid . '","' . $staffId . '","' . $accessRoleId . '")');
             }
-            return response()->json(['message' => "created Successfully"]);
+            return response()->json(['message' => trans('messages.created_succesfully')],200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

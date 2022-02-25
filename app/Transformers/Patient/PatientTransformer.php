@@ -18,7 +18,7 @@ class PatientTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id' => $data->id,
+            'id' => $data->udid,
             'udid'=>$data->udid,
             'sipId' => "UR".$data->user->id,
             'firstName' => ucfirst($data->firstName),
@@ -48,13 +48,13 @@ class PatientTransformer extends TransformerAbstract
             'zipCode' => (!empty($data->zipCode))?$data->zipCode:'',
             'appartment' => (!empty($data->appartment))?$data->appartment:'',
             'address' => (!empty($data->address))?$data->address:'',
-            'email' => $data->user->email,
             'isActive' => $data->isActive == 1 ? 'Active' : 'Inactive',
             'nonCompliance' => 'N/A',
             'lastReadingDate' => 'N/A',
             'lastMessageSent' => 'N/A',
             'flagName' => 'jhj',
             'flagColor' => 'fhghg',
+            'user' =>$data->user? fractal()->item($data->user)->transformWith(new UserTransformer())->toArray():[],
             'medicalRecordNumber'=>(!empty($data->medicalRecordNumber))?$data->medicalRecordNumber:'',
             'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? str_replace("public","",URL::to('/')).'/'.$data->user->profilePhoto : "",
             'profilePhoto'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? str_replace("public","",URL::to('/')).'/'.$data->user->profilePhoto : "",
