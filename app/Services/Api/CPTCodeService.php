@@ -9,14 +9,15 @@ use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class CPTCodeService
 {
    public function listCPTCode()
    {
        try{
-        $data = CPTCode::with('provider','service','duration')->get();
-        return fractal()->collection($data)->transformWith(new CPTCodeTransformer())->toArray();
+        $data = CPTCode::with('provider','service','duration')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE',20));
+        return fractal()->collection($data)->transformWith(new CPTCodeTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }catch(Exception $e){
         return response()->json(['message' => $e->getMessage()], 500);    
     } 
