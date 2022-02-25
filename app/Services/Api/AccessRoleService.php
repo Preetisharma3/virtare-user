@@ -30,11 +30,21 @@ class AccessRoleService
                 $staffId = $id;
                 $staff = Helper::entity('staff', $staffId);
             } else {
-                $staff = auth()->user()->staff->id;
+                
+                if(isset(auth()->user()->staff->id)){
+                    $staff = auth()->user()->staff->id;
+                }else{
+                    $staff = "";
+                }
             }
-            $data = DB::select(
-                'CALL assignedRolesList(' . $staff . ')',
-            );
+
+            if(!empty($staff)){
+                $data = DB::select(
+                    'CALL assignedRolesList(' . $staff . ')',
+                );
+            }else{
+                $data = [];
+            }
             return fractal()->collection($data)->transformWith(new AssignedRolesTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
