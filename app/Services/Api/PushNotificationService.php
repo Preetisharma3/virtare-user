@@ -41,7 +41,7 @@ class PushNotificationService
                 "body" => $data['body']
             ]);
             $fcm->data([
-                "type" => $data['type']
+                "type" => $data['type'],
                 "typeId" => $data['typeId']
             ]);
             $fcm->send();
