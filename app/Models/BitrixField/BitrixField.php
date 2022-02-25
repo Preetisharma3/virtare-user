@@ -17,5 +17,4 @@ class BitrixField extends Model
     protected $table = 'bitrixfields';
     use HasFactory;
     protected $guarded = [];
-
 }
