@@ -13,6 +13,7 @@ use App\Models\Patient\PatientInsurance;
 use App\Models\Patient\PatientProgram;
 use App\Transformers\GlobalCode\GlobalCodeTransformer;
 use App\Transformers\GlobalCode\GlobalCodeCategoryTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Symfony\Component\Console\Input\Input;
 
 class GlobalCodeService
@@ -36,8 +37,8 @@ class GlobalCodeService
      {
           try {
                if (!$id) {
-                    $global = GlobalCode::where('predefined',0)->get();
-                    return fractal()->collection($global)->transformWith(new GlobalCodeTransformer())->toArray();
+                    $global = GlobalCode::where('predefined',0)->paginate(env('PER_PAGE',20));
+                    return fractal()->collection($global)->transformWith(new GlobalCodeTransformer())->paginateWith(new IlluminatePaginatorAdapter($global))->toArray();
                } else {
                     $global = GlobalCode::where('id', $id)->first();
                     return fractal()->item($global)->transformWith(new GlobalCodeTransformer())->toArray();
