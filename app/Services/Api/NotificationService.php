@@ -7,7 +7,8 @@ use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use App\Models\Notification\Notification;
 use App\Models\Appointment\AppointmentNotification;
-
+use App\Models\Appointment\Appointment;
+use App\Services\Api\PushNotificationService;
 class NotificationService
 {
     public function appointmentNotification($request)
@@ -23,11 +24,12 @@ class NotificationService
                     'body' => 'Your Appointment is Scehduled.',
                     'title' => 'Appointment Reminder',
                     'userId' => $appointment->patientUserId,
+                    'isSent' => 0,
                     'entity'=>'Appointment',
                     'referenceId' => $appointment->id,
                     'createdBy' => $appointment->staffId,
                 ]);
-                
+                Appointment::where('id',$appointment->id)->update(['conferenceId'=>'CONF'.$appointment->id);
                 AppointmentNotification::create([
                     'udid' => Str::random(10),
                     'appointmentId' => $appointment->id,
@@ -35,16 +37,26 @@ class NotificationService
                     'createdBy' => $appointment->staffId,,
                 ]);
             }
-            /*$deviceToken = $request->deviceToken;
-            $deviceType = $request->deviceType;
-            if ($deviceType == 'ios') {
-                $pushNotification = new PushNotificationService();
-                $deviceToken = $pushNotification->ios_token($deviceToken);
-            }*/
-
-            return response()->json(['message' => trans('messages.notification')], 200);
-        } else {
-            return response()->json(['message' => trans('Appointments are not Found')], 200);
+        } 
+    } 
+    public function appointmentNotification($request)
+    {
+        $notifications = DB::select(
+            'CALL notificationList("0","")',
+        );
+        if (!empty($notifications)) {
+            foreach ($notifications as $notification) {
+                
+                $pushnotification = new Pushnotification();
+                $notificationData = array(
+                    "body" =>$notification->body,
+                    "title" =>$notification->title,
+                    "type" =>$notification->entity,
+                    "type_id" =>$notification->referenceId,
+                );
+                $pushnotification->sendNotification([$notification->userId],$notificationData);
+            }
+            
         }
     }
 }
