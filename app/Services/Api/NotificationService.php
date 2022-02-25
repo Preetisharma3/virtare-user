@@ -52,7 +52,7 @@ class NotificationService
                     "body" =>$notification->body,
                     "title" =>$notification->title,
                     "type" =>$notification->entity,
-                    "type_id" =>$notification->referenceId,
+                    "typeId" =>$notification->referenceId,
                 );
                 $pushnotification->sendNotification([$notification->userId],$notificationData);
             }
