@@ -1190,6 +1190,58 @@
                                             <variable name="outbound_caller_id_number" value="UR373"/>
                                         </variables>
                                     </user>
+                                                                        <user id="UR374">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR374"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR374"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR374"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR375">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR375"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR375"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR375"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR376">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR376"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Staff test"/>
+                                            <variable name="effective_caller_id_number" value="UR376"/>
+                                            <variable name="outbound_caller_id_name" value="Staff test"/>
+                                            <variable name="outbound_caller_id_number" value="UR376"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR377">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR377"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="ggggg gggggg"/>
+                                            <variable name="effective_caller_id_number" value="UR377"/>
+                                            <variable name="outbound_caller_id_name" value="ggggg gggggg"/>
+                                            <variable name="outbound_caller_id_number" value="UR377"/>
+                                        </variables>
+                                    </user>
                                                                     </users>
                             </group>
                         </groups>

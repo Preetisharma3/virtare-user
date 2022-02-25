@@ -76,7 +76,7 @@ class DocumentService
                 $getDocument = Document::where([['udid', $documentId], ['entityType', $entity]])->with('documentType', 'tag.tags')->first();
                 return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
             } else {
-                $getDocument = Document::where([['referanceId', $reference], ['entityType', $entity]])->with('documentType', 'tag.tags')->get();
+                $getDocument = Document::where([['referanceId', $reference], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->get();
                 return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
             }
         } catch (Exception $e) {

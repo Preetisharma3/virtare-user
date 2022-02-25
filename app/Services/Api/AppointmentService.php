@@ -68,7 +68,7 @@ class AppointmentService
             $staffData = Staff::where('id', $data['staffId'])->first();
             $timeLine = [
                 'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for' . ' ' . $patientData->firstName . ' ' . $patientData->lastName . ' ' . 'Added with' . ' ' . $staffData->firstName . ' ' . $staffData->lastName, 'type' => 1,
-                'createdBy' => 1, 'udid' => Str::uuid()->toString()
+                'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
             ];
             PatientTimeLine::create($timeLine);
             return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
@@ -81,14 +81,14 @@ class AppointmentService
     {
         if (!$id) {
             if($request->id){
-                $patient=Helper::entity('patient',$request->id);
-                $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::today()]])->orderBy('createdAt', 'DESC')->get();
-                $results = Helper::dateGroup($data, 'startDateTime');
+                $patientId = Patient::where('udid', $request->id)->first();
+                $data = Appointment::where([['patientId', $patientId->id], ['startDateTime', '>=', Carbon::today()]])->latest()->get();
+                return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
             }else{
                 $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::today()]])->orderBy('createdAt', 'DESC')->get();
                 $results = Helper::dateGroup($data, 'startDateTime');
-            }
                 return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
+            }
         } elseif ($id) {
             $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $id]])->exists();
             if ($familyMember == true) {
