@@ -25,7 +25,7 @@ class TemplateService
     {
         try {
             $template = [
-                'udid' => Str::random(10),
+                'udid' => Str::uuid()->toString(),
                 'name' => $request->input('name'),
                 'dataType' => $request->input('dataType'),
                 'templateType' => $request->input('templateType')

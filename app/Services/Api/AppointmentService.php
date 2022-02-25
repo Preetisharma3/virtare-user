@@ -18,6 +18,7 @@ use App\Transformers\Appointment\AppointmentDataTransformer;
 use App\Transformers\Appointment\AppointmentListTransformer;
 use App\Transformers\Appointment\AppointmentSearchTransformer;
 use Exception;
+use PHPUnit\TextUI\Help;
 
 class AppointmentService
 {
@@ -42,18 +43,20 @@ class AppointmentService
                     'patientId' => $patientData->id,
                 ];
             } elseif (auth()->user()->staff) {
-                $staff = Staff::where('udid', $request->staffId)->first();
+                $staff = Helper::entity('staff', $request->staffId);
+                $patient = Helper::entity('patient', $request->patientId);
                 $entity = [
-                    'staffId' => $staff->id,
-                    'patientId' => $request->patientId,
+                    'staffId' => $staff,
+                    'patientId' => $patient,
                 ];
             } elseif ($id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
-                $staff = Staff::where('udid', $request->staffId)->first();
+                $staff = Helper::entity('staff', $request->staffId);
+                $patient = Helper::entity('patient', $id);
                     $entity = [
-                        'staffId' => $staff->id,
-                        'patientId' => $id,
+                        'staffId' => $staff,
+                        'patientId' => $patient,
                     ];
                 } else {
                     return response()->json(['message' => trans('messages.unauthenticated')], 401);
@@ -77,31 +80,20 @@ class AppointmentService
     public function appointmentList($request, $id)
     {
         if (!$id) {
-            if ($request->latest) {
-                $patientId = Patient::where('udid', $request->id)->first();
-                $data = Appointment::where([['patientId', $patientId->id], ['startDateTime', '>=', Carbon::today()]])->latest()->get();
-                return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
-            } else {
                 $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::today()]])->orderBy('createdAt', 'DESC')->get();
                 $results = Helper::dateGroup($data, 'startDateTime');
                 return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
-            }
         } elseif ($id) {
             $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $id]])->exists();
             if ($familyMember == true) {
-                if ($request->latest) {
-                    $patientId = Patient::where('udid', $request->id)->first();
-                    $data = Appointment::where([['patientId', $id], ['startDateTime', '>=', Carbon::today()]])->latest()->first();
-                    return fractal()->item($data)->transformWith(new AppointmentDataTransformer())->toArray();
-                } else {
-                    $data = Appointment::where([['patientId', $id], ['startDateTime', '>=', Carbon::today()]])->orderBy('createdAt', 'DESC')->get();
+                $patient=Helper::entity('patient',$id);
+                    $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::today()]])->orderBy('createdAt', 'DESC')->get();
                     $results = Helper::dateGroup($data, 'startDateTime');
                     return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
                 }
             } else {
                 return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }
-        }
     }
 
     public function newAppointments()

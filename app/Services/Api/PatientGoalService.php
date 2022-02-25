@@ -2,12 +2,9 @@
 
 namespace App\Services\Api;
 
-use App\Models\Device\Device;
 use App\Models\Patient\Patient;
 use App\Models\Patient\PatientGoal;
-use App\Models\Patient\PatientInventory;
 use App\Transformers\Patient\PatientGoalTransformer;
-use App\Transformers\Patient\PatientInventoryTransformer;
 
 class PatientGoalService
 {

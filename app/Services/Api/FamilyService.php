@@ -39,7 +39,6 @@ class FamilyService
                 ];
                 $familyData = PatientFamilyMember::create($familyMember);
                 $data = PatientFamilyMember::where('id', $familyData->id)->first();
-
                 $userdata = fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
                 $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
@@ -64,7 +63,6 @@ class FamilyService
                 $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
-
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {

@@ -31,7 +31,7 @@ class StaffService
     {
         try {
             $user = [
-                'udid' => Str::random(10),
+                'udid' => Str::uuid()->toString(),
                 'email' => $request->email,
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // 'password'
                 'emailVerify' => 1,
@@ -40,7 +40,7 @@ class StaffService
             ];
             $data = User::create($user);
             $staff = [
-                'udid' => Str::random(10),
+                'udid' => Str::uuid()->toString(),
                 'userId' => $data->id,
                 'email' => $data->email,
                 'firstName' => $request->firstName,
@@ -80,7 +80,6 @@ class StaffService
     {
         $staffId = Staff::where('udid', $id)->first();
         $uId = $staffId->userId;
-
         $user = [
             'email' => $request->input('email'),
             'updatedBy' => 1
@@ -112,7 +111,7 @@ class StaffService
         try {
             if (!empty($request->id)) {
                 $staff = Staff::where('udid', $id)->first();
-                $udid = Str::random(10);
+                $udid = Str::uuid()->toString();
                 $firstName = $request->firstName;
                 $lastName = $request->lastName;
                 $email = $request->email;
@@ -189,7 +188,7 @@ class StaffService
     public function addStaffAvailability($request, $id)
     {
         try {
-            $udid = Str::random(10);
+            $udid = Str::uuid()->toString();
             $timeStart=Helper::time($request->input('startTime'));
             $timeEnd=Helper::time($request->input('endTime'));
             $startTime = $timeStart;
@@ -223,8 +222,8 @@ class StaffService
             $timeStart=Helper::time($request->input('startTime'));
             $timeEnd=Helper::time($request->input('endTime'));
             $staffAvailability = [
-                'startTime' => $request->input('startTime'),
-                'endTime' => $request->input('endTime'),
+                'startTime' => $timeStart,
+                'endTime' => $timeEnd,
             ];
             $staff = Staff::where('udid', $staffId)->first();
             StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->update($staffAvailability);
@@ -257,7 +256,7 @@ class StaffService
             $roles = $request->roles;
             $staff = Staff::where('udid', $id)->first();
             foreach ($roles as $roleId) {
-                $udid = Str::random(10);
+                $udid = Str::uuid()->toString();
                 $staffId = $staff->id;
                 $accessRoleId = $roleId;
                 DB::select('CALL createstaffRole("' . $udid . '","' . $staffId . '","' . $accessRoleId . '")');
@@ -313,7 +312,7 @@ class StaffService
             $providers = $request->providers;
             $staff = Staff::where('udid', $id)->first();
             foreach ($providers as $providerId) {
-                $udid = Str::random(10);
+                $udid = Str::uuid()->toString();
                 $providerId = $providerId;
                 $staffId  = $staff->id;
                 DB::select('CALL createStaffProvider("' . $udid . '","' . $staffId . '","' . $providerId . '")');

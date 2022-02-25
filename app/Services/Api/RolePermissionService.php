@@ -34,7 +34,7 @@ class RolePermissionService
     public function createRole($request)
     {
         try{
-            $udid = Str::random(10);
+            $udid = Str::uuid()->toString();
             $roles = $request->input('name');
             $roleDescription = $request->input('description');
             $roleTypeId = $request->input('roleTypeId');
@@ -96,7 +96,7 @@ class RolePermissionService
         try{
             $action = $request->actions;
             foreach($action as $actionId ){
-                $udid = Str::random(10);
+                $udid = Str::uuid()->toString();
                 $accessRoleId = $id;
                 $actionId = $actionId;
                 DB::select('CALL createRolePermission("' . $udid . '","' . $accessRoleId . '","' . $actionId . '")'); 

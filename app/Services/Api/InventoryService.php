@@ -19,7 +19,7 @@ class InventoryService
         try {
             $input = $request->only(['deviceModelId', 'serialNumber', 'macAddress', 'isActive']);
             $otherData = [
-                'udid' => Str::random(10),
+                'udid' => Str::uuid()->toString(),
                 'createdBy' => 1
             ];
             $data = json_encode(array_merge($input, $otherData));

@@ -17,7 +17,7 @@ class NotificationService
         );
         if (!empty($data)) {
             foreach ($data as $new) {
-                $patient = Patient::where('id', $new->patientId)->get();
+                $patient = Patient::where('udid', $new->patientId)->get();
                 foreach ($patient as $patientInfo) {
                     $userId = $patientInfo->userId;
                     $notification = Notification::create([
@@ -30,7 +30,7 @@ class NotificationService
                     ]);
                 }
                 AppointmentNotification::create([
-                    'udid' => Str::random(10),
+                    'udid' => Str::uuid()->toString(),
                     'appointmentId' => $new->id,
                     'lastNotification' => 1,
                     'createdBy' => 1,

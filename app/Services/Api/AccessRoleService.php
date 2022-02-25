@@ -27,8 +27,7 @@ class AccessRoleService
     {
         try {
             if ($id) {
-                $staffId = $id;
-                $staff = Helper::entity('staff', $staffId);
+                $staff = Helper::entity('staff', $id);
             } else {
                 $staff = auth()->user()->staff->id;
             }
