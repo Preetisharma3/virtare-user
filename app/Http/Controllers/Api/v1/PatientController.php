@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use \App\Library\BitrixApi;
 use Illuminate\Http\Request;
+use App\Services\Api\BitrixService;
 use App\Services\Api\FamilyService;
 use App\Http\Controllers\Controller;
 use App\Services\Api\PatientService;
@@ -13,7 +15,6 @@ use App\Http\Requests\Patient\PatientConditionRequest;
 use App\Http\Requests\Patient\PatientPhysicianRequest;
 use App\Http\Requests\Patient\PatientMedicalHistoryRequest;
 use App\Http\Requests\Patient\PatientMedicalRoutineRequest;
-use \App\Library\BitrixApi;
 
 class PatientController extends Controller
 {
@@ -264,7 +265,7 @@ class PatientController extends Controller
     if($patientId){
 
       // get deal from the bitrix24 api
-      $response = BitrixApi::getDeal($patientId);
+      $response = BitrixApi::getDealById($patientId);
       return response()->json($response, 200);
 
     }else{
@@ -302,5 +303,9 @@ class PatientController extends Controller
     }
   }
 
+  Public function getBitrixFieldList(Request $request)
+  {
+    return (new BitrixService)->getBitrixFiled($request);
+  }
  
 }
