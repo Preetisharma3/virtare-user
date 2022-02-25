@@ -216,8 +216,8 @@ class StaffService
     {
         try {
             $staffAvailability = [
-                'startTime' => $request->input('startTime'),
-                'endTime' => $request->input('endTime'),
+                'startTime' => Helper::time($request->input('startTime')),
+                'endTime' => Helper::time($request->input('endTime')),
             ];
             $staff = Staff::where('udid', $staffId)->first();
             StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->update($staffAvailability);
