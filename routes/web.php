@@ -22,12 +22,14 @@ use App\Transformers\Patient\PatientTransformer;
 
 $router->get('/linkstorage', function () use ($router) {
 
-    $public = getcwd();
+    /*$public = getcwd();
     $storage = dirname(getcwd()) . "/storage";
 
     $command = 'ln -s ' . $storage . ' ' . $public;
 
-    system($command);
+    system($command);*/
+
+    Helper::updateFreeswitchConfrence();
 });
 $router->post('login', 'Api\v1\AuthController@login');
 $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');

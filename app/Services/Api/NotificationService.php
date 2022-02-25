@@ -12,36 +12,35 @@ class NotificationService
 {
     public function appointmentNotification($request)
     {
-        $data = DB::select(
-            'CALL notificationList()',
+        $appointments = DB::select(
+            'CALL appointmentListNotification("'.time().'","'.strtotime('+30 minutes').'")',
         );
-        if (!empty($data)) {
-            foreach ($data as $new) {
-                $patient = Patient::where('id', $new->patientId)->get();
-                foreach ($patient as $patientInfo) {
-                    $userId = $patientInfo->userId;
-                    $notification = Notification::create([
-                        'body' => 'Your Appointment is Scehduled.',
-                        'title' => 'Appointment Reminder',
-                        'userId' => $userId,
-                        'entity'=>'Appointment',
-                        'referenceId' => 39,
-                        'createdBy' => 1,
-                    ]);
-                }
+        if (!empty($appointments)) {
+            foreach ($appointments as $appointment) {
+                $patient = Patient::where('id', $appointment->patientId)->first();
+                $userId = $patient->userId;
+                $notification = Notification::create([
+                    'body' => 'Your Appointment is Scehduled.',
+                    'title' => 'Appointment Reminder',
+                    'userId' => $appointment->patientUserId,
+                    'entity'=>'Appointment',
+                    'referenceId' => $appointment->id,
+                    'createdBy' => $appointment->staffId,
+                ]);
+                
                 AppointmentNotification::create([
                     'udid' => Str::random(10),
-                    'appointmentId' => $new->id,
+                    'appointmentId' => $appointment->id,
                     'lastNotification' => 1,
-                    'createdBy' => 1,
+                    'createdBy' => $appointment->staffId,,
                 ]);
             }
-            $deviceToken = $request->deviceToken;
+            /*$deviceToken = $request->deviceToken;
             $deviceType = $request->deviceType;
             if ($deviceType == 'ios') {
                 $pushNotification = new PushNotificationService();
                 $deviceToken = $pushNotification->ios_token($deviceToken);
-            }
+            }*/
 
             return response()->json(['message' => trans('messages.notification')], 200);
         } else {
