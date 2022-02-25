@@ -186,8 +186,8 @@ class StaffService
     {
         try {
             $udid = Str::random(10);
-            $startTime = $request->startTime;
-            $endTime = $request->endTime;
+            $startTime = Helper::time($request->startTime);
+            $endTime = Helper::time($request->endTime);
             $staff = Staff::where('udid', $id)->first();
             $staffId = $staff->id;
             DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');
