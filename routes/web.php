@@ -100,6 +100,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     */
     $router->get("bitrix/deal/{patientId}",'Api\v1\PatientController@getAllBitrixDeals');
     $router->get("bitrix/deal",'Api\v1\PatientController@getAllBitrixDeals');
+    $router->get("bitrix/fields",'Api\v1\PatientController@getBitrixFieldList');
 
     // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
