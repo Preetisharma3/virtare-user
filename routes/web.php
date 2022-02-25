@@ -315,6 +315,7 @@ $router->get('staff/network/count', 'Api\v1\StaffController@networkCount');
 
 $router->post('provider', 'Api\v1\ProviderController@store');
 $router->post('provider/{id}/location', 'Api\v1\ProviderController@providerLocationStore');
+$router->get('provider/{id}/location', 'Api\v1\ProviderController@providerLocationList');
 $router->get('provider', 'Api\v1\ProviderController@index');
 
 $router->post('role', 'Api\v1\RolePermissionController@createRole');

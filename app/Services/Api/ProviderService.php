@@ -63,6 +63,11 @@ class ProviderService
         }
     }
 
+    public function providerLocationList($request,$id){
+        $data = Provider::where('providerId',$id)->get();
+        return $data;
+    }
+
     public function index(){
         $data = Provider::all();
         return fractal()->collection($data)->transformWith(new ProviderTransformer())->toArray();
