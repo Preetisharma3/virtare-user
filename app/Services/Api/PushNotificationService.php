@@ -42,6 +42,7 @@ class PushNotificationService
             ]);
             $fcm->data([
                 "type" => $data['type']
+                "typeId" => $data['typeId']
             ]);
             $fcm->send();
             return response()->json(['message' => trans('messages.notification')], 200);

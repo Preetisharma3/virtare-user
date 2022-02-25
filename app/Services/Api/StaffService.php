@@ -73,7 +73,7 @@ class StaffService
     public function listStaff($request, $id)
     {
         if(!$id){
-            $data = Staff::with('roles', 'appointment')->paginate(env('PER_PAGE',20));
+            $data = Staff::with('roles', 'appointment')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE',20));
             return fractal()->collection($data)->transformWith(new StaffTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         }else{
             $data = Staff::where('udid',$id)->with('roles', 'appointment')->first();
@@ -196,8 +196,8 @@ class StaffService
     {
         try {
             $udid = Str::random(10);
-            $startTime = $request->startTime;
-            $endTime = $request->endTime;
+            $startTime = Helper::time($request->startTime);
+            $endTime = Helper::time($request->endTime);
             $staff = Staff::where('udid', $id)->first();
             $staffId = $staff->id;
             DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');

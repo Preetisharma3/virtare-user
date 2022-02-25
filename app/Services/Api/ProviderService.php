@@ -26,10 +26,16 @@ class ProviderService
                 $input,
                 $otherData
             ));
-            DB::select(
+           $id =  DB::select(
                 "CALL addProvider('" . $data . "')"
             );
-            return response()->json(['message' => trans('messages.createdSuccesfully')], 200);
+            foreach($id as $providerId){
+                $provider = Provider::where('id',$providerId->id)->first();
+            }
+            $userdata = fractal()->item($provider)->transformWith(new ProviderTransformer())->toArray();
+            $message = ['message' => trans('messages.createdSuccesfully')];
+            $endData = array_merge($message, $userdata);
+            return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
