@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use App\Models\UserRole\UserRole;
 use Illuminate\Support\Facades\DB;
-use App\Models\Patient\PatientStaff;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
 use App\Models\StaffContact\StaffContact;
 use App\Transformers\Staff\StaffTransformer;
@@ -20,15 +20,11 @@ use App\Transformers\Staff\StaffRoleTransformer;
 use App\Models\Staff\StaffProvider\StaffProvider;
 use App\Models\StaffAvailability\StaffAvailability;
 use App\Transformers\Staff\StaffContactTransformer;
-use App\Transformers\Staff\StaffPatientTransformer;
 use App\Transformers\Staff\StaffProviderTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
-use App\Transformers\Staff\StaffAppointmentTransformer;
-use App\Transformers\Appointment\AppointmentTransformer;
 use App\Transformers\Staff\StaffAvailabilityTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\Appointment\AppointmentDataTransformer;
-use App\Transformers\Appointment\AppointmentListTransformer;
 
 class StaffService
 {
@@ -40,14 +36,13 @@ class StaffService
                 'email' => $request->email,
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // 'password'
                 'emailVerify' => 1,
-                'createdBy' => 1,
+                'createdBy' => Auth::id(),
                 'roleId' => 3,
             ];
             $data = User::create($user);
             $staff = [
                 'udid' => Str::random(10),
                 'userId' => $data->id,
-                'email' => $data->email,
                 'firstName' => $request->firstName,
                 'lastName' => $request->lastName,
                 'phoneNumber' => $request->phoneNumber,
@@ -56,7 +51,7 @@ class StaffService
                 'designationId' => $request->designationId,
                 'networkId' => $request->networkId,
                 'roleId' => 3,
-                'createdBy' => 1
+                'createdBy' => Auth::id()
             ];
             $newData = Staff::create($staff);
             $staffData = Staff::where('id', $newData->id)->first();

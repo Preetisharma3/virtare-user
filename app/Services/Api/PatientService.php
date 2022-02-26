@@ -292,7 +292,7 @@ class PatientService
                     'otherLanguage',
                     'flags.flag',
                     'inventories.inventory'
-                )->paginate(env('PER_PAGE',20));
+                )->paginate(env('PER_PAGE', 20));
                 return fractal()->collection($getPatient)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($getPatient))->toArray();
             }
         } catch (Exception $e) {
@@ -716,7 +716,7 @@ class PatientService
                     $data = [
                         'vitalFieldId' => $vital['type'],
                         'deviceTypeId' => $vital['deviceType'],
-                        'createdBy' => 1,
+                        'createdBy' => Auth::id(),
                         'udid' => $udid,
                         'value' => $vital['value'],
                         'patientId' => $id,
@@ -726,10 +726,11 @@ class PatientService
                         'endTime' => $endTime,
                         'addType' => $vital['addType'],
                         'createdType' => $vital['createdType'],
-                        'comment' => $vital['comment'],
                         'deviceInfo' => json_encode($vital['deviceInfo'])
                     ];
                     $vitalData = PatientVital::create($data);
+                    $note = ['createdBy' => Auth::id(), 'note' => $vital['comment'], 'udid' => Str::uuid()->toString(), 'entityType' => 'patientVital', 'referenceId' => $vitalData->id];
+                    Note::create($note);
                     $result = PatientVital::where('id', $vitalData->id)->first();
                     $patientData = Patient::where('id', $id)->first();
                     $vitalField = VitalField::where('id', $vitalData->vitalFieldId)->first();
@@ -738,7 +739,7 @@ class PatientService
                     $timeLine = [
                         'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' . $patientData->lastName . ' ' .
                             'Submit' . ' ' . $device->name . ' ' . 'Reading' . ' ' . $vitalField->name . ' ' . $vital['value'], 'type' => 1,
-                        'createdBy' => 1, 'udid' => Str::uuid()->toString()
+                        'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
                     ];
                     PatientTimeLine::create($timeLine);
                 }
@@ -764,10 +765,11 @@ class PatientService
                         'endTime' => $endTime,
                         'addType' => $vital['addType'],
                         'createdType' => $vital['createdType'],
-                        'comment' => $vital['comment'],
                         'deviceInfo' => json_encode($vital['deviceInfo'])
                     ];
                     $vitalData = PatientVital::create($data);
+                    $note = ['createdBy' => Auth::id(), 'note' => $vital['comment'], 'udid' => Str::uuid()->toString(), 'entityType' => 'patientVital', 'referenceId' => $vitalData->id];
+                    Note::create($note);
                     $result = PatientVital::where('id', $vitalData->id)->first();
                     $patientData = Patient::where('id', $patientId)->first();
                     $vitalField = VitalField::where('id', $vitalData->vitalFieldId)->first();
@@ -776,7 +778,7 @@ class PatientService
                     $timeLine = [
                         'patientId' => $patientData->id, 'heading' => 'Vital Update', 'title' => $patientData->firstName . ' ' . $patientData->lastName . ' ' .
                             'Submit' . ' ' . $device->name . ' ' . 'Reading' . ' ' . $vitalField->name . ',' . $vital['value'], 'type' => 1,
-                        'createdBy' => 1, 'udid' => Str::uuid()->toString()
+                        'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
                     ];
                     PatientTimeLine::create($timeLine);
                 }

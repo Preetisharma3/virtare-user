@@ -1,0 +1,1199 @@
+<document type="freeswitch/xml">
+                <section name="directory">
+                    <domain name="51.81.193.156">
+                        <params>
+                            <param name="dial-string" value="{presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(${dialed_user}@${dialed_domain})}"/>
+                        </params>
+                        <groups>
+                            <group name="default">
+                                <users>
+                                                                        <user id="UR1">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR1"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="super admin"/>
+                                            <variable name="effective_caller_id_number" value="UR1"/>
+                                            <variable name="outbound_caller_id_name" value="super admin"/>
+                                            <variable name="outbound_caller_id_number" value="UR1"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR270">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR270"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR270"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR270"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR271">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR271"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR271"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR271"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR272">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR272"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR272"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR272"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR273">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR273"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Karan Singh"/>
+                                            <variable name="effective_caller_id_number" value="UR273"/>
+                                            <variable name="outbound_caller_id_name" value="Karan Singh"/>
+                                            <variable name="outbound_caller_id_number" value="UR273"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR274">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR274"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR274"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR274"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR275">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR275"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR275"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR275"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR276">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR276"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="KlarakJ Peter"/>
+                                            <variable name="effective_caller_id_number" value="UR276"/>
+                                            <variable name="outbound_caller_id_name" value="KlarakJ Peter"/>
+                                            <variable name="outbound_caller_id_number" value="UR276"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR277">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR277"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR277"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR277"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR278">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR278"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR278"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR278"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR279">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR279"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Navdeep Garg"/>
+                                            <variable name="effective_caller_id_number" value="UR279"/>
+                                            <variable name="outbound_caller_id_name" value="Navdeep Garg"/>
+                                            <variable name="outbound_caller_id_number" value="UR279"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR280">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR280"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR280"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR280"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR281">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR281"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR281"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR281"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR282">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR282"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Test1 test1"/>
+                                            <variable name="effective_caller_id_number" value="UR282"/>
+                                            <variable name="outbound_caller_id_name" value="Test1 test1"/>
+                                            <variable name="outbound_caller_id_number" value="UR282"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR283">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR283"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Emilie Miller"/>
+                                            <variable name="effective_caller_id_number" value="UR283"/>
+                                            <variable name="outbound_caller_id_name" value="Emilie Miller"/>
+                                            <variable name="outbound_caller_id_number" value="UR283"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR284">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR284"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR284"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR284"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR285">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR285"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR285"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR285"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR286">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR286"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR286"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR286"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR287">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR287"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Emilia Clarke"/>
+                                            <variable name="effective_caller_id_number" value="UR287"/>
+                                            <variable name="outbound_caller_id_name" value="Emilia Clarke"/>
+                                            <variable name="outbound_caller_id_number" value="UR287"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR288">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR288"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR288"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR288"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR289">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR289"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR289"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR289"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR290">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR290"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR290"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR290"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR291">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR291"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR291"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR291"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR292">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR292"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR292"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR292"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR293">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR293"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR293"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR293"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR294">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR294"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR294"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR294"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR295">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR295"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR295"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR295"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR296">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR296"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR296"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR296"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR297">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR297"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR297"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR297"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR299">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR299"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR299"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR299"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR300">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR300"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Sedrick Willi"/>
+                                            <variable name="effective_caller_id_number" value="UR300"/>
+                                            <variable name="outbound_caller_id_name" value="Sedrick Willi"/>
+                                            <variable name="outbound_caller_id_number" value="UR300"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR301">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR301"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR301"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR301"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR302">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR302"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR302"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR302"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR303">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR303"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR303"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR303"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR304">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR304"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR304"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR304"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR305">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR305"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="jacky Clarke"/>
+                                            <variable name="effective_caller_id_number" value="UR305"/>
+                                            <variable name="outbound_caller_id_name" value="jacky Clarke"/>
+                                            <variable name="outbound_caller_id_number" value="UR305"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR309">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR309"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR309"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR309"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR310">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR310"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR310"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR310"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR311">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR311"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR311"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR311"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR312">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR312"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR312"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR312"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR313">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR313"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Maria Sella"/>
+                                            <variable name="effective_caller_id_number" value="UR313"/>
+                                            <variable name="outbound_caller_id_name" value="Maria Sella"/>
+                                            <variable name="outbound_caller_id_number" value="UR313"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR314">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR314"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR314"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR314"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR315">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR315"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Manoj Yadav"/>
+                                            <variable name="effective_caller_id_number" value="UR315"/>
+                                            <variable name="outbound_caller_id_name" value="Manoj Yadav"/>
+                                            <variable name="outbound_caller_id_number" value="UR315"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR316">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR316"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR316"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR316"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR317">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR317"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR317"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR317"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR318">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR318"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="sfdsf dsfdsf"/>
+                                            <variable name="effective_caller_id_number" value="UR318"/>
+                                            <variable name="outbound_caller_id_name" value="sfdsf dsfdsf"/>
+                                            <variable name="outbound_caller_id_number" value="UR318"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR319">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR319"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="dffdgdfg dfgfd"/>
+                                            <variable name="effective_caller_id_number" value="UR319"/>
+                                            <variable name="outbound_caller_id_name" value="dffdgdfg dfgfd"/>
+                                            <variable name="outbound_caller_id_number" value="UR319"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR320">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR320"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="jack Ryan"/>
+                                            <variable name="effective_caller_id_number" value="UR320"/>
+                                            <variable name="outbound_caller_id_name" value="jack Ryan"/>
+                                            <variable name="outbound_caller_id_number" value="UR320"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR321">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR321"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="test test"/>
+                                            <variable name="effective_caller_id_number" value="UR321"/>
+                                            <variable name="outbound_caller_id_name" value="test test"/>
+                                            <variable name="outbound_caller_id_number" value="UR321"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR322">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR322"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="fdgfdg dfgfdgd"/>
+                                            <variable name="effective_caller_id_number" value="UR322"/>
+                                            <variable name="outbound_caller_id_name" value="fdgfdg dfgfdgd"/>
+                                            <variable name="outbound_caller_id_number" value="UR322"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR323">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR323"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="dgfdgfd fdgfdg"/>
+                                            <variable name="effective_caller_id_number" value="UR323"/>
+                                            <variable name="outbound_caller_id_name" value="dgfdgfd fdgfdg"/>
+                                            <variable name="outbound_caller_id_number" value="UR323"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR324">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR324"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="ghfghfg fghfgh"/>
+                                            <variable name="effective_caller_id_number" value="UR324"/>
+                                            <variable name="outbound_caller_id_name" value="ghfghfg fghfgh"/>
+                                            <variable name="outbound_caller_id_number" value="UR324"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR325">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR325"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="fghgfh gfhfgh"/>
+                                            <variable name="effective_caller_id_number" value="UR325"/>
+                                            <variable name="outbound_caller_id_name" value="fghgfh gfhfgh"/>
+                                            <variable name="outbound_caller_id_number" value="UR325"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR326">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR326"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="gfhgfh gfhg"/>
+                                            <variable name="effective_caller_id_number" value="UR326"/>
+                                            <variable name="outbound_caller_id_name" value="gfhgfh gfhg"/>
+                                            <variable name="outbound_caller_id_number" value="UR326"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR327">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR327"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="vfhgfhfg hgfhgfhgf"/>
+                                            <variable name="effective_caller_id_number" value="UR327"/>
+                                            <variable name="outbound_caller_id_name" value="vfhgfhfg hgfhgfhgf"/>
+                                            <variable name="outbound_caller_id_number" value="UR327"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR329">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR329"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="test etetet"/>
+                                            <variable name="effective_caller_id_number" value="UR329"/>
+                                            <variable name="outbound_caller_id_name" value="test etetet"/>
+                                            <variable name="outbound_caller_id_number" value="UR329"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR330">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR330"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR330"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR330"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR331">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR331"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Retret Retret"/>
+                                            <variable name="effective_caller_id_number" value="UR331"/>
+                                            <variable name="outbound_caller_id_name" value="Retret Retret"/>
+                                            <variable name="outbound_caller_id_number" value="UR331"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR332">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR332"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Sherlock Holmes"/>
+                                            <variable name="effective_caller_id_number" value="UR332"/>
+                                            <variable name="outbound_caller_id_name" value="Sherlock Holmes"/>
+                                            <variable name="outbound_caller_id_number" value="UR332"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR334">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR334"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR334"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR334"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR336">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR336"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR336"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR336"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR339">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR339"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR339"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR339"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR340">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR340"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Test User"/>
+                                            <variable name="effective_caller_id_number" value="UR340"/>
+                                            <variable name="outbound_caller_id_name" value="Test User"/>
+                                            <variable name="outbound_caller_id_number" value="UR340"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR341">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR341"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Testing Patient"/>
+                                            <variable name="effective_caller_id_number" value="UR341"/>
+                                            <variable name="outbound_caller_id_name" value="Testing Patient"/>
+                                            <variable name="outbound_caller_id_number" value="UR341"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR342">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR342"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Paul Usher"/>
+                                            <variable name="effective_caller_id_number" value="UR342"/>
+                                            <variable name="outbound_caller_id_name" value="Paul Usher"/>
+                                            <variable name="outbound_caller_id_number" value="UR342"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR343">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR343"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR343"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR343"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR344">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR344"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR344"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR344"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR345">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR345"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR345"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR345"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR346">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR346"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR346"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR346"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR347">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR347"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR347"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR347"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR349">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR349"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR349"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR349"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR350">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR350"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR350"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR350"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR351">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR351"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR351"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR351"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR352">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR352"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR352"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR352"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR353">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR353"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR353"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR353"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR354">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR354"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR354"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR354"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR355">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR355"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR355"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR355"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR356">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR356"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR356"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR356"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR357">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR357"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR357"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR357"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR358">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR358"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR358"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR358"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR359">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR359"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR359"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR359"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR360">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR360"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR360"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR360"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR361">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR361"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR361"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR361"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR362">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR362"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR362"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR362"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR363">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR363"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="test K"/>
+                                            <variable name="effective_caller_id_number" value="UR363"/>
+                                            <variable name="outbound_caller_id_name" value="test K"/>
+                                            <variable name="outbound_caller_id_number" value="UR363"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR364">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR364"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR364"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR364"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR365">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR365"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR365"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR365"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR366">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR366"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value=""/>
+                                            <variable name="effective_caller_id_number" value="UR366"/>
+                                            <variable name="outbound_caller_id_name" value=""/>
+                                            <variable name="outbound_caller_id_number" value="UR366"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR367">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR367"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="test6564 test987"/>
+                                            <variable name="effective_caller_id_number" value="UR367"/>
+                                            <variable name="outbound_caller_id_name" value="test6564 test987"/>
+                                            <variable name="outbound_caller_id_number" value="UR367"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR368">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR368"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Ramsey Gordon"/>
+                                            <variable name="effective_caller_id_number" value="UR368"/>
+                                            <variable name="outbound_caller_id_name" value="Ramsey Gordon"/>
+                                            <variable name="outbound_caller_id_number" value="UR368"/>
+                                        </variables>
+                                    </user>
+                                                                        <user id="UR369">
+                                        <params>
+                                            <param name="password" value="123456"/>
+                                        </params>
+                                        <variables>
+                                            <variable name="accountcode" value="UR369"/>
+                                            <variable name="user_context" value="default"/>
+                                            <variable name="effective_caller_id_name" value="Staff Gordon"/>
+                                            <variable name="effective_caller_id_number" value="UR369"/>
+                                            <variable name="outbound_caller_id_name" value="Staff Gordon"/>
+                                            <variable name="outbound_caller_id_number" value="UR369"/>
+                                        </variables>
+                                    </user>
+                                                                    </users>
+                            </group>
+                        </groups>
+                    </domain>
+                </section>
+            </document>
+        

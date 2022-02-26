@@ -3,21 +3,22 @@
 namespace App\Services\Api;
 
 
+use Exception;
 use App\Helper;
 use Carbon\Carbon;
+use App\Models\Note\Note;
 use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
-use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientTimeLine;
+use App\Models\Patient\PatientFamilyMember;
 use App\Transformers\Appointment\AppointmentTransformer;
 use App\Transformers\Appointment\AppointmentDataTransformer;
 use App\Transformers\Appointment\AppointmentListTransformer;
 use App\Transformers\Appointment\AppointmentSearchTransformer;
-use Exception;
 
 class AppointmentService
 {
@@ -30,7 +31,6 @@ class AppointmentService
                 'appointmentTypeId' => $request->appointmentTypeId,
                 'startDateTime' => date("Y-m-d H:i:s", $request->startDate),
                 'durationId' => $request->durationId,
-                'note' => $request->note,
                 'createdBy' => Auth::user()->id,
             ];
             if (Auth::user()->patient) {
@@ -59,12 +59,14 @@ class AppointmentService
                 }
             }
             $data = array_merge($entity, $input);
-            Appointment::create($data);
+            $appointment=Appointment::create($data);
+            $note=['createdBy'=>Auth::id(),'note'=>$request->input('note'),'udid'=>Str::uuid()->toString(),'entityType'=>'appointment','referenceId'=>$appointment->id];
+            Note::create($note);
             $patientData = Patient::where('id', $data['patientId'])->first();
             $staffData = Staff::where('id', $data['staffId'])->first();
             $timeLine = [
                 'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for' . ' ' . $patientData->firstName . ' ' . $patientData->lastName . ' ' . 'Added with' . ' ' . $staffData->firstName . ' ' . $staffData->lastName, 'type' => 1,
-                'createdBy' => 1, 'udid' => Str::uuid()->toString()
+                'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
             ];
             PatientTimeLine::create($timeLine);
             return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
