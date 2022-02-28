@@ -29,12 +29,12 @@ class NotificationService
                     'referenceId' => $appointment->id,
                     'createdBy' => $appointment->staffId,
                 ]);
-                Appointment::where('id',$appointment->id)->update(['conferenceId'=>'CONF'.$appointment->id);
+                Appointment::where('id',$appointment->id)->update(['conferenceId'=>'CONF'.$appointment->id]);
                 AppointmentNotification::create([
                     'udid' => Str::random(10),
                     'appointmentId' => $appointment->id,
                     'lastNotification' => 1,
-                    'createdBy' => $appointment->staffId,,
+                    'createdBy' => $appointment->staffId,
                 ]);
             }
         } 

@@ -6,7 +6,6 @@ use Exception;
 use App\Helper;
 use App\Models\Note\Note;
 use Illuminate\Support\Str;
-use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Note\NoteTransformer;
 
@@ -29,7 +28,7 @@ class NoteService
         }
     }
 
-    public function noteList($request, $entity, $id)
+    public function noteList($request, $entity, $id,$noteId)
     {
         try {
             if ($request->latest) {

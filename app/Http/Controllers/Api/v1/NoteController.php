@@ -9,14 +9,14 @@ use App\Http\Controllers\Controller;
 
 class NoteController extends Controller
 {
-    public function addNote(Request $request, $entity, $id=null){
+    public function addNote(Request $request, $entity, $id){
 
         return (new NoteService)->noteAdd($request, $entity, $id);
     }
 
-    public function listNote(Request $request, $entity, $id=null){
+    public function listNote(Request $request, $entity, $id,$noteId=null){
 
-        return (new NoteService)->noteList($request, $entity, $id);
+        return (new NoteService)->noteList($request, $entity, $id,$noteId);
     }
    
 }
