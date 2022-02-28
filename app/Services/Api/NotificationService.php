@@ -15,7 +15,7 @@ class NotificationService
     public function appointmentNotification($request)
     {
         $appointments = DB::select(
-            'CALL appointmentListNotification("'.time().'","'.strtotime('+30 minutes').'")',
+            'CALL appointmentListNotification("'.date("Y-m-d H:i:s",time()).'","'.date("Y-m-d H:i:s",strtotime('+30 minutes')).'")',
         );
         if (!empty($appointments)) {
             foreach ($appointments as $appointment) {
