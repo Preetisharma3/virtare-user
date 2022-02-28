@@ -3,10 +3,12 @@
 namespace App;
 
 use Carbon\Carbon;
+use App\Models\User\User;
 use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
-use App\Models\User\User;
+use App\Models\Patient\PatientStaff;
 use App\Models\Patient\PatientTimeLog;
+use App\Models\Patient\PatientFamilyMember;
 
 class Helper
 {
@@ -143,18 +145,18 @@ class Helper
                             <action application="bridge" data="loopback/app=voicemail:default ${domain_name} ${dialed_extension}" />
                         </condition>
                     </extension>
-        <?php 
+                    <?php
                     foreach ($confrence as $conf) {
-        ?>
+                    ?>
                         <extension name="Media Server">
                             <condition field="destination_number" expression="^(<?php echo $conf['conferenceId']; ?>)$">
-                                <action application="answer"/>
-                                <action application="conference" data="internal@myprofile"/>
+                                <action application="answer" />
+                                <action application="conference" data="internal@myprofile" />
                             </condition>
                         </extension>
-        <?php
+                    <?php
                     }
-        ?>
+                    ?>
                 </context>
             </section>
         </document>
@@ -164,5 +166,15 @@ class Helper
         $directory = fopen(base_path() . "/public/dialplan.xml", "w") or die("Unable to open file!");
         fwrite($directory, $contents);
         fclose($directory);
+    }
+
+
+    public static function haveAccess($id)
+    {
+       $data = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $id]]);
+       $staff=PatientStaff::where([['staffId', auth()->user()->staff->id], ['patientId', $id]]);
+        if (!$data || !$staff) {
+            return response()->json(['message' => trans('messages.unauthorized')]);
+        }
     }
 }

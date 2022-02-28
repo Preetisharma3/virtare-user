@@ -21,5 +21,6 @@ return [
     'deletedSuccesfully' => "Deleted Successfully",
     'date_exist'=> "la fecha ya existe",
     'notification'=>"Notification sent successfully.",
-    'udid'=>"This device is already Mapped,Please Contact Admin."
+    'udid'=>"This device is already Mapped,Please Contact Admin.",
+    'unauthorized'=>'unauthorized'
 ];
