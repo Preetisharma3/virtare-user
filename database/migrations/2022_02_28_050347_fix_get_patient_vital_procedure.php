@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFixGetPatientVitalProcedure extends Migration
+class FixGetPatientVitalProcedure extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +12,6 @@ class CreateFixGetPatientVitalProcedure extends Migration
      */
     public function up()
     {
-
         $procedure = "DROP PROCEDURE IF EXISTS `getPatientVital`;";
         DB::unprepared($procedure);
         $procedure = "
@@ -29,11 +27,12 @@ class CreateFixGetPatientVitalProcedure extends Migration
             patientVitals.addType AS addType,
             globalCodes.name AS deviceType,
             patientVitals.createdType AS createdType,
-            patientVitals.comment AS comment,
+            notes.note AS note,
             patientVitals.createdAt AS lastReadingDate,
             patientVitals.deviceInfo AS deviceInfo
             FROM patientVitals
             JOIN vitalFields ON patientVitals.vitalFieldId=vitalFields.id 
+            JOIN notes ON patientVitals.id=notes.referenceId
             JOIN globalCodes ON patientVitals.deviceTypeId=globalCodes.id
             WHERE patientVitals.patientId = patientIdx
             AND (patientVitals.takeTime >= fromDate OR fromDate = '')
@@ -52,6 +51,6 @@ class CreateFixGetPatientVitalProcedure extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fix_get_patient_vital_procedure');
+        //
     }
 }
