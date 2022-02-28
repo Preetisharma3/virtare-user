@@ -48,7 +48,7 @@ class NotificationService
         if (!empty($notifications)) {
             foreach ($notifications as $notification) {
                 
-                $pushnotification = new Pushnotification();
+                $pushnotification = new PushNotificationService();
                 $notificationData = array(
                     "body" =>$notification->body,
                     "title" =>$notification->title,
@@ -56,6 +56,8 @@ class NotificationService
                     "typeId" =>$notification->referenceId,
                 );
                 $pushnotification->sendNotification([$notification->userId],$notificationData);
+                
+                Notification::where('id',$notification->id)->update(['isSent'=>'1']);
             }
             
         }

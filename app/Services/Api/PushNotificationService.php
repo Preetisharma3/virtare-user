@@ -25,14 +25,6 @@ class PushNotificationService
             foreach ($users as $userId) {
                 $user = User::find($userId);
                 array_push($deviceToken,$user->deviceToken);
-
-                $notification = new NotificationRequest();
-                $notification->userId = $user->id;
-                $notification->type = $data['type'];
-                $notification->body = $data['body'];
-                $notification->title = $data['title'];
-                $notification->createdBy = $currentUser;
-                $notification->save();
             }
             $fcm = new FCM();
             $fcm->deviceId($deviceToken);
