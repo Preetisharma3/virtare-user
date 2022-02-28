@@ -35,7 +35,7 @@ class TeamService
                     $data = PatientPhysician::where([['patientId', auth()->user()->patient->id]])->paginate(5);
                     return fractal()->collection($data)->transformWith(new PhysicianTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 } else {
-                    $data = PatientPhysician::where([['patientId', auth()->user()->patient->id], ['id', $id]])->first();
+                    $data = PatientPhysician::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->first();
                     if (!empty($data)) {
                         return fractal()->item($data)->transformWith(new PhysicianTransformer(true))->toArray();
                     } else {
@@ -43,20 +43,34 @@ class TeamService
                     }
                 }
             } elseif ($type == 'familyMember') {
-                if (!$id) {
-                    $data = PatientFamilyMember::with('roles')->where([['patientId', auth()->user()->patient->id]])->paginate(5);
-                    return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
-                } else {
-                    $data = PatientFamilyMember::with('roles')->where([['patientId', auth()->user()->patient->id], ['udid', $id]])->first();
-                    if (!empty($data)) {
-                        return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
+                if (auth()->user()->roleId == 6) {
+                    if (!$id) {
+                        $data = PatientFamilyMember::with('roles')->paginate(5);
+                        return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                     } else {
-                        return response()->json(['message' => trans('messages.not_found')], 404);
+                        $data = PatientFamilyMember::with('roles')->where('udid', $id)->first();
+                        if (!empty($data)) {
+                            return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
+                        } else {
+                            return response()->json(['message' => trans('messages.not_found')], 404);
+                        }
+                    }
+                } else {
+                    if (!$id) {
+                        $data = PatientFamilyMember::with('roles')->where([['patientId', auth()->user()->patient->id]])->paginate(5);
+                        return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+                    } else {
+                        $data = PatientFamilyMember::with('roles')->where([['patientId', auth()->user()->patient->id], ['udid', $id]])->first();
+                        if (!empty($data)) {
+                            return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
+                        } else {
+                            return response()->json(['message' => trans('messages.not_found')], 404);
+                        }
                     }
                 }
             }
         } elseif ($patientId) {
-            $patient=Helper::entity('patient',$patientId);
+            $patient = Helper::entity('patient', $patientId);
             if ($type == 'staff') {
                 if (!$id) {
                     $data = Staff::whereHas('patientStaff', function ($query) use ($patient) {
@@ -76,8 +90,7 @@ class TeamService
                     $data = PatientPhysician::where([['patientId', $patient]])->paginate(5);
                     return fractal()->collection($data)->transformWith(new PhysicianTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 } else {
-
-                    $data = PatientPhysician::where([['patientId', $patient], ['id', $id]])->first();
+                    $data = PatientPhysician::where([['patientId', $patient], ['udid', $id]])->first();
                     if (!empty($data)) {
                         return fractal()->item($data)->transformWith(new PhysicianTransformer(true))->toArray();
                     } else {
