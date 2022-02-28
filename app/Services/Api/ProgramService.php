@@ -7,14 +7,15 @@ use App\Models\Program\Program;
 use Illuminate\Support\Str;
 use App\Transformers\Program\ProgramTransformer;
 use Illuminate\Support\Facades\DB;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class ProgramService
 {
     public function programList($request)
     {
         try{
-            $getProgram = Program::with('type')->get();
-            return fractal()->collection($getProgram)->transformWith(new ProgramTransformer())->toArray();
+            $getProgram = Program::with('type')->paginate(env('PER_PAGE',20));
+            return fractal()->collection($getProgram)->transformWith(new ProgramTransformer())->paginateWith(new IlluminatePaginatorAdapter($getProgram))->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -23,15 +24,19 @@ class ProgramService
     public function createProgram($request)
     {
         try {
-            $udid = Str::random(10);
-            $typeId = $request->input('typeId');
-            $description = $request->input('description');
-            DB::select('CALL createProgram("' . $udid . '","' . $typeId . '","' . $description . '")');
-            $newData = Program::latest('udid')->first();
+            $program = [
+                'udid' => Str::random(10),
+                'typeId' => $request->input('typeId'),
+                'description' => $request->input('description'),
+                'name' => $request->input('name'),
+                'isActive' => $request->input('isActive'),
+            ];
+            $newData = Program::create($program);
+            $staffData = Program::where('id', $newData->id)->first();
             $message = ["message" => "created Successfully"];
-            $resp =  fractal()->item($newData)->transformWith(new ProgramTransformer())->toArray();
+            $resp =  fractal()->item($staffData)->transformWith(new ProgramTransformer())->toArray();
             $endData = array_merge($message, $resp);
-            return $endData; 
+            return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -43,6 +48,8 @@ class ProgramService
             $program = [
                 'typeId' => $request->input('typeId'),
                 'description' => $request->input('description'),
+                'name' => $request->input('name'),
+                'isActive' => $request->input('isActive'),
                 'updatedBy' =>1,
             ];
             Program::where('udid', $id)->update($program);
