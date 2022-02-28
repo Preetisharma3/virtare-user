@@ -34,17 +34,25 @@ class RolePermissionService
     public function createRole($request)
     {
         try{
-            $udid = Str::uuid()->toString();
-            $roles = $request->input('name');
-            $roleDescription = $request->input('description');
-            $roleTypeId = $request->input('roleTypeId');
-            DB::select('CALL createRole("' . $udid . '","' . $roles . '","' . $roleDescription . '","'.$roleTypeId.'")'); 
+            // $udid = Str::uuid()->toString();
+            // $roles = $request->input('name');
+            // $roleDescription = $request->input('description');
+            // $roleTypeId = $request->input('roleTypeId');
+            // DB::select('CALL createRole("' . $udid . '","' . $roles . '","' . $roleDescription . '","'.$roleTypeId.'")'); 
             
-            $role = AccessRole::where('udid', $udid)->first();
-            $message = ['message' => trans('messages.createdSuccesfully')];
-            $resp =  fractal()->item($role)->transformWith(new RoleListTransformer())->toArray();
-            $endData = array_merge($message, $resp);
-            return $endData;
+            // $role = AccessRole::where('udid', $udid)->first();
+            // $message = ['message' => trans('messages.createdSuccesfully')];
+            // $resp =  fractal()->item($role)->transformWith(new RoleListTransformer())->toArray();
+            // $endData = array_merge($message, $resp);
+            // return $endData;
+            $role = [
+                'udid' => Str::uuid()->toString(),
+                'roles' => $request->input('name'),
+                'roleDescription'=> $request->input('description'),
+                'roleTypeId' => '147',
+            ];
+            $data = AccessRole::create($role);
+            return response()->json(['message' => trans('messages.createdSuccesfully')]);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
            } 
