@@ -338,6 +338,8 @@ $router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
 
 //cpt code
 $router->get('cptCode', 'Api\v1\CPTCodeController@listCPTCode');
+$router->get('cptCode/{id}', 'Api\v1\CPTCodeController@listCPTCode');
+$router->put('cptCode/status/{id}', 'Api\v1\CPTCodeController@updateCPTCodeStatus');
 $router->post('cptCode', 'Api\v1\CPTCodeController@createCPTCode');
 $router->put('cptCode/{id}', 'Api\v1\CPTCodeController@updateCPTCode');
 $router->delete('cptCode/{id}', 'Api\v1\CPTCodeController@deleteCPTCode');
