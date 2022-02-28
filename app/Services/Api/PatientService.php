@@ -1356,9 +1356,7 @@ class PatientService
         }
     }
 
-
     // staff setup device
-
     public function staffInventory($request, $id, $staffId)
     {
         DB::beginTransaction();
@@ -1421,4 +1419,5 @@ class PatientService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
+    
 }

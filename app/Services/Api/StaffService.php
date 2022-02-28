@@ -86,7 +86,6 @@ class StaffService
         ];
         User::where('id', $uId)->update($user);
         $staff = [
-            'email' => $user['email'],
             'firstName' => $request->firstName,
             'lastName' => $request->lastName,
             'phoneNumber' => $request->phoneNumber,

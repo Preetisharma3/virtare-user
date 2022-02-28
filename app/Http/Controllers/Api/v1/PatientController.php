@@ -195,7 +195,7 @@ class PatientController extends Controller
     return (new PatientService)->patientInsuranceDelete($request, $id, $insuranceId);
   }
 
-  public function listingPatientInventory(Request $request, $id)
+  public function listingPatientInventory(Request $request, $id=null)
   {
     return (new PatientService)->patientInventoryListing($request, $id);
   }

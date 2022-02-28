@@ -51,8 +51,8 @@ class AppointmentService
             } elseif ($id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
-                $staff = Helper::entity('staff', $request->staffId);
-                $patient = Helper::entity('patient', $id);
+                    $staff = Helper::entity('staff', $request->staffId);
+                    $patient = Helper::entity('patient', $id);
                     $entity = [
                         'staffId' => $staff,
                         'patientId' => $patient,
@@ -62,8 +62,8 @@ class AppointmentService
                 }
             }
             $data = array_merge($entity, $input);
-            $appointment=Appointment::create($data);
-            $note=['createdBy'=>Auth::id(),'note'=>$request->input('note'),'udid'=>Str::uuid()->toString(),'entityType'=>'appointment','referenceId'=>$appointment->id];
+            $appointment = Appointment::create($data);
+            $note = ['createdBy' => Auth::id(), 'note' => $request->input('note'), 'udid' => Str::uuid()->toString(), 'entityType' => 'appointment', 'referenceId' => $appointment->id];
             Note::create($note);
             $patientData = Patient::where('id', $data['patientId'])->first();
             $staffData = Staff::where('id', $data['staffId'])->first();
@@ -81,26 +81,31 @@ class AppointmentService
     public function appointmentList($request, $id)
     {
         if (!$id) {
-            if($request->id){
+            if ($request->id) {
                 $patientId = Patient::where('udid', $request->id)->first();
                 $data = Appointment::where([['patientId', $patientId->id], ['startDateTime', '>=', date('Y-m-d',strtotime("+30 mintues"))]])->latest()->get();
                 return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
+
             }else{
                 $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', date('Y-m-d',strtotime("+30 mintues"))]])->orderBy('createdAt', 'DESC')->get();
+
                 $results = Helper::dateGroup($data, 'startDateTime');
                 return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
             }
         } elseif ($id) {
             $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $id]])->exists();
             if ($familyMember == true) {
+
                 $patient=Helper::entity('patient',$id);
                     $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', date('Y-m-d',strtotime("+30 mintues"))]])->orderBy('createdAt', 'DESC')->get();
                     $results = Helper::dateGroup($data, 'startDateTime');
                     return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
-                }
+                
             } else {
                 return response()->json(['message' => trans('messages.unauthenticated')], 401);
+
             }
+        }
     }
 
     public function newAppointments()
@@ -156,5 +161,11 @@ class AppointmentService
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
+    }
+
+    public function AppointmentConference($request)
+    {
+        $data = Appointment::whereRaw('conferenceId is null')->get();
+        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
     }
 }

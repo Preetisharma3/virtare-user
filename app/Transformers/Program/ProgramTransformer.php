@@ -13,9 +13,13 @@ class ProgramTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
+			'udid' =>$data->udid,
 			'id'=>$data->id,
+			'name'=>$data->name,
             'description'=>$data->description,
             'type'=>$data->type->name,
+			'typeId' => $data->typeId,
+			'status' =>$data->isActive,
 		];
 	}
 }

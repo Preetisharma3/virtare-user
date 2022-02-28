@@ -169,6 +169,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
 
     // appointment Routes
+    $router->get('appointment/conference', 'Api\v1\AppointmentController@conferenceAppointment');
     $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
     $router->get('appointment/search', 'Api\v1\AppointmentController@appointmentSearch');
     $router->get('appointment/summary', 'Api\v1\TimelineController@appointmentTotal');
@@ -207,6 +208,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // Inventory Routes
     $router->post('inventory/{id}', 'Api\v1\InventoryController@store');
     $router->get('inventory', 'Api\v1\InventoryController@index');
+    $router->get('inventory/{id}', 'Api\v1\InventoryController@index');
     $router->put('inventory/{id}', 'Api\v1\InventoryController@update');
     $router->delete('inventory/{id}', 'Api\v1\InventoryController@destroy');
     $router->get('model', 'Api\v1\InventoryController@getModels');
@@ -251,6 +253,17 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('{entity}/{id}/document/{documentId}', 'Api\v1\DocumentController@createDocument');
     $router->get('{entity}/{id}/document[/{documentId}]', 'Api\v1\DocumentController@listDocument');
     $router->delete('{entity}/{id}/document/{documentId}', 'Api\v1\DocumentController@deleteDocument');
+
+    // Provider Routes
+    $router->post('provider', 'Api\v1\ProviderController@store');
+    $router->get('provider[/{id}]', 'Api\v1\ProviderController@index');        
+    $router->put('provider/{id}','Api\v1\ProviderController@updateProvider');
+    $router->delete('provider/{id}','Api\v1\ProviderController@deleteProviderLocation');
+    $router->post('provider/{id}/location', 'Api\v1\ProviderController@providerLocationStore');
+    $router->get('provider/{id}/location[/{locationId}]', 'Api\v1\ProviderController@editLocation');
+    $router->put('provider/{id}/location/{locationId}','Api\v1\ProviderController@updateLocation');
+    $router->delete('provider/{id}/location/{locationId}','Api\v1\ProviderController@deleteProviderLocation');
+
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -264,7 +277,6 @@ $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
 $router->get('widget', 'Api\v1\WidgetController@getWidget');
 $router->put('widget/{id}', 'Api\v1\WidgetController@updateWidget');
 $router->get('widget/assign', 'Api\v1\WidgetController@getassignedWidget');
-$router->get('program', 'Api\v1\ProgramController@listProgram');
 $router->post('file', 'Api\v1\FileController@createFile');
 $router->delete('file', 'Api\v1\FileController@deleteFile');
 $router->get('count/patient', 'Api\v1\DashboardController@patientCountMonthly');
@@ -309,12 +321,6 @@ $router->get('model', 'Api\v1\InventoryController@getModels');
 $router->get('staff/specialization/count', 'Api\v1\StaffController@specializationCount');
 $router->get('staff/network/count', 'Api\v1\StaffController@networkCount');
 
-// Provider Routes
-$router->post('provider', 'Api\v1\ProviderController@store');
-$router->put('provider/{id}', 'Api\v1\ProviderController@updateProvider');
-$router->post('provider/{id}/location', 'Api\v1\ProviderController@providerLocationStore');
-$router->get('provider/{id}/location', 'Api\v1\ProviderController@providerLocationList');
-$router->get('provider', 'Api\v1\ProviderController@index');
 
 $router->post('role', 'Api\v1\RolePermissionController@createRole');
 $router->get('roleList', 'Api\v1\RolePermissionController@roleList');
@@ -350,5 +356,6 @@ $router->delete('template/{id}', 'Api\v1\TemplateController@deleteTemplate');
 
 //program
 $router->post('program', 'Api\v1\ProgramController@createProgram');
+$router->get('program[/{id}]', 'Api\v1\ProgramController@listProgram');
 $router->put('program/{id}', 'Api\v1\ProgramController@updateProgram');
 $router->delete('program/{id}', 'Api\v1\ProgramController@deleteProgram');
