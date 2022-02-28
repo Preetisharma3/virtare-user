@@ -17,7 +17,7 @@ class AlterProcedureWorngTimeStampAppointmentNotification extends Migration
         DB::unprepared($procedure);
         $procedure = "CREATE PROCEDURE  appointmentListNotification(fromDate VARCHAR(50),toDate VARCHAR(50)) 
         BEGIN
-        SELECT appointments.id as id, appointments.startDateTime as startTime, staffs.id as staffId, patients.id as patientId, patients.userId as patientUserId, staff.userId as staffUserId FROM appointments JOIN staffs ON appointments.staffId = staffs.id JOIN patients ON appointments.patientId = patients.id WHERE UNIX_TIMESTAMP(startDateTime) >= UNIX_TIMESTAMP(fromDate) AND UNIX_TIMESTAMP(startDateTime) <= UNIX_TIMESTAMP(toDate) AND appointments.id NOT IN (SELECT `appointmentId` FROM `appointmentNotification` ) ORDER BY startDateTime DESC;
+        SELECT appointments.id as id, appointments.startDateTime as startTime, staffs.id as staffId, patients.id as patientId, patients.userId as patientUserId, staffs.userId as staffUserId FROM appointments JOIN staffs ON appointments.staffId = staffs.id JOIN patients ON appointments.patientId = patients.id WHERE UNIX_TIMESTAMP(startDateTime) >= UNIX_TIMESTAMP(fromDate) AND UNIX_TIMESTAMP(startDateTime) <= UNIX_TIMESTAMP(toDate) AND appointments.id NOT IN (SELECT `appointmentId` FROM `appointmentNotification` ) ORDER BY startDateTime DESC;
         END;";
         DB::unprepared($procedure);
     }
