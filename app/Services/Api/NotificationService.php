@@ -22,7 +22,7 @@ class NotificationService
                 $patient = Patient::where('id', $appointment->patientId)->first();
                 $userId = $patient->userId;
                 $notification = Notification::create([
-                    'body' => 'Your Appointment is Scehduled.',
+                    'body' => 'You have a Appointment in 30 minutes.',
                     'title' => 'Appointment Reminder',
                     'userId' => $appointment->patientUserId,
                     'isSent' => 0,
