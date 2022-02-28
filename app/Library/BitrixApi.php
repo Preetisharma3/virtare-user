@@ -6,7 +6,7 @@ class BitrixApi extends CRest{
     function getDealById($id){
         if($id){
             $getDeal = CRest::call(
-               'crm.contact.get',
+               'crm.deal.get',
                [
                 'id' => $id,
                ]
