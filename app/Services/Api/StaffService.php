@@ -3,23 +3,28 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Helper;
+use Carbon\Carbon;
 use App\Models\User\User;
 use App\Models\Staff\Staff;
-use App\Models\Staff\StaffProvider\StaffProvider;
 use Illuminate\Support\Str;
+use App\Models\Patient\Patient;
 use App\Models\UserRole\UserRole;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Appointment\Appointment;
 use App\Models\StaffContact\StaffContact;
 use App\Transformers\Staff\StaffTransformer;
+use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Staff\StaffRoleTransformer;
+use App\Models\Staff\StaffProvider\StaffProvider;
 use App\Models\StaffAvailability\StaffAvailability;
 use App\Transformers\Staff\StaffContactTransformer;
-use App\Transformers\Patient\PatientCountTransformer;
-use App\Transformers\Provider\ProviderTransformer;
-use App\Transformers\Staff\StaffAvailabilityTransformer;
 use App\Transformers\Staff\StaffProviderTransformer;
+use App\Transformers\Patient\PatientCountTransformer;
+use App\Transformers\Staff\StaffAvailabilityTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
-
+use App\Transformers\Appointment\AppointmentDataTransformer;
 
 class StaffService
 {
@@ -27,18 +32,17 @@ class StaffService
     {
         try {
             $user = [
-                'udid' => Str::random(10),
+                'udid' => Str::uuid()->toString(),
                 'email' => $request->email,
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // 'password'
                 'emailVerify' => 1,
-                'createdBy' => 1,
+                'createdBy' => Auth::id(),
                 'roleId' => 3,
             ];
             $data = User::create($user);
             $staff = [
-                'udid' => Str::random(10),
+                'udid' => Str::uuid()->toString(),
                 'userId' => $data->id,
-                'email' => $data->email,
                 'firstName' => $request->firstName,
                 'lastName' => $request->lastName,
                 'phoneNumber' => $request->phoneNumber,
@@ -47,38 +51,41 @@ class StaffService
                 'designationId' => $request->designationId,
                 'networkId' => $request->networkId,
                 'roleId' => 3,
-                'createdBy' => 1
+                'createdBy' => Auth::id()
             ];
             $newData = Staff::create($staff);
             $staffData = Staff::where('id', $newData->id)->first();
-            $message = ["message" => "created Successfully"];
+            $message = ["message" => trans('messages.created_succesfully')];
             $resp =  fractal()->item($staffData)->transformWith(new StaffTransformer())->toArray();
             $endData = array_merge($message, $resp);
+            Helper::updateFreeswitchUser();
             return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-    public function listStaff($request)
+    public function listStaff($request, $id)
     {
-        $data = Staff::with('roles', 'appointment')->get();
-        return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
+        if(!$id){
+            $data = Staff::with('roles', 'appointment')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE',20));
+            return fractal()->collection($data)->transformWith(new StaffTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+        } else {
+            $data = Staff::where('udid', $id)->with('roles', 'appointment')->first();
+            return fractal()->item($data)->transformWith(new StaffTransformer())->toArray();
+        }
     }
 
     public function updateStaff($request, $id)
     {
-        $staffId = Staff::where('id', $id)->first();
+        $staffId = Staff::where('udid', $id)->first();
         $uId = $staffId->userId;
-
         $user = [
             'email' => $request->input('email'),
             'updatedBy' => 1
         ];
         User::where('id', $uId)->update($user);
-
         $staff = [
-            'email' => $user['email'],
             'firstName' => $request->firstName,
             'lastName' => $request->lastName,
             'phoneNumber' => $request->phoneNumber,
@@ -90,51 +97,49 @@ class StaffService
             'roleId' => 3,
             'createdBy' => 1
         ];
-        Staff::where('id', $id)->update($staff);
-        $staffData = Staff::where('id', $id)->first();
+        Staff::where('udid', $id)->update($staff);
+        $staffData = Staff::where('udid', $id)->first();
         $message = ["message" => "Updated Successfully"];
         $resp =  fractal()->item($staffData)->transformWith(new StaffTransformer())->toArray();
         $endData = array_merge($message, $resp);
         return $endData;
     }
 
-
     public function addStaffContact($request, $id)
     {
         try {
-            if(!empty($request->id)){
-                $udid = Str::random(10);
+            if (!empty($request->id)) {
+                $staff = Staff::where('udid', $id)->first();
+                $udid = Str::uuid()->toString();
                 $firstName = $request->firstName;
                 $lastName = $request->lastName;
                 $email = $request->email;
                 $phoneNumber = $request->phoneNumber;
-                $staffId = $id;
+                $staffId = $staff->id;
                 DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
                 $staffContactData = StaffContact::where('udid', $udid)->first();
-                $message = ["message" => "created Successfully"];
+                $message = ["message" => trans('messages.created_succesfully')];
                 $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
                 $endData = array_merge($message, $resp);
                 return $endData;
-            }else{
-                return response()->json(['message' => 'Somethings Went Worng']);
+            } else {
+                return response()->json(['message' => trans('messages.error')]);
             }
-            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-
     public function listStaffContact($request, $id)
     {
         try {
-            if(!empty($request->id)){
-                $staffContact = StaffContact::where('staffId',$id)->get();
-            return  fractal()->collection($staffContact)->transformWith(new StaffContactTransformer())->toArray();
-            }else{
+            if (!empty($request->id)) {
+                $staff = Staff::where('udid', $id)->first();
+                $staffContact = StaffContact::where('staffId', $staff->id)->get();
+                return  fractal()->collection($staffContact)->transformWith(new StaffContactTransformer())->toArray();
+            } else {
                 return response()->json(['message' => 'Somethings Went Worng']);
             }
-            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -149,8 +154,9 @@ class StaffService
                 'email' => $request->input('email'),
                 'phoneNumber' => $request->input('phoneNumber'),
             ];
-            StaffContact::where([['staffId',$staffId],['id', $id]])->update($staffContact);
-            $staffContactData = StaffContact::where('id', $id)->first();
+            $staff = Staff::where('udid', $staffId)->first();
+            StaffContact::where([['staffId', $staff->id], ['udid', $id]])->update($staffContact);
+            $staffContactData = StaffContact::where('udid', $id)->first();
             $message = ["message" => "Updated Successfully"];
             $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
             $endData = array_merge($message, $resp);
@@ -163,14 +169,15 @@ class StaffService
     public function deleteStaffContact($request, $staffId, $id)
     {
         try {
-            if(!empty($request->staffId)){
-                StaffContact::where([['staffId',$staffId],['id', $id]])->delete();
-
+            if (!empty($request->staffId)) {
+                $staff = Staff::where('udid', $staffId)->first();
+                $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
+                StaffContact::where([['staffId', $staff->id], ['udid', $id]])->update($input);
+                StaffContact::where([['staffId', $staff->id], ['udid', $id]])->delete();
                 return response()->json(['message' => "Deleted Successfully"]);
-            }else{
+            } else {
                 return response()->json(['message' => 'Somethings Went Worng']);
             }
-            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -180,13 +187,15 @@ class StaffService
     public function addStaffAvailability($request, $id)
     {
         try {
-            $udid = Str::random(10);
-            $startTime = $request->startTime;
-            $endTime = $request->endTime;
-            $staffId = $id;
-            DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');
+            $udid = Str::uuid()->toString();
+            $timeStart = Helper::time($request->input('startTime'));
+            $timeEnd = Helper::time($request->input('endTime'));
+            $startTime = $timeStart;
+            $endTime = $timeEnd;
+            $staffId = Helper::entity('staff',$id);
+            DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId. '")');
             $staffAvailability = StaffAvailability::where('udid', $udid)->first();
-            $message = ["message" => "created Successfully"];
+            $message = ["message" => trans('messages.created_succesfully')];
             $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
@@ -195,10 +204,11 @@ class StaffService
         }
     }
 
-    public function listStaffAvailability($request,$id)
+    public function listStaffAvailability($request, $id)
     {
         try {
-            $staffAvailability = StaffAvailability::where('staffId',$id)->get();
+            $staff = Staff::where('udid', $id)->first();
+            $staffAvailability = StaffAvailability::where('staffId', $staff->id)->get();
             return fractal()->collection($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -208,13 +218,15 @@ class StaffService
     public function updateStaffAvailability($request, $staffId, $id)
     {
         try {
+            $timeStart = Helper::time($request->input('startTime'));
+            $timeEnd = Helper::time($request->input('endTime'));
             $staffAvailability = [
-                'udid' => Str::random(10),
-                'startTime' => $request->input('startTime'),
-                'endTime' => $request->input('endTime'),
+                'startTime' => $timeStart,
+                'endTime' => $timeEnd,
             ];
-            StaffAvailability::where([['staffId',$staffId],['id', $id]])->update($staffAvailability);
-            $staffAvailability = StaffAvailability::where('id', $id)->first();
+            $staff = Staff::where('udid', $staffId)->first();
+            StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->update($staffAvailability);
+            $staffAvailability = StaffAvailability::where('udid', $id)->first();
             $message = ["message" => "Updated Successfully"];
             $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
             $endData = array_merge($message, $resp);
@@ -227,36 +239,38 @@ class StaffService
     public function deleteStaffAvailability($request, $staffId, $id)
     {
         try {
-            StaffAvailability::where([['staffId',$staffId],['id', $id]])->delete();
-
+            $staff = Staff::where('udid', $staffId)->first();
+            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
+            StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->update($input);
+            StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->delete();
             return response()->json(['message' => "Deleted Successfully"]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
-   
+
     public function addStaffRole($request, $id)
     {
         try {
             $roles = $request->roles;
-            foreach($roles as $roleId)
-            {
-                $udid = Str::random(10);
-                $staffId = $id;
+            $staff = Staff::where('udid', $id)->first();
+            foreach ($roles as $roleId) {
+                $udid = Str::uuid()->toString();
+                $staffId = $staff->id;
                 $accessRoleId = $roleId;
                 DB::select('CALL createstaffRole("' . $udid . '","' . $staffId . '","' . $accessRoleId . '")');
             }
-            
-            return response()->json(['message' => "created Successfully"]);
+            return response()->json(['message' => trans('messages.created_succesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-    public function listStaffRole($request,$id)
+    public function listStaffRole($request, $id)
     {
         try {
-            $staffRole = UserRole::where('staffId',$id)->with('roles')->get();
+            $staff = Staff::where('udid', $id)->first();
+            $staffRole = UserRole::where('staffId', $staff->id)->with('roles')->get();
             return fractal()->collection($staffRole)->transformWith(new StaffRoleTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -270,44 +284,49 @@ class StaffService
                 'userId' => $request->input('userId'),
                 'roleId' => $request->input('roleId'),
             ];
-            UserRole::where([['staffId',$staffId],['id', $id]])->update($staffRole);
+            $staff = Staff::where('udid', $staffId)->first();
+            UserRole::where([['staffId', $staff->id], ['udid', $id]])->update($staffRole);
             return response()->json(['message' => "Updated Successfully"]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-    public function deleteStaffRole($request,$staffId, $id)
+    public function deleteStaffRole($request, $staffId, $id)
     {
         try {
-            UserRole::where([['staffId',$staffId],['id', $id]])->delete();
+            $staff = Staff::where('udid', $staffId)->first();
+            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
+            UserRole::where([['staffId', $staff->id], ['udid', $id]])->update($input);
+            UserRole::where([['staffId', $staff->id], ['udid', $id]])->delete();
             return response()->json(['message' => "Deleted Successfully"]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-    public function addStaffProvider($request,$id)
+    public function addStaffProvider($request, $id)
     {
-        try{
-             $providers = $request->providers;
-             foreach($providers as $providerId){
-
-                $udid = Str::random(10);
+        try {
+            $providers = $request->providers;
+            $staff = Staff::where('udid', $id)->first();
+            foreach ($providers as $providerId) {
+                $udid = Str::uuid()->toString();
                 $providerId = $providerId;
-                $staffId  = $id;
+                $staffId  = $staff->id;
                 DB::select('CALL createStaffProvider("' . $udid . '","' . $staffId . '","' . $providerId . '")');
-             }
-             return response()->json(['message' => "created Successfully"]);
-        } catch (Exception $e){
+            }
+            return response()->json(['message' => "created Successfully"]);
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-    public function listStaffProvider($request,$id)
+    public function listStaffProvider($request, $id)
     {
         try {
-            $staffProvider = StaffProvider::where('staffId',$id)->with('providers')->get();
+            $staff = Staff::where('udid', $id)->first();
+            $staffProvider = StaffProvider::where('staffId', $staff->id)->with('providers')->get();
             return fractal()->collection($staffProvider)->transformWith(new StaffProviderTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -318,14 +337,13 @@ class StaffService
     {
         try {
             $providers = $request->providers;
-            foreach($providers as $providerId){
-
-               $staffProvider=[
-                   'udid' => Str::random(10),
-                   'providerId' => $providerId,
-                   'staffId' => $staffId,
+            $staff = Staff::where('udid', $staffId)->first();
+            foreach ($providers as $providerId) {
+                $staffProvider = [
+                    'providerId' => $providerId,
+                    'staffId' => $staff->id,
                 ];
-                StaffProvider::where([['staffId',$staffId],['id', $id]])->update($staffProvider);
+                StaffProvider::where([['staffId', $staff->id], ['udid', $id]])->update($staffProvider);
             }
             return response()->json(['message' => "Updated Successfully"]);
         } catch (Exception $e) {
@@ -333,10 +351,13 @@ class StaffService
         }
     }
 
-    public function deleteStaffProvider($request,$staffId, $id)
+    public function deleteStaffProvider($request, $staffId, $id)
     {
         try {
-            StaffProvider::where([['staffId',$staffId],['id', $id]])->delete();
+            $staff = Staff::where('udid', $staffId)->first();
+            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
+            StaffProvider::where([['staffId', $staff->id], ['udid', $id]])->update($input);
+            StaffProvider::where([['staffId', $staff->id], ['udid', $id]])->delete();
             return response()->json(['message' => "Deleted Successfully"]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -357,5 +378,43 @@ class StaffService
             'CALL careCoordinatorNetworkCount()',
         );
         return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+    }
+
+    public function patientList($id)
+    {
+        if ($id) {
+            $staff = Staff::where('udid', $id)->first();
+            $staffId = $staff->id;
+        } else {
+            $staffId = auth()->user()->staff->id;
+        }
+        $data = Patient::whereHas('patientStaff', function ($query) use ($staffId) {
+            $query->where('staffId', '=', $staffId);
+        })->get();
+        return fractal()->collection($data)->transformWith(new PatientTransformer())->toArray();
+    }
+
+    public function appointmentList($id)
+    {
+        if ($id) {
+            $staff = Staff::where('udid', $id)->first();
+            $staffId = $staff->id;
+        } else {
+            $staffId = auth()->user()->staff->id;
+        }
+        $data = Appointment::where([['staffId', $staffId], ['startDateTime', '>=', Carbon::today()]])->paginate(5);
+        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+    }
+
+    public function patientAppointment($id)
+    {
+        if ($id) {
+            $patient = Patient::where('udid', $id)->first();
+            $patientId = $patient->id;
+        } else {
+            $patientId = auth()->user()->patient->id;
+        }
+        $data = Appointment::where('patientId', $patientId)->whereDate('startDateTime', '=', Carbon::today())->paginate(5);
+        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 }

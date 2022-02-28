@@ -34,7 +34,7 @@ class TagTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id'=>$data->id,
+            'id'=>$data->udid,
 			'tag'=>$data->tags->name,
             'documentId'=>$data->documentId,
 		];

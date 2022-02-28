@@ -34,6 +34,7 @@ class StaffProviderTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
+            'id'=>$data->udid,
             "provider" => fractal()->item($data->providers)->transformWith(new ProviderTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray(),
 		];
     }

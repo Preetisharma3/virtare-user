@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Role\Role;
 use App\Models\GlobalCode\GlobalCode;
 use App\Models\Appointment\Appointment;
+use App\Models\Patient\PatientStaff;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,22 +14,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Staff extends Model
 {
-    use SoftDeletes;
-    protected $softDelete = true;
-    const DELETED_AT = 'deletedAt';
-    const CREATED_AT = 'createdAt';
-    const UPDATED_AT = 'updatedAt';
-    public $timestamps = false;
+	use SoftDeletes;
+	protected $softDelete = true;
+	const DELETED_AT = 'deletedAt';
+	const CREATED_AT = 'createdAt';
+	const UPDATED_AT = 'updatedAt';
+	public $timestamps = false;
 	protected $table = 'staffs';
-    use HasFactory;
+	use HasFactory;
 	protected $guarded = [];
 
-    public function network()
+	public function network()
 	{
 		return $this->belongsTo(GlobalCode::class, 'networkId');
 	}
 
-    public function specialization()
+	public function specialization()
 	{
 		return $this->belongsTo(GlobalCode::class, 'specializationId');
 	}
@@ -50,7 +51,7 @@ class Staff extends Model
 
 	public function appointment()
 	{
-		return $this->hasMany(Appointment::class,'staffId');
+		return $this->hasMany(Appointment::class, 'staffId');
 	}
 
 	public function user()
@@ -58,7 +59,13 @@ class Staff extends Model
 		return $this->belongsTo(User::class, 'userId');
 	}
 
-	public function todayAppointment(){
-		return $this->appointment()->where('startDate',Carbon::today());
+	public function todayAppointment()
+	{
+		return $this->appointment()->where('startDate', Carbon::today());
+	}
+
+	public function patientStaff()
+	{
+		return $this->hasMany(PatientStaff::class, 'staffId');
 	}
 }

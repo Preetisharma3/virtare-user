@@ -14,4 +14,15 @@ class PushNotificationController extends Controller
     {
         return (new PushNotificationService)->showNotification($request);
     }
+
+    public function send(NotificationSendRequest $request){
+        
+        $data = array(
+                        "title" => $request->title,
+                        "body" =>$request->message,
+                        "type" =>$request->type,
+        );
+        $notification = (new PushNotificationService)->sendNotification($request->user,$data);
+        return redirect()->to('notification')->with('message', 'Send Successfully');
+    }
 }

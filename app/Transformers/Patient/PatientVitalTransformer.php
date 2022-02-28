@@ -13,8 +13,9 @@ class PatientVitalTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-			'id' => $data->id,
+			'id' => $data->udid,
 			'vitalField' => @$data->vitalFieldNames->name?$data->vitalFieldNames->name:@$data->vitalField,
+			'deviceType' => @$data->deviceType->name?$data->deviceType->name:@$data->deviceType,
 			'value' => $data->value,
 			'units'=>$data->units,
 			'takeTime'=>strtotime($data->takeTime),
@@ -22,7 +23,7 @@ class PatientVitalTransformer extends TransformerAbstract
 			'endTime'=>strtotime($data->endTime),
 			'addType'=>$data->addType,
 			'createdType'=>$data->createdType,
-			'comment'=>$data->comment,
+			'comment'=>@$data->note,
 			'lastReadingDate'=>$data->createdAt,
 			'deviceInfo'=>$data->deviceInfo,
 			'icon'=>(!empty($data->icon))?$data->icon:'',

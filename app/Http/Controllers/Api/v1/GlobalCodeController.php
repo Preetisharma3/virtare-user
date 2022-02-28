@@ -19,7 +19,7 @@ class GlobalCodeController extends BaseController
         return (new GlobalCodeService)->globalCodeList($request,$id);
     }
 
-    public function createGlobalCode(Request $request)
+    public function createGlobalCode(GlobalCodeRequest $request)
     {
         return (new GlobalCodeService)->globalCodeCreate($request);
     }

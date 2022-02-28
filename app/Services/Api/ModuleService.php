@@ -19,7 +19,7 @@ class ModuleService
                 'createdBy' => 1
             ];
              Module::create($module);
-           return response()->json(['message' =>'Created Successfully'],200);
+           return response()->json(['message' => trans('messages.createdSuccesfully')],200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -28,10 +28,10 @@ class ModuleService
     public function getModuleList($request)
     {
         try {
-             $module = Module::all();
-             return fractal()->collection($module)->transformWith(new ModuleTransformer())->toArray();
-        }catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],500);
+            $module = Module::all();
+            return fractal()->collection($module)->transformWith(new ModuleTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 }

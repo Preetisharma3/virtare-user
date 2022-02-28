@@ -14,8 +14,9 @@ class PatientStaffTransformer extends TransformerAbstract
 	{
 		return [
 			'id'=>$data->udid,
-            'patient'=>$data->patient->firstName,
-            'staff'=>$data->staff->firstName,
+            'patient'=>$data->patient->firstName.' '.$data->patient->middleName.' '.$data->patient->lastName,
+            'staffId'=>$data->staff->udid,
+            'staff'=>$data->staff->firstName.' '.$data->staff->lastName,
 		];
 	}
 }

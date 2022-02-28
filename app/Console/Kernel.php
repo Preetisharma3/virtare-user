@@ -24,6 +24,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-       $schedule->call('App\Http\Controllers\Freeswitch\DirectoryController@directory')->everyMinute();
+       $schedule->call('App\Services\Api\NotificationService@appointmentNotification')->everyMinute();
+       $schedule->call('App\Services\Api\NotificationService@appointmentNotificationSend')->everyMinute();
+       $schedule->call('App\Services\Api\NotificationService@appointmentConfrence')->everyMinute();
+
     }
 }

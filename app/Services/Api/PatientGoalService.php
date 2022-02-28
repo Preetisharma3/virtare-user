@@ -2,6 +2,7 @@
 
 namespace App\Services\Api;
 
+use App\Models\Patient\Patient;
 use App\Models\Patient\PatientGoal;
 use App\Transformers\Patient\PatientGoalTransformer;
 
@@ -11,11 +12,13 @@ class PatientGoalService
     {
         if ($id) {
             if ($goalId) {
-                $data = PatientGoal::where([['patientId', $id], ['id', $goalId]])->get();
+                $patient = Patient::where('udid', $id)->first();
+                $data = PatientGoal::where([['patientId', $patient->id], ['id', $goalId]])->get();
             } elseif (!$goalId) {
-                $data = PatientGoal::where('patientId', $id)->get();
+                $patient = Patient::where('udid', $id)->first();
+                $data = PatientGoal::where('patientId', $patient->id)->get();
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }
         } elseif (!$id) {
             if ($goalId) {
@@ -23,7 +26,7 @@ class PatientGoalService
             } elseif (!$goalId) {
                 $data = PatientGoal::where('patientId', auth()->user()->patient->id)->get();
             } else {
-                return response()->json(['message' => 'unauthorized']);
+                return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }
         }
         return  fractal()->collection($data)->transformWith(new PatientGoalTransformer())->toArray();

@@ -24,9 +24,14 @@ class ProviderController extends Controller
         return (new ProviderService)->providerLocationStore($request,$id);
     }
 
-    public function update(Request $request, $id)
+    public function providerLocationList(Request $request,$id)
     {
-        //
+        return (new ProviderService)->providerLocationList($request,$id);
+    }
+
+    public function updateProvider(Request $request, $id)
+    {
+        return (new ProviderService)->providerUpdate($request,$id);
     }
 
 

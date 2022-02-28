@@ -8,9 +8,17 @@ use Illuminate\Http\Request;
 
 class InventoryController extends Controller
 {
-    public function index(request $request)
+    public function index(request $request,$id=NULL)
     {
-        return (new InventoryService)->index($request);
+        if(!empty($id))
+        {
+            return (new InventoryService)->geVentoryById($id);
+        }
+        else
+        {
+            return (new InventoryService)->index($request);
+        }
+        
     }
 
     public function store(Request $request)

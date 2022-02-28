@@ -46,7 +46,7 @@ class StaffTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id' => $data->id,
+            'id' => $data->udid,
             'user_id' => $data->userId,            
             'sipId' => "UR".$data->userId,
             'title' => $data->firstName,
@@ -65,6 +65,7 @@ class StaffTransformer extends TransformerAbstract
             'gender' => $data->gender->name,
             'phoneNumber'=>$data->phoneNumber,
             'profile_photo' =>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
+            'profilePhoto' => (!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
             'network' => $data->network->name,
             'specialization' => $data->specialization->name,
             'createdAt' => strtotime($data->createdAt),

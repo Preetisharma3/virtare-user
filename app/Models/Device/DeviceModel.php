@@ -23,5 +23,7 @@ class DeviceModel extends Model
         return $this->belongsTo(GlobalCode::class,'deviceTypeId');
     }
 
+    
+
    
 }

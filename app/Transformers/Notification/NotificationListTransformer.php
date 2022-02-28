@@ -13,7 +13,8 @@ class NotificationListTransformer extends TransformerAbstract
 	public function transform($data)
 	{
 		return [
-			
+			  'date' => $data['year'],
+            'value' => $data['data'] ?  fractal()->collection((object)$data['data'])->transformWith(new NotificationTransformer(true))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray(): array(),
 		];
 	}
 }

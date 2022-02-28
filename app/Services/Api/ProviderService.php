@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Support\Str;
 use App\Models\Provider\Provider;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use App\Transformers\Provider\ProviderTransformer;
 
 
@@ -26,10 +25,16 @@ class ProviderService
                 $input,
                 $otherData
             ));
-            DB::select(
+            $id =  DB::select(
                 "CALL addProvider('" . $data . "')"
             );
-            return response()->json(['message' => 'Created Successfully'], 200);
+            foreach ($id as $providerId) {
+                $provider = Provider::where('id', $providerId->id)->first();
+            }
+            $userdata = fractal()->item($provider)->transformWith(new ProviderTransformer())->toArray();
+            $message = ['message' => trans('messages.createdSuccesfully')];
+            $endData = array_merge($message, $userdata);
+            return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -41,7 +46,7 @@ class ProviderService
             $input = $request->only(['locationName', 'locationAddress', 'numberOfLocations', 'stateId', 'city', 'zipCode', 'phoneNumber', 'email', 'websiteUrl', 'isActive', 'isDefault']);
             $otherData = [
                 'udid' => Str::uuid()->toString(),
-                'providerId'=>$id,
+                'providerId' => $id,
                 'createdBy' => 1
             ];
             $data = JSON_ENCODE(array_merge(
@@ -51,14 +56,38 @@ class ProviderService
             DB::select(
                 "CALL addProviderLocations('" . $data . "')"
             );
-            return response()->json(['message' => 'Created Successfully'], 200);
+            return response()->json(['message' => trans('messages.createdSuccesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-    public function index(){
+    public function providerLocationList($request, $id)
+    {
+        $data = Provider::where('providerId', $id)->get();
+        return $data;
+    }
+
+    public function index()
+    {
         $data = Provider::all();
         return fractal()->collection($data)->transformWith(new ProviderTransformer())->toArray();
+    }
+
+    public function providerUpdate($request, $id)
+    {
+        try {
+            $input = [
+                'name', 'address', 'countryId', 'stateId', 'city', 'zipcode', 'phoneNumber', 'tagId', 'moduleId', 'isActive', 'updatedBy' => 1
+            ];
+            Provider::where('udid', $id)->update($input);
+            $provider = Provider::where('udid', $id)->first();
+            $userdata = fractal()->item($provider)->transformWith(new ProviderTransformer())->toArray();
+            $message = ['message' => trans('messages.createdSuccesfully')];
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }

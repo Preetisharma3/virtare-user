@@ -22,7 +22,8 @@ class AppointmentTransformer extends TransformerAbstract
             'patient' => ucfirst($data->patient->firstName) . ' ' . ucfirst($data->patient->lastName),
             'staff' => ucfirst($data->staff->firstName) . ' ' . ucfirst($data->staff->lastName),
             'appointmentType' => $data->appointmentType->name,
-            'duration' => $data->duration->name
+            'duration' => $data->duration->name,
+            'conferenceId'=>@$data->conferenceId,
         ];
     }
 }

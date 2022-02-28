@@ -15,11 +15,11 @@ class ScreenService
         try {
             $screen = [
                 'name' => $request->name,
-                'moduleId'=>$request->moduleId,
+                'moduleId' => $request->moduleId,
                 'createdBy' => 1
             ];
              Screen::create($screen);
-           return response()->json(['message' =>'Created Successfully'],200);
+           return response()->json(['message' => trans('messages.createdSuccesfully')],200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -28,10 +28,10 @@ class ScreenService
     public function getScreenList($request)
     {
         try {
-             $screen = Screen::all();
-             return fractal()->collection($screen)->transformWith(new ScreenTransformer())->toArray();
-        }catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],500);
+            $screen = Screen::all();
+            return fractal()->collection($screen)->transformWith(new ScreenTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 }

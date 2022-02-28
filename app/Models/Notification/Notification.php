@@ -2,10 +2,11 @@
 
 namespace App\Models\Notification;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\User\User;
+use App\Models\GlobalCode\GlobalCode;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Notification extends Model
 {
@@ -20,7 +21,9 @@ class Notification extends Model
     use HasFactory;
     protected $guarded = [];
 
-  
+    public function notificationType(){
+        return $this->belongsTo(GlobalCode::class, 'referenceId');
+    }
 
     public function created_user(){
         return $this->belongsTo(User::class,'created_by');

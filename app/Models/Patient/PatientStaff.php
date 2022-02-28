@@ -2,6 +2,7 @@
 
 namespace App\Models\Patient;
 
+use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
 use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
@@ -22,11 +23,11 @@ class PatientStaff extends Model
     
     public function patient()
     {
-        return $this->hasMany(Patient::class,'id','patientId');
+        return $this->hasOne(Patient::class,'id','patientId');
     }
 
     public function staff()
     {
-        return $this->belongsTo(Staff::class,'id','staffId');
+        return $this->belongsTo(Staff::class,'staffId');
     }
 }

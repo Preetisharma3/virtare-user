@@ -26,7 +26,7 @@ class WidgetService
             'createdBy'=>1
         ];
         DashboardWidgetByRole::create($input);
-        return response()->json(['message' => 'Created Successfully'], 200);
+        return response()->json(['message' => trans('messages.createdSuccesfully')], 200);
     }
 
     public function getAssignedWidget(){

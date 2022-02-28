@@ -3,11 +3,9 @@
 namespace App\Services\Api;
 
 use App\Models\CPTCode\CPTCode;
-use App\Models\GlobalCode\GlobalCode;
 use App\Transformers\CPTCode\CPTCodeTransformer;
 use Exception;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
@@ -26,7 +24,7 @@ class CPTCodeService
     public function createCPTCode($request)
     {
         try {
-            $udid = Str::random(10);
+            $udid = Str::uuid()->toString();
             $serviceId = $request->input('serviceId');
             $providerId = $request->input('providerId');
             $name = $request->input('name');
@@ -36,7 +34,7 @@ class CPTCodeService
             DB::select('CALL createCPTCode("' . $udid . '","' . $serviceId . '","' . $providerId . '","' . $name . '","' . $billingAmout . '","' . $description . '","'.$durationId.'")');
             
             $cptCodeData = CPTCode::where('udid', $udid)->first();
-            $message = ["message" => "created Successfully"];
+            $message = ['message' => trans('messages.createdSuccesfully')];
             $resp =  fractal()->item($cptCodeData)->transformWith(new CPTCodeTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData; 
@@ -58,7 +56,7 @@ class CPTCodeService
             $isActive = 1;
             DB::select('CALL updateCPTCode("'.$id.'","' . $serviceId . '","' . $providerId . '","' . $name . '","' . $billingAmout . '","' . $description . '","'.$durationId.'","'.$updatedBy.'","'.$isActive.'")');
             $cptCodeData = CPTCode::where('id', $id)->first();
-            $message = ["message" => "created Successfully"];
+            $message = ['message' => trans('messages.updatedSuccesfully')];
             $resp =  fractal()->item($cptCodeData)->transformWith(new CPTCodeTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData; 
@@ -70,8 +68,16 @@ class CPTCodeService
     public function deleteCPTCode($request,$id)   
     {
         try {
+<<<<<<< HEAD
             CPTCode::where('id', $id)->delete();
+            return response()->json(['message' => trans('messages.deletedSuccesfully')],  200);
+=======
+            $CPTCode = CPTCode::where('udid', $id)->first();
+            $input=['deletedBy'=>1,'isActive'=>0,'isDelete'=>1];
+            CPTCode::where('udid', $id)->update($input);
+            CPTCode::where('udid', $id)->delete();
             return response()->json(['message' => "Deleted Successfully"]);
+>>>>>>> program
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

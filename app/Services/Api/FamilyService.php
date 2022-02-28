@@ -35,13 +35,12 @@ class FamilyService
                     'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),
                     'contactTypeId' => $request->input('contactType'), 'contactTimeId' => $request->input('contactTime'),
                     'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'), 'patientId' => $patientId,
-                    'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => $udid
+                    'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => $udid,'vital'=>$request->input('vitalAuthorization'),'messages'=>$request->input('messageAuthorization')
                 ];
                 $familyData = PatientFamilyMember::create($familyMember);
                 $data = PatientFamilyMember::where('id', $familyData->id)->first();
-
                 $userdata = fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
-                $message = ['message' => 'created successfully'];
+                $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $patient = PatientFamilyMember::where('udid', $familyId)->first();
                 $usersId = $patient->userId;
@@ -50,20 +49,20 @@ class FamilyService
                     'updatedBy' => Auth::id()
                 ];
                 $fam = User::where('id', $usersId)->update($familyMemberUser);
+
                 //updated Family in patientFamilyMember Table
                 $familyMember = [
                     'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),
                     'contactTypeId' => $request->input('contactType'), 'contactTimeId' => $request->input('contactTime'),
                     'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'),
-                    'updatedBy' => Auth::id(),
+                    'updatedBy' => Auth::id(),'vital'=>$request->input('vitalAuthorization'),'messages'=>$request->input('messageAuthorization'),
                 ];
                 $familyData = PatientFamilyMember::where('udid',$familyId)->update($familyMember);
                 $data = PatientFamilyMember::where('udid', $familyId)->first();
                 $userdata = fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
-                $message = ['message' => 'updated successfully'];
+                $message = ['message' => trans('messages.updatedSuccesfully')];
             }
             DB::commit();
-
             $endData = array_merge($message, $userdata);
             return $endData;
         } catch (Exception $e) {

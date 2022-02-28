@@ -38,7 +38,7 @@ class DocumentTransformer extends TransformerAbstract
             return [];
         }
         return [
-            'id'=>$data->id,
+            'id'=>$data->udid,
 			'name'=>$data->name,
             'type'=>$data->documentType->name,
             'patient'=>$data->referanceId,
