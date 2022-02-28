@@ -9,9 +9,9 @@ use App\Services\Api\ProviderService;
 class ProviderController extends Controller
 {
 
-    public function index()
+    public function index($id = null)
     {
-        return (new ProviderService)->index();
+        return (new ProviderService)->index($id);
     }
 
     public function store(Request $request)
@@ -19,24 +19,27 @@ class ProviderController extends Controller
         return (new ProviderService)->store($request);
     }
 
-    public function providerLocationStore(Request $request,$id)
+    public function providerLocationStore(Request $request, $id)
     {
-        return (new ProviderService)->providerLocationStore($request,$id);
+        return (new ProviderService)->providerLocationStore($request, $id);
     }
 
-    public function providerLocationList(Request $request,$id)
+    public function editLocation($id, $locationId = null)
     {
-        return (new ProviderService)->providerLocationList($request,$id);
+        return (new ProviderService)->editLocation($id, $locationId);
     }
 
     public function updateProvider(Request $request, $id)
     {
-        return (new ProviderService)->providerUpdate($request,$id);
+        return (new ProviderService)->updateProvider($request, $id);
     }
 
-
-    public function destroy($id)
+    public function updateLocation(Request $request, $id, $locationId)
     {
-        //
+        return (new ProviderService)->updateLocation($request, $id, $locationId);
+    }
+
+    public function deleteProviderLocation($id, $locationId = null){
+        return (new ProviderService)->deleteProviderLocation($id, $locationId);
     }
 }
