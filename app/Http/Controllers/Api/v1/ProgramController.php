@@ -18,5 +18,20 @@ class ProgramController extends Controller
     return (new ProgramService)->programList($request);
   }
 
+  public function createProgram(Request $request)
+  {
+    return (new ProgramService)->createProgram($request);
+  }
+
+  public function updateProgram(Request $request,$id)
+  {
+    return (new ProgramService)->updateProgram($request,$id);
+  }
+
+  public function deleteProgram(Request $request,$id)
+  {
+    return (new ProgramService)->deleteProgram($request,$id);
+  }
+
    
 }

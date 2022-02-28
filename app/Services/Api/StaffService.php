@@ -222,8 +222,13 @@ class StaffService
             $timeStart = Helper::time($request->input('startTime'));
             $timeEnd = Helper::time($request->input('endTime'));
             $staffAvailability = [
+<<<<<<< HEAD
                 'startTime' => $timeStart,
                 'endTime' => $timeEnd,
+=======
+                'startTime' => Helper::time($request->input('startTime')),
+                'endTime' => Helper::time($request->input('endTime')),
+>>>>>>> program
             ];
             $staff = Staff::where('udid', $staffId)->first();
             StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->update($staffAvailability);
