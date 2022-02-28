@@ -264,7 +264,6 @@ $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
 $router->get('widget', 'Api\v1\WidgetController@getWidget');
 $router->put('widget/{id}', 'Api\v1\WidgetController@updateWidget');
 $router->get('widget/assign', 'Api\v1\WidgetController@getassignedWidget');
-$router->get('program', 'Api\v1\ProgramController@listProgram');
 $router->post('file', 'Api\v1\FileController@createFile');
 $router->delete('file', 'Api\v1\FileController@deleteFile');
 $router->get('count/patient', 'Api\v1\DashboardController@patientCountMonthly');
@@ -350,5 +349,6 @@ $router->delete('template/{id}', 'Api\v1\TemplateController@deleteTemplate');
 
 //program
 $router->post('program', 'Api\v1\ProgramController@createProgram');
+$router->get('program[/{id}]', 'Api\v1\ProgramController@listProgram');
 $router->put('program/{id}', 'Api\v1\ProgramController@updateProgram');
 $router->delete('program/{id}', 'Api\v1\ProgramController@deleteProgram');

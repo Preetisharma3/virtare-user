@@ -11,11 +11,17 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class ProgramService
 {
-    public function programList($request)
+    public function programList($request,$id)
     {
         try{
-            $getProgram = Program::with('type')->paginate(env('PER_PAGE',20));
-            return fractal()->collection($getProgram)->transformWith(new ProgramTransformer())->paginateWith(new IlluminatePaginatorAdapter($getProgram))->toArray();
+            if(!$id){
+                $getProgram = Program::with('type')->paginate(env('PER_PAGE',20));
+                return fractal()->collection($getProgram)->transformWith(new ProgramTransformer())->paginateWith(new IlluminatePaginatorAdapter($getProgram))->toArray();
+            }else{
+                $program = Program::where('udid',$id)->get();
+                return fractal()->collection($program)->transformWith(new ProgramTransformer())->toArray();
+            }
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
