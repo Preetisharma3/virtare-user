@@ -251,6 +251,17 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('{entity}/{id}/document/{documentId}', 'Api\v1\DocumentController@createDocument');
     $router->get('{entity}/{id}/document[/{documentId}]', 'Api\v1\DocumentController@listDocument');
     $router->delete('{entity}/{id}/document/{documentId}', 'Api\v1\DocumentController@deleteDocument');
+
+    // Provider Routes
+    $router->post('provider', 'Api\v1\ProviderController@store');
+    $router->get('provider[/{id}]', 'Api\v1\ProviderController@index');        
+    $router->put('provider/{id}','Api\v1\ProviderController@updateProvider');
+    $router->delete('provider/{id}','Api\v1\ProviderController@deleteProviderLocation');
+    $router->post('provider/{id}/location', 'Api\v1\ProviderController@providerLocationStore');
+    $router->get('provider/{id}/location[/{locationId}]', 'Api\v1\ProviderController@editLocation');
+    $router->put('provider/{id}/location/{locationId}','Api\v1\ProviderController@updateLocation');
+    $router->delete('provider/{id}/location/{locationId}','Api\v1\ProviderController@deleteProviderLocation');
+
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -309,10 +320,7 @@ $router->get('model', 'Api\v1\InventoryController@getModels');
 $router->get('staff/specialization/count', 'Api\v1\StaffController@specializationCount');
 $router->get('staff/network/count', 'Api\v1\StaffController@networkCount');
 
-$router->post('provider', 'Api\v1\ProviderController@store');
-$router->post('provider/{id}/location', 'Api\v1\ProviderController@providerLocationStore');
-$router->get('provider/{id}/location', 'Api\v1\ProviderController@providerLocationList');
-$router->get('provider', 'Api\v1\ProviderController@index');
+
 
 $router->post('role', 'Api\v1\RolePermissionController@createRole');
 $router->get('roleList', 'Api\v1\RolePermissionController@roleList');
