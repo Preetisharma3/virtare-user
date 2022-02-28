@@ -108,7 +108,7 @@ class Helper
         fwrite($directory, $contents);
         fclose($directory);
     }
-    public static function updateFreeswitchConfrence()
+    public static function updateFreeswitchConfrence($confrence)
     {
         ob_start();
 
@@ -143,6 +143,18 @@ class Helper
                             <action application="bridge" data="loopback/app=voicemail:default ${domain_name} ${dialed_extension}" />
                         </condition>
                     </extension>
+        <?php 
+                    foreach ($confrence as $conf) {
+        ?>
+                        <extension name="Media Server">
+                            <condition field="destination_number" expression="^(<?php echo $conf['conferenceId']; ?>)$">
+                                <action application="answer"/>
+                                <action application="conference" data="internal@myprofile"/>
+                            </condition>
+                        </extension>
+        <?php
+                    }
+        ?>
                 </context>
             </section>
         </document>
