@@ -69,7 +69,10 @@ class CPTCodeService
     public function deleteCPTCode($request,$id)   
     {
         try {
-            CPTCode::where('id', $id)->delete();
+            $CPTCode = CPTCode::where('udid', $id)->first();
+            $input=['deletedBy'=>1,'isActive'=>0,'isDelete'=>1];
+            CPTCode::where('udid', $id)->update($input);
+            CPTCode::where('udid', $id)->delete();
             return response()->json(['message' => "Deleted Successfully"]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
