@@ -25,11 +25,11 @@ class ProviderService
                 $input,
                 $otherData
             ));
-           $id =  DB::select(
+            $id =  DB::select(
                 "CALL addProvider('" . $data . "')"
             );
-            foreach($id as $providerId){
-                $provider = Provider::where('id',$providerId->id)->first();
+            foreach ($id as $providerId) {
+                $provider = Provider::where('id', $providerId->id)->first();
             }
             $userdata = fractal()->item($provider)->transformWith(new ProviderTransformer())->toArray();
             $message = ['message' => trans('messages.createdSuccesfully')];
@@ -46,7 +46,7 @@ class ProviderService
             $input = $request->only(['locationName', 'locationAddress', 'numberOfLocations', 'stateId', 'city', 'zipCode', 'phoneNumber', 'email', 'websiteUrl', 'isActive', 'isDefault']);
             $otherData = [
                 'udid' => Str::uuid()->toString(),
-                'providerId'=>$id,
+                'providerId' => $id,
                 'createdBy' => 1
             ];
             $data = JSON_ENCODE(array_merge(
@@ -62,13 +62,32 @@ class ProviderService
         }
     }
 
-    public function providerLocationList($request,$id){
-        $data = Provider::where('providerId',$id)->get();
+    public function providerLocationList($request, $id)
+    {
+        $data = Provider::where('providerId', $id)->get();
         return $data;
     }
 
-    public function index(){
+    public function index()
+    {
         $data = Provider::all();
         return fractal()->collection($data)->transformWith(new ProviderTransformer())->toArray();
+    }
+
+    public function providerUpdate($request, $id)
+    {
+        try {
+            $input = [
+                'name', 'address', 'countryId', 'stateId', 'city', 'zipcode', 'phoneNumber', 'tagId', 'moduleId', 'isActive', 'updatedBy' => 1
+            ];
+            Provider::where('udid', $id)->update($input);
+            $provider = Provider::where('udid', $id)->first();
+            $userdata = fractal()->item($provider)->transformWith(new ProviderTransformer())->toArray();
+            $message = ['message' => trans('messages.createdSuccesfully')];
+            $endData = array_merge($message, $userdata);
+            return $endData;
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }

@@ -19,7 +19,7 @@ class AppointmentDataTransformer extends TransformerAbstract
         }
         return [
             "date"=>strtotime(@$data->startDateTime),
-            "notes"=>@$data->note,
+            "notes"=>@$data->notes->note,
             'time'=>strtotime(@$data->startDateTime),
             'appointmentType'=>$data->appointmentType->name,
             "patient"=>@$data->patient->firstName." ".@$data->patient->lastName,

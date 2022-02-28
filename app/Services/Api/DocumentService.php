@@ -5,9 +5,7 @@ namespace App\Services\Api;
 use Exception;
 use App\Helper;
 use App\Models\Tag\Tag;
-use App\Models\User\User;
 use Illuminate\Support\Str;
-use App\Models\Patient\Patient;
 use App\Models\Document\Document;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +22,7 @@ class DocumentService
                 $reference = Helper::entity($entity, $id);
                 $input = [
                     'name' => $request->input('name'), 'filePath' => $request->input('document'), 'documentTypeId' => $request->input('type'),
-                    'referanceId' => $reference, 'entityType' => $request->input('entity'), 'udid' => Str::uuid()->toString(), 'createdBy' => 1
+                    'referanceId' => $reference, 'entityType' => $entity, 'udid' => Str::uuid()->toString(), 'createdBy' => 1
                 ];
                 $document = Document::create($input);
                 $tags = $request->input('tags');

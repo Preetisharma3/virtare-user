@@ -2,6 +2,7 @@
 
 namespace App\Services\Api;
 
+use App\Helper;
 use App\Models\Staff\Staff;
 use App\Models\Patient\PatientPhysician;
 use App\Models\Patient\PatientFamilyMember;
@@ -53,10 +54,11 @@ class TeamService
                 }
             }
         } elseif ($patientId) {
+            $patient=Helper::entity('patient',$patientId);
             if ($type == 'staff') {
                 if (!$id) {
-                    $data = Staff::whereHas('patientStaff', function ($query) use ($patientId) {
-                        $query->where('patientId', $patientId);
+                    $data = Staff::whereHas('patientStaff', function ($query) use ($patient) {
+                        $query->where('patientId', $patient);
                     })->paginate(5);
                     return fractal()->collection($data)->transformWith(new StaffTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 } else {
@@ -69,11 +71,11 @@ class TeamService
                 }
             } elseif ($type == 'physician') {
                 if (!$id) {
-                    $data = PatientPhysician::where([['patientId', $patientId]])->paginate(5);
+                    $data = PatientPhysician::where([['patientId', $patient]])->paginate(5);
                     return fractal()->collection($data)->transformWith(new PhysicianTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 } else {
 
-                    $data = PatientPhysician::where([['patientId', $patientId], ['id', $id]])->first();
+                    $data = PatientPhysician::where([['patientId', $patient], ['id', $id]])->first();
                     if (!empty($data)) {
                         return fractal()->item($data)->transformWith(new PhysicianTransformer(true))->toArray();
                     } else {
@@ -82,7 +84,7 @@ class TeamService
                 }
             } elseif ($type == 'familyMember') {
                 if (!$id) {
-                    $data = PatientFamilyMember::with('roles')->where([['patientId', $patientId]])->paginate(5);
+                    $data = PatientFamilyMember::with('roles')->where([['patientId', $patient]])->paginate(5);
                     return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 } else {
                     $data = PatientFamilyMember::with('roles')->where([['patientId', $patientId], ['id', $id]])->first();

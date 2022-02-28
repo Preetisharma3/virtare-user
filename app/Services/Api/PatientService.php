@@ -842,7 +842,7 @@ class PatientService
         } else {
             return response()->json(['message' => trans('messages.unauthenticated')], 401);
         }
-        $data = PatientVital::where('patientId', $patientId)->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
+        $data = PatientVital::where([['patientId', $patientId],['deviceTypeId',$request->deviceType]])->orderBy('takeTime', 'desc')->get();
         return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
     }
 
