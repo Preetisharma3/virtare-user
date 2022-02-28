@@ -18,7 +18,9 @@ class TeamService
         if (!$patientId) {
             if ($type == 'staff') {
                 if (!$id) {
-                    $data = Staff::where('roleId', 3)->paginate(5);
+                    $data = Staff::whereHas('patientStaff', function ($query) {
+                        $query->where('patientId', auth()->user()->patient->id);
+                    })->paginate(5);
                     return fractal()->collection($data)->transformWith(new StaffTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 } else {
                     $data = Staff::where([['roleId', 3], ['udid', $id]])->with('user')->first();
