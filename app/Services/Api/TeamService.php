@@ -47,7 +47,7 @@ class TeamService
                     $data = PatientFamilyMember::with('roles')->where([['patientId', auth()->user()->patient->id]])->paginate(5);
                     return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 } else {
-                    $data = PatientFamilyMember::with('roles')->where([['patientId', auth()->user()->patient->id], ['id', $id]])->first();
+                    $data = PatientFamilyMember::with('roles')->where([['patientId', auth()->user()->patient->id], ['udid', $id]])->first();
                     if (!empty($data)) {
                         return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
                     } else {
@@ -89,7 +89,7 @@ class TeamService
                     $data = PatientFamilyMember::with('roles')->where([['patientId', $patient]])->paginate(5);
                     return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 } else {
-                    $data = PatientFamilyMember::with('roles')->where([['patientId', $patientId], ['id', $id]])->first();
+                    $data = PatientFamilyMember::with('roles')->where([['patientId', $patientId], ['udid', $id]])->first();
                     if (!empty($data)) {
                         return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
                     } else {
