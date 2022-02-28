@@ -25,6 +25,7 @@ class CPTCodeTransformer extends TransformerAbstract
                 'provider' => $data->provider->name,
 			    'name'=>$data->name,
                 'billingAmout'=>$data->billingAmout,
+                'status'=> $data->isActive ? True : False,
                 'description' => $data->description,
                 'duration' => $data->duration->name,
 		];
