@@ -5,7 +5,7 @@ namespace App\Transformers\Provider;
 use League\Fractal\TransformerAbstract;
  
 
-class ProviderTransformer extends TransformerAbstract
+class ProviderLocationTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -34,17 +34,10 @@ class ProviderTransformer extends TransformerAbstract
     {
         return[ 
             'id'=>$data->id,
-            'name' => $data->name,
-            'address'=>$data->address,
-            'zipcode'=>$data->zipcode,
+            'locationName'=>$data->locationName,
             'phoneNumber'=>$data->phoneNumber,
-            'countryId'=>$data->countryId,
-            'stateId'=>$data->stateId,
-            'city'=>$data->city,
-            'zipCode'=>$data->zipcode,
-            'phoneNumber'=>$data->phoneNumber,
-            'tagId'=>$data->tagId,
-            'moduleId'=>$data->moduleId,
+            'noOfLocation'=>$data->numberOfLocations,
+            'address'=>$data->locationAddress
         ];
       
     }
