@@ -640,14 +640,13 @@ class PatientService
     {
         try {
             $data = Patient::where('udid', $id)->first();
-                    if ($inventoryId) {
-                        $getPatient = PatientInventory::where('id', $inventoryId)->with('patient', 'inventory', 'deviceTypes')->first();
-                        return fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
-                    } else {
-                        $getPatient = PatientInventory::where('patientId', $data->id)->with('patient', 'inventory', 'deviceTypes')->latest()->get();
-                        return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
-                    }
-             
+            if ($inventoryId) {
+                $getPatient = PatientInventory::where('id', $inventoryId)->with('patient', 'inventory', 'deviceTypes')->first();
+                return fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+            } else {
+                $getPatient = PatientInventory::where('patientId', $data->id)->with('patient', 'inventory', 'deviceTypes')->latest()->get();
+                return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+            }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -670,8 +669,8 @@ class PatientService
             ];
             PatientTimeLine::create($timeLine);
             $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
-            PatientInventory::where('udid',$inventoryId)->update($data);
-            PatientInventory::where('udid',$inventoryId)->delete();
+            PatientInventory::where('udid', $inventoryId)->update($data);
+            PatientInventory::where('udid', $inventoryId)->delete();
             DB::commit();
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
@@ -692,7 +691,7 @@ class PatientService
                     $takeTime = Helper::date($vital['takeTime']);
                     $startTime = Helper::date($vital['startTime']);
                     $endTime = Helper::date($vital['endTime']);
-                    $patient = Helper::entity('patient',$id);
+                    $patient = Helper::entity('patient', $id);
                     $data = [
                         'vitalFieldId' => $vital['type'],
                         'deviceTypeId' => $vital['deviceType'],
@@ -842,7 +841,11 @@ class PatientService
         } else {
             return response()->json(['message' => trans('messages.unauthenticated')], 401);
         }
-        $data = PatientVital::where([['patientId', $patientId],['deviceTypeId',$request->deviceType]])->orderBy('takeTime', 'desc')->get();
+        if ($request->deviceType) {
+            $data = PatientVital::where([['patientId', $patientId], ['deviceTypeId', $request->deviceType]])->orderBy('takeTime', 'desc')->get();
+        } else {
+            $data = PatientVital::where('patientId', $patientId)->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
+        }
         return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
     }
 
@@ -916,8 +919,8 @@ class PatientService
         DB::beginTransaction();
         try {
             $data = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
-            PatientMedicalHistory::where('udid',$medicalHistoryId)->update($data);
-            PatientMedicalHistory::where('udid',$medicalHistoryId)->delete();
+            PatientMedicalHistory::where('udid', $medicalHistoryId)->update($data);
+            PatientMedicalHistory::where('udid', $medicalHistoryId)->delete();
             DB::commit();
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
@@ -982,8 +985,8 @@ class PatientService
         DB::beginTransaction();
         try {
             $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
-            PatientMedicalRoutine::where('udid',$medicalRoutineId)->update($data);
-            PatientMedicalRoutine::where('udid',$medicalRoutineId)->delete();
+            PatientMedicalRoutine::where('udid', $medicalRoutineId)->update($data);
+            PatientMedicalRoutine::where('udid', $medicalRoutineId)->delete();
             DB::commit();
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
