@@ -842,7 +842,7 @@ class PatientService
             return response()->json(['message' => trans('messages.unauthenticated')], 401);
         }
         if ($request->deviceType) {
-            $data = PatientVital::where([['patientId', $patientId], ['deviceTypeId', $request->deviceType]])->orderBy('takeTime', 'desc')->get();
+            $data = PatientVital::where([['patientId', $patientId], ['deviceTypeId', $request->deviceType]])->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
         } else {
             $data = PatientVital::where('patientId', $patientId)->orderBy('takeTime', 'desc')->get()->unique('vitalFieldId');
         }
