@@ -83,11 +83,11 @@ class AppointmentService
         if (!$id) {
             if ($request->id) {
                 $patientId = Patient::where('udid', $request->id)->first();
-                $data = Appointment::where([['patientId', $patientId->id], ['startDateTime', '>=', date('Y-m-d',Carbon::today())]])->latest()->get();
+                $data = Appointment::where([['patientId', $patientId->id], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->latest()->get();
                 return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
 
             }else{
-                $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::today()]])->orderBy('createdAt', 'DESC')->get();
+                $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('createdAt', 'DESC')->get();
 
                 $results = Helper::dateGroup($data, 'startDateTime');
                 return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
@@ -97,7 +97,7 @@ class AppointmentService
             if ($familyMember == true) {
 
                 $patient=Helper::entity('patient',$id);
-                    $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', date('Y-m-d',Carbon::today()]])->orderBy('createdAt', 'DESC')->get();
+                    $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('createdAt', 'DESC')->get();
                     $results = Helper::dateGroup($data, 'startDateTime');
                     return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
                 

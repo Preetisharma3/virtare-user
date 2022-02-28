@@ -64,7 +64,7 @@ class NotificationService
     }
     public function appointmentConfrence()
     {
-            $toDate = Helper::date(strtotime('+30 minutes'));
+            $toDate = Helper::date(strtotime('+5 minutes'));
                 
             $fromDate = Helper::date(time());
 
