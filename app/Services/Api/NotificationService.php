@@ -39,7 +39,7 @@ class NotificationService
             }
         } 
     } 
-    public function appointmentNotification($request)
+    public function appointmentNotificationSend($request)
     {
         $notifications = DB::select(
             'CALL notificationList("0","")',
