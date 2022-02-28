@@ -334,3 +334,8 @@ $router->get('template','Api\v1\TemplateController@listTemplate');
 $router->post('template','Api\v1\TemplateController@createTemplate');
 $router->put('template/{id}','Api\v1\TemplateController@updateTemplate');
 $router->delete('template/{id}','Api\v1\TemplateController@deleteTemplate');
+
+//program
+$router->post('program', 'Api\v1\ProgramController@createProgram');
+$router->put('program/{id}', 'Api\v1\ProgramController@updateProgram');
+$router->delete('program/{id}', 'Api\v1\ProgramController@deleteProgram');
