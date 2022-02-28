@@ -12,7 +12,7 @@ use App\Models\Appointment\Appointment;
 use App\Services\Api\PushNotificationService;
 class NotificationService
 {
-    public function appointmentNotification($request)
+    public function appointmentNotification()
     {
         $appointments = DB::select(
             'CALL appointmentListNotification("'.date("Y-m-d H:i:s",time()).'","'.date("Y-m-d H:i:s",strtotime('+30 minutes')).'")',
@@ -40,7 +40,7 @@ class NotificationService
             }
         } 
     } 
-    public function appointmentNotificationSend($request)
+    public function appointmentNotificationSend()
     {
         $notifications = DB::select(
             'CALL notificationList("0","")',
@@ -60,7 +60,7 @@ class NotificationService
             
         }
     }
-    public function appointmentConfrence($request)
+    public function appointmentConfrence()
     {
             $toDate = Helper::date(strtotime('+5 minutes'));
                 
