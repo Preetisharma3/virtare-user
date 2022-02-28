@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
     {
        $schedule->call('App\Services\Api\NotificationService@appointmentNotification')->everyMinute();
        $schedule->call('App\Services\Api\NotificationService@appointmentNotificationSend')->everyMinute();
+       $schedule->call('App\Services\Api\NotificationService@appointmentConfrence')->everyMinute();
 
     }
 }

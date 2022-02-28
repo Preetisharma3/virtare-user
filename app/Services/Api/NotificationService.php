@@ -5,6 +5,7 @@ namespace App\Services\Api;
 use App\Helper;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
+use App\Models\Staff\Staff;
 use Illuminate\Support\Facades\DB;
 use App\Models\Notification\Notification;
 use App\Models\Appointment\AppointmentNotification;
@@ -64,34 +65,41 @@ class NotificationService
     }
     public function appointmentConfrence()
     {
-            $toDate = Helper::date(strtotime('+5 minutes'));
+            $toDate = Helper::date(strtotime('+30 minutes'));
                 
-            $fromDate = Helper::date(time);
-                
+            $fromDate = Helper::date(time());
+
             $appointments = DB::select(
                 'CALL appointmentList("' . $fromDate . '","' . $toDate . '")',
             );
             if (!empty($appointments)) {
                 foreach ($appointments as $appointment) {
-                    $staffId = Helper::entity('staff',$appointment->staff_id);
-                    $patentId = Helper::entity('patient',$appointment->patient_id);
+                    if(empty($appointment->conferenceId) || is_null($appointment->conferenceId)){
 
-                    $patient = Patient::where('id', $appointment->patientId)->first();
-                    $userId = $patient->userId;
-                    $notification = Notification::create([
-                        'body' => 'Your Appointment is Scehduled.',
-                        'title' => 'Appointment Reminder',
-                        'userId' => $patentId,
-                        'isSent' => 0,
-                        'entity'=>'Confrence',
-                        'referenceId' => 'CONF'.$appointment->id,
-                        'createdBy' => $staffId,
-                    ]);
-                    Appointment::where('id',$appointment->id)->update(['conferenceId'=>'CONF'.$appointment->id]);
+                        $staffId = Helper::entity('staff',$appointment->staff_id);
+                        $patentId = Helper::entity('patient',$appointment->patient_id);
+
+                        $patient = Patient::where('id', $patentId)->first();
+                        $userId = $patient->userId;
+
+                        $staff = Staff::where('id', $staffId)->first();
+                        $staffUserId = $staff->userId;
+
+                        $notification = Notification::create([
+                            'body' => 'Your Appointment going to start please join.',
+                            'title' => 'Appointment Reminder',
+                            'userId' => $userId,
+                            'isSent' => 0,
+                            'entity'=>'Confrence',
+                            'referenceId' => 'CONF'.$appointment->id,
+                            'createdBy' => $staffUserId,
+                        ]);
+                        Appointment::where('id',$appointment->id)->update(['conferenceId'=>'CONF'.$appointment->id]);
+                    }
                     
                 }
             }
             $confrence =  Appointment::whereNotNull('conferenceId')->get();
-            updateFreeswitchConfrence($confrence);
+            Helper::updateFreeswitchConfrence($confrence);
     }
 }
