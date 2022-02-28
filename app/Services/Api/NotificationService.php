@@ -31,7 +31,6 @@ class NotificationService
                     'referenceId' => $appointment->id,
                     'createdBy' => $appointment->staffUserId,
                 ]);
-                Appointment::where('id',$appointment->id)->update(['conferenceId'=>'CONF'.$appointment->id]);
                 AppointmentNotification::create([
                     'udid' => Str::random(10),
                     'appointmentId' => $appointment->id,
