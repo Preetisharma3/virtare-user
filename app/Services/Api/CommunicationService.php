@@ -3,8 +3,8 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Helper;
 use Carbon\Carbon;
-use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -24,42 +24,25 @@ class CommunicationService
     //  create Communication
     public function addCommunication($request)
     {
-        $udid = Str::uuid()->toString();
-        if($request->entityType=='staff'){
-            $staff=Staff::where('udid',$request->referenceId)->first();
-            $staffFrom=Staff::where('udid',$request->from)->first();
-            $input = [
-                'from' => $staffFrom->id,
-                'referenceId' => $staff->id,
-                'messageTypeId' => $request->messageTypeId,
-                'subject' => $request->subject,
-                'priorityId' => $request->priorityId,
-                'messageCategoryId' => $request->messageCategoryId,
-                'createdBy' => 1,
-                'entityType' => $request->entityType,
-                'udid' => $udid
-            ];
-        }else{
-            $staffFrom=Staff::where('udid',$request->from)->first();
-            $input = [
-                'from' => $staffFrom->id,
-                'referenceId' => $request->referenceId,
-                'messageTypeId' => $request->messageTypeId,
-                'subject' => $request->subject,
-                'priorityId' => $request->priorityId,
-                'messageCategoryId' => $request->messageCategoryId,
-                'createdBy' => 1,
-                'entityType' => $request->entityType,
-                'udid' => $udid
-            ];
-        }
-       
+        $reference = Helper::entity($request->entityType, $request->referenceId);
+        $staffFrom = Helper::entity('staff', $request->from);
+        $input = [
+            'from' => $staffFrom,
+            'referenceId' => $reference,
+            'messageTypeId' => $request->messageTypeId,
+            'subject' => $request->subject,
+            'priorityId' => $request->priorityId,
+            'messageCategoryId' => $request->messageCategoryId,
+            'createdBy' => 1,
+            'entityType' => $request->entityType,
+            'udid' => Str::uuid()->toString()
+        ];
         $data = Communication::create($input);
         CommunicationMessage::create([
             'communicationId' => $data->id,
             'message' => $request->message,
             'createdBy' => $data->createdBy,
-            'udid' => $udid
+            'udid' => Str::uuid()->toString()
         ]);
         return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
     }
@@ -67,7 +50,7 @@ class CommunicationService
     // get Communication
     public function getCommunication($request)
     {
-        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt','DESC')
+        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')
             ->paginate(15, ['*'], 'page', $request->page);
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
@@ -76,10 +59,11 @@ class CommunicationService
     public function addCallRecord($request)
     {
         $udid = Str::uuid()->toString();
-        $staffFrom=Staff::where('udid',$request->staff)->first();
+        $staffFrom = Helper::entity('staff', $request->staff);
+        $patientId = Helper::entity('patient', $request->patient);
         $input = [
-            'patientId' => $request->patient,
-            'staffId' => $staffFrom->id,
+            'patientId' => $patientId,
+            'staffId' => $staffFrom,
             'callStatusId' => $request->callStatus,
             'createdBy' => 1,
             'udid' => $udid
@@ -91,14 +75,14 @@ class CommunicationService
     //Call Status API's
     public function callStatus()
     {
-        $data = CommunicationCallRecord::with('status')->select('callStatusId', DB::raw('count(*) as count'))->groupBy('callStatusId')->get();
+        $data = CommunicationCallRecord::with('status')->select('callStatusId', DB::raw('count(*) as count'))->groupBy('callStatusId')->orderBy('createdAt', 'DESC')->get();
         return fractal()->collection($data)->transformWith(new CallStatusTransformer())->toArray();
     }
 
     // calls Per Staff API
     public function callCountPerStaff()
     {
-        $data = CommunicationCallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->get();
+        $data = CommunicationCallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->orderBy('createdAt', 'DESC')->get();
         return fractal()->collection($data)->transformWith(new CallRecordTransformer())->toArray();
     }
 

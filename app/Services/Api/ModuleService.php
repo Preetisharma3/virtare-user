@@ -28,10 +28,10 @@ class ModuleService
     public function getModuleList($request)
     {
         try {
-             $module = Module::all();
-             return fractal()->collection($module)->transformWith(new ModuleTransformer())->toArray();
-        }catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],500);
+            $module = Module::all();
+            return fractal()->collection($module)->transformWith(new ModuleTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 }

@@ -68,16 +68,16 @@ class GlobalCodeService
      {
           try {
                $globalCode = array();
-               if(!empty($request->globalcodecategory)){
+               if (!empty($request->globalcodecategory)) {
                     $globalCode['globalCodeCategoryId'] = $request->globalcodecategory;
                }
-               if(!empty($request->name)){
+               if (!empty($request->name)) {
                     $globalCode['name'] = $request->name;
                }
-               if(!empty($request->description)){
+               if (!empty($request->description)) {
                     $globalCode['description'] = $request->description;
                }
-               if(isset($request->status)){
+               if (isset($request->status)) {
                     $globalCode['isActive'] = $request->status;
                }
                $globalCode['updatedBy'] = 1;

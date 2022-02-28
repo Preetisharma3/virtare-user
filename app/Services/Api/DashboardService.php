@@ -22,14 +22,11 @@ class DashboardService
             $patient = DB::select(
                 'CALL getPatientsCount()',
             );
-
-
             $data = array_merge(
                 $total,
                 $count,
                 $patient
             );
-
             return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);

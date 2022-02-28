@@ -37,7 +37,7 @@ class TaskAssignedTransformer extends TransformerAbstract
            'id'=>$data->assigned ? $data->assigned->id:'',
            'entityType'=>$data->entityType,
            'taskId'=>$data->taskId,
-           'name'=>ucfirst($data->assigned->firstName).' '.ucfirst($data->assigned->lastName)
+           'name'=>ucfirst(@$data->assigned->firstName).' '.ucfirst(@$data->assigned->lastName)
         ];
     }elseif($data->entityType == 'patient'){
         return[

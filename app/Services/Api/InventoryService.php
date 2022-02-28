@@ -17,10 +17,12 @@ class InventoryService
     public function store($request)
     {
         try {
+            $isActive=$request->isActive;
             $input = $request->only(['deviceModelId', 'serialNumber', 'macAddress', 'isActive']);
             $otherData = [
-                'udid' => Str::random(10),
-                'createdBy' => 1
+                'udid' => Str::uuid()->toString(),
+                'createdBy' => 1,
+                'isActive'=>$isActive==true?1:0
             ];
             $data = json_encode(array_merge($input, $otherData));
             DB::select(

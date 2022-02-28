@@ -3,11 +3,9 @@
 namespace App\Services\Api;
 
 use App\Models\CPTCode\CPTCode;
-use App\Models\GlobalCode\GlobalCode;
 use App\Transformers\CPTCode\CPTCodeTransformer;
 use Exception;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CPTCodeService
@@ -25,7 +23,7 @@ class CPTCodeService
     public function createCPTCode($request)
     {
         try {
-            $udid = Str::random(10);
+            $udid = Str::uuid()->toString();
             $serviceId = $request->input('serviceId');
             $providerId = $request->input('providerId');
             $name = $request->input('name');

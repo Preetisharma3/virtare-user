@@ -39,7 +39,7 @@ class CommunicationTransformer extends TransformerAbstract
                 'id'=>$data->id,
                 'from'=>$data->staff->firstName,
                 'type'=>$data->type->name,
-                'to'=>$data->patient->firstName,
+                'to'=>@$data->patient->firstName,
                 'category'=>$data->globalCode->name,
                 'priority'=>$data->priority->name,
                 'createdAt'=>strtotime($data->createdAt),

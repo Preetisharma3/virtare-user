@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Support\Str;
 use App\Models\Provider\Provider;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use App\Transformers\Provider\ProviderTransformer;
 
 

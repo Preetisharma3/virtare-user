@@ -15,9 +15,12 @@ return [
     'user_updated' => 'La usuario ha sido actualizada con éxito.',
     'not_found' => "Datos no encontrados.",
     'vital_add' => "Vitales agregados con éxito.",
-
-    'date_exist'=> " la fecha ya existe",
-
-    'notification'=>"notificación enviado con éxito.",
-    'udid'=>"Este dispositivo ya está asignado, comuníquese con el administrador"
+    'updated_succesfully' => "Actualizado con éxito",
+    'created_succesfully' => "Creado con éxito.",
+    'deleted_succesfully' => "Borrado exitosamente.",
+    'date_exist' => " la fecha ya existe",
+    'notification' => "notificación enviado con éxito.",
+    'udid' => "Este dispositivo ya está asignado, comuníquese con el administrador",
+    'unauthorized' => 'No autorizada',
+    'error' => 'Algo salió mal',
 ];
