@@ -169,6 +169,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
 
     // appointment Routes
+    $router->get('appointment/conference', 'Api\v1\AppointmentController@conferenceAppointment');
     $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
     $router->get('appointment/search', 'Api\v1\AppointmentController@appointmentSearch');
     $router->get('appointment/summary', 'Api\v1\TimelineController@appointmentTotal');

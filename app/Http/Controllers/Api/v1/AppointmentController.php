@@ -13,22 +13,29 @@ class AppointmentController extends Controller
   {
     return (new AppointmentService)->newAppointments($request);
   }
-  
-  public function todayAppointment(Request $request,$id = null)
+
+  public function todayAppointment(Request $request, $id = null)
   {
-    return (new AppointmentService)->todayAppointment($request,$id);
+    return (new AppointmentService)->todayAppointment($request, $id);
   }
 
-  public function addAppointment(request $request,$id = null){
-    return (new AppointmentService)->addAppointment($request,$id);
+  public function addAppointment(request $request, $id = null)
+  {
+    return (new AppointmentService)->addAppointment($request, $id);
   }
 
-  public function appointmentList(request $request,$id = null){
-    return (new AppointmentService)->appointmentList($request,$id);
+  public function appointmentList(request $request, $id = null)
+  {
+    return (new AppointmentService)->appointmentList($request, $id);
   }
 
-  public function appointmentSearch(request $request){
+  public function appointmentSearch(request $request)
+  {
     return (new AppointmentService)->appointmentSearch($request);
   }
 
+  public function conferenceAppointment(request $request)
+  {
+    return (new AppointmentService)->AppointmentConference($request);
+  }
 }
