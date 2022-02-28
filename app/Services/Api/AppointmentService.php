@@ -165,7 +165,7 @@ class AppointmentService
 
     public function AppointmentConference($request)
     {
-        $data = Appointment::whereRaw('conferenceId is null')->get();
+        $data = Appointment::whereRaw('conferenceId is not null')->get();
         return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
     }
 }
