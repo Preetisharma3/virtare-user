@@ -2,13 +2,15 @@
 
 namespace App\Models\Appointment;
 
-use App\Models\GlobalCode\GlobalCode;
-use App\Models\Patient\Patient;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Note\Note;
 use App\Models\Staff\Staff;
-use App\Transformers\Staff\StaffAvailabilityTransformer;
+use App\Models\Patient\Patient;
+use App\Models\GlobalCode\GlobalCode;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\StaffAvailability\StaffAvailability;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Transformers\Staff\StaffAvailabilityTransformer;
 
 class Appointment extends Model
 {
@@ -45,6 +47,11 @@ class Appointment extends Model
     public function duration()
     {
         return $this->belongsTo(GlobalCode::class, 'durationId');
+    }
+
+    public function notes()
+    {
+        return $this->hasOne(Note::class,'referenceId');
     }
 
 }
