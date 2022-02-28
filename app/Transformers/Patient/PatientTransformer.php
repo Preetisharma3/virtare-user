@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\User\UserTransformer;
 use App\Transformers\Patient\PatientFlagTransformer;
-use App\Transformers\Patient\PatientVitalFieldTransformer;
 use App\Transformers\Patient\PatientFamilyMemberTransformer;
 
 class PatientTransformer extends TransformerAbstract
