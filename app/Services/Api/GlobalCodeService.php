@@ -44,13 +44,12 @@ class GlobalCodeService
      public function globalCodeCreate($request)
      {
           try {
-               $merge = $request->merge([
+              $input=[
                     'globalCodeCategoryId' => $request->globalCodeCategory, 'createdBy' => 1,
-                    'udid' => Str::uuid()->toString(), 'isActive' => $request->status
-               ]);
-               $global = GlobalCode::create($merge->only([
-                    'globalCodeCategoryId', 'name', 'description','predefined', 'createdBy', 'isActive', 'udid'
-               ]));
+                    'udid' => Str::uuid()->toString(), 'isActive' => $request->status,'name'=>$request->input('name'),
+                    'description'=>$request->input('description')
+               ];
+               $global = GlobalCode::create($input);
                $data = GlobalCode::whereHas('globalCodeCategory', function ($q) use ($global) {
                     $q->where('id', $global->globalCodeCategoryId);
                })->where('id', $global->id)->with('globalCodeCategory')->first();
