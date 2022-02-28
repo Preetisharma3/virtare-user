@@ -343,6 +343,11 @@ $router->put('cptCode/status/{id}', 'Api\v1\CPTCodeController@updateCPTCodeStatu
 $router->post('cptCode', 'Api\v1\CPTCodeController@createCPTCode');
 $router->put('cptCode/{id}', 'Api\v1\CPTCodeController@updateCPTCode');
 $router->delete('cptCode/{id}', 'Api\v1\CPTCodeController@deleteCPTCode');
+
+//service
+$router->get('service', 'Api\v1\ServiceNameController@listService');
+$router->post('service', 'Api\v1\ServiceNameController@createService');
+
 // FAQ Routes
 $router->get('faq', 'Api\v1\FaqController');
 
