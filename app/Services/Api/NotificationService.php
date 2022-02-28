@@ -92,3 +92,4 @@ class NotificationService
             $confrence =  Appointment::whereNotNull('conferenceId')->get();
             updateFreeswitchConfrence($confrence);
     }
+}
