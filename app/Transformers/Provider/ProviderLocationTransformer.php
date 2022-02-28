@@ -36,8 +36,14 @@ class ProviderLocationTransformer extends TransformerAbstract
             'id'=>$data->id,
             'locationName'=>$data->locationName,
             'phoneNumber'=>$data->phoneNumber,
-            'noOfLocation'=>$data->numberOfLocations,
-            'address'=>$data->locationAddress
+            'noOfLocations'=>$data->numberOfLocations,
+            'address'=>$data->locationAddress,
+            'state'=>$data->stateId,
+            'city'=>$data->city,
+            'zipCode'=>$data->zipCode,
+            'phoneNumber'=>$data->phoneNumber,
+            'email'=>$data->email,
+            'websiteUrl'=>$data->websiteUrl,
         ];
       
     }
