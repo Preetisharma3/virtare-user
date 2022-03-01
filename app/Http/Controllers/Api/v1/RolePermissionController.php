@@ -10,19 +10,14 @@ use App\Services\Api\RolePermissionService;
 class RolePermissionController extends Controller
 {
 
-    public function roleList(Request $request)
+    public function roleList(Request $request,$id=null)
     {
-        return (new RolePermissionService)->roleList($request); 
+        return (new RolePermissionService)->roleList($request,$id); 
     }
     
     public function createRole(RoleRequest $request)
     {
         return (new RolePermissionService)->createRole($request);
-    }
-
-    public function listingRole(Request $request,$id)
-    {
-        return (new RolePermissionService)->listingRole($request, $id);
     }
 
     public function updateRole(Request $request, $id)

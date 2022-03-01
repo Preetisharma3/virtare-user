@@ -16,7 +16,6 @@ class RoleRequest extends FormRequest
         return [
             'name' => 'required',
             'description'=>'required',
-            'roleTypeId' => 'required',
         ];
     }
 
@@ -25,7 +24,6 @@ class RoleRequest extends FormRequest
         return [
             'name.required' => 'Name is required',
             'description.required' => 'Description is required',
-            'roleTypeId.required' => 'Role Type Id is required',
         ];
     }
 }

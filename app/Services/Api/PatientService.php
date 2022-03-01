@@ -33,6 +33,7 @@ use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
+use App\Models\Patient\PatientStaff;
 use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Patient\PatientFlagTransformer;
 use App\Transformers\Patient\PatientVitalTransformer;
@@ -261,38 +262,51 @@ class PatientService
     public function patientList($request, $id)
     {
         try {
-            if ($id) {
-                $getPatient = Patient::where('udid', $id)->with(
-                    'user',
-                    'family.user',
-                    'emergency',
-                    'gender',
-                    'language',
-                    'contactType',
-                    'contactTime',
-                    'state',
-                    'country',
-                    'otherLanguage',
-                    'flags.flag',
-                    'inventories.inventory'
-                )->first();
-                return fractal()->item($getPatient)->transformWith(new PatientTransformer())->toArray();
-            } else {
-                $getPatient = Patient::with(
-                    'user',
-                    'family.user',
-                    'emergency',
-                    'gender',
-                    'language',
-                    'contactType',
-                    'contactTime',
-                    'state',
-                    'country',
-                    'otherLanguage',
-                    'flags.flag',
-                    'inventories.inventory'
-                )->paginate(env('PER_PAGE', 20));
-                return fractal()->collection($getPatient)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($getPatient))->toArray();
+            $roleId = auth()->user()->roleId;
+            if($id){
+                $patient = Helper::entity('patient', $id);
+                if ($roleId == 3) {
+                        $staff = Patient::where('id', $patient)->whereHas('patientStaff', function ($query) use ($patient) {
+                            $query->where('patientId', $patient);
+                        })->first();
+                        if (!empty($staff)) {
+                            return fractal()->item($staff)->transformWith(new PatientTransformer())->toArray();
+                        }
+                } elseif ($roleId == 6) {
+                        $family = Patient::where('id', $patient)->whereHas('family', function ($query) use ($patient) {
+                            $query->where('patientId', $patient);
+                        })->first();
+                        if (!empty($family)) {
+                            return fractal()->item($family)->transformWith(new PatientTransformer())->toArray();
+                        }
+                } elseif ($roleId == 1) {
+                        $patient = Patient::where('id', $patient)->first();
+                        if (!empty($patient)) {
+                            return fractal()->item($patient)->transformWith(new PatientTransformer())->toArray();
+                        }
+                }
+            }else{
+                if ($roleId == 3) {
+                        $staff = Patient::whereHas('patientStaff', function ($query) {
+                            $query->where('staffId', auth()->user()->staff->id);
+                        })->paginate(env('PER_PAGE', 20));
+                        if (!empty($staff)) {
+                            return fractal()->collection($staff)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($staff))->toArray();
+                        }
+                } elseif ($roleId == 6) {
+                        $family = Patient::whereHas('family', function ($query) {
+                            $query->where('id', auth()->user()->familyMember->id);
+                        })->paginate(env('PER_PAGE', 20));
+                        if (!empty($family)) {
+                            return fractal()->collection($family)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($family))->toArray();
+                        }
+                } elseif ($roleId == 1) {
+                        $patient = Patient::paginate(env('PER_PAGE', 20));
+                        return fractal()->collection($patient)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($patient))->toArray();
+                }elseif ($roleId == 4) {
+                    $patient = Patient::where('id',auth()->user()->patient->id)->first();
+                    return fractal()->item($patient)->transformWith(new PatientTransformer())->toArray();
+            }
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
@@ -442,8 +456,8 @@ class PatientService
         DB::beginTransaction();
         try {
             $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
-            PatientReferal::where('udid',$referalsId)->update($data);
-            PatientReferal::where('udid',$referalsId)->delete();
+            PatientReferal::where('udid', $referalsId)->update($data);
+            PatientReferal::where('udid', $referalsId)->delete();
             DB::commit();
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
@@ -523,8 +537,8 @@ class PatientService
         DB::beginTransaction();
         try {
             $data = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
-            PatientPhysician::where('udid',$physicianId)->update($data);
-            PatientPhysician::where('udid',$physicianId)->delete();
+            PatientPhysician::where('udid', $physicianId)->update($data);
+            PatientPhysician::where('udid', $physicianId)->delete();
             DB::commit();
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
@@ -1060,8 +1074,8 @@ class PatientService
         DB::beginTransaction();
         try {
             $data = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
-            PatientInsurance::where('udid',$insuranceId)->update($data);
-            PatientInsurance::where('udid',$insuranceId)->delete();
+            PatientInsurance::where('udid', $insuranceId)->update($data);
+            PatientInsurance::where('udid', $insuranceId)->delete();
             DB::commit();
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
@@ -1370,6 +1384,4 @@ class PatientService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
-
-
 }

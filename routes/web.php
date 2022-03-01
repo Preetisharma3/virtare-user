@@ -40,6 +40,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // Auth Routes
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
+
+    $router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
+    $router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
+
     // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
     $router->get('staff/patient', 'Api\v1\StaffPatientController@patientList');
@@ -106,7 +110,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientCondition');
     $router->get('patient/{id}/condition[/{conditionId}]', 'Api\v1\PatientController@listPatientCondition');
     $router->post('staff', 'Api\v1\StaffController@addStaff');
-    $router->get('staff', 'Api\v1\StaffController@listStaff');
+    $router->get('staff[/{id}]', 'Api\v1\StaffController@listStaff');
     $router->put('staff/{id}', 'Api\v1\StaffController@updateStaff');
     $router->post('patient/{id}/referals', 'Api\v1\PatientController@createPatientReferals');
     $router->put('patient/{id}/referals/{referalsId}', 'Api\v1\PatientController@updatePatientReferals');
@@ -262,21 +266,18 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Provider Routes
     $router->post('provider', 'Api\v1\ProviderController@store');
-    $router->get('provider[/{id}]', 'Api\v1\ProviderController@index');        
-    $router->put('provider/{id}','Api\v1\ProviderController@updateProvider');
-    $router->delete('provider/{id}','Api\v1\ProviderController@deleteProviderLocation');
+    $router->get('provider[/{id}]', 'Api\v1\ProviderController@index');
+    $router->put('provider/{id}', 'Api\v1\ProviderController@updateProvider');
+    $router->delete('provider/{id}', 'Api\v1\ProviderController@deleteProviderLocation');
     $router->post('provider/{id}/location', 'Api\v1\ProviderController@providerLocationStore');
     $router->get('provider/{id}/location[/{locationId}]', 'Api\v1\ProviderController@editLocation');
-    $router->put('provider/{id}/location/{locationId}','Api\v1\ProviderController@updateLocation');
-    $router->delete('provider/{id}/location/{locationId}','Api\v1\ProviderController@deleteProviderLocation');
-
+    $router->put('provider/{id}/location/{locationId}', 'Api\v1\ProviderController@updateLocation');
+    $router->delete('provider/{id}/location/{locationId}', 'Api\v1\ProviderController@deleteProviderLocation');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
 $router->get('getScreenAction', 'Api\v1\ScreenActionController@getScreenAction');
 
-$router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
-$router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
 $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
 $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
@@ -329,7 +330,7 @@ $router->get('staff/network/count', 'Api\v1\StaffController@networkCount');
 
 
 $router->post('role', 'Api\v1\RolePermissionController@createRole');
-$router->get('roleList', 'Api\v1\RolePermissionController@roleList');
+$router->get('roleList[/{id}]', 'Api\v1\RolePermissionController@roleList');
 $router->get('role/{id}', 'Api\v1\RolePermissionController@listingRole');
 $router->put('role/{id}', 'Api\v1\RolePermissionController@updateRole');
 $router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');

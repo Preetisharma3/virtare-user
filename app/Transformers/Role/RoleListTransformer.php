@@ -34,6 +34,7 @@ class RoleListTransformer extends TransformerAbstract
     {
         return[ 
             'id' => $data->id,
+            'udid' =>$data->udid,
             'name' => $data->roles,
             'roleDescription' => $data->roleDescription,
             'roleType' =>$data->roleType->name,

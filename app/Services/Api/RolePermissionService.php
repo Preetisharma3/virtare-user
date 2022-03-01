@@ -15,17 +15,16 @@ use App\Transformers\RolePermission\RolePermissionTransformer;
 class RolePermissionService
 {
 
-    public function roleList($request)
+    public function roleList($request,$id)
     {
         try{
-            if($request->id){
-                $data = AccessRole::where('id',$request->id)->get();
-                return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
-            }else{
+            if(!$id){
                 $data = AccessRole::all();
                 return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
+            }else{
+                $data = AccessRole::where('udid',$id)->get();
+                return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
             }
-            
         }catch(Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);    
         } 
@@ -34,43 +33,29 @@ class RolePermissionService
     public function createRole($request)
     {
         try{
-            $udid = Str::uuid()->toString();
-            $roles = $request->input('name');
-            $roleDescription = $request->input('description');
-            $roleTypeId = $request->input('roleTypeId');
-            DB::select('CALL createRole("' . $udid . '","' . $roles . '","' . $roleDescription . '","'.$roleTypeId.'")'); 
-            
-            $role = AccessRole::where('udid', $udid)->first();
-            $message = ['message' => trans('messages.createdSuccesfully')];
-            $resp =  fractal()->item($role)->transformWith(new RoleListTransformer())->toArray();
-            $endData = array_merge($message, $resp);
-            return $endData;
+            $role = [
+                'udid' => Str::uuid()->toString(),
+                'roles' => $request->input('name'),
+                'roleDescription'=> $request->input('description'),
+                'roleTypeId' => '147',
+            ];
+            $data = AccessRole::create($role);
+            return response()->json(['message' => trans('messages.createdSuccesfully')]);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
            } 
     }
 
-    public function listingRole($request,$id)
-    {
-        $data = AccessRole::where('id', $id)->get();
-        return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
-    }
-
     public function updateRole($request, $id)
     {
         try{
-            $roles = $request->input('name');
-            $roleDescription = $request->input('description');
-            $roleTypeId = $request->input('roleTypeId');
-            $isActive = $request->input('isActive');
-            $updatedBy = 2;
-            DB::select('CALL updateRole("'.$id.'","' . $roles . '","' . $roleDescription . '","' . $roleTypeId . '","'.$isActive.'","'.$updatedBy.'")');
-            
-            $roleData = AccessRole::where('id', $id)->first();
-            $message = ['message' => trans('messages.updatedSuccesfully')];
-            $resp =  fractal()->item($roleData)->transformWith(new RoleListTransformer())->toArray();
-            $endData = array_merge($message, $resp);
-            return $endData;
+            $role = [
+                'roles' => $request->input('name'),
+                'roleDescription'=> $request->input('description'),
+                'roleTypeId' => '147',
+            ];
+            AccessRole::where('udid', $id)->update($role);
+            return response()->json(['message' => trans('messages.updatedSuccesfully')]);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
            }
@@ -79,12 +64,11 @@ class RolePermissionService
     public function deleteRole($request,$id)
     {
         try {
-            $id = $request->id;
-            $isDelete= 1;
-            $deletedBy =2;
-            $deletedAt = date('Y-m-d H:i:s');
-            DB::select('CALL deleteRole("'.$id.'","'.$isDelete.'","'.$deletedBy.'","'.$deletedAt.'")');
-            return response()->json(['message' => trans('messages.deletedSuccesfully')], 200);
+            $role = AccessRole::where('udid', $id)->first();
+            $input=['deletedBy'=>1,'isActive'=>0,'isDelete'=>1];
+            AccessRole::where('udid', $id)->update($input);
+            AccessRole::where('udid', $id)->delete();
+            return response()->json(['message' => "Deleted Successfully"]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
