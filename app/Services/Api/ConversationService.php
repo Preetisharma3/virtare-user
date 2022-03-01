@@ -3,7 +3,6 @@
 namespace App\Services\Api;
 
 use Exception;
-use App\Helper;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Conversation\Conversation;
@@ -141,7 +140,7 @@ class ConversationService
             if ($input == true) {
                 $data = ConversationMessage::where([['conversationId', $conversationId]])->get();
             } else {
-                return response()->json(['message' => trans('messages.unauthenticated')]);
+                return response()->json(['message' => trans('messages.unauthenticated')],401);
             }
             return fractal()->collection($data)->transformWith(new ConversationTransformer)->toArray();
         } catch (Exception $e) {

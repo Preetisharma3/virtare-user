@@ -14,7 +14,7 @@ class BitrixField extends Model
     const CREATED_AT = 'createdAt';
     const UPDATED_AT = 'updatedAt';
     public $timestamps = false;
-    protected $table = 'bitrixfields';
+    protected $table = 'bitrixFields';
     use HasFactory;
     protected $guarded = [];
 }

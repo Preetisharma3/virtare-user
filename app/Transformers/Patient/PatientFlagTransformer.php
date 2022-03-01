@@ -16,7 +16,7 @@ class PatientFlagTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-            'id'=>(!empty($data->udid))?$data->udid:$data->patientFlagId,
+            'id'=>(!empty($data->udid))?$data->udid:$data->patientFlagUdId,
             'patientId'=>(!empty($data->patientId))?$data->patientId:$data->patientFlagPatientId,
 			'icon'=>(!empty($data->icon))&&(!is_null($data->icon)) ? URL::to('/').'/'.$data->icon : "",
             'flags'=> (!empty($data->flag))?fractal()->item($data->flag)->transformWith(new FlagTransformer())->toArray():'',

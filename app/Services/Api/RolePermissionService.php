@@ -2,18 +2,15 @@
 
 namespace App\Services\Api;
 
-use App\Models\Module\Module;
-use App\Models\Permission\Permission;
-use App\Models\Role\AccessRole;
-use App\Models\RolePermission\RolePermission;
 use Exception;
 use Illuminate\Support\Str;
-use App\Transformers\Role\RoleTransformer;
+use App\Models\Module\Module;
+use App\Models\Role\AccessRole;
+use Illuminate\Support\Facades\DB;
+use App\Models\RolePermission\RolePermission;
 use App\Transformers\Role\RoleListTransformer;
 use App\Transformers\RolePermission\PermissionTransformer;
 use App\Transformers\RolePermission\RolePermissionTransformer;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class RolePermissionService
 {
@@ -37,7 +34,7 @@ class RolePermissionService
     public function createRole($request)
     {
         try{
-            $udid = Str::random(10);
+            $udid = Str::uuid()->toString();
             $roles = $request->input('name');
             $roleDescription = $request->input('description');
             $roleTypeId = $request->input('roleTypeId');
@@ -48,7 +45,6 @@ class RolePermissionService
             $resp =  fractal()->item($role)->transformWith(new RoleListTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
-
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
            } 
@@ -100,7 +96,7 @@ class RolePermissionService
         try{
             $action = $request->actions;
             foreach($action as $actionId ){
-                $udid = Str::random(10);
+                $udid = Str::uuid()->toString();
                 $accessRoleId = $id;
                 $actionId = $actionId;
                 DB::select('CALL createRolePermission("' . $udid . '","' . $accessRoleId . '","' . $actionId . '")'); 
@@ -124,7 +120,6 @@ class RolePermissionService
             return response()->json(['message' => $e->getMessage()], 500);    
         }
     }
-
 
     public function permissionsList($request)
     {

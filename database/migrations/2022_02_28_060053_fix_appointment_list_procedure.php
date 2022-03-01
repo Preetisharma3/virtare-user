@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class FixAppointmentListProcedure extends Migration
@@ -20,16 +18,18 @@ class FixAppointmentListProcedure extends Migration
         IF toDate = '' THEN
         SELECT  appointments.id as id,
                 appointments.startDateTime as startDate,
-                appointments.note as note,
+                notes.note AS note,
                 appointmentType.name as appointmentType,
                 globalCodes.name as duration,
                 appointments.startDateTime as startTime,
+                appointments.conferenceId,
                 staffs.udid as staff_id,
                 patients.udid as patient_id,
                 CONCAT(staffs.firstName,' ',staffs.lastName) as staff,
                 CONCAT(patients.firstName,' ',patients.lastName) as patient
                 FROM    appointments 
                 JOIN staffs ON appointments.staffId = staffs.id
+                JOIN notes ON appointments.id = notes.referenceId
                 JOIN patients ON appointments.patientId = patients.id
                 JOIN globalCodes ON appointments.durationId = globalCodes.id
                 JOIN globalCodes as appointmentType ON appointments.appointmentTypeId = appointmentType.id
@@ -38,16 +38,18 @@ class FixAppointmentListProcedure extends Migration
         ELSE 
         SELECT  appointments.id as id,
                 appointments.startDateTime as startDate,
-                appointments.note as note,
+                notes.note AS note,
                 appointmentType.name as appointmentType,
                 globalCodes.name as duration,
                 appointments.startDateTime as startTime,
                 staffs.udid as staff_id,
+                appointments.conferenceId,
                 patients.udid as patient_id,
                 CONCAT(staffs.firstName,' ',staffs.lastName) as staff,
                 CONCAT(patients.firstName,' ',patients.lastName) as patient
                 FROM    appointments 
                 JOIN staffs ON appointments.staffId = staffs.id
+                JOIN notes ON appointments.id = notes.referenceId
                 JOIN patients ON appointments.patientId = patients.id
                 JOIN globalCodes ON appointments.durationId = globalCodes.id
                 JOIN globalCodes as appointmentType ON appointments.appointmentTypeId = appointmentType.id

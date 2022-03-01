@@ -13,9 +13,29 @@ class ProgramController extends Controller
      *
      * @return void
      */
-    public function listProgram(Request $request)
+    public function listProgram(Request $request,$id = null)
   {
-    return (new ProgramService)->programList($request);
+    return (new ProgramService)->programList($request,$id);
+  }
+
+  public function createProgram(Request $request)
+  {
+    return (new ProgramService)->createProgram($request);
+  }
+
+  public function updateProgram(Request $request,$id)
+  {
+    return (new ProgramService)->updateProgram($request,$id);
+  }
+
+  // public function editProgram(Request $request,$id)
+  // {
+  //   return (new ProgramService)->editProgram($request,$id);
+  // }
+
+  public function deleteProgram(Request $request,$id)
+  {
+    return (new ProgramService)->deleteProgram($request,$id);
   }
 
    

@@ -2,50 +2,103 @@
 
 namespace App\Services\Api;
 
+use App\Helper;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
+use App\Models\Staff\Staff;
 use Illuminate\Support\Facades\DB;
 use App\Models\Notification\Notification;
 use App\Models\Appointment\AppointmentNotification;
-
+use App\Models\Appointment\Appointment;
+use App\Services\Api\PushNotificationService;
 class NotificationService
 {
-    public function appointmentNotification($request)
+    public function appointmentNotification()
     {
-        $data = DB::select(
-            'CALL notificationList()',
+        $appointments = DB::select(
+            'CALL appointmentListNotification("'.date("Y-m-d H:i:s",time()).'","'.date("Y-m-d H:i:s",strtotime('+30 minutes')).'")',
         );
-        if (!empty($data)) {
-            foreach ($data as $new) {
-                $patient = Patient::where('id', $new->patientId)->get();
-                foreach ($patient as $patientInfo) {
-                    $userId = $patientInfo->userId;
-                    $notification = Notification::create([
-                        'body' => 'Your Appointment is Scehduled.',
-                        'title' => 'Appointment Reminder',
-                        'userId' => $userId,
-                        'entity'=>'Appointment',
-                        'referenceId' => 39,
-                        'createdBy' => 1,
-                    ]);
-                }
+        if (!empty($appointments)) {
+            foreach ($appointments as $appointment) {
+                $patient = Patient::where('id', $appointment->patientId)->first();
+                $userId = $patient->userId;
+                $notification = Notification::create([
+                    'body' => 'You have a Appointment in 30 minutes.',
+                    'title' => 'Appointment Reminder',
+                    'userId' => $appointment->patientUserId,
+                    'isSent' => 0,
+                    'entity'=>'Appointment',
+                    'referenceId' => $appointment->id,
+                    'createdBy' => $appointment->staffUserId,
+                ]);
                 AppointmentNotification::create([
                     'udid' => Str::random(10),
-                    'appointmentId' => $new->id,
+                    'appointmentId' => $appointment->id,
                     'lastNotification' => 1,
-                    'createdBy' => 1,
+                    'createdBy' => $appointment->staffUserId,
                 ]);
             }
-            $deviceToken = $request->deviceToken;
-            $deviceType = $request->deviceType;
-            if ($deviceType == 'ios') {
-                $pushNotification = new PushNotificationService();
-                $deviceToken = $pushNotification->ios_token($deviceToken);
+        } 
+    } 
+    public function appointmentNotificationSend()
+    {
+        $notifications = DB::select(
+            'CALL notificationList("0","")',
+        );
+        if (!empty($notifications)) {
+            foreach ($notifications as $notification) {
+                
+                $pushnotification = new PushNotificationService();
+                $notificationData = array(
+                    "body" =>$notification->body,
+                    "title" =>$notification->title,
+                    "type" =>$notification->entity,
+                    "typeId" =>$notification->referenceId,
+                );
+                $pushnotification->sendNotification([$notification->userId],$notificationData);
+                
+                Notification::where('id',$notification->id)->update(['isSent'=>'1']);
             }
-
-            return response()->json(['message' => trans('messages.notification')], 200);
-        } else {
-            return response()->json(['message' => trans('Appointments are not Found')], 200);
+            
         }
+    }
+    public function appointmentConfrence()
+    {
+            $toDate = Helper::date(strtotime('+5 minutes'));
+                
+            $fromDate = Helper::date(time());
+
+            $appointments = DB::select(
+                'CALL appointmentList("' . $fromDate . '","' . $toDate . '")',
+            );
+            if (!empty($appointments)) {
+                foreach ($appointments as $appointment) {
+                    if(empty($appointment->conferenceId) || is_null($appointment->conferenceId)){
+
+                        $staffId = Helper::entity('staff',$appointment->staff_id);
+                        $patentId = Helper::entity('patient',$appointment->patient_id);
+
+                        $patient = Patient::where('id', $patentId)->first();
+                        $userId = $patient->userId;
+
+                        $staff = Staff::where('id', $staffId)->first();
+                        $staffUserId = $staff->userId;
+
+                        $notification = Notification::create([
+                            'body' => 'Your Appointment going to start please join.',
+                            'title' => 'Appointment Reminder',
+                            'userId' => $userId,
+                            'isSent' => 0,
+                            'entity'=>'Confrence',
+                            'referenceId' => 'CONF'.$appointment->id,
+                            'createdBy' => $staffUserId,
+                        ]);
+                        Appointment::where('id',$appointment->id)->update(['conferenceId'=>'CONF'.$appointment->id]);
+                    }
+                    
+                }
+            }
+            $confrence =  Appointment::whereNotNull('conferenceId')->get();
+            Helper::updateFreeswitchConfrence($confrence);
     }
 }

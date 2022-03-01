@@ -35,6 +35,16 @@ class ProviderTransformer extends TransformerAbstract
         return[ 
             'id'=>$data->id,
             'name' => $data->name,
+            'address'=>$data->address,
+            'zipcode'=>$data->zipcode,
+            'phoneNumber'=>$data->phoneNumber,
+            'countryId'=>$data->countryId,
+            'stateId'=>$data->stateId,
+            'city'=>$data->city,
+            'zipCode'=>$data->zipcode,
+            'phoneNumber'=>$data->phoneNumber,
+            'tagId'=>$data->tagId,
+            'moduleId'=>$data->moduleId,
         ];
       
     }

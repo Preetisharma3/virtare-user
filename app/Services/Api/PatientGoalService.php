@@ -2,12 +2,9 @@
 
 namespace App\Services\Api;
 
-use App\Models\Device\Device;
 use App\Models\Patient\Patient;
 use App\Models\Patient\PatientGoal;
-use App\Models\Patient\PatientInventory;
 use App\Transformers\Patient\PatientGoalTransformer;
-use App\Transformers\Patient\PatientInventoryTransformer;
 
 class PatientGoalService
 {
@@ -15,9 +12,11 @@ class PatientGoalService
     {
         if ($id) {
             if ($goalId) {
-                $data = PatientGoal::where([['patientId', $id], ['id', $goalId]])->get();
+                $patient = Patient::where('udid', $id)->first();
+                $data = PatientGoal::where([['patientId', $patient->id], ['id', $goalId]])->get();
             } elseif (!$goalId) {
-                $data = PatientGoal::where('patientId', $id)->get();
+                $patient = Patient::where('udid', $id)->first();
+                $data = PatientGoal::where('patientId', $patient->id)->get();
             } else {
                 return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }

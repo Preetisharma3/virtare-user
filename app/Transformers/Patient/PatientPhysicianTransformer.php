@@ -15,17 +15,15 @@ class PatientPhysicianTransformer extends TransformerAbstract
 	public function transform($data): array
 	{
 		return [
-			'id'=>$data->id,
+			'id'=>$data->udid,
 			'patientId'=>$data->patientId,
             'name'=>$data->name,
             'designation'=>$data->designation->name,
             'designationId'=>$data->designation->id,
             'phoneNumber'=>$data->phoneNumber,
-            'email'=>$data->user->email,
             'fax'=>$data->fax,
             'sameAsReferal'=>$data->sameAsReferal,
-			'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
-			'profilePhoto'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? URL::to('/').'/'.$data->user->profilePhoto : "",
+            'user' =>$data->user? fractal()->item($data->user)->transformWith(new UserTransformer())->toArray():[],
 		];
 	}
 }

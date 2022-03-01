@@ -26,7 +26,7 @@ class GlobalCodeRequest extends FormRequest
     public function rules()
     {
         return [
-            'globalCodeCategoryId'=> 'required',
+            'globalCodeCategory'=> 'required',
             'name'=> 'required',
             'description'=> 'required',
         ];
