@@ -171,14 +171,17 @@ class Helper
 
     public static function haveAccess($id)
     {
-        $role=auth()->user()->roleId;
-        if($role==3)
-        {
-            PatientStaff::where([['staffId',auth()->user()->staff->id],['patientId',$id]]);
-        }
-        elseif($role==6)
-        {
-            PatientFamilyMember::where([['id',auth()->user()->familyMember->id],['patientId',$id]]);
+        $role = auth()->user()->roleId;
+        if ($role == 3) {
+            $staff = PatientStaff::where([['staffId', auth()->user()->staff->id], ['patientId', $id]]);
+            if (!$staff) {
+                return response()->json(['message', trans('messages.unauthorized')], 401);
+            }
+        } elseif ($role == 6) {
+            $family = PatientFamilyMember::where([['id', auth()->user()->familyMember->id], ['patientId', $id]]);
+            if (!$family) {
+                return response()->json(['message', trans('messages.unauthorized')], 401);
+            }
         }
     }
 }
