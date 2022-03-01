@@ -42,7 +42,7 @@ class PhysicianTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id'=>$data->id,
+            'id'=>$data->udid,
 			'patientId'=>$data->patientId,
             "user_id"=>$data->userId,
             'sipId' => "UR".$data->userId,
