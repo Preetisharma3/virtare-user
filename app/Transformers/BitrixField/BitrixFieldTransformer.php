@@ -15,8 +15,10 @@ class BitrixFieldTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
+            'id' => $data->id,
             'bitrixId' => $data->bitrixId,
-            'patientId' => $data->patientId
+            'patientId' => $data->patientId,
+            'isActive'  => $data->isActive ? True : False
         ];
     }
 }

@@ -16,7 +16,8 @@ class ServiceNameService
        try{
         if(!empty($id))
         {
-            $data = Service::where("id",$id)->orderBy('createdAt', 'DESC')->first();
+            $data = Service::find($id);
+            return fractal()->item($data)->transformWith(new ServiceTransformer())->toArray();
         }
         else
         {
@@ -87,7 +88,6 @@ class ServiceNameService
             $serviceData = Service::where('udid', $id)->first();
             $input=['deletedBy'=>1,'isActive'=>0,'isDelete'=>1];
             Service::where('udid', $id)->update($input);
-            Service::where('udid', $id)->delete();
             return response()->json(['message' => trans('messages.deletedSuccesfully')],  200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);

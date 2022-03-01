@@ -296,9 +296,4 @@ class PatientController extends Controller
       return response()->json($response, 200);
     }
   }
-
-  public function getBitrixFieldList(Request $request)
-  {
-    return (new BitrixService)->getBitrixFiled($request);
-  }
 }
