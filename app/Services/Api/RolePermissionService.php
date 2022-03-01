@@ -54,13 +54,21 @@ class RolePermissionService
     public function updateRole($request, $id)
     {
         try{
-            $role = [
-                'roles' => $request->input('name'),
-                'roleDescription'=> $request->input('description'),
-                'isActive' => $request->input('status'),
-                'updatedBy' =>1,
-            ];
+        $role = array();
+        if(!empty($request->input('name'))){
+            $role['roles'] =  $request->input('name');
+        }
+        if(!empty($request->input('description'))){
+            $role['roleDescription'] =  $request->input('description');
+        }
+        if(!empty($request->input('isActive'))){
+            $role['isActive'] =  $request->input('isActive');
+        }
+        $role['updatedBy'] =  1;
+        
+        if(!empty($role)){
             AccessRole::where('udid', $id)->update($role);
+        }
             return response()->json(['message' => trans('messages.updatedSuccesfully')]);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
