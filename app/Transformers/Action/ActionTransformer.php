@@ -21,6 +21,7 @@ class ActionTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
+                'id' => $data->id,
 			    'name'=>$data->name,
                 'controller'=>$data->controller,
                 'function' => $data->function,

@@ -336,7 +336,7 @@ $router->put('role/{id}', 'Api\v1\RolePermissionController@updateRole');
 $router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
 $router->post('rolePermission/{id}', 'Api\v1\RolePermissionController@createRolePermission');
 $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
-$router->get('rolePermission', 'Api\v1\RolePermissionController@rolePermissionList');
+$router->get('rolePermission/{id}', 'Api\v1\RolePermissionController@rolePermissionList');
 
 $router->get('role', 'Api\v1\AccessRoleController@index');
 $router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
