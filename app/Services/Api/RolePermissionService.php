@@ -9,6 +9,7 @@ use App\Models\Role\AccessRole;
 use Illuminate\Support\Facades\DB;
 use App\Models\RolePermission\RolePermission;
 use App\Transformers\Role\RoleListTransformer;
+use App\Transformers\RolePermission\RolePerTransformer;
 use App\Transformers\RolePermission\PermissionTransformer;
 use App\Transformers\RolePermission\RolePermissionTransformer;
 
@@ -56,7 +57,8 @@ class RolePermissionService
             $role = [
                 'roles' => $request->input('name'),
                 'roleDescription'=> $request->input('description'),
-                'roleTypeId' => '147',
+                'isActive' => $request->input('status'),
+                'updatedBy' =>1,
             ];
             AccessRole::where('udid', $id)->update($role);
             return response()->json(['message' => trans('messages.updatedSuccesfully')]);
@@ -121,4 +123,14 @@ class RolePermissionService
         }
         
     }
+
+    public function rolePermissionEdit($id){
+        try{
+        $role = AccessRole::where('udid',$id)->first();
+        $data = DB::select('CALL rolePermissionListing(' . $role->id . ')');
+        return fractal()->collection($data)->transformWith(new RolePerTransformer())->toArray();
+    }catch(Exception $e){
+        return response()->json(['message' => $e->getMessage()], 500);    
+    }
+ }
 }
