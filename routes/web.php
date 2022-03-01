@@ -165,7 +165,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get("bitrix/deal",'Api\v1\PatientController@getAllBitrixDeals');
 
     // Bitrix Fields routes
-    $router->get("bitrix/field",'Api\v1\BitrixFieldController@listBitrixField');
+    $router->get("bitrix/fields",'Api\v1\BitrixFieldController@listBitrixField');
     $router->get("bitrix/field/{id}",'Api\v1\BitrixFieldController@listBitrixField');
     $router->post("bitrix/field",'Api\v1\BitrixFieldController@createBitrixField');
     $router->put("bitrix/field/{id}",'Api\v1\BitrixFieldController@updateBitrixField');
