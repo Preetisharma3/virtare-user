@@ -45,6 +45,7 @@ class ProviderTransformer extends TransformerAbstract
             'phoneNumber'=>$data->phoneNumber,
             'tagId'=>$data->tagId,
             'moduleId'=>$data->moduleId,
+            'status'=>$data->isActive?true:false
         ];
       
     }

@@ -138,20 +138,20 @@ class ProviderService
         return response()->json(['message' => trans('messages.deletedSuccesfully')], 200);
     }
 
-    public function providerUpdate($request, $id)
-    {
-        try {
-            $input = [
-                'name', 'address', 'countryId', 'stateId', 'city', 'zipcode', 'phoneNumber', 'tagId', 'moduleId', 'isActive', 'updatedBy' => 1
-            ];
-            Provider::where('udid', $id)->update($input);
-            $provider = Provider::where('udid', $id)->first();
-            $userdata = fractal()->item($provider)->transformWith(new ProviderTransformer())->toArray();
-            $message = ['message' => trans('messages.createdSuccesfully')];
-            $endData = array_merge($message, $userdata);
-            return $endData;
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
-        }
-    }
+    // public function providerUpdate($request, $id)
+    // {
+    //     try {
+    //         $input = [
+    //             'name', 'address', 'countryId', 'stateId', 'city', 'zipcode', 'phoneNumber', 'tagId', 'moduleId', 'isActive', 'updatedBy' => 1
+    //         ];
+    //         Provider::where('udid', $id)->update($input);
+    //         $provider = Provider::where('udid', $id)->first();
+    //         $userdata = fractal()->item($provider)->transformWith(new ProviderTransformer())->toArray();
+    //         $message = ['message' => trans('messages.createdSuccesfully')];
+    //         $endData = array_merge($message, $userdata);
+    //         return $endData;
+    //     } catch (Exception $e) {
+    //         return response()->json(['message' => $e->getMessage()], 500);
+    //     }
+    // }
 }
