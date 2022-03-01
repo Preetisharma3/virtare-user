@@ -40,7 +40,11 @@ class RolePermissionService
                 'roleTypeId' => '147',
             ];
             $data = AccessRole::create($role);
-            return response()->json(['message' => trans('messages.createdSuccesfully')]);
+            $roleData = AccessRole::where('id', $data->id)->first();
+            $message = ["message" => trans('messages.createdSuccesfully')];
+            $resp =  fractal()->item($roleData)->transformWith(new RoleListTransformer())->toArray();
+            $endData = array_merge($message, $resp);
+            return $endData;
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
            } 
@@ -78,10 +82,11 @@ class RolePermissionService
     public function createRolePermission($request,$id)
     {
         try{
+            $role = AccessRole::where('udid',$id)->first();
             $action = $request->actions;
             foreach($action as $actionId ){
                 $udid = Str::uuid()->toString();
-                $accessRoleId = $id;
+                $accessRoleId = $role->id;
                 $actionId = $actionId;
                 DB::select('CALL createRolePermission("' . $udid . '","' . $accessRoleId . '","' . $actionId . '")'); 
             }
@@ -93,11 +98,11 @@ class RolePermissionService
     }
 
 
-    public function rolePermissionList($request)
+    public function rolePermissionList($request,$id)
     {
         try{
-            $id = $request->id;
-            $data = RolePermission::where('accessRoleId',$id)->with('role','action')->get();
+            $role = AccessRole::where('udid',$id)->first();
+            $data = RolePermission::where('accessRoleId',$role->id)->with('role','action')->get();
             $array  = ['role' => fractal()->collection($data)->transformWith(new RolePermissionTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()];
             return $array;
         }catch(Exception $e){

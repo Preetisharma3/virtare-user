@@ -22,6 +22,7 @@ class ScreenTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
+                'id' =>$data->id,
 			    'name'=>$data->name,
                 'moduleId'=>$data->moduleId,
                 'actions'=> fractal()->collection($data->action)->transformWith(new ActionTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray(),
