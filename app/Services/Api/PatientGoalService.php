@@ -2,6 +2,7 @@
 
 namespace App\Services\Api;
 
+use App\Helper;
 use App\Models\Patient\Patient;
 use App\Models\Patient\PatientGoal;
 use App\Transformers\Patient\PatientGoalTransformer;
@@ -12,7 +13,7 @@ class PatientGoalService
     {
         if ($id) {
             if ($goalId) {
-                $patient = Patient::where('udid', $id)->first();
+                $patient = Helper::entity('patient', $id);
                 $data = PatientGoal::where([['patientId', $patient->id], ['id', $goalId]])->get();
             } elseif (!$goalId) {
                 $patient = Patient::where('udid', $id)->first();

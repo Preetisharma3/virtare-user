@@ -83,27 +83,28 @@ class AppointmentService
         if (!$id) {
             if ($request->id) {
                 $patient = Helper::entity('patient', $request->id);
-                $access=Helper::haveAccess($patient);
-                if($access){
+                $access = Helper::haveAccess($patient);
+                if ($access) {
                     $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->latest()->get();
-                    return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();    
+                    return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
                 }
-            }else{
+            } else {
                 $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('createdAt', 'DESC')->get();
                 $results = Helper::dateGroup($data, 'startDateTime');
                 return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
             }
         } elseif ($id) {
             $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $id]])->exists();
-            if ($familyMember == true) { 
-                $patient=Helper::entity('patient',$id);
+            if ($familyMember == true) {
+                $patient = Helper::entity('patient', $id);
+                $access = Helper::haveAccess($patient);
+                if(!$access){
                     $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('createdAt', 'DESC')->get();
                     $results = Helper::dateGroup($data, 'startDateTime');
                     return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
-                
+                }
             } else {
                 return response()->json(['message' => trans('messages.unauthenticated')], 401);
-
             }
         }
     }
@@ -128,11 +129,15 @@ class AppointmentService
                     $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['staffId', auth()->user()->staff->id]])->whereDate('startDateTime', '=', Carbon::today())->order('createdAt', 'DESC')->get();
                 }
             } elseif ($id) {
-                $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $id]])->exists();
-                if ($familyMember == true) {
-                    $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $id]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('createdAt', 'DESC')->get();
-                } else {
-                    return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                $patient=Helper::entity('patient',$id);
+                $access=Helper::haveAccess($patient);
+                if($access){
+                    $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $patient]])->exists();
+                    if ($familyMember == true) {
+                        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $id]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('createdAt', 'DESC')->get();
+                    } else {
+                        return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                    }
                 }
             }
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
