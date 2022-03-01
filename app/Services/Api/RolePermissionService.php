@@ -37,7 +37,7 @@ class RolePermissionService
                 'udid' => Str::uuid()->toString(),
                 'roles' => $request->input('name'),
                 'roleDescription'=> $request->input('description'),
-                'roleTypeId' => '147',
+                'roleTypeId' => '162',
             ];
             $data = AccessRole::create($role);
             return response()->json(['message' => trans('messages.createdSuccesfully')]);
@@ -52,7 +52,7 @@ class RolePermissionService
             $role = [
                 'roles' => $request->input('name'),
                 'roleDescription'=> $request->input('description'),
-                'roleTypeId' => '147',
+                'roleTypeId' => '162',
             ];
             AccessRole::where('udid', $id)->update($role);
             return response()->json(['message' => trans('messages.updatedSuccesfully')]);
