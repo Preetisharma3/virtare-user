@@ -4,7 +4,8 @@ namespace App\Transformers\Patient;
 
 use League\Fractal\TransformerAbstract;
 
-class PatientStaffTransformer extends TransformerAbstract
+class 
+PatientStaffTransformer extends TransformerAbstract
 {
 	protected $defaultIncludes = [];
 
