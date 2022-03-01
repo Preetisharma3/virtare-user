@@ -323,7 +323,7 @@ $router->get('staff/network/count', 'Api\v1\StaffController@networkCount');
 
 
 $router->post('role', 'Api\v1\RolePermissionController@createRole');
-$router->get('roleList', 'Api\v1\RolePermissionController@roleList');
+$router->get('roleList[/{id}]', 'Api\v1\RolePermissionController@roleList');
 $router->get('role/{id}', 'Api\v1\RolePermissionController@listingRole');
 $router->put('role/{id}', 'Api\v1\RolePermissionController@updateRole');
 $router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
