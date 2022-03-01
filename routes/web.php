@@ -161,9 +161,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     /*
     *Bitrix APi routes
     */
-    $router->get("bitrix/deal/{patientId}",'Api\v1\PatientController@getAllBitrixDeals');
-    $router->get("bitrix/deal",'Api\v1\PatientController@getAllBitrixDeals');
-    $router->get("bitrix/fields",'Api\v1\PatientController@getBitrixFieldList');
+    $router->get("bitrix/deal/{patientId}", 'Api\v1\PatientController@getAllBitrixDeals');
+    $router->get("bitrix/deal", 'Api\v1\PatientController@getAllBitrixDeals');
+    $router->get("bitrix/fields", 'Api\v1\PatientController@getBitrixFieldList');
 
     // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
@@ -256,14 +256,16 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Provider Routes
     $router->post('provider', 'Api\v1\ProviderController@store');
-    $router->get('provider[/{id}]', 'Api\v1\ProviderController@index');        
-    $router->put('provider/{id}','Api\v1\ProviderController@updateProvider');
-    $router->delete('provider/{id}','Api\v1\ProviderController@deleteProviderLocation');
+    $router->get('provider[/{id}]', 'Api\v1\ProviderController@index');
+    $router->put('provider/{id}', 'Api\v1\ProviderController@updateProvider');
+    $router->delete('provider/{id}', 'Api\v1\ProviderController@deleteProviderLocation');
     $router->post('provider/{id}/location', 'Api\v1\ProviderController@providerLocationStore');
     $router->get('provider/{id}/location[/{locationId}]', 'Api\v1\ProviderController@editLocation');
-    $router->put('provider/{id}/location/{locationId}','Api\v1\ProviderController@updateLocation');
-    $router->delete('provider/{id}/location/{locationId}','Api\v1\ProviderController@deleteProviderLocation');
+    $router->put('provider/{id}/location/{locationId}', 'Api\v1\ProviderController@updateLocation');
+    $router->delete('provider/{id}/location/{locationId}', 'Api\v1\ProviderController@deleteProviderLocation');
 
+    // role Permission routes
+    $router->get('rolePermissionEdit/{id}', 'Api\v1\RolePermissionController@rolePermissionEdit');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');

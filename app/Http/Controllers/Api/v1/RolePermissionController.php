@@ -10,11 +10,11 @@ use App\Services\Api\RolePermissionService;
 class RolePermissionController extends Controller
 {
 
-    public function roleList(Request $request,$id=null)
+    public function roleList(Request $request, $id = null)
     {
-        return (new RolePermissionService)->roleList($request,$id); 
+        return (new RolePermissionService)->roleList($request, $id);
     }
-    
+
     public function createRole(RoleRequest $request)
     {
         return (new RolePermissionService)->createRole($request);
@@ -22,22 +22,22 @@ class RolePermissionController extends Controller
 
     public function updateRole(Request $request, $id)
     {
-        return (new RolePermissionService)->updateRole($request, $id); 
+        return (new RolePermissionService)->updateRole($request, $id);
     }
 
     public function deleteRole(Request $request, $id)
     {
-        return (new RolePermissionService)->deleteRole($request, $id); 
+        return (new RolePermissionService)->deleteRole($request, $id);
     }
 
-    public function rolePermissionList(Request $request,$id)
+    public function rolePermissionList(Request $request, $id)
     {
-        return (new RolePermissionService)->rolePermissionList($request,$id);
+        return (new RolePermissionService)->rolePermissionList($request, $id);
     }
 
-    public function createRolePermission(Request $request,$id)
+    public function createRolePermission(Request $request, $id)
     {
-        return (new RolePermissionService)->createRolePermission($request,$id);
+        return (new RolePermissionService)->createRolePermission($request, $id);
     }
 
     public function permissionsList(Request $request)
@@ -45,4 +45,8 @@ class RolePermissionController extends Controller
         return (new RolePermissionService)->permissionsList($request);
     }
 
+    public function rolePermissionEdit($id)
+    {
+        return (new RolePermissionService)->rolePermissionEdit($id);
+    }
 }
