@@ -38,4 +38,9 @@ class AppointmentController extends Controller
   {
     return (new AppointmentService)->AppointmentConference($request);
   }
+
+  public function conferenceIdAppointment(request $request,$id)
+  {
+    return (new AppointmentService)->AppointmentConferenceId($request,$id);
+  }
 }

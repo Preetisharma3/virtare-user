@@ -174,6 +174,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // appointment Routes
     $router->get('appointment/conference', 'Api\v1\AppointmentController@conferenceAppointment');
+    $router->get('appointment/conference/{id}', 'Api\v1\AppointmentController@conferenceIdAppointment');
     $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
     $router->get('appointment/search', 'Api\v1\AppointmentController@appointmentSearch');
     $router->get('appointment/summary', 'Api\v1\TimelineController@appointmentTotal');

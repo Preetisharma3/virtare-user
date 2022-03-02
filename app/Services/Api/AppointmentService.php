@@ -168,4 +168,10 @@ class AppointmentService
         $data = Appointment::whereRaw('conferenceId is not null')->where('startDateTime', '>=', Carbon::now()->subMinute(30))->get();
         return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
     }
+
+    public function AppointmentConferenceId($request,$id)
+    {
+        $data = Appointment::where([['startDateTime', '>=', Carbon::now()->subMinute(30)],['conferenceId',$id]])->get();
+        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
+    }
 }
