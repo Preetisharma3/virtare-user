@@ -36,7 +36,19 @@ class RolePerTransformer extends TransformerAbstract
     public function transform($data)
     {
         return [
-            $data,
+            'id' =>$data->id,
+            'name' =>$data->name,
+            'screen' =>json_decode($data->screens,true),
+            // 'roleId'=>$data->id,
+            // 'roleName'=>$data->role,
+            // 'action'=>$data->rolesAndPermission->action ? fractal()->collection($data->rolesAndPermission->actions)->transformWith(new ActionTransformer())->toArray(): "",
+            // 'moduleName'=>[$data->moduleName],  
+            // 'screenId'=>[$data->screenId],
+            // 'screenName'=>[$data->screenName],
+            // 'actionId'=>$data->actionId?[$data->actionId]:[],
+            // 'actionName'=>$data->actionName?[$data->actionName]:[],
+            // 'actionController'=>$data->actionController?[$data->actionController]:[],
+            // 'actionFunction'=>$data->actionFunction? [$data->actionFunction]:[]
         ];
     }
 }
