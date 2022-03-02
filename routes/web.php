@@ -40,6 +40,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // Auth Routes
     $router->get('userProfile', 'Api\v1\UserController@userProfile');
     $router->post('logout', 'Api\v1\AuthController@logout');
+
+    $router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
+    $router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
+
     // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
     $router->get('staff/patient', 'Api\v1\StaffPatientController@patientList');
@@ -106,7 +110,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('patient/{id}/condition', 'Api\v1\PatientController@createPatientCondition');
     $router->get('patient/{id}/condition[/{conditionId}]', 'Api\v1\PatientController@listPatientCondition');
     $router->post('staff', 'Api\v1\StaffController@addStaff');
-    $router->get('staff', 'Api\v1\StaffController@listStaff');
+    $router->get('staff[/{id}]', 'Api\v1\StaffController@listStaff');
     $router->put('staff/{id}', 'Api\v1\StaffController@updateStaff');
     $router->post('patient/{id}/referals', 'Api\v1\PatientController@createPatientReferals');
     $router->put('patient/{id}/referals/{referalsId}', 'Api\v1\PatientController@updatePatientReferals');
@@ -170,6 +174,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // appointment Routes
     $router->get('appointment/conference', 'Api\v1\AppointmentController@conferenceAppointment');
+    $router->get('appointment/conference/{id}', 'Api\v1\AppointmentController@conferenceIdAppointment');
     $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
     $router->get('appointment/search', 'Api\v1\AppointmentController@appointmentSearch');
     $router->get('appointment/summary', 'Api\v1\TimelineController@appointmentTotal');
@@ -271,8 +276,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
 $router->get('getScreenAction', 'Api\v1\ScreenActionController@getScreenAction');
 
-$router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
-$router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
 $router->post('call', 'Api\v1\CommunicationController@addCallRecord');
 $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
 $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');

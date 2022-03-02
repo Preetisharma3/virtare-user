@@ -25,7 +25,7 @@ class FamilyService
                 $patientId = $patient->id;
                 $udid = Str::uuid()->toString();
                 $familyMemberUser = [
-                    'password' => Hash::make('password'), 'udid' => $udid, 'email' => $request->input('email'),
+                    'password' => Hash::make('password'), 'udid' => $udid, 'email' => $request->input('email'),'profilePhoto'=>$request->input('profilePhoto'),
                     'emailVerify' => 1, 'createdBy' => Auth::id(), 'roleId' => 6
                 ];
                 $fam = User::create($familyMemberUser);
@@ -45,7 +45,7 @@ class FamilyService
                 $patient = PatientFamilyMember::where('udid', $familyId)->first();
                 $usersId = $patient->userId;
                 $familyMemberUser = [
-                    'email' => $request->input('email'),
+                    'email' => $request->input('email'),'profilePhoto'=>$request->input('profilePhoto'),
                     'updatedBy' => Auth::id()
                 ];
                 $fam = User::where('id', $usersId)->update($familyMemberUser);

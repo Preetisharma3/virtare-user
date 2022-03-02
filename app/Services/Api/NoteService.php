@@ -31,14 +31,9 @@ class NoteService
     public function noteList($request, $entity, $id,$noteId)
     {
         try {
-            if ($request->latest) {
                 $referenceId = Helper::entity($entity, $id);
                 $note = Note::where([['referenceId', $referenceId], ['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->get();
                 return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
-            } else {
-                $note = Note::where('entityType', $entity)->with('typeName', 'category')->get();
-                return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
-            }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

@@ -11,12 +11,13 @@ use App\Models\Notification\Notification;
 use App\Models\Appointment\AppointmentNotification;
 use App\Models\Appointment\Appointment;
 use App\Services\Api\PushNotificationService;
+
 class NotificationService
 {
     public function appointmentNotification()
     {
         $appointments = DB::select(
-            'CALL appointmentListNotification("'.date("Y-m-d H:i:s",time()).'","'.date("Y-m-d H:i:s",strtotime('+30 minutes')).'")',
+            'CALL appointmentListNotification("' . date("Y-m-d H:i:s", time()) . '","' . date("Y-m-d H:i:s", strtotime('+30 minutes')) . '")',
         );
         if (!empty($appointments)) {
             foreach ($appointments as $appointment) {
@@ -27,7 +28,7 @@ class NotificationService
                     'title' => 'Appointment Reminder',
                     'userId' => $appointment->patientUserId,
                     'isSent' => 0,
-                    'entity'=>'Appointment',
+                    'entity' => 'Appointment',
                     'referenceId' => $appointment->id,
                     'createdBy' => $appointment->staffUserId,
                 ]);
@@ -38,8 +39,8 @@ class NotificationService
                     'createdBy' => $appointment->staffUserId,
                 ]);
             }
-        } 
-    } 
+        }
+    }
     public function appointmentNotificationSend()
     {
         $notifications = DB::select(
@@ -47,58 +48,64 @@ class NotificationService
         );
         if (!empty($notifications)) {
             foreach ($notifications as $notification) {
-                
+
                 $pushnotification = new PushNotificationService();
                 $notificationData = array(
-                    "body" =>$notification->body,
-                    "title" =>$notification->title,
-                    "type" =>$notification->entity,
-                    "typeId" =>$notification->referenceId,
+                    "body" => $notification->body,
+                    "title" => $notification->title,
+                    "type" => $notification->entity,
+                    "typeId" => $notification->referenceId,
                 );
-                $pushnotification->sendNotification([$notification->userId],$notificationData);
-                
-                Notification::where('id',$notification->id)->update(['isSent'=>'1']);
+                $pushnotification->sendNotification([$notification->userId], $notificationData);
+
+                Notification::where('id', $notification->id)->update(['isSent' => '1']);
             }
-            
         }
     }
     public function appointmentConfrence()
     {
-            $toDate = Helper::date(strtotime('+5 minutes'));
-                
-            $fromDate = Helper::date(time());
+        $toDate = Helper::date(strtotime('+5 minutes'));
 
-            $appointments = DB::select(
-                'CALL appointmentList("' . $fromDate . '","' . $toDate . '")',
-            );
-            if (!empty($appointments)) {
-                foreach ($appointments as $appointment) {
-                    if(empty($appointment->conferenceId) || is_null($appointment->conferenceId)){
+        $fromDate = Helper::date(time());
 
-                        $staffId = Helper::entity('staff',$appointment->staff_id);
-                        $patentId = Helper::entity('patient',$appointment->patient_id);
+        $appointments = DB::select(
+            'CALL appointmentList("' . $fromDate . '","' . $toDate . '")',
+        );
+        if (!empty($appointments)) {
+            foreach ($appointments as $appointment) {
+                if (empty($appointment->conferenceId) || is_null($appointment->conferenceId)) {
 
-                        $patient = Patient::where('id', $patentId)->first();
-                        $userId = $patient->userId;
+                    $staffId = Helper::entity('staff', $appointment->staff_id);
+                    $patentId = Helper::entity('patient', $appointment->patient_id);
 
-                        $staff = Staff::where('id', $staffId)->first();
-                        $staffUserId = $staff->userId;
+                    $patient = Patient::where('id', $patentId)->first();
+                    $userId = $patient->userId;
 
-                        $notification = Notification::create([
-                            'body' => 'Your Appointment going to start please join.',
-                            'title' => 'Appointment Reminder',
-                            'userId' => $userId,
-                            'isSent' => 0,
-                            'entity'=>'Confrence',
-                            'referenceId' => 'CONF'.$appointment->id,
-                            'createdBy' => $staffUserId,
-                        ]);
-                        Appointment::where('id',$appointment->id)->update(['conferenceId'=>'CONF'.$appointment->id]);
-                    }
-                    
+                    $staff = Staff::where('id', $staffId)->first();
+                    $staffUserId = $staff->userId;
+
+                    $notification = Notification::create([
+                        'body' => 'Your Appointment going to start please join.',
+                        'title' => 'Appointment Reminder',
+                        'userId' => $userId,
+                        'isSent' => 0,
+                        'entity' => 'Confrence',
+                        'referenceId' => 'CONF' . $appointment->id,
+                        'createdBy' => $staffUserId,
+                    ]);
+                    Appointment::where('id', $appointment->id)->update(['conferenceId' => 'CONF' . $appointment->id]);
                 }
             }
-            $confrence =  Appointment::whereNotNull('conferenceId')->get();
-            Helper::updateFreeswitchConfrence($confrence);
+        }
+        $confrence =  Appointment::whereNotNull('conferenceId')->get();
+        Helper::updateFreeswitchConfrence($confrence);
+    }
+
+    public function appointmentConfrenceIdUpdate()
+    {
+        $fromDate = date('Y-m-d H:i:s', strtotime('+2 hours'));
+        return DB::select(
+            'CALL appointmentConferenceIdUpdate("' . $fromDate . '")',
+        );
     }
 }

@@ -51,14 +51,24 @@ class ProgramService
     public function updateProgram($request,$id)
     {
         try {
-            $program = [
-                'typeId' => $request->input('typeId'),
-                'description' => $request->input('description'),
-                'name' => $request->input('name'),
-                'isActive' => $request->input('isActive'),
-                'updatedBy' =>1,
-            ];
-            Program::where('udid', $id)->update($program);
+            $program = array();
+            if(!empty($request->input('typeId'))){
+                $program['typeId'] =  $request->input('typeId');
+            }
+            if(!empty($request->input('description'))){
+                $program['description'] =  $request->input('description');
+            }
+            if(!empty($request->input('name'))){
+                $program['name'] =  $request->input('name');
+            }
+            if(!empty($request->input('isActive'))){
+                $program['isActive'] =  $request->input('isActive');
+            }
+            $program['updatedBy'] =  1;
+            
+            if(!empty($program)){
+                Program::where('udid', $id)->update($program);
+            }
             $newData = Program::where('udid', $id)->first();
             $message = ["message" => "updated Successfully"];
             $resp =  fractal()->item($newData)->transformWith(new ProgramTransformer())->toArray();
