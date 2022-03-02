@@ -16,7 +16,6 @@ class PatientTransformer extends TransformerAbstract
 
     public function transform($data): array
     {
-        var_dump($data->vitals);
         return [
             'id' => $data->udid,
             'sipId' => "UR".$data->user->id,
