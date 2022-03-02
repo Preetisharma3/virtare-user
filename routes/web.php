@@ -270,6 +270,14 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('provider/{id}/location/{locationId}', 'Api\v1\ProviderController@deleteProviderLocation');
 
     // role Permission routes
+    $router->post('role', 'Api\v1\RolePermissionController@createRole');
+    $router->get('roleList[/{id}]', 'Api\v1\RolePermissionController@roleList');
+    $router->get('role/{id}', 'Api\v1\RolePermissionController@listingRole');
+    $router->put('role/{id}', 'Api\v1\RolePermissionController@updateRole');
+    $router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
+    $router->post('rolePermission/{id}', 'Api\v1\RolePermissionController@createRolePermission');
+    $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
+    $router->get('rolePermission/{id}', 'Api\v1\RolePermissionController@rolePermissionList');
     $router->get('rolePermissionEdit/{id}', 'Api\v1\RolePermissionController@rolePermissionEdit');
 });
 
@@ -327,14 +335,7 @@ $router->get('staff/specialization/count', 'Api\v1\StaffController@specializatio
 $router->get('staff/network/count', 'Api\v1\StaffController@networkCount');
 
 
-$router->post('role', 'Api\v1\RolePermissionController@createRole');
-$router->get('roleList[/{id}]', 'Api\v1\RolePermissionController@roleList');
-$router->get('role/{id}', 'Api\v1\RolePermissionController@listingRole');
-$router->put('role/{id}', 'Api\v1\RolePermissionController@updateRole');
-$router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
-$router->post('rolePermission/{id}', 'Api\v1\RolePermissionController@createRolePermission');
-$router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
-$router->get('rolePermission/{id}', 'Api\v1\RolePermissionController@rolePermissionList');
+
 
 $router->get('role', 'Api\v1\AccessRoleController@index');
 $router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');

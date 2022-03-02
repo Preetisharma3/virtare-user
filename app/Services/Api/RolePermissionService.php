@@ -12,6 +12,7 @@ use App\Transformers\Role\RoleListTransformer;
 use App\Transformers\RolePermission\RolePerTransformer;
 use App\Transformers\RolePermission\PermissionTransformer;
 use App\Transformers\RolePermission\RolePermissionTransformer;
+use Illuminate\Support\Facades\Auth;
 
 class RolePermissionService
 {
@@ -64,7 +65,7 @@ class RolePermissionService
         if(!empty($request->input('isActive'))){
             $role['isActive'] =  $request->input('isActive');
         }
-        $role['updatedBy'] =  1;
+        $role['updatedBy'] =  Auth::id();
         
         if(!empty($role)){
             AccessRole::where('udid', $id)->update($role);
@@ -79,7 +80,7 @@ class RolePermissionService
     {
         try {
             $role = AccessRole::where('udid', $id)->first();
-            $input=['deletedBy'=>1,'isActive'=>0,'isDelete'=>1];
+            $input=['deletedBy'=>Auth::id(),'isActive'=>0,'isDelete'=>1];
             AccessRole::where('udid', $id)->update($input);
             AccessRole::where('udid', $id)->delete();
             return response()->json(['message' => "Deleted Successfully"]);
