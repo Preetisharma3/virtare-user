@@ -803,7 +803,7 @@ class PatientService
                 $patient = Helper::entity('patient', $id);
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $patient]])->get();
                 if ($familyMember == true) {
-                    $patientIdx = $id;
+                    $patientIdx = $patient;
                 } else {
                     return response()->json(['message' => trans('messages.unauthenticated')], 401);
                 }
@@ -831,7 +831,6 @@ class PatientService
             if (empty($patientIdx)) {
                 $patientIdx = auth()->user()->patient->id;
             } elseif (!empty($patientIdx)) {
-                $patient = Helper::entity('patient', $id);
                 $patientIdx = $patient;
             }
             $data = DB::select(
