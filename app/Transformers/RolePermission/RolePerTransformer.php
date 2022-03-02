@@ -36,7 +36,16 @@ class RolePerTransformer extends TransformerAbstract
     public function transform($data)
     {
         return [
-            $data,
+            'roleId'=>$data->roleId,
+            'roleName'=>$data->role,
+            'moduleId'=>$data->moduleId,
+            'moduleName'=>[$data->moduleName],  
+            'screenId'=>[$data->screenId],
+            'screenName'=>[$data->screenName],
+            'actionId'=>$data->actionId?[$data->actionId]:[],
+            'actionName'=>$data->actionName?[$data->actionName]:[],
+            'actionController'=>$data->actionController?[$data->actionController]:[],
+            'actionFunction'=>$data->actionFunction? [$data->actionFunction]:[]
         ];
     }
 }
