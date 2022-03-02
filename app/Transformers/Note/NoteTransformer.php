@@ -27,8 +27,8 @@ class NoteTransformer extends TransformerAbstract
         return [
             'id' => $data->udid,
             'date' => strtotime($data->date),
-            'category' => $data->category->name,
-            'type' => $data->typeName->name,
+            'category' => @$data->category->name,
+            'type' => @$data->typeName->name,
             'note' => $data->note,
             'addedBy'=>ucfirst(@$data->user->staff->firstName).' '.ucfirst(@$data->user->staff->lastName),
             'flag'=>'#39B5C2'

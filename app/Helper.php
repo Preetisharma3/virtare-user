@@ -10,6 +10,7 @@ use App\Models\Patient\PatientStaff;
 use App\Models\Patient\PatientTimeLog;
 use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientPhysician;
+use App\Models\Patient\PatientVital;
 
 class Helper
 {
@@ -56,7 +57,9 @@ $data = Patient::where('udid', $id)->first();
 $data = Staff::where('udid', $id)->first();
 } elseif ($entity == 'auditlog') {
 $data = PatientTimeLog::where('udid', $id)->first();
-}
+} elseif ($entity == 'patientVital') {
+    $data = PatientVital::where('udid', $id)->first();
+    }
 return $data->id;
 }
 public static function updateFreeswitchUser()
