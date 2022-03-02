@@ -40,6 +40,7 @@ class NotificationService
             }
         } 
     } 
+
     public function appointmentNotificationSend()
     {
         $notifications = DB::select(
@@ -62,6 +63,7 @@ class NotificationService
             
         }
     }
+    
     public function appointmentConfrence()
     {
             $toDate = Helper::date(strtotime('+5 minutes'));

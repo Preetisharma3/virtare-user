@@ -14,10 +14,10 @@ class PatientGoalService
         if ($id) {
             if ($goalId) {
                 $patient = Helper::entity('patient', $id);
-                $data = PatientGoal::where([['patientId', $patient->id], ['id', $goalId]])->get();
+                $data = PatientGoal::where([['patientId', $patient], ['id', $goalId]])->get();
             } elseif (!$goalId) {
                 $patient = Patient::where('udid', $id)->first();
-                $data = PatientGoal::where('patientId', $patient->id)->get();
+                $data = PatientGoal::where('patientId', $patient)->get();
             } else {
                 return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }

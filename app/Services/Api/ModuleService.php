@@ -5,8 +5,6 @@ namespace App\Services\Api;
 use Exception;
 use App\Models\Module\Module;
 use App\Transformers\Module\ModuleTransformer;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 
 class ModuleService
 {

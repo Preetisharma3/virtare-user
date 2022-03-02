@@ -94,7 +94,8 @@ class AppointmentService
                 return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
             }
         } elseif ($id) {
-            $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $id]])->exists();
+            $patient = Helper::entity('patient', $id);
+            $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $patient]])->exists();
             if ($familyMember == true) {
                 $patient = Helper::entity('patient', $id);
                 $access = Helper::haveAccess($patient);
@@ -134,7 +135,7 @@ class AppointmentService
                 if($access){
                     $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $patient]])->exists();
                     if ($familyMember == true) {
-                        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $id]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('createdAt', 'DESC')->get();
+                        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $patient]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('createdAt', 'DESC')->get();
                     } else {
                         return response()->json(['message' => trans('messages.unauthenticated')], 401);
                     }
