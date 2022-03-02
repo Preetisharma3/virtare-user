@@ -847,7 +847,8 @@ class PatientService
         if (empty($patientIdx)) {
             $patientIdx = auth()->user()->patient->id;
         } elseif (!empty($patientIdx)) {
-            $patientIdx = $id;
+            $patient = Helper::entity('patient', $id);
+            $patientIdx = $patient;
         }
         $result = DB::select(
             "CALL getVitals('" . $patientIdx . "','" . $request->type . "')"
@@ -860,7 +861,8 @@ class PatientService
         if (!$id) {
             $patientId = auth()->user()->patient->id;
         } elseif ($id) {
-            $patientId = $id;
+            $patient = Helper::entity('patient', $id);
+            $patientId = $patient;
         } else {
             return response()->json(['message' => trans('messages.unauthenticated')], 401);
         }
