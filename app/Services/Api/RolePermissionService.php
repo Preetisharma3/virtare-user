@@ -132,10 +132,12 @@ class RolePermissionService
         
     }
 
-    public function rolePermissionEdit($id){
-        try{
+    public function rolePermissionEdit($id)
+    {
+     try{
         $role = AccessRole::where('udid',$id)->first();
         $data = DB::select('CALL rolePermissionListing(' . $role->id . ')');
+        dd($data);
         return fractal()->collection($data)->transformWith(new RolePerTransformer())->toArray();
     }catch(Exception $e){
         return response()->json(['message' => $e->getMessage()], 500);    

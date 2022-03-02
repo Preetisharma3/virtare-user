@@ -21,60 +21,39 @@ class AlterRolePermissionListingProcedure extends Migration
         $procedure =
             "CREATE PROCEDURE `rolePermissionListing`(IN idx INT)
     BEGIN
-    SELECT
-    accessRoleId AS roleId,
-    accessRoles.roles AS role,
-    GROUP_CONCAT(
-        DISTINCT modules.id
-    ORDER BY
-        screenId SEPARATOR ', '
-    ) AS moduleId,
-    GROUP_CONCAT(
-        DISTINCT modules.name
-    ORDER BY
-        screenId SEPARATOR ', '
-    ) AS moduleName,
-    GROUP_CONCAT(
-        DISTINCT screens.id
-    ORDER BY
-        actionId SEPARATOR ', '
-    ) AS screenId,
-    GROUP_CONCAT(
-        DISTINCT screens.name
-    ORDER BY
-        actionId SEPARATOR ', '
-    ) AS screenName,
-    GROUP_CONCAT(
-        DISTINCT actionId
-    ORDER BY
-        actionId SEPARATOR ', '
-    ) AS actionId,
-    GROUP_CONCAT(
-        DISTINCT actions.name
-    ORDER BY
-    actionId SEPARATOR ', '
-    ) AS actionName,
-    GROUP_CONCAT(
-        DISTINCT actions.controller
-    ORDER BY
-    actionId SEPARATOR ', '
-    ) AS actionController,
-    GROUP_CONCAT(
-        DISTINCT actions.function
-    ORDER BY
-    actionId SEPARATOR ', '
-    ) AS actionFunction
-FROM
-    rolePermissions
-JOIN actions ON actions.id = rolePermissions.actionId
-JOIN accessRoles ON accessRoles.id = rolePermissions.accessRoleId
-JOIN screens ON screens.id = actions.screenId
-JOIN modules ON modules.id = screens.moduleId
-WHERE
-          rolePermissions.accessRoleId = idx
-GROUP BY
-    accessRoleId;
-        END;";
+        SELECT *,
+        (SELECT JSON_ARRAYAGG(JSON_ARRAY(JSON_OBJECT('name',screens.name, 'udid',screens.udid,'action',((SELECT JSON_ARRAYAGG(JSON_ARRAY(JSON_OBJECT('name',actions.name, 'udid',actions.udid)))
+        FROM
+            rolePermissions
+        JOIN actions ON rolePermissions.actionId = actions.id
+        JOIN screens as s ON actions.screenId = s.id
+                                                                                                        
+        WHERE
+            rolePermissions.accessRoleId = idx and s.id = screens.id
+    )))))
+        FROM
+            screens
+        WHERE
+            screens.moduleId = modules.id
+        ) AS screens
+ 
+        FROM
+            modules
+        WHERE
+        modules.id IN(
+        SELECT
+            modules.id
+        FROM
+            `rolePermissions`
+        JOIN actions ON rolePermissions.actionId = actions.id
+        JOIN screens ON actions.screenId = screens.id
+        JOIN modules ON screens.moduleId = modules.id
+        WHERE
+            `accessRoleId` = idx
+        GROUP BY
+            modules.id
+);
+    END;";
         DB::unprepared($procedure);
     }
 
