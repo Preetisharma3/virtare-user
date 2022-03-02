@@ -9,6 +9,7 @@ use App\Models\Role\AccessRole;
 use Illuminate\Support\Facades\DB;
 use App\Models\RolePermission\RolePermission;
 use App\Transformers\Role\RoleListTransformer;
+use App\Transformers\RolePermission\RolePerTransformer;
 use App\Transformers\RolePermission\PermissionTransformer;
 use App\Transformers\RolePermission\RolePermissionTransformer;
 
@@ -53,12 +54,21 @@ class RolePermissionService
     public function updateRole($request, $id)
     {
         try{
-            $role = [
-                'roles' => $request->input('name'),
-                'roleDescription'=> $request->input('description'),
-                'roleTypeId' => '147',
-            ];
+        $role = array();
+        if(!empty($request->input('name'))){
+            $role['roles'] =  $request->input('name');
+        }
+        if(!empty($request->input('description'))){
+            $role['roleDescription'] =  $request->input('description');
+        }
+        if(!empty($request->input('isActive'))){
+            $role['isActive'] =  $request->input('isActive');
+        }
+        $role['updatedBy'] =  1;
+        
+        if(!empty($role)){
             AccessRole::where('udid', $id)->update($role);
+        }
             return response()->json(['message' => trans('messages.updatedSuccesfully')]);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
@@ -121,4 +131,14 @@ class RolePermissionService
         }
         
     }
+
+    public function rolePermissionEdit($id){
+        try{
+        $role = AccessRole::where('udid',$id)->first();
+        $data = DB::select('CALL rolePermissionListing(' . $role->id . ')');
+        return fractal()->collection($data)->transformWith(new RolePerTransformer())->toArray();
+    }catch(Exception $e){
+        return response()->json(['message' => $e->getMessage()], 500);    
+    }
+ }
 }
