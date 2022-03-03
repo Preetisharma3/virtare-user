@@ -22,6 +22,9 @@ class UserService
             if (auth()->user()->roleId == 4) {
                 $data = User::where('id', auth()->user()->id)->first();
                 return fractal()->item($data)->transformWith(new UserPatientTransformer())->toArray();
+            }elseif(auth()->user()->roleId == 6){
+                $data = PatientFamilyMember::where('userId', auth()->user()->id)->first();
+                return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
             } else {
                 $data = User::where('id', auth()->user()->id)->first();
                 return fractal()->item($data)->transformWith(new UserTransformer())->toArray();
@@ -56,7 +59,7 @@ class UserService
                 User::where('id', Auth::user()->id)->update([
                     "profilePhoto"=>str_replace(URL::to('/').'/', "", $request->path),
                 ]);
-                $user = User::where('udid', Auth::user()->udid)->first();
+                $user = PatientFamilyMember::where('userId', auth()->user()->id)->first();
                 return fractal()->item($user)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
             }else {
                 Staff::where('userId', Auth::user()->id)->update([
