@@ -76,8 +76,10 @@ class CPTCodeService
         if (!empty($request->input('durationId'))) {
             $CPTCode['durationId'] =  $request->input('durationId');
         }
-        if (!empty($request->input('isActive'))) {
-            $CPTCode['isActive'] =  $request->input('isActive');
+        if (empty($request->input('status'))) {
+            $CPTCode['isActive'] =  0;
+        }else{
+            $CPTCode['isActive']=1;
         }
         $CPTCode['updatedBy'] =  Auth::id();
 
