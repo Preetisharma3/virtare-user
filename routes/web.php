@@ -165,6 +165,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
     $router->delete('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameterGroup');
     $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameter');
+
+    //template
+    $router->get('template[/{id}]','Api\v1\TemplateController@listTemplate');
+    $router->post('template','Api\v1\TemplateController@createTemplate');
+    $router->put('template/{id}','Api\v1\TemplateController@updateTemplate');
+    $router->delete('template/{id}','Api\v1\TemplateController@deleteTemplate');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -329,8 +335,4 @@ $router->get('faq', 'Api\v1\FaqController');
 $router->get('freeswitch/directory', 'Freeswitch\DirectoryController@directory');
 $router->get('freeswitch/dialplan', 'Freeswitch\DirectoryController@dialplan');
 
-//template
-$router->get('template','Api\v1\TemplateController@listTemplate');
-$router->post('template','Api\v1\TemplateController@createTemplate');
-$router->put('template/{id}','Api\v1\TemplateController@updateTemplate');
-$router->delete('template/{id}','Api\v1\TemplateController@deleteTemplate');
+

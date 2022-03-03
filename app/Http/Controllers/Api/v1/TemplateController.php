@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 class TemplateController extends Controller
 {
    
-    public function listTemplate(Request $request)
+    public function listTemplate(Request $request,$id=null)
     {
-        return (new TemplateService())->listTemplate($request);  
+        return (new TemplateService())->listTemplate($request,$id);  
     } 
 
     public function createTemplate(Request $request)

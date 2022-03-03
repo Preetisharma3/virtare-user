@@ -33,9 +33,12 @@ class TemplateTransformer extends TransformerAbstract
     public function transform($data)
     {
         return[ 
+            'id' => $data->id,
+            'udid' => $data->udid,
             'name' => $data->name,
             'dataType' => $data->dataType,
-            'templateType' =>$data->templateType
+            'templateType' =>$data->templateType,
+            'isActive'  => $data->isActive,
         ];
       
     }

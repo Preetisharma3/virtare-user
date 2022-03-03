@@ -7,15 +7,22 @@ use App\Transformers\Template\TemplateTransformer;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class TemplateService
 {
 
-    public function listTemplate()
+    public function listTemplate($request,$id)
     {
         try {
-            $template = Template::all();
-            return fractal()->collection($template)->transformWith(new TemplateTransformer())->toArray();
+            if(!$id){
+                $template = Template::all();
+                return fractal()->collection($template)->transformWith(new TemplateTransformer())->toArray();
+            }else{
+                $template = Template::where('udid',$id)->get();
+                return fractal()->collection($template)->transformWith(new TemplateTransformer())->toArray();
+            }
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -25,17 +32,14 @@ class TemplateService
     {
         try {
             $template = [
-                'udid' => Str::random(10),
+                'udid' => Str::uuid()->toString(),
                 'name' => $request->input('name'),
                 'dataType' => $request->input('dataType'),
-                'templateType' => $request->input('templateType')
+                'templateType' => $request->input('templateType'),
+                'isActive' => $request->input('isActive')
             ];
             $newtemplate = Template::create($template);
-            $newtemplate = Template::where('udid', $newtemplate->udid)->first();
-            $message = ["message" => "created Successfully"];
-            $resp =  fractal()->item($newtemplate)->transformWith(new TemplateTransformer())->toArray();
-            $endData = array_merge($message, $resp);
-            return $endData; 
+            return response()->json(['message' => trans('messages.createdSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -44,14 +48,26 @@ class TemplateService
     public function updateTemplate($request,$id)
     {
         try {
-            $template = [
-                'name' => $request->input('name'),
-                'dataType' => $request->input('dataType'),
-                'templateType' => $request->input('templateType')
-            ];
-            $newtemplate = Template::find($id)->update($template);
-            $newtemplate = Template::where('id', $id)->first();
-            $message = ["message" => "updated Successfully"];
+            $template = array();
+        if(!empty($request->input('name'))){
+            $template['name'] =  $request->input('name');
+        }
+        if(!empty($request->input('dataType'))){
+            $template['dataType'] =  $request->input('dataType');
+        }
+        if(!empty($request->input('templateType'))){
+            $template['templateType'] =  $request->input('templateType');
+        }
+        if(!empty($request->input('isActive'))){
+            $template['isActive'] =  $request->input('isActive');
+        }
+        $template['updatedBy'] =  Auth::id();
+        
+        if(!empty($template)){
+            Template::where('udid', $id)->update($template);
+        }
+            $newtemplate = Template::where('udid', $id)->first();
+            $message = ["message" => trans('messages.updatedSuccesfully')];
             $resp =  fractal()->item($newtemplate)->transformWith(new TemplateTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData; 
@@ -63,7 +79,9 @@ class TemplateService
     public function deleteTemplate($request,$id)
     {
         try {
-            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            $temp = Template::where('udid',$id)->first();
+            $id = $temp->id;
+            $data = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
             Template::find($id)->update($data);
             Template::find($id)->delete();
             return response()->json(['message' => 'delete successfully']);
