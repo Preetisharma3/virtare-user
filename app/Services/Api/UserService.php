@@ -10,7 +10,9 @@ use App\Models\Document\Document;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\User\UserTransformer;
+use App\Models\Patient\PatientFamilyMember;
 use App\Transformers\User\UserPatientTransformer;
+use App\Transformers\Patient\PatientFamilyMemberTransformer;
 
 class UserService
 {
@@ -44,7 +46,19 @@ class UserService
                 ]);
                 $user = User::where('udid', Auth::user()->udid)->first();
                 return fractal()->item($user)->transformWith(new UserPatientTransformer(true))->toArray();
-            } else {
+            } elseif (auth()->user()->roleId == 6) {
+                PatientFamilyMember::where('userId', auth()->user()->id)->update([
+                    "phoneNumber" => $request->phoneNumber,
+                    "contactTypeId" => $request->contactType,
+                    "contactTimeId" => $request->contactTime,
+                    "updatedBy" => Auth::user()->id,
+                ]);
+                User::where('id', Auth::user()->id)->update([
+                    "profilePhoto"=>str_replace(URL::to('/').'/', "", $request->path),
+                ]);
+                $user = User::where('udid', Auth::user()->udid)->first();
+                return fractal()->item($user)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
+            }else {
                 Staff::where('userId', Auth::user()->id)->update([
                     "phoneNumber" => $request->phoneNumber,
                     "updatedBy" => Auth::user()->id,

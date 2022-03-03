@@ -14,7 +14,7 @@ class NoteController extends Controller
         return (new NoteService)->noteAdd($request, $entity, $id);
     }
 
-    public function listNote(Request $request, $entity, $id,$noteId=null){
+    public function listNote(Request $request, $entity, $id=null,$noteId=null){
 
         return (new NoteService)->noteList($request, $entity, $id,$noteId);
     }
