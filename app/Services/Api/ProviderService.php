@@ -124,9 +124,13 @@ class ProviderService
     {
         if (!$locationId) {
             Provider::where('id', $id)->update([
-                'isActive' => 0, 'isDelete' => 1, 'deletedBy' => auth()->user()->id
+                'isActive' => 0, 'isDelete' => 1, 'deletedBy' => Auth::id()
+            ]);
+            ProviderLocation::where('providerId', $id)->update([
+                'isActive' => 0, 'isDelete' => 1, 'deletedBy' => Auth::id()
             ]);
             Provider::where('id', $id)->delete();
+            ProviderLocation::where('providerId', $id)->delete();
         } elseif ($locationId) {
             ProviderLocation::where([['providerId', $id], ['id', $locationId]])->update([
                 'isActive' => 0, 'isDelete' => 1, 'deletedBy' => auth()->user()->id
