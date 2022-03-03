@@ -62,8 +62,10 @@ class RolePermissionService
         if(!empty($request->input('description'))){
             $role['roleDescription'] =  $request->input('description');
         }
-        if(!empty($request->input('isActive'))){
-            $role['isActive'] =  $request->input('isActive');
+        if (empty($request->input('status'))) {
+            $role['isActive'] =  0;
+        }else{
+            $role['isActive']=1;
         }
         $role['updatedBy'] =  Auth::id();
         
