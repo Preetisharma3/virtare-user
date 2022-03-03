@@ -6,7 +6,6 @@ use Exception;
 use App\Models\User\User;
 use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
-use App\Models\Document\Document;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\User\UserTransformer;

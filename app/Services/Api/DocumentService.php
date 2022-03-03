@@ -70,12 +70,15 @@ class DocumentService
     {
         try {
             $reference = Helper::entity($entity, $id);
-            if ($documentId) {
-                $getDocument = Document::where([['udid', $documentId], ['entityType', $entity]])->with('documentType', 'tag.tags')->first();
-                return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
-            } else {
-                $getDocument = Document::where([['referanceId', $reference], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->get();
-                return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
+            $access=Helper::haveAccess($reference);
+            if($access){
+                if ($documentId) {
+                    $getDocument = Document::where([['udid', $documentId], ['entityType', $entity]])->with('documentType', 'tag.tags')->first();
+                    return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();
+                } else {
+                    $getDocument = Document::where([['referanceId', $reference], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->get();
+                    return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
+                }
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
