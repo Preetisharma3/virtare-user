@@ -6,7 +6,6 @@ use Exception;
 use App\Helper;
 use App\Models\Note\Note;
 use Illuminate\Support\Str;
-use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Patient\PatientTimeLog;
