@@ -289,6 +289,14 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
     $router->get('rolePermission/{id}', 'Api\v1\RolePermissionController@rolePermissionList');
     $router->get('rolePermissionEdit/{id}', 'Api\v1\RolePermissionController@rolePermissionEdit');
+
+    //cpt code
+    $router->get('cptCode', 'Api\v1\CPTCodeController@listCPTCode');
+    $router->get('cptCode/{id}', 'Api\v1\CPTCodeController@listCPTCode');
+    $router->put('cptCode/status/{id}', 'Api\v1\CPTCodeController@updateCPTCodeStatus');
+    $router->post('cptCode', 'Api\v1\CPTCodeController@createCPTCode');
+    $router->put('cptCode/{id}', 'Api\v1\CPTCodeController@updateCPTCode');
+    $router->delete('cptCode/{id}', 'Api\v1\CPTCodeController@deleteCPTCode');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -350,15 +358,6 @@ $router->get('staff/network/count', 'Api\v1\StaffController@networkCount');
 $router->get('role', 'Api\v1\AccessRoleController@index');
 $router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
 
-
-
-//cpt code
-$router->get('cptCode', 'Api\v1\CPTCodeController@listCPTCode');
-$router->get('cptCode/{id}', 'Api\v1\CPTCodeController@listCPTCode');
-$router->put('cptCode/status/{id}', 'Api\v1\CPTCodeController@updateCPTCodeStatus');
-$router->post('cptCode', 'Api\v1\CPTCodeController@createCPTCode');
-$router->put('cptCode/{id}', 'Api\v1\CPTCodeController@updateCPTCode');
-$router->delete('cptCode/{id}', 'Api\v1\CPTCodeController@deleteCPTCode');
 
 //service
 $router->get('service', 'Api\v1\ServiceNameController@listService');

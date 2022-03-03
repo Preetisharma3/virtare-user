@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Models\CPTCode\CPTCode;
 use Illuminate\Support\Facades\DB;
 use App\Transformers\CPTCode\CPTCodeTransformer;
+use Illuminate\Support\Facades\Auth;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class CPTCodeService
@@ -52,7 +53,7 @@ class CPTCodeService
 
     public function updateCPTCode($request, $id)
     {
-        // try {
+        try {
 
         $CPTCode = array();
         if (!empty($request->input('serviceId'))) {
@@ -78,7 +79,7 @@ class CPTCodeService
         if (!empty($request->input('isActive'))) {
             $CPTCode['isActive'] =  $request->input('isActive');
         }
-        $CPTCode['updatedBy'] =  1;
+        $CPTCode['updatedBy'] =  Auth::id();
 
         if (!empty($CPTCode)) {
             CPTCode::where('udid', $id)->update($CPTCode);
@@ -103,9 +104,9 @@ class CPTCodeService
         // $resp =  fractal()->item($cptCodeData)->transformWith(new CPTCodeTransformer())->toArray();
         // $endData = array_merge($message, $resp);
         // return $endData;
-        // } catch (Exception $e) {
-        //     return response()->json(['message' => $e->getMessage()], 500);
-        // }
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     public function updateCPTCodeStatus($request, $id)
@@ -131,7 +132,7 @@ class CPTCodeService
     {
         try {
             $CPTCode = CPTCode::where('udid', $id)->first();
-            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
+            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
             CPTCode::where('udid', $id)->update($input);
             CPTCode::where('udid', $id)->delete();
             return response()->json(['message' => trans('messages.deletedSuccesfully')],  200);

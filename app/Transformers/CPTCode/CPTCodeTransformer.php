@@ -22,7 +22,7 @@ class CPTCodeTransformer extends TransformerAbstract
     {
         return [
                 'udid' =>$data->udid,
-                'serviceUdid'=>$data->service ? $data->service->udid:'',
+                'serviceid'=>$data->service ? $data->service->udid:'',
                 'service' => $data->service ? $data->service->name:'',
                 'provider' => $data->provider ? $data->provider->name:'',
 			    'name'=>$data->name,
@@ -30,6 +30,7 @@ class CPTCodeTransformer extends TransformerAbstract
                 'status'=> $data->isActive ? True : False,
                 'description' => $data->description,
                 'duration' => $data->duration->name,
+                'durationId' => $data->duration->udid,
 		];
     }
 }
