@@ -70,7 +70,6 @@ class RolePermissionService
         $role['updatedBy'] =  Auth::id();
         
         if(!empty($role)){
-            dd($role);
             AccessRole::where('udid', $id)->update($role);
         }
             return response()->json(['message' => trans('messages.updatedSuccesfully')]);
