@@ -21,6 +21,8 @@ class CPTCodeTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
+                'udid' =>$data->udid,
+                'serviceUdid'=>$data->service ? $data->service->udid:'',
                 'service' => $data->service ? $data->service->name:'',
                 'provider' => $data->provider ? $data->provider->name:'',
 			    'name'=>$data->name,
