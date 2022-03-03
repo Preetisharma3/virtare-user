@@ -61,8 +61,10 @@ class ProgramService
             if(!empty($request->input('name'))){
                 $program['name'] =  $request->input('name');
             }
-            if(!empty($request->input('isActive'))){
-                $program['isActive'] =  $request->input('isActive');
+            if (empty($request->input('status'))) {
+                $program['isActive'] =  0;
+            }else{
+                $program['isActive']=1;
             }
             $program['updatedBy'] =  1;
             
