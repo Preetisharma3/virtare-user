@@ -26,14 +26,14 @@ class DocumentRequest extends FormRequest
     public function rules()
     {
         return [
-            'document' => 'max:5120'
+            'document' => 'max:2048'
         ];
     }
 
     public function messages()
     {
         return [
-            'document.size' => 'Document Must be less than 5MB'
+            'document.size' => 'Document Must be less than 2MB'
         ];
     }
 }

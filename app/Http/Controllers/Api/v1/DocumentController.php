@@ -9,7 +9,7 @@ use App\Services\Api\DocumentService;
 
 class DocumentController extends Controller
 {
-    public function createDocument(Request $request, $entity, $id, $documentId = null)
+    public function createDocument(DocumentRequest $request, $entity, $id, $documentId = null)
     {
         return (new DocumentService)->documentCreate($request, $entity, $id, $documentId);
     }
