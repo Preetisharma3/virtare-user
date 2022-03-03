@@ -21,8 +21,8 @@ class CPTCodeTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-                'service' => $data->service->name,
-                'provider' => $data->provider->name,
+                'service' => $data->service ? $data->service->name:'',
+                'provider' => $data->provider ? $data->provider->name:'',
 			    'name'=>$data->name,
                 'billingAmout'=>$data->billingAmout,
                 'status'=> $data->isActive ? True : False,
