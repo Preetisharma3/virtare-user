@@ -250,6 +250,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // Note Routes
     $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
     $router->get('{entity}/{id}/notes[/{noteId}]', 'Api\v1\NoteController@listNote');
+    $router->get('{entity}/notes[/{noteId}]', 'Api\v1\NoteController@listNote');
 
 
     // Document Routes
