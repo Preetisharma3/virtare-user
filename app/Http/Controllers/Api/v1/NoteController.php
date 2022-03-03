@@ -18,5 +18,10 @@ class NoteController extends Controller
 
         return (new NoteService)->noteList($request, $entity, $id,$noteId);
     }
+
+    public function patientNote(Request $request){
+
+        return (new NoteService)->patientNoteList($request);
+    }
    
 }

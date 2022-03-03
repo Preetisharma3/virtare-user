@@ -79,7 +79,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // patient Routes
     $router->post('family', 'Api\v1\PatientController@createFamily');
     $router->put('family/{id}', 'Api\v1\PatientController@createFamily');
-    // $router->get('patient/{id}/inventory', 'Api\v1\PatientController@listingPatientInventory');
     $router->put('inventory/{id}/link', 'Api\v1\PatientController@inventory');
     $router->post('patient/vital', 'Api\v1\PatientController@createPatientVital');
     $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
@@ -97,6 +96,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
     $router->get('patient/{id}/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
     $router->get('patient/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
+    $router->get('patient/notes', 'Api\v1\NoteController@patientNote');
 
     $router->post('patient/{id}/flag', 'Api\v1\PatientController@addPatientFlag');
     $router->get('patient/{id}/flag[/{flagId}]', 'Api\v1\PatientController@listPatientFlag');
