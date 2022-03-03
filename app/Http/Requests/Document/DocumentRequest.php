@@ -26,8 +26,7 @@ class DocumentRequest extends FormRequest
     public function rules()
     {
         return [
-            'document' => 'max:2048',
-            'document' => 'required',
+            'document' => 'required|max:2048',
             'name' => 'required',
             'type' => 'required',
             'tags' => 'required'
@@ -37,7 +36,7 @@ class DocumentRequest extends FormRequest
     public function messages()
     {
         return [
-            'document.size' => 'Document Must be less than 2MB',
+            'document.max' => 'Document Must be less than 2MB',
             'document.required' => 'Document is Required',
             'name.required' => 'Name is Required',
             'type.required' => 'Type is Required',
