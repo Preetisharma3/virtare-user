@@ -30,7 +30,7 @@ class CPTCodeTransformer extends TransformerAbstract
                 'status'=> $data->isActive ? True : False,
                 'description' => $data->description,
                 'duration' => $data->duration->name,
-                'durationId' => $data->duration->udid,
+                'durationId' => $data->duration->id,
 		];
     }
 }
