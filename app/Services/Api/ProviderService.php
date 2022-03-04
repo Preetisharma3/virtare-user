@@ -49,7 +49,7 @@ class ProviderService
             $otherData = [
                 'udid' => Str::uuid()->toString(),
                 'providerId' => $id,
-                'createdBy' => 1
+                'createdBy' => Auth::id()
             ];
             $data = JSON_ENCODE(array_merge(
                 $input,
@@ -90,16 +90,41 @@ class ProviderService
         }
     }
 
-
-
     public function updateProvider($request, $id)
     {
-        $input = [
-            'name' => $request->name, 'address' => $request->address, 'countryId' => $request->countryId,
-            'stateId' => $request->stateId, 'city' => $request->city, 'zipCode' => $request->zipCode, 'phoneNumber' => $request->phoneNumber, 'tagId' => $request->tagId, 'moduleId' => $request->moduleId,
-            'isActive' => $request->isActive,
-        ];
-        Provider::where('id', $id)->update($input);
+        $provider = array();
+        if (!empty($request->name)) {
+            $provider['name'] = $request->name;
+        }
+        if (!empty($request->address)) {
+            $provider['address'] = $request->address;
+        }
+        if (!empty($request->countryId)) {
+            $provider['countryId'] = $request->countryId;
+        }
+        if (!empty($request->stateId)) {
+            $provider['stateId'] = $request->stateId;
+        }
+        if (!empty($request->city)) {
+            $provider['city'] = $request->city;
+        }
+        if (!empty($request->zipCode)) {
+            $provider['zipCode'] = $request->zipCode;
+        }
+        if (!empty($request->phoneNumber)) {
+            $provider['phoneNumber'] = $request->phoneNumber;
+        }
+        if (!empty($request->tagId)) {
+            $provider['tagId'] = $request->tagId;
+        }
+        if (!empty($request->moduleId)) {
+            $provider['moduleId'] = $request->moduleId;
+        }
+        if (isset($request->isActive)) {
+            $provider['isActive'] = $request->isActive;
+        }
+        $provider['updatedBy'] = Auth::id();
+        Provider::where('id', $id)->update($provider);
         $enddata = Provider::where('id', $id)->first();
         $message = ['message' => trans('messages.updatedSuccesfully')];
         $data = fractal()->item($enddata)->transformWith(new ProviderTransformer())->toArray();
@@ -141,21 +166,4 @@ class ProviderService
         }
         return response()->json(['message' => trans('messages.deletedSuccesfully')], 200);
     }
-
-    // public function providerUpdate($request, $id)
-    // {
-    //     try {
-    //         $input = [
-    //             'name', 'address', 'countryId', 'stateId', 'city', 'zipcode', 'phoneNumber', 'tagId', 'moduleId', 'isActive', 'updatedBy' => 1
-    //         ];
-    //         Provider::where('udid', $id)->update($input);
-    //         $provider = Provider::where('udid', $id)->first();
-    //         $userdata = fractal()->item($provider)->transformWith(new ProviderTransformer())->toArray();
-    //         $message = ['message' => trans('messages.createdSuccesfully')];
-    //         $endData = array_merge($message, $userdata);
-    //         return $endData;
-    //     } catch (Exception $e) {
-    //         return response()->json(['message' => $e->getMessage()], 500);
-    //     }
-    // }
 }

@@ -15,7 +15,7 @@ class AppointmentConferenceIdUpdateProcedure extends Migration
     public function up()
     {
         $procedure = "DROP PROCEDURE IF EXISTS `appointmentConferenceIdUpdate`;";
-     
+        DB::unprepared($procedure);
         $procedure = "CREATE PROCEDURE  appointmentConferenceIdUpdate(fromDate datetime) 
         BEGIN
         Update `appointments` set conferenceId=Null where startDateTime<=fromDate;
