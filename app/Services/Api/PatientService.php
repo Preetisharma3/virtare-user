@@ -292,22 +292,45 @@ class PatientService
                 }
             } else {
                 if ($roleId == 3) {
-                    $staff = Patient::whereHas('patientStaff', function ($query) {
-                        $query->where('staffId', auth()->user()->staff->id);
-                    })->paginate(env('PER_PAGE', 20));
-                    if (!empty($staff)) {
-                        return fractal()->collection($staff)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($staff))->toArray();
+                    if ($request->all) {
+                        $staff = Patient::whereHas('patientStaff', function ($query) {
+                            $query->where('staffId', auth()->user()->staff->id);
+                        })->get();
+                        if (!empty($staff)) {
+                            return fractal()->collection($staff)->transformWith(new PatientTransformer())->toArray();
+                        }
+                    } else {
+                        $staff = Patient::whereHas('patientStaff', function ($query) {
+                            $query->where('staffId', auth()->user()->staff->id);
+                        })->paginate(env('PER_PAGE', 20));
+                        if (!empty($staff)) {
+                            return fractal()->collection($staff)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($staff))->toArray();
+                        }
                     }
                 } elseif ($roleId == 6) {
-                    $family = Patient::whereHas('family', function ($query) {
-                        $query->where('id', auth()->user()->familyMember->id);
-                    })->paginate(env('PER_PAGE', 20));
-                    if (!empty($family)) {
-                        return fractal()->collection($family)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($family))->toArray();
+                    if ($request->all) {
+                        $family = Patient::whereHas('family', function ($query) {
+                            $query->where('id', auth()->user()->familyMember->id);
+                        })->get();
+                        if (!empty($family)) {
+                            return fractal()->collection($family)->transformWith(new PatientTransformer())->toArray();
+                        }
+                    } else {
+                        $family = Patient::whereHas('family', function ($query) {
+                            $query->where('id', auth()->user()->familyMember->id);
+                        })->paginate(env('PER_PAGE', 20));
+                        if (!empty($family)) {
+                            return fractal()->collection($family)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($family))->toArray();
+                        }
                     }
                 } elseif ($roleId == 1) {
-                    $patient = Patient::paginate(env('PER_PAGE', 20));
-                    return fractal()->collection($patient)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($patient))->toArray();
+                    if ($request->all) {
+                        $patient = Patient::all();
+                        return fractal()->collection($patient)->transformWith(new PatientTransformer())->toArray();
+                    } else {
+                        $patient = Patient::paginate(env('PER_PAGE', 20));
+                        return fractal()->collection($patient)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($patient))->toArray();
+                    }
                 } elseif ($roleId == 4) {
                     $patient = Patient::where('id', auth()->user()->patient->id)->first();
                     return fractal()->item($patient)->transformWith(new PatientTransformer())->toArray();

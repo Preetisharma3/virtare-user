@@ -64,12 +64,17 @@ class ProviderService
         }
     }
 
-    public function index($id)
+    public function index($request,$id)
     {
         if (!$id) {
-            $data = Provider::paginate(env('PER_PAGE', 20));
-            return fractal()->collection($data)->transformWith(new ProviderTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
-        } elseif ($id) {
+            if($request->all){
+                $data = Provider::all();
+                return fractal()->collection($data)->transformWith(new ProviderTransformer())->toArray();
+            }else{
+                $data = Provider::paginate(env('PER_PAGE', 20));
+                return fractal()->collection($data)->transformWith(new ProviderTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();    
+            }
+            } elseif ($id) {
             $data = Provider::where('id', $id)->first();
             return fractal()->item($data)->transformWith(new ProviderTransformer())->toArray();
         } else {

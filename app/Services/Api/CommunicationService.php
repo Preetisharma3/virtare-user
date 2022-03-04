@@ -50,10 +50,16 @@ class CommunicationService
     // get Communication
     public function getCommunication($request)
     {
-        $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')
+        if($request->all){
+            $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')->get();
+        return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
+        }else{
+            $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')
             ->paginate(15, ['*'], 'page', $request->page);
         return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
-    }
+    
+        }
+        }
 
     //Create A call Api
     public function addCallRecord($request)

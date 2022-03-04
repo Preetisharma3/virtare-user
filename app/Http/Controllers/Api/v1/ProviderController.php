@@ -9,9 +9,9 @@ use App\Services\Api\ProviderService;
 class ProviderController extends Controller
 {
 
-    public function index($id = null)
+    public function index(Request $request,$id = null)
     {
-        return (new ProviderService)->index($id);
+        return (new ProviderService)->index($request,$id);
     }
 
     public function store(Request $request)
