@@ -86,7 +86,6 @@ class UserService
                 $user= User::where('id', $id)->whereHas('patient', function ($query) use ($id) {
                     $query->where('userId', $id);
                 })->first();
-                dd($user);
             }else{
                 $user= User::where('id', $id)->whereHas('staff', function ($query) use ($id) {
                     $query->where('userId', $id);
