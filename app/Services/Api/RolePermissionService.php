@@ -24,8 +24,8 @@ class RolePermissionService
                 $data = AccessRole::all();
                 return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
             }else{
-                $data = AccessRole::where('udid',$id)->get();
-                return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
+                $data = AccessRole::where('udid',$id)->first();
+                return fractal()->item($data)->transformWith(new RoleListTransformer())->toArray();
             }
         }catch(Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);    
