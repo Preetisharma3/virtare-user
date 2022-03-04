@@ -318,6 +318,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // patient search
 
+    //widgets Access
+    $router->get('widgetAccess/{id}', 'Api\v1\WidgetController@listWidgetAccess');
+    $router->post('widgetAccess/{id}', 'Api\v1\WidgetController@createWidgetAccess');
+    $router->delete('widgetAccess/{id}', 'Api\v1\WidgetController@deleteWidgetAccess');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -402,3 +406,5 @@ $router->post('program', 'Api\v1\ProgramController@createProgram');
 $router->get('program[/{id}]', 'Api\v1\ProgramController@listProgram');
 $router->put('program/{id}', 'Api\v1\ProgramController@updateProgram');
 $router->delete('program/{id}', 'Api\v1\ProgramController@deleteProgram');
+
+
