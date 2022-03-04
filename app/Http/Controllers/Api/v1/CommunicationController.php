@@ -13,31 +13,43 @@ class CommunicationController extends Controller
         return (new CommunicationService)->addCommunication($request);
     }
 
-    public function getCommunication(Request $request){
+    public function getCommunication(Request $request)
+    {
         return (new CommunicationService)->getCommunication($request);
     }
 
-    public function addCallRecord(request $request){
-        return (new CommunicationService)->addCallRecord($request);
+    public function addCommunicationCallRecord(request $request)
+    {
+        return (new CommunicationService)->communicationCallRecordAdd($request);
     }
-    
-    public function callStatus(request $request){
+
+    public function createCommunicationCallRecord(request $request)
+    {
+        return (new CommunicationService)->communicationCallRecordCreate($request);
+    }
+
+    public function callStatus(request $request)
+    {
         return (new CommunicationService)->callStatus($request);
     }
 
-    public function callCountPerStaff(request $request){
+    public function callCountPerStaff(request $request)
+    {
         return (new CommunicationService)->callCountPerStaff($request);
     }
 
-    public function messageType(){
+    public function messageType()
+    {
         return (new CommunicationService)->messageType();
     }
 
-    public function countCommunication(Request $request){
+    public function countCommunication(Request $request)
+    {
         return (new CommunicationService)->communicationCount($request);
     }
 
-    public function searchCommunication(Request $request){
+    public function searchCommunication(Request $request)
+    {
         return (new CommunicationService)->communicationSearch($request);
     }
 }

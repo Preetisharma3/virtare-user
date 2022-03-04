@@ -165,18 +165,18 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     /*
     *Bitrix APi routes
     */
-       /*
+    /*
     *Bitrix APi routes
     */
-    $router->get("bitrix/deal/{patientId}",'Api\v1\PatientController@getAllBitrixDeals');
-    $router->get("bitrix/deal",'Api\v1\PatientController@getAllBitrixDeals');
+    $router->get("bitrix/deal/{patientId}", 'Api\v1\PatientController@getAllBitrixDeals');
+    $router->get("bitrix/deal", 'Api\v1\PatientController@getAllBitrixDeals');
 
     // Bitrix Fields routes
-    $router->get("bitrix/fields",'Api\v1\BitrixFieldController@listBitrixField');
-    $router->get("bitrix/field/{id}",'Api\v1\BitrixFieldController@listBitrixField');
-    $router->post("bitrix/field",'Api\v1\BitrixFieldController@createBitrixField');
-    $router->put("bitrix/field/{id}",'Api\v1\BitrixFieldController@updateBitrixField');
-    $router->post("bitrix/field/{id}",'Api\v1\BitrixFieldController@deleteBitrixField');
+    $router->get("bitrix/fields", 'Api\v1\BitrixFieldController@listBitrixField');
+    $router->get("bitrix/field/{id}", 'Api\v1\BitrixFieldController@listBitrixField');
+    $router->post("bitrix/field", 'Api\v1\BitrixFieldController@createBitrixField');
+    $router->put("bitrix/field/{id}", 'Api\v1\BitrixFieldController@updateBitrixField');
+    $router->post("bitrix/field/{id}", 'Api\v1\BitrixFieldController@deleteBitrixField');
 
     // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
@@ -302,7 +302,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
 $router->get('getScreenAction', 'Api\v1\ScreenActionController@getScreenAction');
 
-$router->post('call', 'Api\v1\CommunicationController@addCallRecord');
+$router->post('call', 'Api\v1\CommunicationController@addCommunicationCallRecord');
+$router->post('callRecord', 'Api\v1\CommunicationController@createCommunicationCallRecord');
 $router->get('call/status', 'Api\v1\CommunicationController@callStatus');
 $router->get('call/staff', 'Api\v1\CommunicationController@callCountPerStaff');
 $router->get('widget', 'Api\v1\WidgetController@getWidget');
@@ -315,7 +316,7 @@ $router->get('count/appointment', 'Api\v1\DashboardController@appointmentCountMo
 $router->put('profile', 'Api\v1\UserController@profile');
 
 $router->get('field[/{id}]', 'Api\v1\VitalController@listVitalTypeField');
-$router->post('callRecord', 'Api\v1\CommunicationController@addCallRecord');
+// $router->post('callRecord', 'Api\v1\CommunicationController@addCallRecord');
 $router->get('inQueue', 'Api\v1\CommunicationController@inQueue');
 $router->get('goingOn', 'Api\v1\CommunicationController@goingOn');
 $router->get('completed', 'Api\v1\CommunicationController@completed');

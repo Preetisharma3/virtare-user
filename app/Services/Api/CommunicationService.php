@@ -4,10 +4,13 @@ namespace App\Services\Api;
 
 use Exception;
 use App\Helper;
+use App\Models\Communication\CallRecord;
+use App\Models\Communication\CallRecords;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Communication\Communication;
 use App\Models\Communication\CommunicationMessage;
 use App\Models\Communication\CommunicationCallRecord;
@@ -50,33 +53,60 @@ class CommunicationService
     // get Communication
     public function getCommunication($request)
     {
-        if($request->all){
+        if ($request->all) {
             $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')->get();
-        return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
-        }else{
+            return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
+        } else {
             $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')
-            ->paginate(15, ['*'], 'page', $request->page);
-        return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
-    
+                ->paginate(15, ['*'], 'page', $request->page);
+            return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         }
-        }
+    }
 
-    //Create A call Api
-    public function addCallRecord($request)
+    //Create A call Api beyween doctor and patient
+    public function communicationCallRecordAdd($request)
     {
-        $udid = Str::uuid()->toString();
-        $staffFrom = Helper::entity('staff', $request->staff);
-        $patientId = Helper::entity('patient', $request->patient);
+        $patient = Helper::entity('patient', $request->input('patient'));
+        $startTime = Helper::time($request->input('startTime'));
+        $endTime = Helper::time($request->input('endTime'));
         $input = [
-            'patientId' => $patientId,
-            'staffId' => $staffFrom,
-            'callStatusId' => $request->callStatus,
-            'createdBy' => 1,
-            'udid' => $udid
+            'patientId' => $patient, 'statusId' => $request->input('status'), 'startTime' => $startTime,
+            'endTime' => $endTime, 'referenceId' => $request->input('reference'), 'entityType' => $request->input('entityType'),
+            'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
         ];
-        CommunicationCallRecord::create($input);
+        $communication = CommunicationCallRecord::create($input);
+        $data = [
+            'udid' => Str::uuid()->toString(), 'staffId' => auth()->user()->id, 'communicationCallRecordId' => $communication->id,
+            'createdBy' => Auth::id()
+        ];
+        CallRecord::create($data);
         return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
     }
+
+    // call between multiple doctors and patient
+    public function communicationCallRecordCreate($request)
+    {
+        $patient = Helper::entity('patient', $request->input('patient'));
+        $startTime = Helper::time($request->input('startTime'));
+        $endTime = Helper::time($request->input('endTime'));
+        $input = [
+            'patientId' => $patient, 'statusId' => $request->input('status'), 'startTime' => $startTime,
+            'endTime' => $endTime, 'referenceId' => $request->input('reference'), 'entityType' => $request->input('entityType'),
+            'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
+        ];
+        $communication = CommunicationCallRecord::create($input);
+        $staffId=$request->input('staff');
+        foreach ($staffId as $value) {
+        $staff = Helper::entity('staff', $value);
+            $data = [
+                'udid' => Str::uuid()->toString(), 'staffId' => $staff, 'communicationCallRecordId' => $communication->id,
+                'createdBy' => Auth::id()
+            ];
+            CallRecord::create($data);
+        }
+        return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
+    }
+
 
     //Call Status API's
     public function callStatus()
