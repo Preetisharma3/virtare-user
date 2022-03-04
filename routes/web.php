@@ -298,8 +298,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('cptCode/{id}', 'Api\v1\CPTCodeController@updateCPTCode');
     $router->delete('cptCode/{id}', 'Api\v1\CPTCodeController@deleteCPTCode');
 
-    //widgets
+    //widgets Access
     $router->post('widgetAccess/{id}', 'Api\v1\WidgetController@createWidgetAccess');
+    $router->delete('widgetAccess/{id}', 'Api\v1\WidgetController@deleteWidgetAccess');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');

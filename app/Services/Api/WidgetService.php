@@ -11,6 +11,7 @@ use App\Models\Widget\WidgetAccess;
 use App\Transformers\Widget\WidgetUpdateTransformer;
 use App\Transformers\Widget\AssignedWidgetTransformer;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class WidgetService
 {
@@ -61,5 +62,17 @@ class WidgetService
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
            }
+    }
+
+    public function deleteWidgetAccess($request,$id)
+    {
+        try {
+            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
+            WidgetAccess::where('udid', $id)->update($input);
+            WidgetAccess::where('udid', $id)->delete();
+            return response()->json(['message' => trans('messages.deletedSuccesfully')],  200);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }
