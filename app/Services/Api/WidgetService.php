@@ -2,6 +2,7 @@
 
 namespace App\Services\Api;
 
+use App\Models\AccessRole\AccessRole;
 use App\Models\Widget\Widget;
 use Illuminate\Support\Str;
 use App\Transformers\Widget\WidgetTransformer;
@@ -46,14 +47,16 @@ class WidgetService
     public function createWidgetAccess($request,$id)
     {
         try{
-            $role = WidgetAccess::where('udid',$id)->first();
-            $action = $request->actions;
-            foreach($action as $actionId ){
-                $udid = Str::uuid()->toString();
-                $accessRoleId = $role->id;
-                $actionId = $actionId;
+            $role = AccessRole::where('udid',$id)->first();
+            $widget = $request->widgets;
+            foreach($widget as $widgetId ){
+                $widgets = [
+                    'udid' => Str::uuid()->toString(),
+                    'accessRoleId' => $role->id,
+                    'widgetId' => $widgetId,
+                ];
+                WidgetAccess::create($widgets);
             }
-            
             return response()->json(['message' => trans('messages.createdSuccesfully')]);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
