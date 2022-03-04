@@ -6,6 +6,7 @@ use Exception;
 use App\Helper;
 use App\Models\Note\Note;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Note\NoteTransformer;
 
@@ -31,12 +32,16 @@ class NoteService
     public function noteList($request, $entity, $id,$noteId)
     {
         try {
+
             if ($request->latest) {
                 $referenceId = Helper::entity($entity, $id);
-                $note = Note::where([['referenceId', $referenceId], ['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->get();
+                $note = DB::select('CALL NotesListByPatientId(' . $referenceId . ')',);
+                // $note = Note::where([['referenceId', $referenceId], ['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->get();
                 return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
             } else {
-                $note = Note::where('entityType', $entity)->with('typeName', 'category')->get();
+                // $note = Note::where('entityType', $entity)->with('typeName', 'category')->get();
+                $referenceId = Helper::entity($entity, $id);
+                $note = DB::select('CALL NotesListByPatientId(' . $referenceId . ')',);
                 return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
             }
         } catch (Exception $e) {
