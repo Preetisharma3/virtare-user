@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Document;
+namespace App\Http\Requests\File;
 
 use Urameshibr\Requests\FormRequest;
 
 
-class DocumentRequest extends FormRequest
+class FileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,24 +22,19 @@ class DocumentRequest extends FormRequest
      *
      * @return array
      */
-
+  
     public function rules()
     {
         return [
-            'document' => 'required',
-            'name' => 'required',
-            'type' => 'required',
-            'tags' => 'required'
+            'file'=> 'max:2048',
         ];
     }
 
     public function messages()
     {
         return [
-            'document.required' => 'Document is Required',
-            'name.required' => 'Name is Required',
-            'type.required' => 'Type is Required',
-            'tags.required' => 'Tags is Required',
+            'file.max' => 'File Must be less than 2MB',
         ];
     }
+
 }
