@@ -17,4 +17,9 @@ class WidgetAccess extends Model
     protected $table = 'widgetAccesses';
     use HasFactory;
     protected $guarded = [];
+
+    public function widget()
+    {
+        return $this->belongsTo(Widget::class,'widgetId');
+    }
 }

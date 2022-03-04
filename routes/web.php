@@ -299,6 +299,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('cptCode/{id}', 'Api\v1\CPTCodeController@deleteCPTCode');
 
     //widgets Access
+    $router->get('widgetAccess/{id}', 'Api\v1\WidgetController@listWidgetAccess');
     $router->post('widgetAccess/{id}', 'Api\v1\WidgetController@createWidgetAccess');
     $router->delete('widgetAccess/{id}', 'Api\v1\WidgetController@deleteWidgetAccess');
 });

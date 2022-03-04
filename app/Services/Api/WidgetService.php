@@ -10,7 +10,10 @@ use App\Models\Dashboard\DashboardWidgetByRole;
 use App\Models\Widget\WidgetAccess;
 use App\Transformers\Widget\WidgetUpdateTransformer;
 use App\Transformers\Widget\AssignedWidgetTransformer;
+use App\Transformers\Widget\WidgetAccessTransformer;
 use Exception;
+use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class WidgetService
@@ -45,10 +48,25 @@ class WidgetService
         return fractal()->item($data)->transformWith(new WidgetUpdateTransformer())->toArray();
     }
 
+    public function listWidgetAccess($request,$id)
+    {
+        try{
+            $role = AccessRole::where('udid',$id)->first();
+            $data = WidgetAccess::where('accessRoleId',$role->id)->with('widget')->get();
+        return fractal()->collection($data)->transformWith(new WidgetAccessTransformer())->toArray();
+     }catch (Exception $e){
+        return response()->json(['message' => $e->getMessage()], 500);  
+       }
+    }
+
     public function createWidgetAccess($request,$id)
     {
         try{
             $role = AccessRole::where('udid',$id)->first();
+
+            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1,'deletedAt'=>Carbon::now()];
+            WidgetAccess::where('accessRoleId', $role->id)->update($input);
+
             $widget = $request->widgets;
             foreach($widget as $widgetId ){
                 $widgets = [
