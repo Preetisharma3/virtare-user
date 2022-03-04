@@ -79,7 +79,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // patient Routes
     $router->post('family', 'Api\v1\PatientController@createFamily');
     $router->put('family/{id}', 'Api\v1\PatientController@createFamily');
-    // $router->get('patient/{id}/inventory', 'Api\v1\PatientController@listingPatientInventory');
     $router->put('inventory/{id}/link', 'Api\v1\PatientController@inventory');
     $router->post('patient/vital', 'Api\v1\PatientController@createPatientVital');
     $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
@@ -97,6 +96,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
     $router->get('patient/{id}/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
     $router->get('patient/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
+    $router->get('patient/notes', 'Api\v1\NoteController@patientNote');
 
     $router->post('patient/{id}/flag', 'Api\v1\PatientController@addPatientFlag');
     $router->get('patient/{id}/flag[/{flagId}]', 'Api\v1\PatientController@listPatientFlag');
@@ -165,6 +165,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     /*
     *Bitrix APi routes
     */
+       /*
+    *Bitrix APi routes
+    */
     $router->get("bitrix/deal/{patientId}",'Api\v1\PatientController@getAllBitrixDeals');
     $router->get("bitrix/deal",'Api\v1\PatientController@getAllBitrixDeals');
 
@@ -180,6 +183,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // appointment Routes
     $router->get('appointment/conference', 'Api\v1\AppointmentController@conferenceAppointment');
+    $router->get('appointment/conference/{id}', 'Api\v1\AppointmentController@conferenceIdAppointment');
     $router->get('appointment/new', 'Api\v1\AppointmentController@newAppointments');
     $router->get('appointment/search', 'Api\v1\AppointmentController@appointmentSearch');
     $router->get('appointment/summary', 'Api\v1\TimelineController@appointmentTotal');
@@ -255,6 +259,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // Note Routes
     $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
     $router->get('{entity}/{id}/notes[/{noteId}]', 'Api\v1\NoteController@listNote');
+    $router->get('{entity}/notes[/{noteId}]', 'Api\v1\NoteController@listNote');
 
 
     // Document Routes
@@ -273,6 +278,25 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('provider/{id}/location[/{locationId}]', 'Api\v1\ProviderController@editLocation');
     $router->put('provider/{id}/location/{locationId}', 'Api\v1\ProviderController@updateLocation');
     $router->delete('provider/{id}/location/{locationId}', 'Api\v1\ProviderController@deleteProviderLocation');
+
+    // role Permission routes
+    $router->post('role', 'Api\v1\RolePermissionController@createRole');
+    $router->get('roleList[/{id}]', 'Api\v1\RolePermissionController@roleList');
+    $router->get('role/{id}', 'Api\v1\RolePermissionController@listingRole');
+    $router->put('role/{id}', 'Api\v1\RolePermissionController@updateRole');
+    $router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
+    $router->post('rolePermission/{id}', 'Api\v1\RolePermissionController@createRolePermission');
+    $router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
+    $router->get('rolePermission/{id}', 'Api\v1\RolePermissionController@rolePermissionList');
+    $router->get('rolePermissionEdit/{id}', 'Api\v1\RolePermissionController@rolePermissionEdit');
+
+    //cpt code
+    $router->get('cptCode', 'Api\v1\CPTCodeController@listCPTCode');
+    $router->get('cptCode/{id}', 'Api\v1\CPTCodeController@listCPTCode');
+    $router->put('cptCode/status/{id}', 'Api\v1\CPTCodeController@updateCPTCodeStatus');
+    $router->post('cptCode', 'Api\v1\CPTCodeController@createCPTCode');
+    $router->put('cptCode/{id}', 'Api\v1\CPTCodeController@updateCPTCode');
+    $router->delete('cptCode/{id}', 'Api\v1\CPTCodeController@deleteCPTCode');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -329,27 +353,11 @@ $router->get('staff/specialization/count', 'Api\v1\StaffController@specializatio
 $router->get('staff/network/count', 'Api\v1\StaffController@networkCount');
 
 
-$router->post('role', 'Api\v1\RolePermissionController@createRole');
-$router->get('roleList[/{id}]', 'Api\v1\RolePermissionController@roleList');
-$router->get('role/{id}', 'Api\v1\RolePermissionController@listingRole');
-$router->put('role/{id}', 'Api\v1\RolePermissionController@updateRole');
-$router->delete('role/{id}', 'Api\v1\RolePermissionController@deleteRole');
-$router->post('rolePermission/{id}', 'Api\v1\RolePermissionController@createRolePermission');
-$router->get('permissionList', 'Api\v1\RolePermissionController@permissionsList');
-$router->get('rolePermission/{id}', 'Api\v1\RolePermissionController@rolePermissionList');
+
 
 $router->get('role', 'Api\v1\AccessRoleController@index');
 $router->get('staff/{id}/access', 'Api\v1\AccessRoleController@assignedRoles');
 
-
-
-//cpt code
-$router->get('cptCode', 'Api\v1\CPTCodeController@listCPTCode');
-$router->get('cptCode/{id}', 'Api\v1\CPTCodeController@listCPTCode');
-$router->put('cptCode/status/{id}', 'Api\v1\CPTCodeController@updateCPTCodeStatus');
-$router->post('cptCode', 'Api\v1\CPTCodeController@createCPTCode');
-$router->put('cptCode/{id}', 'Api\v1\CPTCodeController@updateCPTCode');
-$router->delete('cptCode/{id}', 'Api\v1\CPTCodeController@deleteCPTCode');
 
 //service
 $router->get('service', 'Api\v1\ServiceNameController@listService');

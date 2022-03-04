@@ -40,7 +40,7 @@ class DocumentTransformer extends TransformerAbstract
         return [
             'id'=>$data->udid,
 			'name'=>$data->name,
-            'type'=>$data->documentType->name,
+            'type'=>@$data->documentType->name,
             'patient'=>$data->referanceId,
             'document'=>$data->filePath,
             'entity'=>$data->entityType,
