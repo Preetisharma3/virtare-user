@@ -28,5 +28,19 @@ class WidgetController extends Controller
     {
         return (new WidgetService)->updateWidget($request,$id);
     }
+
+   public function listWidgetAccess(Request $request,$id)
+   {
+       return (new WidgetService)->listWidgetAccess($request,$id); 
+   }
     
+    public function createWidgetAccess(Request $request,$id)
+    {
+        return (new WidgetService)->createWidgetAccess($request,$id);
+    }
+
+    public function deleteWidgetAccess(Request $request,$id)
+    {
+        return (new WidgetService)->deleteWidgetAccess($request,$id);
+    }
 }
