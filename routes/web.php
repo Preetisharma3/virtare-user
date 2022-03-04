@@ -308,6 +308,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('cptCode', 'Api\v1\CPTCodeController@createCPTCode');
     $router->put('cptCode/{id}', 'Api\v1\CPTCodeController@updateCPTCode');
     $router->delete('cptCode/{id}', 'Api\v1\CPTCodeController@deleteCPTCode');
+
+    // user Router
+    $router->get('user/{id}','Api\v1\UserController@listUser');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');

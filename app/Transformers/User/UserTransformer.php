@@ -6,6 +6,8 @@ use App\Models\User\User;
 use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Role\RoleTransformer;
+use App\Transformers\Staff\StaffTransformer;
+use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Contact\ContactTypeTransformer;
 
 class UserTransformer extends TransformerAbstract
@@ -49,6 +51,8 @@ class UserTransformer extends TransformerAbstract
 			'relation' => @$user->familyMember->relation->name ?  @$user->familyMember->relation->name : '',
 			'deviceType' => $user->deviceType,
 			'deviceToken' => $user->deviceToken,
+			'patient'=>$user->patient ? fractal()->item($user->patient)->transformWith(new PatientTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
+			'staff'=>$user->staff ? fractal()->item($user->staff)->transformWith(new StaffTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
 
 		];
 	}
