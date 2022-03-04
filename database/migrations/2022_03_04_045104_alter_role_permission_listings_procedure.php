@@ -53,6 +53,8 @@ class AlterRolePermissionListingsProcedure extends Migration
             modules.id
 );
     END;";
+        DB::unprepared($procedure);
+
     }
 
     /**
