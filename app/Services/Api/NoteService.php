@@ -37,12 +37,28 @@ class NoteService
                 $referenceId = Helper::entity($entity, $id);
                 $note = DB::select('CALL NotesListByPatientId(' . $referenceId . ')',);
                 // $note = Note::where([['referenceId', $referenceId], ['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->get();
-                return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
+                if(!empty($note))
+                {
+                    return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
+                }
+                else
+                {
+                    $note = [];
+                    return $note;
+                }
             } else {
                 // $note = Note::where('entityType', $entity)->with('typeName', 'category')->get();
                 $referenceId = Helper::entity($entity, $id);
                 $note = DB::select('CALL NotesListByPatientId(' . $referenceId . ')',);
-                return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
+                if(!empty($note))
+                {
+                    return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
+                }
+                else
+                {
+                    $note = [];
+                    return $note;
+                }
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
