@@ -291,8 +291,8 @@ class PatientService
             } else {
                 if ($roleId == 3) {
                     $staff = Patient::where(function ($query) use ($request) {
-                        $query->where('firstName', 'LIKE', '%'.$request->firstName.'%')
-                        ->orWhere('lastName', 'LIKE', '%'.$request->lastName.'%');
+                        $query->where('firstName', 'LIKE', '%'.$request->q.'%')
+                        ->orWhere('lastName', 'LIKE', '%'.$request->q.'%');
                     })->whereHas('patientStaff', function ($query) {
                         $query->where('staffId', auth()->user()->staff->id);
                     })->paginate(env('PER_PAGE', 20));
@@ -314,21 +314,6 @@ class PatientService
                     return fractal()->item($patient)->transformWith(new PatientTransformer())->toArray();
                 }
             }
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
-        }
-    }
-
-    // patient search
-    public function searchPatient($request)
-    {
-        try {
-            $patient = Patient::where(function ($query) use ($request) {
-                $query->where('firstName', 'like', '%' . $request->firstName . '%')
-                    ->orWhere('lastName', 'like', '%' . $request->lastName . '%');
-            })
-                ->get();
-            return fractal()->collection($patient)->transformWith(new PatientTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }

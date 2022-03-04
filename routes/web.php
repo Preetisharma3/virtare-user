@@ -88,7 +88,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/count', 'Api\v1\DashboardController@patientCount');
 
     // patient Routes
-    $router->get('patient/search','Api\v1\PatientController@patientSearch');
     $router->post('family', 'Api\v1\PatientController@createFamily');
     $router->put('family/{id}', 'Api\v1\PatientController@createFamily');
     $router->put('inventory/{id}/link', 'Api\v1\PatientController@inventory');
@@ -316,12 +315,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // patient appointment update
     $router->patch('patient/appointment/{id}','Api\v1\AppointmentController@updateAppointment');
 
-    // patient search
-
     //widgets Access
     $router->get('widgetAccess/{id}', 'Api\v1\WidgetController@listWidgetAccess');
     $router->post('widgetAccess/{id}', 'Api\v1\WidgetController@createWidgetAccess');
     $router->delete('widgetAccess/{id}', 'Api\v1\WidgetController@deleteWidgetAccess');
+
+
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
