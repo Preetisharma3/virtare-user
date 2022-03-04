@@ -838,10 +838,10 @@ class PatientService
                 $toDate = '';
                 $deviceType = '';
                 if (!empty($request->toDate)) {
-                    $toDate = Helper::date($request->toDate);
+                    $toDate = date("Y-m-d H:i:s", $request->toDate);
                 }
                 if (!empty($request->fromDate)) {
-                    $fromDate = Helper::date($request->fromDate);
+                    $fromDate = date("Y-m-d H:i:s", $request->fromDate);
                 }
                 if (!empty($request->type)) {
                     $type = $request->type;
@@ -852,7 +852,46 @@ class PatientService
                 if (empty($patientIdx)) {
                     $patientIdx = auth()->user()->patient->id;
                 } elseif (!empty($patientIdx)) {
-                    $patient = Helper::entity('patient', $id);
+                    $patientIdx = $patient;
+                }
+                $data = DB::select(
+                    'CALL getPatientVital("' . $patientIdx . '","' . $fromDate . '","' . $toDate . '","' . $type . '","' . $deviceType . '")',
+                );
+                return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
+            } else {
+                $patient = auth()->user()->patient->id;
+                $access = Helper::haveAccess($patient);
+                if (!$access) {
+                    $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $patient]])->get();
+                    if ($familyMember == true) {
+                        $patientIdx = $patient;
+                    } else {
+                        return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                    }
+                } elseif (!$id) {
+                    $patientIdx = '';
+                } else {
+                    return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                }
+                $type = '';
+                $fromDate = '';
+                $toDate = '';
+                $deviceType = '';
+                if (!empty($request->toDate)) {
+                    $toDate = date("Y-m-d H:i:s", $request->toDate);
+                }
+                if (!empty($request->fromDate)) {
+                    $fromDate = date("Y-m-d H:i:s", $request->fromDate);
+                }
+                if (!empty($request->type)) {
+                    $type = $request->type;
+                }
+                if (!empty($request->deviceType)) {
+                    $deviceType = $request->deviceType;
+                }
+                if (empty($patientIdx)) {
+                    $patientIdx = auth()->user()->patient->id;
+                } elseif (!empty($patientIdx)) {
                     $patientIdx = $patient;
                 }
                 $data = DB::select(
