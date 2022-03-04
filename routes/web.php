@@ -311,6 +311,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // user Router
     $router->get('user/{id}','Api\v1\UserController@listUser');
+
+    // patient appointment update
+    $router->patch('patient/appointment/{id}','Api\v1\AppointmentController@updateAppointment');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');

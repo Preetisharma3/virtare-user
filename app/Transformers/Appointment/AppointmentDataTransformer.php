@@ -23,7 +23,7 @@ class AppointmentDataTransformer extends TransformerAbstract
             "notes"=>@$data->notes->note,
             'conferenceId'=>@$data->conferenceId,
             'time'=>strtotime(@$data->startDateTime),
-            'appointmentType'=>$data->appointmentType->name,
+            'appointmentType'=>@$data->appointmentType->name,
             "patient"=>@$data->patient->firstName." ".@$data->patient->lastName,
             "patientDetailed"=>@$data->patient != null ? fractal()->item($data->patient)->transformWith(new PatientTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
             "staff"=>@$data->staff != null ? fractal()->item($data->staff)->transformWith(new StaffTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array()

@@ -43,4 +43,10 @@ class AppointmentController extends Controller
   {
     return (new AppointmentService)->AppointmentConferenceId($request,$id);
   }
+
+  public function updateAppointment(request $request,$id)
+  {
+    return (new AppointmentService)->appointmentUpdate($request,$id);
+  }
+
 }
