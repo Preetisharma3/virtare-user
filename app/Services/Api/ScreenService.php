@@ -5,8 +5,6 @@ namespace App\Services\Api;
 use Exception;
 use App\Models\Screen\Screen;
 use App\Transformers\Screen\ScreenTransformer;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 
 class ScreenService
 {

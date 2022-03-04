@@ -2,6 +2,7 @@
 
 namespace App\Services\Api;
 
+use App\Helper;
 use Exception;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
@@ -15,15 +16,14 @@ class PatientStaffService
     public function assignStaffToPatient($request, $id, $patientStaffId)
     {
         try {
+            $staff = Helper::entity('staff', $request->input('staff'));
             if (!$patientStaffId) {
-                $patientId = Patient::where('udid', $id)->first();
-                $staffId = Staff::where('udid', $request->input('staff'))->first();
-                $input = ['udid' => Str::uuid()->toString(), 'patientId' => $patientId->id, 'staffId' => $staffId->id, 'createdBy' => Auth::id()];
+                $patient = Helper::entity('patient', $id);
+                $input = ['udid' => Str::uuid()->toString(), 'patientId' => $patient, 'staffId' => $staff, 'createdBy' => Auth::id()];
                 PatientStaff::create($input);
                 return response()->json(['message' => trans('messages.createdSuccesfully')], 200);
             } else {
-                $staffId = Staff::where('udid', $request->input('staff'))->first();
-                $input = ['staffId' => $staffId->id, 'updatedBy' => Auth::id()];
+                $input = ['staffId' => $staff, 'updatedBy' => Auth::id()];
                 PatientStaff::where('udid', $patientStaffId)->update($input);
                 return response()->json(['message' => trans('messages.updatedSuccesfully')], 200);
             }
@@ -39,8 +39,8 @@ class PatientStaffService
                 $getPatient = PatientStaff::where('udid', $patientStaffId)->with('patient', 'staff')->first();
                 return fractal()->item($getPatient)->transformWith(new PatientStaffTransformer())->toArray();
             } else {
-                $patientId = Patient::where('udid', $id)->first();
-                $getPatient = PatientStaff::where('patientId', $patientId->id)->orderBy('createdAt', 'DESC')->get();
+                $patient = Helper::entity('patient', $id);
+                $getPatient = PatientStaff::where('patientId', $patient)->orderBy('createdAt', 'DESC')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientStaffTransformer())->toArray();
             }
         } catch (Exception $e) {
