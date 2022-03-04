@@ -261,12 +261,13 @@ class PatientService
     // Patient Listing
     public function patientList($request, $id)
     {
-        try {
+        // try {
             $roleId = auth()->user()->roleId;
             if ($id) {
                 $patient = Helper::entity('patient', $id);
                 if ($roleId == 3) {
-                    $staff = Patient::where('id', $patient)->whereHas('patientStaff', function ($query) use ($patient) {
+                    $staff = Patient::where('id', $patient)->where('firstName', 'like', '%' . $request->firstName . '%')
+                            ->orWhere('lastName', 'like', '%' . $request->lastName . '%')->whereHas('patientStaff', function ($query) use ($patient) {
                         $query->where('patientId', $patient);
                     })->first();
                     if (!empty($staff)) {
@@ -284,13 +285,14 @@ class PatientService
                     if (!empty($patient)) {
                         return fractal()->item($patient)->transformWith(new PatientTransformer())->toArray();
                     }
-                }elseif ($roleId == 4) {
+                } elseif ($roleId == 4) {
                     $patient = Patient::where('id', auth()->user()->patient->id)->first();
                     return fractal()->item($patient)->transformWith(new PatientTransformer())->toArray();
                 }
             } else {
                 if ($roleId == 3) {
-                    $staff = Patient::whereHas('patientStaff', function ($query) {
+                    $staff = Patient::where('firstName', 'like', '%' . $request->firstName . '%')
+                            ->orWhere('lastName', 'like', '%' . $request->lastName . '%')->whereHas('patientStaff', function ($query) {
                         $query->where('staffId', auth()->user()->staff->id);
                     })->paginate(env('PER_PAGE', 20));
                     if (!empty($staff)) {
@@ -311,6 +313,21 @@ class PatientService
                     return fractal()->item($patient)->transformWith(new PatientTransformer())->toArray();
                 }
             }
+        // } catch (Exception $e) {
+        //     return response()->json(['message' => $e->getMessage()],  500);
+        // }
+    }
+
+    // patient search
+    public function searchPatient($request)
+    {
+        try {
+            $patient = Patient::where(function ($query) use ($request) {
+                $query->where('firstName', 'like', '%' . $request->firstName . '%')
+                    ->orWhere('lastName', 'like', '%' . $request->lastName . '%');
+            })
+                ->get();
+            return fractal()->collection($patient)->transformWith(new PatientTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }

@@ -195,7 +195,6 @@ class AppointmentService
 
     public function appointmentUpdate($request, $id)
     {
-
         $input = ['updatedBy' => Auth::id(), 'startDateTime' => Helper::date($request->startDateTime)];
         Appointment::where('id', $id)->update($input);
         $data = Appointment::where('id', $id)->first();

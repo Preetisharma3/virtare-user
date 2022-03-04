@@ -34,6 +34,11 @@ class PatientController extends Controller
     return (new PatientService)->patientList($request, $id);
   }
 
+  public function patientsearch(Request $request, $id = null)
+  {
+    return (new PatientService)->searchPatient($request, $id);
+  }
+
   public function deletePatient(Request $request, $id)
   {
     return (new PatientService)->patientDelete($request, $id);
