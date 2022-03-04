@@ -5,7 +5,7 @@ namespace App;
 use App\Models\Access\Access;
 use Illuminate\Support\Facades\DB;
 use App\Transformers\Patient\PatientTransformer;
-
+use App\Services\Api\PushNotificationService;
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /*
@@ -30,6 +30,17 @@ $router->get('/linkstorage', function () use ($router) {
     system($command);*/
 
     Helper::updateFreeswitchConfrence();
+});
+$router->get('/notification/default', function () use ($router) {
+
+    $pushnotification = new PushNotificationService();
+    $notificationData = array(
+        "body" => "Please answer",
+        "title" => "Call Recived",
+        "type" => "call",
+        "typeId" => "test",
+    );
+    $pushnotification->sendNotification([279], $notificationData);
 });
 $router->post('login', 'Api\v1\AuthController@login');
 $router->post('refreshToken', 'Api\v1\AuthController@refreshToken');

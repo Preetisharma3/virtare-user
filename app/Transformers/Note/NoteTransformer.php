@@ -25,12 +25,12 @@ class NoteTransformer extends TransformerAbstract
             return [];
         }
         return [
-            'id' => $data->udid,
+            'id' => $data->id,
             'date' => strtotime($data->date),
-            'category' => @$data->category->name,
-            'type' => @$data->typeName->name,
+            'category' => $data->category,
+            'type' => $data->type,
             'note' => $data->note,
-            'addedBy'=>ucfirst(@$data->user->staff->firstName).' '.ucfirst(@$data->user->staff->lastName),
+            'addedBy'=>ucfirst(@$data->firstName).' '.ucfirst(@$data->lastName),
             'flag'=>'#39B5C2'
         ];
     }
