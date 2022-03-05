@@ -5,10 +5,11 @@ namespace App\Services\Api;
 use Exception;
 use App\Models\User\User;
 use App\Models\Staff\Staff;
+use Illuminate\Http\Request;
 use App\Models\Patient\Patient;
-use App\Models\Document\Document;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Transformers\User\UserTransformer;
 use App\Models\Patient\PatientFamilyMember;
 use App\Transformers\User\UserPatientTransformer;
@@ -33,7 +34,6 @@ class UserService
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
-
 
     public function profile($request)
     {
@@ -77,21 +77,30 @@ class UserService
         }
     }
 
-
     public function userList($request, $id)
     {
         try {
-            $patient=Patient::where('userId',$id)->first();
-            if($patient){
-                $user= User::where('id', $id)->whereHas('patient', function ($query) use ($id) {
+            $patient = Patient::where('userId', $id)->first();
+            if ($patient) {
+                $user = User::where('id', $id)->whereHas('patient', function ($query) use ($id) {
                     $query->where('userId', $id);
                 })->first();
-            }else{
-                $user= User::where('id', $id)->whereHas('staff', function ($query) use ($id) {
+            } else {
+                $user = User::where('id', $id)->whereHas('staff', function ($query) use ($id) {
                     $query->where('userId', $id);
                 })->first();
             }
             return fractal()->item($user)->transformWith(new UserTransformer(false))->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function passwordChange(Request $request)
+    {
+        try {
+            User::find(auth()->user()->id)->update(['password'=> Hash::make($request->newPassword)]);
+            return response()->json(['message'=>trans('messages.changePassword')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

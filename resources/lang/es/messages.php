@@ -23,4 +23,5 @@ return [
     'udid' => "Este dispositivo ya está asignado, comuníquese con el administrador",
     'unauthorized' => 'No autorizada',
     'error' => 'Algo salió mal',
+    'changePassword'=>'cambio de contraseña con éxito'
 ];

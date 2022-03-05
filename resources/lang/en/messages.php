@@ -22,5 +22,6 @@ return [
     'date_exist'=> "la fecha ya existe",
     'notification'=>"Notification sent successfully.",
     'udid'=>"This device is already Mapped,Please Contact Admin.",
-    'unauthorized'=>'unauthorized'
+    'unauthorized'=>'unauthorized',
+    'changePassword'=>'Password Change Successfully'
 ];

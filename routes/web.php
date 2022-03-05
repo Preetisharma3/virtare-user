@@ -321,6 +321,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('widgetAccess/{id}', 'Api\v1\WidgetController@deleteWidgetAccess');
 
 
+    // change password
+    $router->post('changePassword', 'Api\v1\UserController@changePassword');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
