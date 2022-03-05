@@ -14,6 +14,7 @@ class WidgetTransformer extends TransformerAbstract
 	public function transform($data)
 	{
 		return [
+            'id' =>$data->id,
             'udid'=>$data->udid,
             'widgetName'=>$data->widgetName,
             'title'=>$data->title,
@@ -21,6 +22,7 @@ class WidgetTransformer extends TransformerAbstract
             'rows'=>$data->rows,
             'columns'=>$data->columns,
             'widgetType'=>[
+                'id' =>$data->widgetType->id,
                 'udid'=>$data->widgetType->udid,
                 'widgetType'=>$data->widgetType->name,
             ],
