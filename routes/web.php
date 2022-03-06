@@ -6,6 +6,7 @@ use App\Models\Access\Access;
 use Illuminate\Support\Facades\DB;
 use App\Transformers\Patient\PatientTransformer;
 use App\Services\Api\PushNotificationService;
+
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /*
@@ -101,10 +102,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
     $router->get('patient/{id}/device[/{deviceId}]', 'Api\v1\PatientController@listPatientDevice');
 
-    $router->post('{entityType}/{id}/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
-    $router->get('{entityType}/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
-    $router->put('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
-    $router->delete('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
     $router->get('patient/{id}/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
     $router->get('patient/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
     $router->get('patient/notes', 'Api\v1\NoteController@patientNote');
@@ -154,10 +151,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@createPatientInsurance');
     $router->get('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@listPatientInsurance');
     $router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
-    $router->post('patient/{id}/timeLog', 'Api\v1\PatientController@addPatientTimeLog');
-    $router->get('patient/{id}/timeLog[/{timelogId}]', 'Api\v1\PatientController@listPatientTimeLog');
-    $router->put('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@addPatientTimeLog');
-    $router->delete('patient/{id}/timeLog/{timelogId}', 'Api\v1\PatientController@deletePatientTimeLog');
     $router->get('patient/{id}/timeLine', 'Api\v1\PatientController@listPatientTimeline');
 
 
@@ -167,27 +160,34 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('patient/{id}/staff/{patientStaffId}', 'Api\v1\PatientStaffController@assignStaff');
     $router->delete('patient/{id}/staff/{patientStaffId}', 'Api\v1\PatientStaffController@deleteAssignStaff');
 
-
+    // Timelog Routes
     $router->get('timeLog[/{id}]', 'Api\v1\TimeLogController@listTimeLog');
     $router->put('timeLog/{id}', 'Api\v1\TimeLogController@updateTimeLog');
     $router->delete('timeLog/{id}', 'Api\v1\TimeLogController@deleteTimeLog');
+
+    // Patient Timelog Routes
+    $router->post('{entityType}/{id}/timeLog', 'Api\v1\TimeLogController@addPatientTimeLog');
+    $router->get('{entityType}/{id}/timeLog[/{timelogId}]', 'Api\v1\TimeLogController@listPatientTimeLog');
+    $router->put('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\TimeLogController@addPatientTimeLog');
+    $router->delete('{entityType}/{id}/timeLog/{timelogId}', 'Api\v1\TimeLogController@deletePatientTimeLog');
+
 
 
     /*
     *Bitrix APi routes
     */
-       /*
+    /*
     *Bitrix APi routes
     */
-    $router->get("bitrix/deal/{patientId}",'Api\v1\PatientController@getAllBitrixDeals');
-    $router->get("bitrix/deal",'Api\v1\PatientController@getAllBitrixDeals');
+    $router->get("bitrix/deal/{patientId}", 'Api\v1\PatientController@getAllBitrixDeals');
+    $router->get("bitrix/deal", 'Api\v1\PatientController@getAllBitrixDeals');
 
     // Bitrix Fields routes
-    $router->get("bitrix/fields",'Api\v1\BitrixFieldController@listBitrixField');
-    $router->get("bitrix/field/{id}",'Api\v1\BitrixFieldController@listBitrixField');
-    $router->post("bitrix/field",'Api\v1\BitrixFieldController@createBitrixField');
-    $router->put("bitrix/field/{id}",'Api\v1\BitrixFieldController@updateBitrixField');
-    $router->post("bitrix/field/{id}",'Api\v1\BitrixFieldController@deleteBitrixField');
+    $router->get("bitrix/fields", 'Api\v1\BitrixFieldController@listBitrixField');
+    $router->get("bitrix/field/{id}", 'Api\v1\BitrixFieldController@listBitrixField');
+    $router->post("bitrix/field", 'Api\v1\BitrixFieldController@createBitrixField');
+    $router->put("bitrix/field/{id}", 'Api\v1\BitrixFieldController@updateBitrixField');
+    $router->post("bitrix/field/{id}", 'Api\v1\BitrixFieldController@deleteBitrixField');
 
     // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
@@ -310,10 +310,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('cptCode/{id}', 'Api\v1\CPTCodeController@deleteCPTCode');
 
     // user Router
-    $router->get('user/{id}','Api\v1\UserController@listUser');
+    $router->get('user/{id}', 'Api\v1\UserController@listUser');
 
     // patient appointment update
-    $router->patch('patient/appointment/{id}','Api\v1\AppointmentController@updateAppointment');
+    $router->patch('patient/appointment/{id}', 'Api\v1\AppointmentController@updateAppointment');
 
     //widgets Access
     $router->get('widgetAccess/{id}', 'Api\v1\WidgetController@listWidgetAccess');
@@ -407,5 +407,3 @@ $router->post('program', 'Api\v1\ProgramController@createProgram');
 $router->get('program[/{id}]', 'Api\v1\ProgramController@listProgram');
 $router->put('program/{id}', 'Api\v1\ProgramController@updateProgram');
 $router->delete('program/{id}', 'Api\v1\ProgramController@deleteProgram');
-
-

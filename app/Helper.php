@@ -42,6 +42,15 @@ class Helper
 
         return $date;
     }
+
+    public static function dateOnly($date)
+    {
+        $date = Carbon::createFromTimestamp($date)->format('Y-m-d');
+
+        return $date;
+    }
+
+
     public static function time($date)
     {
         $date = Carbon::createFromTimestamp($date)->format('H:i:s');

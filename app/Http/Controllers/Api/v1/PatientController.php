@@ -144,7 +144,6 @@ class PatientController extends Controller
     return (new PatientService)->latest($request, $id, $vitalType);
   }
 
-
   public function deletePatientVital(Request $request, $id, $vitalId = null)
   {
     return (new PatientService)->patientVitalDelete($request, $id, $vitalId);
@@ -195,7 +194,7 @@ class PatientController extends Controller
     return (new PatientService)->patientInsuranceDelete($request, $id, $insuranceId);
   }
 
-  public function listingPatientInventory(Request $request, $id=null)
+  public function listingPatientInventory(Request $request, $id = null)
   {
     return (new PatientService)->patientInventoryListing($request, $id);
   }
@@ -218,21 +217,6 @@ class PatientController extends Controller
   public function listPatientTimeline(Request $request, $id = null)
   {
     return (new PatientService)->patientTimelineList($request, $id);
-  }
-
-  public function addPatientTimeLog(Request $request, $entityType, $id = null, $timelogId = null)
-  {
-    return (new PatientService)->patientTimeLogAdd($request, $entityType, $id, $timelogId);
-  }
-
-  public function listPatientTimeLog(Request $request, $entityType, $id = null, $timelogId = null)
-  {
-    return (new PatientService)->patientTimeLogList($request, $entityType, $id, $timelogId);
-  }
-
-  public function deletePatientTimeLog(Request $request, $entityType, $id = null, $timelogId)
-  {
-    return (new PatientService)->patientTimeLogDelete($request, $entityType, $id, $timelogId);
   }
 
   public function addPatientFlag(Request $request, $id = null)
