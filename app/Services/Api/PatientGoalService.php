@@ -2,6 +2,7 @@
 
 namespace App\Services\Api;
 
+use App\Helper;
 use App\Models\Patient\Patient;
 use App\Models\Patient\PatientGoal;
 use App\Transformers\Patient\PatientGoalTransformer;
@@ -11,12 +12,14 @@ class PatientGoalService
     public function index($request, $id, $goalId)
     {
         if ($id) {
+            $patient = Helper::entity('patient', $id);
             if ($goalId) {
-                $patient = Patient::where('udid', $id)->first();
-                $data = PatientGoal::where([['patientId', $patient->id], ['id', $goalId]])->get();
+                $access=Helper::haveAccess($patient);
+                if($access){
+                    $data = PatientGoal::where([['patientId', $patient], ['id', $goalId]])->get();
+                }
             } elseif (!$goalId) {
-                $patient = Patient::where('udid', $id)->first();
-                $data = PatientGoal::where('patientId', $patient->id)->get();
+                $data = PatientGoal::where('patientId', $patient)->get();
             } else {
                 return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }

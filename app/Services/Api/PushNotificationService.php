@@ -9,7 +9,6 @@ use GuzzleHttp\Client;
 use App\Models\User\User;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notification\Notification;
-use App\Http\Requests\Notification\NotificationRequest;
 use App\Transformers\Notification\NotificationListTransformer;
 
 class PushNotificationService

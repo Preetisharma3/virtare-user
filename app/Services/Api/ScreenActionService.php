@@ -3,10 +3,6 @@
 namespace App\Services\Api;
 
 use Exception;
-use App\Models\ScreenAction\ScreenAction;
-use App\Transformers\ScreenAction\ScreenActionTransformer;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ScreenActionService

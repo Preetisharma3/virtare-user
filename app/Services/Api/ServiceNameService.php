@@ -6,7 +6,6 @@ use App\Models\CPTCode\Service;
 use App\Transformers\CPTCode\ServiceTransformer;
 use Exception;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 
 class ServiceNameService
 {

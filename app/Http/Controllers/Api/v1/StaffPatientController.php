@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Models\Staff\Staff;
 use Illuminate\Http\Request;
 use App\Services\Api\StaffService;
 use App\Http\Controllers\Controller;
-use App\Models\Patient\PatientStaff;
-use App\Transformers\Patient\PatientTransformer;
 
 class StaffPatientController extends Controller
 {
@@ -15,11 +12,11 @@ class StaffPatientController extends Controller
         return (new StaffService)->patientList( $id);
     }
 
-    public function appointmentList($id = null){
-        return (new StaffService)->appointmentList( $id);
+    public function appointmentList(Request $request,$id = null){
+        return (new StaffService)->appointmentList($request, $id);
     }
 
-    public function patientAppointment($id = null){
-        return (new StaffService)->patientAppointment( $id);
+    public function patientAppointment(Request $request,$id = null){
+        return (new StaffService)->patientAppointment( $request,$id);
     }
 }

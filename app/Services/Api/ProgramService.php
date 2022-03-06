@@ -15,9 +15,14 @@ class ProgramService
     {
         try{
             if(!$id){
-                $getProgram = Program::with('type')->paginate(env('PER_PAGE',20));
-                return fractal()->collection($getProgram)->transformWith(new ProgramTransformer())->paginateWith(new IlluminatePaginatorAdapter($getProgram))->toArray();
-            }else{
+                if($request->all()){
+                    $getProgram = Program::with('type')->get();
+                    return fractal()->collection($getProgram)->transformWith(new ProgramTransformer())->toArray();
+                }else{
+                    $getProgram = Program::with('type')->paginate(env('PER_PAGE',20));
+                    return fractal()->collection($getProgram)->transformWith(new ProgramTransformer())->paginateWith(new IlluminatePaginatorAdapter($getProgram))->toArray();    
+                }
+                 }else{
                 $program = Program::where('udid',$id)->get();
                 return fractal()->collection($program)->transformWith(new ProgramTransformer())->toArray();
             }

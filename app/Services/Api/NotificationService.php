@@ -62,6 +62,7 @@ class NotificationService
             }
         }
     }
+    
     public function appointmentConfrence()
     {
         $toDate = Helper::date(strtotime('+5 minutes'));

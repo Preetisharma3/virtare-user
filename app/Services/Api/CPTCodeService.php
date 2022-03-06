@@ -20,9 +20,14 @@ class CPTCodeService
                 $data = CPTCode::with('provider', 'service', 'duration')->where("udid", $id)->orderBy('createdAt', 'DESC')->first();
                 return fractal()->item($data)->transformWith(new CPTCodeTransformer())->toArray();
             } else {
-                $data = CPTCode::with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
-                return fractal()->collection($data)->transformWith(new CPTCodeTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
-            }
+                if($request->all){
+                    $data = CPTCode::with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->get();
+                    return fractal()->collection($data)->transformWith(new CPTCodeTransformer())->toArray();
+                }else{
+                    $data = CPTCode::with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
+                    return fractal()->collection($data)->transformWith(new CPTCodeTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+                }
+                }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
