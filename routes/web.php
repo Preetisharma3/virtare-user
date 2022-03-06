@@ -111,7 +111,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     $router->post('patient/{id}/flag', 'Api\v1\PatientController@addPatientFlag');
     $router->get('patient/{id}/flag[/{flagId}]', 'Api\v1\PatientController@listPatientFlag');
-    $router->get('patient/{id}/task', 'Api\v1\TaskController@listTask');
+    $router->get('{entity}/{id}/task', 'Api\v1\TaskController@taskListEntity');
     $router->post('patient/{id}/staff', 'Api\v1\PatientController@latest');
 
     $router->post('patient', 'Api\v1\PatientController@createPatient');

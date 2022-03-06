@@ -69,6 +69,23 @@ class TaskService
         }
     }
 
+    public function entityTaskList($request,$entity,$id)
+    {
+        if ($request->all) {
+            $reference=Helper::entity($entity,$id);
+            $data = Task::whereHas('assignedTo',function($query) use($entity,$reference){
+                $query->where([['entityType',$entity],['assignedTo',$reference]]);
+            })->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
+            return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
+        } else {
+            $reference=Helper::entity($entity,$id);
+            $data = Task::whereHas('assignedTo',function($query) use($entity,$reference){
+                $query->where([['entityType',$entity],['assignedTo',$reference]]);
+            })->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->paginate(env('PER_PAGE', 20));
+            return fractal()->collection($data)->transformWith(new TaskTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+        }
+    }
+
     // Task List According to priorities
     public function priorityTask($request)
     {

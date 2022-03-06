@@ -18,6 +18,11 @@ class TaskController extends Controller
         return (new TaskService)->listTask($request);
     }
 
+    public function taskListEntity(request $request,$entity,$id)
+    {
+        return (new TaskService)->entityTaskList($request,$entity,$id);
+    }
+
     public function priorityTask(request $request)
     {
         return (new TaskService)->priorityTask($request);
