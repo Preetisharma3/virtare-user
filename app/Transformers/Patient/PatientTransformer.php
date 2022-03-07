@@ -58,14 +58,14 @@ class PatientTransformer extends TransformerAbstract
             'lastMessageSent' => 'N/A',
             'flagName' => 'jhj',
             'flagColor' => 'fhghg',
-            'user' =>$this->showData? fractal()->item($data->user)->transformWith(new UserTransformer(false))->toArray():[],
+            'user' =>$this->showData && $data->user? fractal()->item($data->user)->transformWith(new UserTransformer(false))->toArray():[],
             'medicalRecordNumber'=>(!empty($data->medicalRecordNumber))?$data->medicalRecordNumber:'',
             'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? str_replace("public","",URL::to('/')).'/'.$data->user->profilePhoto : "",
             'profilePhoto'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? str_replace("public","",URL::to('/')).'/'.$data->user->profilePhoto : "",
              'patientFamilyMember' =>$this->showData && $data->family? fractal()->item($data->family)->transformWith(new PatientFamilyMemberTransformer())->toArray():[],
-            'emergencyContact' => $data->emergency?fractal()->item($data->emergency)->transformWith(new PatientFamilyMemberTransformer())->toArray():[],
-            'patientFlags' => $data->flags ? fractal()->collection($data->flags)->transformWith(new PatientFlagTransformer())->toArray() : [],
-            'patientVitals'=> $data->vitals ?fractal()->collection($data->vitals)->transformWith(new PatientVitalTransformer())->toArray(): [],
+            'emergencyContact' =>$this->showData && $data->emergency?fractal()->item($data->emergency)->transformWith(new PatientFamilyMemberTransformer())->toArray():[],
+            'patientFlags' =>$this->showData && $data->flags ? fractal()->collection($data->flags)->transformWith(new PatientFlagTransformer())->toArray() : [],
+            'patientVitals'=>$this->showData && $data->vitals ?fractal()->collection($data->vitals)->transformWith(new PatientVitalTransformer())->toArray(): [],
         ];
     }
 }
