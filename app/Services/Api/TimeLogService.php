@@ -19,7 +19,13 @@ class TimeLogService
     {
         if (!$id) {
             if ($request->all) {
-                $data = PatientTimeLog::where([['date', '>=', $request->fromDate], ['date', '<=', $request->toDate]])->with('category', 'logged', 'performed', 'notes')->get();
+                if($request->toDate || $request->fromDate){
+                    $fromDate=Helper::dateOnly($request->fromDate);
+                    $toDate=Helper::dateOnly($request->toDate);
+                    $data = PatientTimeLog::where('date', '>=', $fromDate)->where('date', '<=', $toDate)->with('category', 'logged', 'performed', 'notes')->get();
+                }else{
+                    $data = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->get();
+                }
                 return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->toArray();
             } else {
                 if($request->toDate || $request->fromDate){
@@ -29,7 +35,7 @@ class TimeLogService
                 }else{
                     $data = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->paginate(env('PER_PAGE', 20));
                 }
-                return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->toArray();
+                return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             }
         } else {
             $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed', 'notes')->first();
