@@ -112,7 +112,7 @@ class TimeLogService
             } else {
                 $dateConvert = Helper::date($request->input('date'));
                 $timeConvert = Helper::time($request->input('timeAmount'));
-                $cpt=CPTCode::where('udid',$id)->first();
+                $cpt=CPTCode::where('udid',$request->cptCode)->first();
                 $timeLog = array();
                 if (!empty($request->category)) {
                     $timeLog['categoryId'] = $request->category;

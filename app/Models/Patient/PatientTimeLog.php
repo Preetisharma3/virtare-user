@@ -3,6 +3,7 @@
 namespace App\Models\Patient;
 ;
 
+use App\Models\CPTCode\CPTCode;
 use App\Models\Note\Note;
 use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
@@ -50,7 +51,7 @@ class PatientTimeLog extends Model
 
    public function cptCode()
    {
-       return $this->hasOne(GlobalCode::class,'id');
+       return $this->hasOne(CPTCode::class,'id','cptCodeId');
    }
     
 }
