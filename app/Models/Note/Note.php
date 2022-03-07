@@ -20,9 +20,9 @@ class Note extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function category()
+    public function categoryName()
     {
-        return $this->hasOne(GlobalCode::class,'id','categoryId');
+        return $this->hasOne(GlobalCode::class,'id');
     }
 
     public function typeName()
@@ -31,7 +31,7 @@ class Note extends Model
     }
 
     public function user(){
-        return $this->hasOne(User::class,'id','createdBy');
+        return $this->hasOne(User::class,'id');
     }
 
 }
