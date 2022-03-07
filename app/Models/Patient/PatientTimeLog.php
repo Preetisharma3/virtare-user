@@ -48,5 +48,9 @@ class PatientTimeLog extends Model
        return $this->hasOne(Note::class,'referenceId');
    }
 
+   public function cptCode()
+   {
+       return $this->hasOne(GlobalCode::class,'id');
+   }
     
 }

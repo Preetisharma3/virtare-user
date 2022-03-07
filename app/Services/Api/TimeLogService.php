@@ -97,7 +97,7 @@ class TimeLogService
                 $input = [
                     'categoryId' => $request->input('category'), 'loggedId' => $loggedBy, 'udid' => Str::uuid()->toString(),
                     'performedId' => $performedBy, 'date' => $dateConvert, 'timeAmount' => $timeConvert,
-                    'createdBy' => Auth::id(), 'patientId' => $patientId->id
+                    'createdBy' => Auth::id(), 'patientId' => $patientId->id,'cptCodeId'=>$request->input('cptCode')
                 ];
                 $data = PatientTimeLog::create($input);
                 if ($request->input('note')) {
@@ -159,7 +159,7 @@ class TimeLogService
         try {
             if (!$timelogId) {
                 $patient = Helper::entity($entity, $id);
-                $getPatient = PatientTimeLog::where('patientId', $patient)->with('category', 'logged', 'performed', 'notes')->get();
+                $getPatient = PatientTimeLog::where('patientId', $patient)->with('category', 'logged', 'performed', 'notes')->latest()->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientTimeLogTransformer())->toArray();
             } else {
                 $getPatient = PatientTimeLog::where('udid', $timelogId)->with('category', 'logged', 'performed', 'notes')->first();
