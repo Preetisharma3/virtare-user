@@ -19,4 +19,8 @@ class PatientGoalController extends Controller
     public function addPatientGoal(Request $request,$id){
         return (new PatientGoalService)->patientGoalAdd($request,$id);
     }
+
+    public function deletePatientGoal(Request $request,$id,$goalId){
+        return (new PatientGoalService)->patientGoaldelete($request,$id,$goalId);
+    }
 }

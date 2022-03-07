@@ -14,7 +14,7 @@ class PatientGoalTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id'=>$data->id,
+            'id'=>$data->udid,
             'lowValue'=>$data->lowValue,
             'highValue'=>$data->highValue,
             'patientId'=>$data->patientId,
