@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Transformers\User\UserTransformer;
 use App\Models\Patient\PatientFamilyMember;
+use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\User\UserPatientTransformer;
 use App\Transformers\Patient\PatientFamilyMemberTransformer;
 
@@ -22,7 +23,7 @@ class UserService
         try {
             if (auth()->user()->roleId == 4) {
                 $data = User::where('id', auth()->user()->id)->first();
-                return fractal()->item($data)->transformWith(new UserPatientTransformer())->toArray();
+                return fractal()->item($data)->transformWith(new PatientTransformer(false))->toArray();
             } elseif (auth()->user()->roleId == 6) {
                 $data = PatientFamilyMember::where('userId', auth()->user()->id)->first();
                 return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
@@ -48,7 +49,7 @@ class UserService
                     "profilePhoto" => str_replace(URL::to('/') . '/', "", $request->path),
                 ]);
                 $user = User::where('udid', Auth::user()->udid)->first();
-                return fractal()->item($user)->transformWith(new UserPatientTransformer(true))->toArray();
+                return fractal()->item($user)->transformWith(new PatientTransformer(false))->toArray();
             } elseif (auth()->user()->roleId == 6) {
                 PatientFamilyMember::where('userId', auth()->user()->id)->update([
                     "phoneNumber" => $request->phoneNumber,

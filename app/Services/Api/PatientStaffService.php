@@ -5,9 +5,7 @@ namespace App\Services\Api;
 use App\Helper;
 use Exception;
 use Illuminate\Support\Str;
-use App\Models\Patient\Patient;
 use App\Models\Patient\PatientStaff;
-use App\Models\Staff\Staff;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Patient\PatientStaffTransformer;
 

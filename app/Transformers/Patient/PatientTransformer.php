@@ -62,10 +62,10 @@ class PatientTransformer extends TransformerAbstract
             'medicalRecordNumber'=>(!empty($data->medicalRecordNumber))?$data->medicalRecordNumber:'',
             'profile_photo'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? str_replace("public","",URL::to('/')).'/'.$data->user->profilePhoto : "",
             'profilePhoto'=>(!empty($data->user->profilePhoto))&&(!is_null($data->user->profilePhoto)) ? str_replace("public","",URL::to('/')).'/'.$data->user->profilePhoto : "",
-            'patientFamilyMember' =>$data->family? fractal()->item($data->family)->transformWith(new PatientFamilyMemberTransformer())->toArray():[],
-            'emergencyContact' => $data->emergency?fractal()->item($data->emergency)->transformWith(new PatientFamilyMemberTransformer())->toArray():[],
-            'patientFlags' => $data->flags ? fractal()->collection($data->flags)->transformWith(new PatientFlagTransformer())->toArray() : [],
-            'patientVitals'=> $data->vitals ?fractal()->collection($data->vitals)->transformWith(new PatientVitalTransformer())->toArray(): [],
+            'patientFamilyMember' =>$this->showData? fractal()->item($data->family)->transformWith(new PatientFamilyMemberTransformer())->toArray():[],
+            'emergencyContact' => $this->showData?fractal()->item($data->emergency)->transformWith(new PatientFamilyMemberTransformer())->toArray():[],
+            'patientFlags' => $this->showData ? fractal()->collection($data->flags)->transformWith(new PatientFlagTransformer())->toArray() : [],
+            'patientVitals'=> $this->showData ?fractal()->collection($data->vitals)->transformWith(new PatientVitalTransformer())->toArray(): [],
         ];
     }
 }
