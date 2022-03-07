@@ -23,7 +23,7 @@ class FamilyMemberService
             $data=Patient::whereHas('family',function($query){
                 $query->where('userId',auth()->user()->id);
             })->get();
-            return fractal()->collection($data)->transformWith(new PatientTransformer(false))->toArray();
+            return fractal()->collection($data)->transformWith(new PatientTransformer(true))->toArray();
         } else {
             return response()->json(['message' => trans('messages.unauthenticated')], 401);
         }
