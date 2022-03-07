@@ -23,6 +23,8 @@ class AppointmentSearchTransformer extends TransformerAbstract
             "patient"=>$data->patient,
             "staff"=>$data->staff ,
             "patient_id"=>$data->patient_id,
+            "patientId"=>$data->patientId,
+            "staffId"=>$data->staffId ,
             "staff_id"=>$data->staff_id ,
             'conferenceId'=>@$data->conferenceId,
         ];
