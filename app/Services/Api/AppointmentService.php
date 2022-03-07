@@ -146,6 +146,7 @@ class AppointmentService
     public function appointmentSearch($request)
     {
         try {
+            $staffIdx = '';
             $fromDate = time();
             $toDate = '';
             if (!empty($request->toDate)) {
@@ -156,8 +157,13 @@ class AppointmentService
                 $fromDateFormate = Helper::date($request->input('fromDate'));
                 $fromDate = $fromDateFormate;
             }
+
+            if (!empty($request->staffId)) {
+                $staffIdx = json_encode(explode(',',$request->staffId));
+            }
+
             $data = DB::select(
-                'CALL appointmentList("' . $fromDate . '","' . $toDate . '")',
+                "CALL appointmentList('" . $fromDate . "','" . $toDate . "','" . $staffIdx . "')",
             );
             return fractal()->collection($data)->transformWith(new AppointmentSearchTransformer())->toArray();
         } catch (Exception $e) {
