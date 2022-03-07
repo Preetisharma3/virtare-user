@@ -30,7 +30,7 @@ class NoteTransformer extends TransformerAbstract
             'category' => (!empty($data->categoryName->name))?$data->categoryName->name:$data->category,
             'type' => $data->type,
             'note' => $data->note,
-            'addedBy'=>(!empty(@$data->firstName))?ucfirst(@$data->firstName).' '.ucfirst(@$data->lastName):ucfirst(@$data->user->staff->firstName).' '.ucfirst(@$data->user->staff->lastName),
+            'addedBy'=>(!empty(@$data->firstName))?ucfirst(@$data->firstName).' '.ucfirst(@$data->lastName):(!empty($data->user->staff->firstName))?ucfirst(@$data->user->staff->firstName).' '.ucfirst(@$data->user->staff->lastName):ucfirst(@$data->user->patient->firstName).' '.ucfirst(@$data->user->patient->lastName),
             'addedByDetail'=>@$data->user,
             'flag'=>'#39B5C2'
         ];
