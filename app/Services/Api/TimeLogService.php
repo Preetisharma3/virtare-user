@@ -88,14 +88,14 @@ class TimeLogService
     public function patientTimeLogAdd($request, $entityType, $id, $timelogId)
     {
         DB::beginTransaction();
-        try {
+        // try {
             if (!$timelogId) {
                 $dateConvert = Helper::date($request->input('date'));
                 $timeConvert = Helper::time($request->input('timeAmount'));
                 $patientId = Patient::where('udid', $id)->first();
                 $performedBy = Helper::entity('staff', $request->input('performedBy'));
                 $loggedBy = Helper::entity('staff', $request->input('loggedBy'));
-                $cpt=CPTCode::where('udid',$id)->first();
+                $cpt=CPTCode::where('udid',$request->cptCode)->first();
                 $input = [
                     'categoryId' => $request->input('category'), 'loggedId' => $loggedBy, 'udid' => Str::uuid()->toString(),
                     'performedId' => $performedBy, 'date' => $dateConvert, 'timeAmount' => $timeConvert,
@@ -153,10 +153,10 @@ class TimeLogService
             }
             DB::commit();
             return $data;
-        } catch (Exception $e) {
-            DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
-        }
+        // } catch (Exception $e) {
+        //     DB::rollback();
+        //     return response()->json(['message' => $e->getMessage()],  500);
+        // }
     }
 
     // List Patient TimeLog
