@@ -103,6 +103,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/{id}/device[/{deviceId}]', 'Api\v1\PatientController@listPatientDevice');
 
     $router->get('patient/{id}/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
+    $router->post('patient/{id}/goal', 'Api\v1\PatientGoalController@addPatientGoal');
     $router->get('patient/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
     $router->get('patient/notes', 'Api\v1\NoteController@patientNote');
 

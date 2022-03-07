@@ -2,9 +2,11 @@
 
 namespace App\Services\Api;
 
+use Exception;
 use App\Helper;
-use App\Models\Patient\Patient;
+use Illuminate\Support\Str;
 use App\Models\Patient\PatientGoal;
+use Illuminate\Support\Facades\Auth;
 use App\Transformers\Patient\PatientGoalTransformer;
 
 class PatientGoalService
@@ -33,5 +35,17 @@ class PatientGoalService
             }
         }
         return  fractal()->collection($data)->transformWith(new PatientGoalTransformer())->toArray();
+    }
+
+    public function patientGoalAdd($request,$id){
+        try{
+            $patient=Helper::entity('patient',$id);
+            $input=['lowValue'=>$request->input('lowValue'),'highValue'=>$request->input('highValue'),
+            'createdBy'=>Auth::id(),'patientId'=>$patient,'udid'=>Str::uuid()->toString()];
+            PatientGoal::create($input);
+            return response()->json(['message'=>trans('messages.createdSuccesfully')]);
+        }catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
     }
 }
