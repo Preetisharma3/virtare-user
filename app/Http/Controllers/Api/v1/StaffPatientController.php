@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\Api\StaffService;
 use App\Http\Controllers\Controller;
 
-class StaffPatientController extends Controller
+class StaffPatientController extends Controller 
 {
     public function patientList($id = null){
         return (new StaffService)->patientList( $id);
