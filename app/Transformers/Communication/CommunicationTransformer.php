@@ -48,9 +48,9 @@ class CommunicationTransformer extends TransformerAbstract
         else{
             return [
                 'id'=>$data->id,
-                'from'=>$data->staff->firstName,
+                'from'=>@$data->staff->firstName,
                 'type'=>$data->type->name,
-                'to'=>$data->staffs->firstName,
+                'to'=>@$data->staffs->firstName,
                 'category'=>$data->globalCode->name,
                 'priority'=>$data->priority->name,
                 'createdAt'=>strtotime($data->createdAt),
