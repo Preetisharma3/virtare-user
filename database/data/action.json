@@ -1964,8 +1964,23 @@
             "name": "Log Out Cancel",
             "controller": "",
             "function": ""
-        }
+        },
         
+        {
+
+            "screenId" : 2,
+            "name" : "Global Code Export",
+            "controller" : "",
+            "function" : ""
+        },
+
+        {
+
+            "screenId" : 2,
+            "name" : "Global Code Status",
+            "controller" : "",
+            "function" : ""
+        }
 
     ]
 }
