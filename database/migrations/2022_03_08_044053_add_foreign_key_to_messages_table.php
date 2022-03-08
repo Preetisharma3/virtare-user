@@ -26,7 +26,6 @@ class AddForeignKeyToMessagesTable extends Migration
     public function down()
     {
         Schema::table('messages', function (Blueprint $table) {
-            $table->dropForeign('messages_communicationid_foreign');
             $table->dropColumn('communicationId');
         });
     }
