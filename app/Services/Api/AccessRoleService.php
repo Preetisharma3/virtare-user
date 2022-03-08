@@ -69,14 +69,29 @@ class AccessRoleService
 
             if(!empty($staff)){
                 $data = DB::select(
-                    'CALL assignedRolesActionList(' . $staff . ')',
+                    'CALL assignedRolesActionList('.$staff.')',
                 );
             }else{
                 $data = [];
             }
-             $finalAction['action']=fractal()->collection($data)->transformWith(new AssignedRoleActionTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
-             $finalWidget['widget']=fractal()->collection($data)->transformWith(new AssignedRoleWidgetTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
-               return array_merge($finalAction,$finalWidget);
+
+            $action= [];
+            $widget= [];
+            foreach( $data as $new){
+                $actionidx = $new->actionId;
+                array_push($action,$actionidx);
+                $widgetidx = $new->widgetId;
+                array_push($widget,$widgetidx);
+            }
+            $daat = [
+                'actionId'=>$action,
+                'widgetId'=>$widget,
+            ];
+            return $daat;
+
+            //  $finalAction['action']=fractal()->collection($data)->transformWith(new AssignedRoleActionTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+            //  $finalWidget['widget']=fractal()->collection($data)->transformWith(new AssignedRoleWidgetTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+            //    return array_merge($finalAction,$finalWidget);
             } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
