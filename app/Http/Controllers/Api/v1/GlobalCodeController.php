@@ -33,4 +33,10 @@ class GlobalCodeController extends BaseController
     {
         return (new GlobalCodeService)->globalCodeDelete($request, $id);
     }
+
+    public function globalStartEndDate(Request $request,$id)
+    {
+        return (new GlobalCodeService)->getGlobalStartEndDate($request,$id);
+    }
+
 }
