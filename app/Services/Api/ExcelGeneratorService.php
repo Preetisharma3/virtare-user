@@ -15,13 +15,39 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ExcelGeneratorService
 {
-    public function excelTimeLogExport()
+    public function excelTimeLogExport($request)
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         $writer = new Xlsx($spreadsheet);
-        $patientData = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->get();
+        $post = $request->all();
+        if(isset($post["fromDate"]) && !empty($post["fromDate"])){
+            $fromDate = date('Y-m-d', strtotime($request->get("fromDate")));
+        }
+        else
+        {
+            $fromDate = "";
+        }
+
+        if($request->get("toDate")){
+            $toDate = date('Y-m-d', strtotime($request->get("toDate")));
+        }
+        else
+        {
+            $toDate = "";
+        }
+
+        if(!empty($fromDate) && !empty($toDate))
+        {
+            // die("d");
+            $patientData = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->whereBetween('date', [$fromDate, $toDate])->get();
+        }
+        else
+        {
+            $patientData = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->get();
+        }
+
         $excelObj = array();
         if(!empty($patientData)){
             foreach($patientData as $data){
