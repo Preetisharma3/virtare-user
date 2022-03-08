@@ -147,7 +147,7 @@ class ConversationService
             if ($input == true) {
                 $data = ConversationMessage::where([['communicationId', $communicationId]])->get();
             } else {
-                return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                $data = ConversationMessage::where([['communicationId', $communicationId]])->get();
             }
             return fractal()->collection($data)->transformWith(new ConversationTransformer)->toArray();
         } catch (Exception $e) {
