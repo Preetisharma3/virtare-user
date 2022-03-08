@@ -102,8 +102,11 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/vital/{vitalType}', 'Api\v1\PatientController@latest');
     $router->get('patient/vitalNew', 'Api\v1\PatientController@vital');
     $router->post('patient/{id}/device', 'Api\v1\PatientController@createPatientDevice');
+    $router->post('patient/device', 'Api\v1\PatientController@createPatientDevice');
     $router->put('patient/{id}/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
+    $router->put('patient/device/{deviceId}', 'Api\v1\PatientController@createPatientDevice');
     $router->get('patient/{id}/device[/{deviceId}]', 'Api\v1\PatientController@listPatientDevice');
+    $router->get('patient/device[/{deviceId}]', 'Api\v1\PatientController@listPatientDevice');
 
     $router->get('patient/{id}/goal[/{goalId}]', 'Api\v1\PatientGoalController@index');
     $router->post('patient/{id}/goal', 'Api\v1\PatientGoalController@addPatientGoal');

@@ -204,12 +204,12 @@ class PatientController extends Controller
     return (new PatientService)->inventoryUpdate($request, $id);
   }
 
-  public function createPatientDevice(Request $request, $id, $deviceId = null)
+  public function createPatientDevice(Request $request, $id=null, $deviceId = null)
   {
     return (new PatientService)->patientDeviceCreate($request, $id, $deviceId);
   }
 
-  public function listPatientDevice(Request $request, $id, $deviceId = null)
+  public function listPatientDevice(Request $request, $id=null, $deviceId = null)
   {
     return (new PatientService)->patientDeviceList($request, $id, $deviceId);
   }

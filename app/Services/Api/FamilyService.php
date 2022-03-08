@@ -19,9 +19,7 @@ class FamilyService
         DB::beginTransaction();
         try {
             if (!$familyId) {
-                $user=User::where('udid',$id)->first();
-                $usersId=Patient::where('userId',$user->id)->first();
-                $patient = Patient::where('id', $usersId->id)->first();
+                $patient = Patient::where('udid', $id)->first();
                 $patientId = $patient->id;
                 $udid = Str::uuid()->toString();
                 $familyMemberUser = [

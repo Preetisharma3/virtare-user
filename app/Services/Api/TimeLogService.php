@@ -4,6 +4,7 @@ namespace App\Services\Api;
 
 use Exception;
 use App\Helper;
+use App\Models\CPTCode\CPTCode;
 use App\Models\Note\Note;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
@@ -94,10 +95,11 @@ class TimeLogService
                 $patientId = Patient::where('udid', $id)->first();
                 $performedBy = Helper::entity('staff', $request->input('performedBy'));
                 $loggedBy = Helper::entity('staff', $request->input('loggedBy'));
+                $cpt=CPTCode::where('udid',$request->cptCode)->first();
                 $input = [
                     'categoryId' => $request->input('category'), 'loggedId' => $loggedBy, 'udid' => Str::uuid()->toString(),
                     'performedId' => $performedBy, 'date' => $dateConvert, 'timeAmount' => $timeConvert,
-                    'createdBy' => Auth::id(), 'patientId' => $patientId->id
+                    'createdBy' => Auth::id(), 'patientId' => $patientId->id,'cptCodeId'=>$cpt->id
                 ];
                 $data = PatientTimeLog::create($input);
                 if ($request->input('note')) {
@@ -110,6 +112,7 @@ class TimeLogService
             } else {
                 $dateConvert = Helper::date($request->input('date'));
                 $timeConvert = Helper::time($request->input('timeAmount'));
+                $cpt=CPTCode::where('udid',$request->cptCode)->first();
                 $timeLog = array();
                 if (!empty($request->category)) {
                     $timeLog['categoryId'] = $request->category;
@@ -128,6 +131,9 @@ class TimeLogService
                 }
                 if (!empty($request->timeAmount)) {
                     $timeLog['timeAmount'] = $timeConvert;
+                }
+                if (!empty($request->cptCode)) {
+                    $timeLog['cptCodeId'] = $cpt;
                 }
                 $timeLog['updatedBy'] = Auth::id();
                 $data = PatientTimeLog::where('udid', $timelogId)->update($timeLog);
@@ -159,7 +165,7 @@ class TimeLogService
         try {
             if (!$timelogId) {
                 $patient = Helper::entity($entity, $id);
-                $getPatient = PatientTimeLog::where('patientId', $patient)->with('category', 'logged', 'performed', 'notes')->get();
+                $getPatient = PatientTimeLog::where('patientId', $patient)->with('category', 'logged', 'performed', 'notes')->latest()->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientTimeLogTransformer())->toArray();
             } else {
                 $getPatient = PatientTimeLog::where('udid', $timelogId)->with('category', 'logged', 'performed', 'notes')->first();
