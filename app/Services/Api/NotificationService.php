@@ -3,14 +3,18 @@
 namespace App\Services\Api;
 
 use App\Helper;
+use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
-use App\Models\Staff\Staff;
 use Illuminate\Support\Facades\DB;
-use App\Models\Notification\Notification;
-use App\Models\Appointment\AppointmentNotification;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
+use App\Models\Communication\CallRecord;
+use App\Models\Notification\Notification;
 use App\Services\Api\PushNotificationService;
+use App\Models\Appointment\AppointmentNotification;
+use App\Models\Communication\CommunicationCallRecord;
+use Carbon\Carbon;
 
 class NotificationService
 {
@@ -94,7 +98,40 @@ class NotificationService
                         'referenceId' => 'CONF' . $appointment->id,
                         'createdBy' => $staffUserId,
                     ]);
-                    Appointment::where('id', $appointment->id)->update(['conferenceId' => 'CONF' . $appointment->id]);
+                   $app= Appointment::where('id', $appointment->id)->update(['conferenceId' => 'CONF' . $appointment->id]);
+                   
+                    $udid = Str::uuid()->toString();
+                    if($app->status=='start'){
+                       $start=Carbon::now(); 
+                    }elseif($app->status=='end'){
+                        $end=Carbon::now();
+                    }
+                    if (Auth::user()->roleId == 4) {
+                        $input = [
+                            'patientId' => auth()->user()->patient->id,
+                            'statusId' => $app->status,
+                            'createdBy' => Auth::id(),
+                            'udid' => $udid,
+                            'startTime'=>$start,
+                            'endTime'=>$end,
+                            'referenceId'=>$app->conferenceId,
+                            'entityType'=>'conferenceCall'
+                        ];
+                    } elseif (Auth::user()->roleId == 3) {
+                        $input = [
+                            'patientId' => $patentId,
+                            'statusId' => $app->status,
+                            'createdBy' => Auth::id(),
+                            'udid' => $udid,
+                            'startTime'=>$start,
+                            'endTime'=>$end,
+                            'referenceId'=>$app->conferenceId,
+                            'entityType'=>'conferenceCall'
+                        ];
+                    }
+                    $comm=CommunicationCallRecord::create($input);
+                    $call=['udid' => $udid,'createdBy' => Auth::id(),'communicationCallRecordId'=>$comm->id,'staffId'=>$staffId];
+                    CallRecord::create($call);
                 }
             }
         }

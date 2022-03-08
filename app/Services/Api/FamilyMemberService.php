@@ -6,7 +6,6 @@ use App\Helper;
 use App\Models\Patient\Patient;
 use App\Models\Patient\PatientFamilyMember;
 use App\Transformers\Patient\PatientTransformer;
-use App\Transformers\Family\FamilyPatientTransformer;
 
 class FamilyMemberService
 {
@@ -22,7 +21,7 @@ class FamilyMemberService
         } elseif (!$id) {
             $data=Patient::whereHas('family',function($query){
                 $query->where('userId',auth()->user()->id);
-            })->get();
+            })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
             return fractal()->collection($data)->transformWith(new PatientTransformer(true))->toArray();
         } else {
             return response()->json(['message' => trans('messages.unauthenticated')], 401);

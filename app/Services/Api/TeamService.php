@@ -21,12 +21,12 @@ class TeamService
                     if ($request->all) {
                         $data = Staff::whereHas('patientStaff', function ($query) {
                             $query->where('patientId', auth()->user()->patient->id);
-                        })->get();
+                        })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
                         return fractal()->collection($data)->transformWith(new StaffTransformer(true))->toArray();
                     } else {
                         $data = Staff::whereHas('patientStaff', function ($query) {
                             $query->where('patientId', auth()->user()->patient->id);
-                        })->paginate(5);
+                        })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->paginate(5);
                         return fractal()->collection($data)->transformWith(new StaffTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                     }
                 } else {
@@ -58,10 +58,10 @@ class TeamService
                 if (auth()->user()->roleId == 6) {
                     if (!$id) {
                         if ($request->all) {
-                            $data = PatientFamilyMember::with('roles')->get();
+                            $data = PatientFamilyMember::with('roles')->orderBy('fullName','ASC')->get();
                             return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
                         } else {
-                            $data = PatientFamilyMember::with('roles')->paginate(5);
+                            $data = PatientFamilyMember::with('roles')->orderBy('fullName','ASC')->paginate(5);
                             return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                         }
                     } else {
@@ -75,10 +75,10 @@ class TeamService
                 } elseif (auth()->user()->roleId == 4) {
                     if (!$id) {
                         if ($request->all) {
-                            $data = PatientFamilyMember::with('roles')->where([['patientId', auth()->user()->patient->id]])->get();
+                            $data = PatientFamilyMember::with('roles')->where([['patientId', auth()->user()->patient->id]])->orderBy('fullname','ASC')->get();
                             return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
                         } else {
-                            $data = PatientFamilyMember::with('roles')->where([['patientId', auth()->user()->patient->id]])->paginate(5);
+                            $data = PatientFamilyMember::with('roles')->where([['patientId', auth()->user()->patient->id]])->orderBy('fullname','ASC')->paginate(5);
                             return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                         }
                     } else {
@@ -100,12 +100,12 @@ class TeamService
                         if ($request->all) {
                             $data = Staff::whereHas('patientStaff', function ($query) use ($patient) {
                                 $query->where('patientId', $patient);
-                            })->get();
+                            })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
                             return fractal()->collection($data)->transformWith(new StaffTransformer(true))->toArray();
                         } else {
                             $data = Staff::whereHas('patientStaff', function ($query) use ($patient) {
                                 $query->where('patientId', $patient);
-                            })->paginate(5);
+                            })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->paginate(5);
                             return fractal()->collection($data)->transformWith(new StaffTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                         }
                     } else {
@@ -138,10 +138,10 @@ class TeamService
                 } elseif ($type == 'familyMember') {
                     if (!$id) {
                         if ($request->all) {
-                            $data = PatientFamilyMember::with('roles')->where([['patientId', $patient]])->get();
+                            $data = PatientFamilyMember::with('roles')->where([['patientId', $patient]])->orderBy('fullName','ASC')->get();
                             return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
                         } else {
-                            $data = PatientFamilyMember::with('roles')->where([['patientId', $patient]])->paginate(5);
+                            $data = PatientFamilyMember::with('roles')->where([['patientId', $patient]])->orderBy('fullName','ASC')->paginate(5);
                             return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                         }
                     } else {

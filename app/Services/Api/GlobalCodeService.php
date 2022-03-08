@@ -16,7 +16,7 @@ class GlobalCodeService
      {
           try {
                if (!$id) {
-                    $global = GlobalCodeCategory::with('globalCode')->get();
+                    $global = GlobalCodeCategory::with('globalCode')->orderBy('name','ASC')->get();
                     return fractal()->collection($global)->transformWith(new GlobalCodeCategoryTransformer())->toArray();
                } else {
                     $global = GlobalCodeCategory::where('id', $id)->with('globalCode')->first();
@@ -31,7 +31,7 @@ class GlobalCodeService
      {
           try {
                if (!$id) {
-                    $global = GlobalCode::where('predefined',0)->get();
+                    $global = GlobalCode::where('predefined',0)->orderBy('name','ASC')->get();
                     return fractal()->collection($global)->transformWith(new GlobalCodeTransformer())->toArray();
                } else {
                     $global = GlobalCode::where('id', $id)->first();

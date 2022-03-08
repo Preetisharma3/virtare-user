@@ -23,7 +23,6 @@ use App\Models\GlobalCode\GlobalCode;
 use App\Models\Patient\PatientDevice;
 use App\Models\Patient\PatientProgram;
 use App\Models\Patient\PatientReferal;
-use App\Models\Patient\PatientTimeLog;
 use App\Models\Patient\PatientTimeLine;
 use App\Models\Patient\PatientCondition;
 use App\Models\Patient\PatientInsurance;
@@ -40,7 +39,6 @@ use App\Transformers\Patient\PatientDeviceTransformer;
 use App\Transformers\Patient\PatientMedicalTransformer;
 use App\Transformers\Patient\PatientProgramTransformer;
 use App\Transformers\Patient\PatientReferalTransformer;
-use App\Transformers\Patient\PatientTimeLogTransformer;
 use App\Transformers\Patient\PatientTimelineTransformer;
 use App\Transformers\Patient\PatientConditionTransformer;
 use App\Transformers\Patient\PatientInsuranceTransformer;
@@ -298,14 +296,14 @@ class PatientService
                     if ($request->all) {
                         $staff = Patient::whereHas('patientStaff', function ($query) {
                             $query->where('staffId', auth()->user()->staff->id);
-                        })->get();
+                        })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
                         if (!empty($staff)) {
                             return fractal()->collection($staff)->transformWith(new PatientTransformer())->toArray();
                         }
                     } else {
                         $staff = Patient::whereHas('patientStaff', function ($query) {
                             $query->where('staffId', auth()->user()->staff->id);
-                        })->paginate(env('PER_PAGE', 20));
+                        })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->paginate(env('PER_PAGE', 20));
                         if (!empty($staff)) {
                             return fractal()->collection($staff)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($staff))->toArray();
                         }
@@ -314,24 +312,24 @@ class PatientService
                     if ($request->all) {
                         $family = Patient::whereHas('family', function ($query) {
                             $query->where('id', auth()->user()->familyMember->id);
-                        })->get();
+                        })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
                         if (!empty($family)) {
                             return fractal()->collection($family)->transformWith(new PatientTransformer())->toArray();
                         }
                     } else {
                         $family = Patient::whereHas('family', function ($query) {
                             $query->where('id', auth()->user()->familyMember->id);
-                        })->paginate(env('PER_PAGE', 20));
+                        })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->paginate(env('PER_PAGE', 20));
                         if (!empty($family)) {
                             return fractal()->collection($family)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($family))->toArray();
                         }
                     }
                 } elseif ($roleId == 1) {
                     if ($request->all) {
-                        $patient = Patient::all();
+                        $patient = Patient::all()->orderBy('firstName','ASC')->orderBy('lastName','ASC');
                         return fractal()->collection($patient)->transformWith(new PatientTransformer())->toArray();
                     } else {
-                        $patient = Patient::paginate(env('PER_PAGE', 20));
+                        $patient = Patient::orderBy('firstName','ASC')->orderBy('lastName','ASC')->paginate(env('PER_PAGE', 20));
                         return fractal()->collection($patient)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($patient))->toArray();
                     }
                 } elseif ($roleId == 4) {
