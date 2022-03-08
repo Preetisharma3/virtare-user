@@ -778,6 +778,9 @@ class PatientService
                     if (!empty($vital['addType'])) {
                         $vitalRecord['addType'] = $vital['addType'];
                     }
+                    if (!empty($vital['value'])) {
+                        $vitalRecord['value'] = $vital['value'];
+                    }
                     if (!empty($vital['createdType'])) {
                         $vitalRecord['createdType'] = $vital['createdType'];
                     }
