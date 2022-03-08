@@ -15,7 +15,6 @@ class AddForeignKeyToMessagesTable extends Migration
     {
         Schema::table('messages', function (Blueprint $table) {
             $table->bigInteger('communicationId')->unsigned()->after('id');
-            $table->foreign('communicationId')->references('id')->on('communications')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
