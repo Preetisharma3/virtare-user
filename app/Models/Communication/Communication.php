@@ -2,11 +2,13 @@
 
 namespace App\Models\Communication;
 
+use App\Models\User\User;
 use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
 use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Conversation\ConversationMessage;
 use App\Models\Communication\CommunicationMessage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -58,5 +60,20 @@ class Communication extends Model
         return $this->hasOne(GlobalCode::class,'id', 'messageTypeId');
     }
     
+
+    public function sender()
+	{
+		return $this->belongsTo(User::class,'from','id');
+	}
+
+    public function receiver()
+	{
+		return $this->belongsTo(User::class,'referenceId','id');
+	}
+
+    public function conversationMessages()
+    {
+        return $this->hasMany(ConversationMessage::class,'communicationId');
+    }
 
 }

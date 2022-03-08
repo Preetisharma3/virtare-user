@@ -15,4 +15,9 @@ class AccessRoleController extends Controller
     public function assignedRoles($id=null){
         return (new AccessRoleService)->assignedRoles($id);
     }
+
+    public function assignedRoleAction($id=null)
+    {
+        return (new AccessRoleService)->assignedRoleAction($id);
+    }
 }

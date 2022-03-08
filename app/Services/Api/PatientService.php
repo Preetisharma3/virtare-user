@@ -756,26 +756,40 @@ class PatientService
             if ($id) {
                 $dataVital = $request->vital;
                 foreach ($dataVital as $vital) {
-                    $takeTime = Helper::date($vital['takeTime']);
-                    $startTime = Helper::date($vital['startTime']);
-                    $endTime = Helper::date($vital['endTime']);
-                    $patient = Helper::entity('patient', $id);
-                    $data = [
-                        'vitalFieldId' => $vital['type'],
-                        'deviceTypeId' => $vital['deviceType'],
-                        'createdBy' => Auth::id(),
-                        'udid' => Str::uuid()->toString(),
-                        'value' => $vital['value'],
-                        'patientId' => $patient,
-                        'units' => $vital['units'],
-                        'takeTime' => $takeTime,
-                        'startTime' => $startTime,
-                        'endTime' => $endTime,
-                        'addType' => $vital['addType'],
-                        'createdType' => $vital['createdType'],
-                        'deviceInfo' => json_encode($vital['deviceInfo'])
-                    ];
-                    $vitalData = PatientVital::create($data);
+                    $vitalRecord = array();
+                    if (!empty($vital['startTime'])) {
+                        $vitalRecord['startTime'] = Helper::date($vital['startTime']);
+                    };
+                    if (!empty($vital['deviceType'])) {
+                        $vitalRecord['deviceTypeId'] = $vital['deviceType'];
+                    };
+                    if (!empty($vital['units'])) {
+                        $vitalRecord['units'] = $vital['units'];
+                    }
+                    if (!empty($vital['endTime'])) {
+                        $vitalRecord['endTime'] = Helper::date($vital['endTime']);
+                    }
+                    if (!empty($id)) {
+                        $vitalRecord['patientId'] = Helper::entity('patient', $id);
+                    }
+                    if (!empty($vital['takeTime'])) {
+                        $vitalRecord['takeTime'] = Helper::date($vital['takeTime']);
+                    }
+                    if (!empty($vital['addType'])) {
+                        $vitalRecord['addType'] = $vital['addType'];
+                    }
+                    if (!empty($vital['createdType'])) {
+                        $vitalRecord['createdType'] = $vital['createdType'];
+                    }
+                    if (!empty($vital['deviceInfo'])) {
+                        $vitalRecord['deviceInfo'] = json_encode($vital['deviceInfo']);
+                    }
+                    if (!empty($vital['type'])) {
+                        $vitalRecord['vitalFieldId'] = $vital['type'];
+                    }
+                    $vitalRecord['createdBy'] = Auth::id();
+                    $vitalRecord['udid'] = Str::uuid()->toString();
+                    $vitalData = PatientVital::create($vitalRecord);
                     $note = ['createdBy' => Auth::id(), 'note' => $vital['comment'], 'udid' => Str::uuid()->toString(), 'entityType' => 'patientVital', 'referenceId' => $vitalData->id];
                     Note::create($note);
                     $result = PatientVital::where('id', $vitalData->id)->first();
@@ -1340,7 +1354,7 @@ class PatientService
         }
     }
 
-   
+
     // Add Patient Flags
     public function patientFlagAdd($request, $id)
     {

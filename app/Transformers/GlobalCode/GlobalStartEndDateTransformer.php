@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Transformers\Conversation;
+namespace App\Transformers\GlobalCode;
 
 use League\Fractal\TransformerAbstract;
 
 
-class ConversationTransformer extends TransformerAbstract
+class GlobalStartEndDateTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -15,7 +15,7 @@ class ConversationTransformer extends TransformerAbstract
     protected $defaultIncludes = [
         //
     ];
-
+    
     /**
      * List of resources possible to include
      *
@@ -24,7 +24,7 @@ class ConversationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         //
     ];
-
+    
     /**
      * A Fractal transformer.
      *
@@ -33,13 +33,12 @@ class ConversationTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id' => $data->id,
-            'conversationId' => $data->communicationId,
-            'senderId' => $data->senderId,
-            'message' => $data->message,
-            'type' => $data->type,
-            'isRead' => $data->isRead,
-            "createdAt"=>strtotime($data->createdAt),
-        ];
+            'globalCodeId'=>$data->globalCodeId,
+            'conditions'=>$data->conditions,
+			'number'=>$data->nm,
+            'intervalType'=>$data->intervalType,
+            'startDate'=>$data->startDate,
+            'endDate'=>$data->endDate
+		];
     }
 }
