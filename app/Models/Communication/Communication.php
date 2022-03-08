@@ -63,7 +63,7 @@ class Communication extends Model
 
     public function sender()
 	{
-		return $this->belongsTo(User::class,'referenceId','id');
+		return $this->belongsTo(User::class,'from','id');
 	}
 
     public function receiver()

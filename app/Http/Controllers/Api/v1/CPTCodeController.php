@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Api\CPTCodeService;
-use Illuminate\Http\Request;
+use App\Services\Api\ExcelGeneratorService;
 
 class CPTCodeController extends Controller
 {
@@ -32,6 +33,10 @@ class CPTCodeController extends Controller
     public function deleteCPTCode(Request $request , $id)
     {
         return (new CPTCodeService)->deleteCPTCode($request,$id);
+    }
+
+    public function cptCodeReport(){
+        ExcelGeneratorService::excelCptCodeExport();
     }
     
 }

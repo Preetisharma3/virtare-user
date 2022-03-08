@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Conversation\Conversation;
 use App\Models\Conversation\ConversationMessage;
 use App\Models\Patient\PatientFamilyMember;
+use App\Models\Staff\Staff;
 use App\Transformers\Conversation\ConversationTransformer;
 use App\Transformers\Conversation\LatestMessageTransformer;
 use App\Transformers\Conversation\ConversationListTransformer;
@@ -146,7 +147,7 @@ class ConversationService
             if ($input == true) {
                 $data = ConversationMessage::where([['communicationId', $communicationId]])->get();
             } else {
-                return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                $data = ConversationMessage::where([['communicationId', $communicationId]])->get();
             }
             return fractal()->collection($data)->transformWith(new ConversationTransformer)->toArray();
         } catch (Exception $e) {

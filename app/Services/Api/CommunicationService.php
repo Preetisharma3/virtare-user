@@ -4,10 +4,14 @@ namespace App\Services\Api;
 
 use Exception;
 use App\Helper;
+use App\Models\Communication\CallRecord;
 use Carbon\Carbon;
+use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
+use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Communication\Communication;
 use App\Models\Communication\CommunicationMessage;
 use App\Models\Communication\CommunicationCallRecord;
@@ -16,6 +20,7 @@ use App\Transformers\Communication\CallStatusTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\Communication\MessageTypeTransformer;
 use App\Transformers\Communication\CommunicationTransformer;
+use App\Transformers\Conversation\ConversationListTransformer;
 use App\Transformers\Communication\CommunicationCountTransformer;
 use App\Transformers\Communication\CommunicationSearchTransformer;
 
@@ -25,10 +30,17 @@ class CommunicationService
     public function addCommunication($request)
     {
         $reference = Helper::entity($request->entityType, $request->referenceId);
-        $staffFrom = Helper::entity('staff', $request->from);
+        if ($request->entityType == 'patient') {
+            $newReference = Patient::where('id', $reference)->first();
+        } elseif ($request->entityType == 'staff') {
+            $newReference = Staff::where('id', $reference)->first();
+        } else {
+            return response()->json(['message' => trans('messages.unauthenticated')],  401);
+        }
+        $staffFrom = Staff::where('udid', $request->from)->first();
         $input = [
-            'from' => $staffFrom,
-            'referenceId' => $reference,
+            'from' => $staffFrom->userId,
+            'referenceId' => $newReference->userId,
             'messageTypeId' => $request->messageTypeId,
             'subject' => $request->subject,
             'priorityId' => $request->priorityId,
@@ -37,44 +49,68 @@ class CommunicationService
             'entityType' => $request->entityType,
             'udid' => Str::uuid()->toString()
         ];
-        $data = Communication::create($input);
-        CommunicationMessage::create([
-            'communicationId' => $data->id,
-            'message' => $request->message,
-            'createdBy' => $data->createdBy,
-            'udid' => Str::uuid()->toString()
-        ]);
-        return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
+        $exdata = Communication::where([['from', $staffFrom->userId], ['referenceId', $newReference->userId]])->exists();
+        if ($exdata == false) {
+            $data = Communication::create($input);
+            CommunicationMessage::create([
+                'communicationId' => $data->id,
+                'message' => $request->message,
+                'createdBy' => $data->createdBy,
+                'udid' => Str::uuid()->toString()
+            ]);
+            return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
+        } elseif ($exdata == true) {
+            $conversation = Communication::where([['from', $staffFrom->userId], ['referenceId', $newReference->userId]])->with('sender', 'receiver')->first();
+            return fractal()->item($conversation)->transformWith(new ConversationListTransformer(true))->toArray();
+        } else {
+            return response()->json(['message' => trans('messages.unauthenticated')], 401);
+        }
     }
 
     // get Communication
     public function getCommunication($request)
     {
-        if($request->all){
+        if ($request->all) {
             $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')->get();
-        return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
-        }else{
+            return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
+        } else {
             $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')
-            ->paginate(15, ['*'], 'page', $request->page);
-        return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
-    
+                ->paginate(15, ['*'], 'page', $request->page);
+            return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         }
-        }
+    }
 
     //Create A call Api
     public function addCallRecord($request)
     {
         $udid = Str::uuid()->toString();
-        $staffFrom = Helper::entity('staff', $request->staff);
-        $patientId = Helper::entity('patient', $request->patient);
-        $input = [
-            'patientId' => $patientId,
-            'staffId' => $staffFrom,
-            'callStatusId' => $request->callStatus,
-            'createdBy' => 1,
-            'udid' => $udid
-        ];
+        if (Auth::user()->roleId == 4) {
+            $input = [
+                'patientId' => auth()->user()->patient->id,
+                'statusId' => $request->status,
+                'createdBy' => Auth::id(),
+                'udid' => $udid,
+                'startTime', 
+                'endTime',
+                'referenceId',
+                'entityType'
+            ];
+        } elseif (Auth::user()->roleId == 3) {
+            $patientId = Helper::entity('patient', $request->patient);
+            $input = [
+                'patientId' => $patientId,
+                'statusId' => $request->status,
+                'createdBy' => Auth::id(),
+                'udid' => $udid,
+                'startTime',
+                'endTime',
+                'referenceId',
+                'entityType'
+            ];
+        }
         CommunicationCallRecord::create($input);
+        $call=[];
+        CallRecord::create();
         return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
     }
 

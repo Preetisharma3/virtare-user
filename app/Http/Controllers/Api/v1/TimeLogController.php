@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Api\TimeLogService;
+use App\Services\Api\TimelineService;
+use App\Services\Api\ExcelGeneratorService;
 
 class TimeLogController extends Controller
 {
@@ -36,5 +38,9 @@ class TimeLogController extends Controller
     public function deletePatientTimeLog(Request $request, $entityType, $id = null, $timelogId)
     {
         return (new TimeLogService)->patientTimeLogDelete($request, $entityType, $id, $timelogId);
+    }
+
+    public function timeLogReport(){
+        ExcelGeneratorService::excelTimeLogExport();
     }
 }
