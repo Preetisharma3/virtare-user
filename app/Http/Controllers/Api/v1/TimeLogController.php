@@ -40,7 +40,7 @@ class TimeLogController extends Controller
         return (new TimeLogService)->patientTimeLogDelete($request, $entityType, $id, $timelogId);
     }
 
-    public function timeLogReport(){
-        ExcelGeneratorService::excelTimeLogExport();
+    public function timeLogReport(Request $request){
+        ExcelGeneratorService::excelTimeLogExport($request);
     }
 }
