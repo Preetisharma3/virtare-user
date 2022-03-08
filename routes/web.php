@@ -20,6 +20,7 @@ use App\Services\Api\PushNotificationService;
 */
 
 
+
 $router->get('/linkstorage', function () use ($router) {
 
     /*$public = getcwd();
@@ -191,6 +192,11 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // appointment Routes
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
+
+    // Export Excel Report Routes
+    $router->get('globalstartEnd/date/{id}', 'Api\v1\GlobalCodeController@globalStartEndDate');
+    $router->get('timelog/report/export', 'Api\v1\TimeLogController@timeLogReport');
+    $router->get('cptCode/report/export', 'Api\v1\CPTCodeController@cptCodeReport');
 
     // appointment Routes
     $router->get('appointment/conference', 'Api\v1\AppointmentController@conferenceAppointment');

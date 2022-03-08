@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Api\TimeLogService;
 use App\Services\Api\TimelineService;
+use App\Services\Api\ExcelGeneratorService;
 
 class TimeLogController extends Controller
 {
@@ -22,5 +23,9 @@ class TimeLogController extends Controller
     public function deleteTimeLog(Request $request,$id)
     {
         return (new TimeLogService)->timeLogDelete($request,$id);
+    }
+
+    public function timeLogReport(){
+        ExcelGeneratorService::excelTimeLogExport();
     }
 }

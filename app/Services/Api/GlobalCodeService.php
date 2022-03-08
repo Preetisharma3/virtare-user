@@ -4,6 +4,7 @@ namespace App\Services\Api;
 
 use Exception;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use App\Models\GlobalCode\GlobalCode;
 use App\Models\GlobalCode\GlobalCodeCategory;
 use App\Transformers\GlobalCode\GlobalCodeTransformer;
@@ -100,6 +101,19 @@ class GlobalCodeService
                return response()->json(['message' => trans('messages.deletedSuccesfully')]);
           } catch (Exception $e) {
                return response()->json(['message' => $e->getMessage()],  500);
+          }
+     }
+
+     public function getGlobalStartEndDate($request, $globalCodeId)
+     {    
+          if($globalCodeId)
+          {
+               $data = DB::select('CALL getGlobalStartEndDate(' . $globalCodeId . ')');
+               return fractal()->item($data)->transformWith(new GlobalCodeTransformer())->toArray();
+          }
+          else
+          {
+               return response()->json(['message' => "globalCodeId required"],  500);
           }
      }
 }
