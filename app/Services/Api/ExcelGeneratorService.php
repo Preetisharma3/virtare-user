@@ -28,6 +28,7 @@ class ExcelGeneratorService
                 $excelObj[] = array(
                     "staff_name" => @$data->performed->firstName.' '.@$data->performed->lastName,
                     "patient_name" => @$data->patient->firstName.' '.@$data->patient->middleName.' '.@$data->patient->lastName,
+                    "cpt_code" =>(!empty($data->cptCode->name))?$data->cptCode->name:'',
                     "time" =>$data->timeAmount,
                     "notes"=> (!empty($data->notes->note))?$data->notes->note:''
                 );
@@ -37,27 +38,30 @@ class ExcelGeneratorService
         $excelData = array($excelObj);
         
         $headingFrom = "A1"; // or any value
-        $headingTo = "D1"; // or any value
-        $sheet->setCellValue('A1', 'Patient TimeLog Report')->mergeCells('A1:D1');
+        $headingTo = "E1"; // or any value
+        $sheet->setCellValue('A1', 'Patient TimeLog Report')->mergeCells('A1:E1');
         $sheet->getStyle('A1')->getFont()->setSize(16);
         $sheet->getStyle("$headingFrom:$headingTo")->getAlignment()->setHorizontal('center');
         $sheet->getStyle("$headingFrom:$headingTo")->getFont()->setBold( true );
-        $sheet->getStyle("A2:D2")->getFont()->setBold( true );
+        $sheet->getStyle("A2:E2")->getFont()->setBold( true );
         // $sheet->getColumnDimension("A1")->setWidth(20);
         $sheet->getColumnDimension('A')->setWidth(80, 'pt');
         $sheet->getColumnDimension('B')->setWidth(80, 'pt');
         $sheet->getColumnDimension('C')->setWidth(80, 'pt');
         $sheet->getColumnDimension('D')->setWidth(120, 'pt');
+        $sheet->getColumnDimension('E')->setWidth(120, 'pt');
         $sheet->setCellValue('A2', 'Staff Name')
                 ->setCellValue('B2', 'Patient Name')
-                ->setCellValue('C2', 'Time')
-                ->setCellValue('D2', 'Notes');
+                ->setCellValue('C2', 'Cpt Code')
+                ->setCellValue('D2', 'Time')
+                ->setCellValue('E2', 'Notes');
         $k = 3;
         for ($i = 0; $i < count($excelObj); $i++) {
             $sheet->setCellValue('A' . $k, $excelObj[$i]["staff_name"]);
             $sheet->setCellValue('B' . $k, $excelObj[$i]["patient_name"]);
-            $sheet->setCellValue('C' . $k, $excelObj[$i]["time"]);
-            $sheet->setCellValue('D' . $k, $excelObj[$i]["notes"]);
+            $sheet->setCellValue('C' . $k, $excelObj[$i]["cpt_code"]);
+            $sheet->setCellValue('D' . $k, $excelObj[$i]["time"]);
+            $sheet->setCellValue('E' . $k, $excelObj[$i]["notes"]);
             $k++;
         }
         
