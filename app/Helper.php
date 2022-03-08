@@ -85,7 +85,7 @@ class Helper
 
 ?><document type="freeswitch/xml">
             <section name="directory">
-                <domain name="51.81.193.156">
+                <domain name="54.175.131.234">
                     <params>
                         <param name="dial-string" value="{presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(${dialed_user}@${dialed_domain})}" />
                     </params>
