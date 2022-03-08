@@ -23,7 +23,7 @@ class UserService
         try {
             if (auth()->user()->roleId == 4) {
                 $data = patient::where('userId', auth()->user()->id)->first();
-                return fractal()->item($data)->transformWith(new PatientTransformer(false))->toArray();
+                return fractal()->item($data)->transformWith(new PatientTransformer(true))->toArray();
             } elseif (auth()->user()->roleId == 6) {
                 $data = PatientFamilyMember::where('userId', auth()->user()->id)->first();
                 return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
