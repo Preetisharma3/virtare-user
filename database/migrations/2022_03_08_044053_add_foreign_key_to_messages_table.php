@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class AddForeignKeyToMessagesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('messages', function (Blueprint $table) {
+            $table->bigInteger('communicationId')->unsigned()->after('id');
+            $table->foreign('communicationId')->references('id')->on('communications')->onDelete('cascade')->onUpdate('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('messages', function (Blueprint $table) {
+            $table->dropForeign('messages_communicationid_foreign');
+            $table->dropColumn('communicationId');
+        });
+    }
+}

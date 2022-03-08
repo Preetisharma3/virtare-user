@@ -35,12 +35,12 @@ class ConversationListTransformer extends TransformerAbstract
     {
         return [
             'id' => $data->id,
-            'senderId'=>$data->senderId,
+            'senderId'=>$data->from,
             'sender' => $data->sender->patient ? $data->sender->patient->firstName . ' ' . $data->sender->patient->lastName : $data->sender->staff->firstName . ' ' . $data->sender->staff->lastName,
-            'receiverId'=>$data->receiverId,
+            'receiverId'=>$data->referenceId,
             'profile_photo'=>(!empty($data->receiver->profilePhoto))&&(!is_null($data->receiver->profilePhoto)) ? URL::to('/').'/'.$data->receiver->profilePhoto : "",
             'profilePhoto'=>(!empty($data->receiver->profilePhoto))&&(!is_null($data->receiver->profilePhoto)) ? URL::to('/').'/'.$data->receiver->profilePhoto : "",
-            // 'expertise' => $data->receiver->staff->expertise ? $data->receiver->staff->expertise->name : '',
+            'expertise' => $data->receiver->staff->expertise ? $data->receiver->staff->expertise->name : '',
             'designation' => $data->receiver->staff->designation ? $data->receiver->staff->designation->name :'',
             'specialization' => $data->receiver->staff->specialization ? $data->receiver->staff->specialization->name : '',
             'receiver' => $data->receiver->patient ? $data->receiver->patient->firstName . ' ' . $data->receiver->patient->lastName : $data->receiver->staff->firstName . ' ' . $data->receiver->staff->lastName,

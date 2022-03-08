@@ -34,7 +34,7 @@ class ConversationTransformer extends TransformerAbstract
     {
         return [
             'id' => $data->id,
-            'conversationId' => $data->conversationId,
+            'conversationId' => $data->communicationId,
             'senderId' => $data->senderId,
             'message' => $data->message,
             'type' => $data->type,
