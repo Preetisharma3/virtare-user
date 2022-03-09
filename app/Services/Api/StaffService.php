@@ -69,10 +69,10 @@ class StaffService
     {
         if(!$id){
             if($request->all){
-                $data = Staff::with('roles', 'appointment')->orderBy('createdAt', 'DESC')->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
+                $data = Staff::where('firstname','LIKE', '%' . $request->search . '%')->orWhere('lastName','LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('createdAt', 'DESC')->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
                 return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
             }else{
-                $data = Staff::with('roles', 'appointment')->orderBy('createdAt', 'DESC')->orderBy('firstName','ASC')->orderBy('lastName','ASC')->paginate(env('PER_PAGE',20));
+                $data = Staff::where('firstname','LIKE', '%' . $request->search . '%')->orWhere('lastName','LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('createdAt', 'DESC')->orderBy('firstName','ASC')->orderBy('lastName','ASC')->paginate(env('PER_PAGE',20));
                 return fractal()->collection($data)->transformWith(new StaffTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();    
             }
            } else {
