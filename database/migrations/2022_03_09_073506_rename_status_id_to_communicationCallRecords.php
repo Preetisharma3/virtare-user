@@ -14,12 +14,7 @@ class RenameStatusIdToCommunicationCallRecords extends Migration
     public function up()
     {
         Schema::table('communicationCallRecords', function (Blueprint $table) {
-            $table->dropForeign(['statusId']);
             $table->renameColumn('statusId', 'callStatusId');
-            $table->foreign('callStatusId')
-                ->references('id')
-                ->on('globalCodes')
-                ->onDelete('cascade');
         });
     }
 
