@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\Controller;
-use App\Services\Api\TaskService;
 use Illuminate\Http\Request;
+use App\Services\Api\TaskService;
+use App\Http\Controllers\Controller;
+use App\Services\Api\ExcelGeneratorService;
+use App\Services\Api\ExportReportRequestService;
 
 class TaskController extends Controller
 {
@@ -53,5 +55,21 @@ class TaskController extends Controller
 
     public function taskPerCategory(){
         return (new TaskService)->taskPerCategory();
+    }
+
+    public function taskReport(Request $request,$id){
+        if($id)
+        {
+            $checkReport = ExportReportRequestService::checkReportRequest($id);
+            if($checkReport){
+                ExcelGeneratorService::taskReportExport($request);
+            }else{
+                return response()->json(['message' => "User not Access to download Report."], 500);
+            }
+        }
+        else
+        {
+            return response()->json(['message' => "invalid URL."], 500);
+        }
     }
 }
