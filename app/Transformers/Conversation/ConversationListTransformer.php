@@ -40,7 +40,7 @@ class ConversationListTransformer extends TransformerAbstract
             'receiverId'=>$data->referenceId,
             'profile_photo'=>(!empty($data->receiver->profilePhoto))&&(!is_null($data->receiver->profilePhoto)) ? URL::to('/').'/'.$data->receiver->profilePhoto : "",
             'profilePhoto'=>(!empty($data->receiver->profilePhoto))&&(!is_null($data->receiver->profilePhoto)) ? URL::to('/').'/'.$data->receiver->profilePhoto : "",
-            'expertise' => $data->receiver->staff ? $data->receiver->staff->expertise->name : '',
+            'expertise' => (!empty($data->receiver->staff->expertise)) ? $data->receiver->staff->expertise->name : '',
             'designation' => $data->receiver->staff ? $data->receiver->staff->designation->name :'',
             'specialization' => $data->receiver->staff ? $data->receiver->staff->specialization->name : '',
             'receiver' => $data->receiver->patient ? $data->receiver->patient->firstName . ' ' . $data->receiver->patient->lastName : $data->receiver->staff->firstName . ' ' . $data->receiver->staff->lastName,

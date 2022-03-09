@@ -37,7 +37,7 @@ class CommunicationTransformer extends TransformerAbstract
     {
         return [
             'id'=>$data->id,
-            'from'=>$data->sender->patient ? $data->sender->patient->firstName . ' ' . $data->sender->patient->lastName : $data->sender->staff->firstName . ' ' . $data->sender->staff->lastName,
+            'from'=>$data->sender->patient ? @$data->sender->patient->firstName . ' ' . @$data->sender->patient->lastName : @$data->sender->staff->firstName . ' ' . @$data->sender->staff->lastName,
             'type'=>$data->type->name,
             'to'=>$data->receiver->patient ? @$data->receiver->patient->firstName . ' ' . @$data->receiver->patient->lastName : @$data->receiver->staff->firstName . ' ' . @$data->receiver->staff->lastName,
             'category'=>$data->globalCode->name,

@@ -157,9 +157,16 @@ class AppointmentService
                 $fromDateFormate = Helper::date($request->input('fromDate'));
                 $fromDate = $fromDateFormate;
             }
-
-            if (!empty($request->staffId)) {
-                $staffIdx = json_encode(explode(',',$request->staffId));
+            $staffIdx = '';
+            $staffs = '';
+            if (!empty($request->staffId) && $request->staffId != 'undefined') {
+                $staffs = explode(',',$request->staffId);
+                $staff_array = array();
+                foreach ($staffs as  $staff) {
+                    $staff_id = Helper::entity('staff',trim($staff));
+                    array_push($staff_array, $staff_id);
+                }
+                $staffIdx = json_encode($staff_array);
             }
 
             $data = DB::select(
