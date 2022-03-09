@@ -186,8 +186,9 @@ class AppointmentService
     public function appointmentUpdate($request, $id)
     {
         $input = ['updatedBy' => Auth::id(), 'startDateTime' => Helper::date($request->startDateTime)];
-        Appointment::where('id', $id)->update($input);
-        $data = Appointment::where('id', $id)->first();
+        $staff=Helper::entity('staff',$id);
+        Appointment::where([['patientId', auth()->user()->patient->id],['staffId',$staff]])->update($input);
+        $data = Appointment::where([['patientId', auth()->user()->patient->id],['staffId',$staff]])->first();
         return fractal()->item($data)->transformWith(new AppointmentTransformer())->toArray();
     }
 }
