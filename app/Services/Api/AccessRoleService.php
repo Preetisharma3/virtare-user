@@ -66,23 +66,27 @@ class AccessRoleService
                     $staff = "";
                 }
             }
-
             if(!empty($staff)){
-                $data = DB::select(
-                    'CALL assignedRolesActionList('.$staff.')',
+                $actions = DB::select(
+                    'CALL assignedRolesActionsList('.$staff.')',
+                );
+                $widgets = DB::select(
+                    'CALL assignedRolesWidgetsList('.$staff.')',
                 );
             }else{
                 $data = [];
             }
-
             $action= [];
             $widget= [];
-            foreach( $data as $new){
+            foreach( $actions as $new){
                 $actionidx = $new->actionId;
                 array_push($action,$actionidx);
+            }
+            foreach( $widgets as $new){
                 $widgetidx = $new->widgetId;
                 array_push($widget,$widgetidx);
             }
+
             $daat = [
                 'actionId'=>$action,
                 'widgetId'=>$widget,
