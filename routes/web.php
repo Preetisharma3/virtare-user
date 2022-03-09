@@ -57,6 +57,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
     $router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
 
+    // Call Router
+
+    $router->patch('call/notification/{id}','Api\v1\NotificationController@callUpdate');
+
     // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
     $router->get('staff/patient', 'Api\v1\StaffPatientController@patientList');
