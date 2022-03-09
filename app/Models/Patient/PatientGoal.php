@@ -44,7 +44,7 @@ class PatientGoal extends Model
 
     public function notes()
     {
-        return $this->hasOne(Note::class, 'referenceId');
+        return $this->hasOne(Note::class,'referenceId');
     }
 
 }

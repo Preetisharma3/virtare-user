@@ -22,7 +22,9 @@ class PatientGoalService
                     $data = PatientGoal::where([['patientId', $patient], ['udid', $goalId]])->get();
                 }
             } elseif (!$goalId) {
-                $data = PatientGoal::where('patientId', $patient)->get();
+                $data = PatientGoal::where('patientId', $patient)->with('notes',function($query){
+                    $query->where('entityType','patientGoal');
+                })->orderBy('createdAt','DESC')->get();
             } else {
                 return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }
