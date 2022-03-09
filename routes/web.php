@@ -22,6 +22,8 @@ use App\Services\Api\PushNotificationService;
 
 
 
+$router->get('timelog/report/export/{id}', 'Api\v1\TimeLogController@timeLogReport');
+
 $router->get('/linkstorage', function () use ($router) {
 
     /*$public = getcwd();
@@ -56,6 +58,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     $router->get('staff/network', 'Api\v1\DashboardController@staffNetwork');
     $router->get('staff/specialization', 'Api\v1\DashboardController@staffSpecialization');
+
+    // Call Router
+
+    $router->patch('call/notification/{id}','Api\v1\NotificationController@callUpdate');
 
     // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
@@ -203,8 +209,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Export Excel Report Routes
     $router->get('globalstartEnd/date/{id}', 'Api\v1\GlobalCodeController@globalStartEndDate');
-    $router->get('timelog/report/export', 'Api\v1\TimeLogController@timeLogReport');
     $router->get('cptCode/report/export', 'Api\v1\CPTCodeController@cptCodeReport');
+    $router->post('export/report/request', 'Api\v1\ExportReportRequestController@addExportRequest');
 
     // appointment Routes
     $router->get('appointment/conference', 'Api\v1\AppointmentController@conferenceAppointment');
@@ -216,6 +222,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
     $router->get('appointment[/{id}]', 'Api\v1\AppointmentController@appointmentList');
     $router->post('appointment[/{id}]', 'Api\v1\AppointmentController@addAppointment');
+    $router->delete('appointment/{id}', 'Api\v1\AppointmentController@deleteAppointment');
 
     // Communication Routes
     $router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');

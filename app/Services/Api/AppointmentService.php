@@ -157,9 +157,16 @@ class AppointmentService
                 $fromDateFormate = Helper::date($request->input('fromDate'));
                 $fromDate = $fromDateFormate;
             }
-
-            if (!empty($request->staffId)) {
-                $staffIdx = json_encode(explode(',',$request->staffId));
+            $staffIdx = '';
+            $staffs = '';
+            if (!empty($request->staffId) && $request->staffId != 'undefined') {
+                $staffs = explode(',',$request->staffId);
+                $staff_array = array();
+                foreach ($staffs as  $staff) {
+                    $staff_id = Helper::entity('staff',trim($staff));
+                    array_push($staff_array, $staff_id);
+                }
+                $staffIdx = json_encode($staff_array);
             }
 
             $data = DB::select(
@@ -186,8 +193,17 @@ class AppointmentService
     public function appointmentUpdate($request, $id)
     {
         $input = ['updatedBy' => Auth::id(), 'startDateTime' => Helper::date($request->startDateTime)];
-        Appointment::where('id', $id)->update($input);
-        $data = Appointment::where('id', $id)->first();
+        Appointment::where([['patientId', auth()->user()->patient->id],['udid',$id]])->update($input);
+        $data = Appointment::where([['patientId', auth()->user()->patient->id],['udid',$id]])->first();
         return fractal()->item($data)->transformWith(new AppointmentTransformer())->toArray();
     }
+
+    public function appointmentDelete($request, $id)
+    {
+        $input = ['deletedBy' => Auth::id(), 'isDelete' => 1,'isActive'=>0];
+        Appointment::where([['patientId', auth()->user()->patient->id],['udid',$id]])->update($input);
+        Appointment::where([['patientId', auth()->user()->patient->id],['udid',$id],['startDateTime','>=',Carbon::now()->subMinutes(60)]])->delete();
+        return response()->json(['message'=>trans('messages.deletedSuccesfully')]);
+    }
+
 }

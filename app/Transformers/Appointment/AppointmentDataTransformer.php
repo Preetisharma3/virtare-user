@@ -19,6 +19,8 @@ class AppointmentDataTransformer extends TransformerAbstract
             return [];
         }
         return [
+            'id'=>$data->udid,
+            'duration'=>$data->duration->name,
             "date"=>strtotime(@$data->startDateTime),
             "notes"=>@$data->notes->note,
             'conferenceId'=>@$data->conferenceId,

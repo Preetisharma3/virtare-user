@@ -37,9 +37,9 @@ class CommunicationTransformer extends TransformerAbstract
     {
         return [
             'id'=>$data->id,
-            'from'=>$data->sender->patient ? $data->sender->patient->firstName . ' ' . $data->sender->patient->lastName : $data->sender->staff->firstName . ' ' . $data->sender->staff->lastName,
+            'from'=>$data->sender->patient ? @$data->sender->patient->firstName . ' ' . @$data->sender->patient->lastName : @$data->sender->staff->firstName . ' ' . @$data->sender->staff->lastName,
             'type'=>$data->type->name,
-            'to'=>$data->receiver->patient ? $data->receiver->patient->firstName . ' ' . $data->receiver->patient->lastName : $data->receiver->staff->firstName . ' ' . $data->receiver->staff->lastName,
+            'to'=>$data->receiver->patient ? @$data->receiver->patient->firstName . ' ' . @$data->receiver->patient->lastName : @$data->receiver->staff->firstName . ' ' . @$data->receiver->staff->lastName,
             'category'=>$data->globalCode->name,
             'priority'=>$data->priority->name,
             'createdAt'=>strtotime($data->createdAt),
@@ -51,7 +51,7 @@ class CommunicationTransformer extends TransformerAbstract
             'expertise' => (!empty($data->receiver->staff->expertise)) ? $data->receiver->staff->expertise->name : '',
             'designation' => $data->receiver->staff ? $data->receiver->staff->designation->name : '',
             'specialization' => $data->receiver->staff ? $data->receiver->staff->specialization->name : '',
-            'receiver' => $data->receiver->patient ? $data->receiver->patient->firstName . ' ' . $data->receiver->patient->lastName : $data->receiver->staff->firstName . ' ' . $data->receiver->staff->lastName,
+            'receiver' => $data->receiver->patient ? @$data->receiver->patient->firstName . ' ' . @$data->receiver->patient->lastName : @$data->receiver->staff->firstName . ' ' . @$data->receiver->staff->lastName,
             'message' => (!empty($data->conversationMessages->last()->message)) ? $data->conversationMessages->last()->message : '',
             'type' => (!empty($data->conversationMessages->last()->type)) ? $data->conversationMessages->last()->type : '',
             'isRead' => (!empty($data->conversationMessages->last()->isRead)) ? 1 : 0,

@@ -11,4 +11,8 @@ class NotificationController extends Controller
     public function appointmentNotification(Request $request){
         return (new NotificationService)->appointmentNotification($request);
     }
+
+    public function callUpdate(Request $request,$id){
+        return (new NotificationService)->updateCall($request,$id);
+    }
 }

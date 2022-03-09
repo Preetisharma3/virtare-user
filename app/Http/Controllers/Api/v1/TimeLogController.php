@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Api\TimeLogService;
 use App\Services\Api\TimelineService;
 use App\Services\Api\ExcelGeneratorService;
+use App\Services\Api\ExportReportRequestService;
 
 class TimeLogController extends Controller
 {
@@ -40,7 +41,19 @@ class TimeLogController extends Controller
         return (new TimeLogService)->patientTimeLogDelete($request, $entityType, $id, $timelogId);
     }
 
-    public function timeLogReport(Request $request){
-        ExcelGeneratorService::excelTimeLogExport($request);
+    public function timeLogReport(Request $request,$id){
+        if($id)
+        {
+            $checkReport = ExportReportRequestService::checkReportRequest($id);
+            if($checkReport){
+                ExcelGeneratorService::excelTimeLogExport($request);
+            }else{
+                return response()->json(['message' => "User not Access to download Report."], 500);
+            }
+        }
+        else
+        {
+            return response()->json(['message' => "invalid URL."], 500);
+        }
     }
 }
