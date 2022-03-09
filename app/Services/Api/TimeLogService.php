@@ -48,7 +48,6 @@ class TimeLogService
     {
         DB::beginTransaction();
         try {
-            $time = Helper::time($request->input('timeAmount'));
             if ($request->input('noteId')) {
                 $noteData = ['note' => $request->input('note'), 'updatedBy' => Auth::id()];
                 Note::where('id', $request->input('noteId'))->update($noteData);
@@ -62,7 +61,7 @@ class TimeLogService
             }
             $staffid = Helper::entity('staff', $request->input('staff'));
             $patient = Helper::entity('patient', $request->input('patient'));
-            $input = ['performedId' => $staffid, 'patientId' => $patient, 'timeAmount' => $time, 'updatedBy' => Auth::id()];
+            $input = ['performedId' => $staffid, 'patientId' => $patient, 'timeAmount' => $request->input('timeAmount'), 'updatedBy' => Auth::id()];
             PatientTimeLog::where('udid', $id)->update($input);
             $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed', 'patient.notes')->first();
             $userdata = fractal()->item($data)->transformWith(new PatientTimeLogTransformer())->toArray();
@@ -88,17 +87,16 @@ class TimeLogService
     public function patientTimeLogAdd($request, $entityType, $id, $timelogId)
     {
         DB::beginTransaction();
-        try {
+        // try {
             if (!$timelogId) {
                 $dateConvert = Helper::date($request->input('date'));
-                $timeConvert = Helper::time($request->input('timeAmount'));
                 $patientId = Patient::where('udid', $id)->first();
                 $performedBy = Helper::entity('staff', $request->input('performedBy'));
                 $loggedBy = Helper::entity('staff', $request->input('loggedBy'));
                 $cpt=CPTCode::where('udid',$request->cptCode)->first();
                 $input = [
                     'categoryId' => $request->input('category'), 'loggedId' => $loggedBy, 'udid' => Str::uuid()->toString(),
-                    'performedId' => $performedBy, 'date' => $dateConvert, 'timeAmount' => $timeConvert,
+                    'performedId' => $performedBy, 'date' => $dateConvert, 'timeAmount' => $request->input('timeAmount'),
                     'createdBy' => Auth::id(), 'patientId' => $patientId->id,'cptCodeId'=>$cpt->id
                 ];
                 $data = PatientTimeLog::create($input);
@@ -111,7 +109,6 @@ class TimeLogService
                 $data = response()->json(['message' => trans('messages.createdSuccesfully')]);
             } else {
                 $dateConvert = Helper::date($request->input('date'));
-                $timeConvert = Helper::time($request->input('timeAmount'));
                 $cpt=CPTCode::where('udid',$request->cptCode)->first();
                 $timeLog = array();
                 if (!empty($request->category)) {
@@ -130,7 +127,7 @@ class TimeLogService
                     $timeLog['date'] = $dateConvert;
                 }
                 if (!empty($request->timeAmount)) {
-                    $timeLog['timeAmount'] = $timeConvert;
+                    $timeLog['timeAmount'] = $request->input('timeAmount');
                 }
                 if (!empty($request->cptCode)) {
                     $timeLog['cptCodeId'] = $cpt;
@@ -142,7 +139,6 @@ class TimeLogService
                     Note::where('id', $request->input('noteId'))->update($noteData);
                 } else {
                     $time = PatientTimeLog::where('udid', $timelogId)->first();
-
                     $noteData = [
                         'note' => $request->input('note'), 'entityType' => $request->input('entityType'), 'referenceId' => $time->id,
                         'udid' => Str::uuid()->toString(), 'createdBy' => Auth::id(),
@@ -153,10 +149,10 @@ class TimeLogService
             }
             DB::commit();
             return $data;
-        } catch (Exception $e) {
-            DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
-        }
+        // } catch (Exception $e) {
+        //     DB::rollback();
+        //     return response()->json(['message' => $e->getMessage()],  500);
+        // }
     }
 
     // List Patient TimeLog
