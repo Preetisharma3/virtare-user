@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Widget\Widget;
 use Illuminate\Database\Seeder;
 
-class RoleSeeder extends Seeder
+class WidgetSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,48 +15,48 @@ class RoleSeeder extends Seeder
     public function run()
     {
         Widget::create([
-            'id'=>'1',
-            'name'=>'Patients widgets',
+            'widgetName' =>'Patients widgets',
+            'title'=>'Patients widgets',
         ]);
 
         Widget::create([
-            'id'=>'2',
-            'name'=>'Today Appointment',
+            'widgetName' => 'Today Appointment',
+            'title'=>'Today Appointment',
         ]);
 
         Widget::create([
-            'id'=>'3',
-            'name'=>'Call Queue',
+            'widgetName' => 'Call Queue',
+            'title'=>'Call Queue',
         ]);
 
         Widget::create([
-            'id'=>'4',
-            'name'=>'Patients Stats',
+            'widgetName'=> 'Patients Stats',
+            'title'=>'Patients Stats',
         ]);
 
         Widget::create([
-            'id'=>'5',
-            'name'=>'Care Coordinator',
+            'widgetName' => 'Care Coordinator',
+            'title'=>'Care Coordinator',
         ]);
 
         Widget::create([
-            'id'=>'6',
-            'name'=>'Cpt Code',
+            'widgetName'=> 'Cpt Code',
+            'title'=>'Cpt Code',
         ]);
 
         Widget::create([
-            'id'=>'7',
-            'name'=>'Financial Stats',
+            'widgetName' => 'Financial Stats',
+            'title'=>'Financial Stats',
         ]);
 
         Widget::create([
-            'id'=>'8',
-            'name'=>'New Patients Chart',
+            'widgetName' => 'New Patients Chart',
+            'title'=>'New Patients Chart',
         ]);
 
         Widget::create([
-            'id'=>'9',
-            'name'=>'New Appointment Chart',
+            'widgetName' => 'New Appointment Chart',
+            'title'=>'New Appointment Chart',
         ]);
 
 
