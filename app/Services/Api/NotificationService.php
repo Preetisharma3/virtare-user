@@ -15,6 +15,7 @@ use App\Services\Api\PushNotificationService;
 use App\Models\Appointment\AppointmentNotification;
 use App\Models\Communication\CommunicationCallRecord;
 use Carbon\Carbon;
+use GuzzleHttp\Psr7\Request;
 
 class NotificationService
 {
@@ -45,6 +46,7 @@ class NotificationService
             }
         }
     }
+
     public function appointmentNotificationSend()
     {
         $notifications = DB::select(
@@ -66,7 +68,7 @@ class NotificationService
             }
         }
     }
-    
+
     public function appointmentConfrence()
     {
         $toDate = Helper::date(strtotime('+5 minutes'));
@@ -98,39 +100,17 @@ class NotificationService
                         'referenceId' => 'CONF' . $appointment->id,
                         'createdBy' => $staffUserId,
                     ]);
-                   $app= Appointment::where('id', $appointment->id)->update(['conferenceId' => 'CONF' . $appointment->id]);
-                   
-                    $udid = Str::uuid()->toString();
-                    if($app->status=='start'){
-                       $start=Carbon::now(); 
-                    }elseif($app->status=='end'){
-                        $end=Carbon::now();
-                    }
-                    if (Auth::user()->roleId == 4) {
-                        $input = [
-                            'patientId' => auth()->user()->patient->id,
-                            'statusId' => $app->status,
-                            'createdBy' => Auth::id(),
-                            'udid' => $udid,
-                            'startTime'=>$start,
-                            'endTime'=>$end,
-                            'referenceId'=>$app->conferenceId,
-                            'entityType'=>'conferenceCall'
-                        ];
-                    } elseif (Auth::user()->roleId == 3) {
-                        $input = [
-                            'patientId' => $patentId,
-                            'statusId' => $app->status,
-                            'createdBy' => Auth::id(),
-                            'udid' => $udid,
-                            'startTime'=>$start,
-                            'endTime'=>$end,
-                            'referenceId'=>$app->conferenceId,
-                            'entityType'=>'conferenceCall'
-                        ];
-                    }
-                    $comm=CommunicationCallRecord::create($input);
-                    $call=['udid' => $udid,'createdBy' => Auth::id(),'communicationCallRecordId'=>$comm->id,'staffId'=>$staffId];
+                    Appointment::where('id', $appointment->id)->update(['conferenceId' => 'CONF' . $appointment->id]);
+
+                    $input = [
+                        'patientId' => $patient->id,
+                        'statusId' => 47,
+                        'udid' => Str::uuid()->toString(),
+                        'referenceId' => 'CONF' . $appointment->id,
+                        'entityType' => 'conferenceCall'
+                    ];
+                    $comm = CommunicationCallRecord::create($input);
+                    $call = ['udid' => Str::uuid()->toString(), 'createdBy' => $patient->id, 'communicationCallRecordId' => $comm->id, 'staffId' => $staffId];
                     CallRecord::create($call);
                 }
             }
@@ -145,5 +125,27 @@ class NotificationService
         return DB::select(
             'CALL appointmentConferenceIdUpdate("' . $fromDate . '")',
         );
+    }
+
+
+    public function updateCall($request, $id)
+    {
+        $start = '';
+        $end = '';
+        if ($request->status == 'start') {
+            $start = Carbon::now();
+        } elseif ($request->status == 'end') {
+            $end = Carbon::now();
+        }
+        $comm = array();
+       if (!empty($start)){
+            $comm['startTime'] = $start;
+        }
+        if (!empty($end)){
+            $comm['endTime'] = $end;
+        }
+        $comm['updatedBy']=Auth::id();
+        CommunicationCallRecord::where('referenceId',$id)->update($comm);
+        return response()->json(['message'=>trans('messages.updatedSuccesfully')]);
     }
 }
