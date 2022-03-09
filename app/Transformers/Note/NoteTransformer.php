@@ -4,7 +4,6 @@ namespace App\Transformers\Note;
 
 use League\Fractal\TransformerAbstract;
 use App\Transformers\User\UserTransformer;
-use App\Transformers\Screen\ScreenTransformer;
 
 
 class NoteTransformer extends TransformerAbstract
@@ -32,7 +31,7 @@ class NoteTransformer extends TransformerAbstract
             'type' => $data->type,
             'note' => $data->note,
             'addedBy'=>(!empty(@$data->firstName))?ucfirst(@$data->firstName).' '.ucfirst(@$data->lastName):ucfirst(@$data->user->staff->firstName).' '.ucfirst(@$data->user->staff->lastName),
-            'addedByDetail'=>$data->user?fractal()->item($data->user)->transformWith(new UserTransformer(false))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray():[],
+            'addedByDetail'=>@$data->user?fractal()->item($data->user)->transformWith(new UserTransformer(false))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray():[],
             'flag'=>'#39B5C2'
         ];
     }
