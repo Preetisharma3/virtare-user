@@ -49,4 +49,9 @@ class AppointmentController extends Controller
     return (new AppointmentService)->appointmentUpdate($request,$id);
   }
 
+  public function deleteAppointment(request $request,$id)
+  {
+    return (new AppointmentService)->appointmentDelete($request,$id);
+  }
+
 }
