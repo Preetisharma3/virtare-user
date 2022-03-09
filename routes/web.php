@@ -23,6 +23,7 @@ use App\Services\Api\PushNotificationService;
 
 
 $router->get('timelog/report/export/{id}', 'Api\v1\TimeLogController@timeLogReport');
+$router->get('task/report/export/{id}', 'Api\v1\TaskController@taskReport');
 
 $router->get('/linkstorage', function () use ($router) {
 
