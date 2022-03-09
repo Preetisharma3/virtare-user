@@ -200,7 +200,7 @@ class StaffService
             $staffId = Helper::entity('staff',$id);
             DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId. '")');
             $staffAvailability = StaffAvailability::where('udid', $udid)->first();
-            $message = ["message" => trans('messages.created_succesfully')];
+            $message = ["message" => trans('messages.createdSuccesfully')];
             $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
             $endData = array_merge($message, $resp);
             return $endData;
