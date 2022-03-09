@@ -159,7 +159,7 @@ class AppointmentService
             }
             $staffIdx = '';
             $staffs = '';
-            if (!empty($request->staffId) && $request->staffId == 'undefined') {
+            if (!empty($request->staffId) && $request->staffId != 'undefined') {
                 $staffs = explode(',',$request->staffId);
                 $staff_array = array();
                 foreach ($staffs as  $staff) {
