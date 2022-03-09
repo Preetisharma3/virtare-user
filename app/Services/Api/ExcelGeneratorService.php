@@ -23,7 +23,7 @@ class ExcelGeneratorService
         $writer = new Xlsx($spreadsheet);
         $post = $request->all();
         if(isset($post["fromDate"]) && !empty($post["fromDate"])){
-            $fromDate = date('Y-m-d', strtotime($request->get("fromDate")));
+            $fromDate = date('Y-m-d', $request->get("fromDate"));
         }
         else
         {
@@ -31,7 +31,7 @@ class ExcelGeneratorService
         }
 
         if($request->get("toDate")){
-            $toDate = date('Y-m-d', strtotime($request->get("toDate")));
+            $toDate = date('Y-m-d', $request->get("toDate"));
         }
         else
         {
