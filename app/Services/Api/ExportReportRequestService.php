@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ExportReportRequest\ExportReportRequest;
+use App\Transformers\ExportReportRequest\ExportReportRequestTransformer;
 
 class ExportReportRequestService
 {
@@ -44,7 +45,12 @@ class ExportReportRequestService
 
             if($lastid)
             {
-                return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
+                $serviceData = ExportReportRequest::where('id', $lastid)->first();
+                $message = ['message' => trans('messages.createdSuccesfully')];
+                $resp =  fractal()->item($serviceData)->transformWith(new ExportReportRequestTransformer())->toArray();
+                $endData = array_merge($message, $resp);
+                return $endData;
+                // return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
             }else{
                 return response()->json(['message' => "server internal error."], 500);
             }
