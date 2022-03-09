@@ -74,7 +74,8 @@ class AccessRoleService
                     'CALL assignedRolesWidgetsList('.$staff.')',
                 );
             }else{
-                $data = [];
+                $actions = [];
+                $widgets = [];
             }
             $action= [];
             $widget= [];
