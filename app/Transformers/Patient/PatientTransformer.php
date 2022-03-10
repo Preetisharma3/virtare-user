@@ -23,10 +23,14 @@ class PatientTransformer extends TransformerAbstract
 
     public function transform($data): array
     {
-        if (!$data->family->relationId || !$data->genderId) {
-            $relation = '';
+        if ($data->family) {
+            if (!$data->family->relationId || !$data->genderId) {
+                $relation = '';
+            } else {
+                $relation = Helper::relation($data->family->relationId, $data->genderId);
+            }
         } else {
-            $relation = Helper::relation($data->family->relationId, $data->genderId);
+            $relation = '';
         }
         return [
             'id' => $data->udid,
@@ -64,8 +68,8 @@ class PatientTransformer extends TransformerAbstract
             'lastMessageSent' => 'N/A',
             'flagName' => 'jhj',
             'flagColor' => 'fhghg',
-            'relationId' => (!empty($relation['relationId'])) ? $relation['relationId']:'',
-            'relation' => (!empty($relation['relation'])) ? $relation['relation']:'',
+            'relationId' => (!empty($relation['relationId'])) ? $relation['relationId'] : '',
+            'relation' => (!empty($relation['relation'])) ? $relation['relation'] : '',
             'user' => $this->showData && $data->user ? fractal()->item($data->user)->transformWith(new UserTransformer(false))->toArray() : [],
             'medicalRecordNumber' => (!empty($data->medicalRecordNumber)) ? $data->medicalRecordNumber : '',
             'profile_photo' => (!empty($data->user->profilePhoto)) && (!is_null($data->user->profilePhoto)) ? str_replace("public", "", URL::to('/')) . '/' . $data->user->profilePhoto : "",
