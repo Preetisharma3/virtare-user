@@ -80,7 +80,7 @@ class Patient extends Model
 
     public function family()
     {
-        return $this->belongsTo(PatientFamilyMember::class, 'id');
+        return $this->belongsTo(PatientFamilyMember::class, 'id','patientId');
     }
 
     public function emergency()
