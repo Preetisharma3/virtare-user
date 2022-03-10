@@ -31,10 +31,10 @@ class Patient extends Model
     protected $guarded = [];
 
 
-    public function initials(): string
-	{
-		return substr($this->firstName, 0, 1);
-	}
+    // public function initials(): string
+	// {
+	// 	return substr($this->firstName, 0, 1);
+	// }
 
 
     public function gender()
