@@ -15,7 +15,7 @@ class TimelineService
             $data = DB::select(
                 'CALL getTotalPatientSummaryCount('.$timelineId.')',
              );
-        return fractal()->collection($data)->transformWith(new NewPatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+        return fractal()->collection($data)->transformWith(new NewPatientCountTransformer())->toArray();
     }
 
     public function appointmentTotal($request){
@@ -23,6 +23,6 @@ class TimelineService
             $data = DB::select(
                 'CALL getTotalAppointmentSummaryCount('.$timelineId.')',
              );
-        return fractal()->collection($data)->transformWith(new NewPatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+        return fractal()->collection($data)->transformWith(new NewPatientCountTransformer())->toArray();
     }
 }
