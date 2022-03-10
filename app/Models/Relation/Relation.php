@@ -2,6 +2,7 @@
 
 namespace App\Models\Relation;
 
+use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,4 +18,8 @@ class Relation extends Model
     protected $table = 'relations';
     use HasFactory;
     protected $guarded = [];
+
+    public function relation(){
+        return $this->belongsTo(GlobalCode::class, 'reverseRelationId', 'id');
+    }
 }
