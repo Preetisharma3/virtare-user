@@ -66,6 +66,7 @@ class Patient extends Model
     {
         return $this->hasOne(GlobalCode::class, 'id', 'stateId');
     }
+    
 
     public function country()
     {
@@ -79,7 +80,7 @@ class Patient extends Model
 
     public function family()
     {
-        return $this->hasOne(PatientFamilyMember::class, 'patientId');
+        return $this->belongsTo(PatientFamilyMember::class, 'id');
     }
 
     public function emergency()

@@ -20,7 +20,7 @@ class WidgetService
 {
     public function getWidget()
     {
-        $data = Widget::with('widgetType')->get();
+        $data = Widget::all();
         return fractal()->collection($data)->transformWith(new WidgetTransformer())->toArray();
     }
 

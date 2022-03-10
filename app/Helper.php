@@ -6,11 +6,12 @@ use Carbon\Carbon;
 use App\Models\User\User;
 use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
+use App\Models\Relation\Relation;
 use App\Models\Patient\PatientStaff;
-use App\Models\Patient\PatientTimeLog;
-use App\Models\Patient\PatientFamilyMember;
-use App\Models\Patient\PatientPhysician;
 use App\Models\Patient\PatientVital;
+use App\Models\Patient\PatientTimeLog;
+use App\Models\Patient\PatientPhysician;
+use App\Models\Patient\PatientFamilyMember;
 
 class Helper
 {
@@ -48,6 +49,16 @@ class Helper
         $date = Carbon::createFromTimestamp($date)->format('Y-m-d');
 
         return $date;
+    }
+
+    public static function relation($value, $gender)
+    {
+        $data = Relation::where([['relationId', $value], ['genderId', $gender]])->with('relation')->first();
+        $newData = [
+            'relationId' => $data->reverseRelationId,
+            'relation' => $data->relation->name,
+        ];
+        return   $newData;
     }
 
 

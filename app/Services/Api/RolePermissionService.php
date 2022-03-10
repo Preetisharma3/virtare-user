@@ -90,10 +90,15 @@ class RolePermissionService
     {
         try {
             $role = AccessRole::where('udid', $id)->first();
+            $roleId = $role->id;
+            if(($roleId == 1)){
+            return response()->json(['message' => 'unauthorized']);
+            }else{
             $input=['deletedBy'=>Auth::id(),'isActive'=>0,'isDelete'=>1];
-            AccessRole::where('udid', $id)->update($input);
-            AccessRole::where('udid', $id)->delete();
+            AccessRole::where('id', $roleId)->update($input);
+            AccessRole::where('id', $roleId)->delete();
             return response()->json(['message' => "Deleted Successfully"]);
+        }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
