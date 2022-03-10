@@ -13,6 +13,7 @@ use App\Transformers\RolePermission\RolePerTransformer;
 use App\Transformers\RolePermission\PermissionTransformer;
 use App\Transformers\RolePermission\RolePermissionTransformer;
 use Illuminate\Support\Facades\Auth;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class RolePermissionService
 {
@@ -21,8 +22,8 @@ class RolePermissionService
     {
         try{
             if(!$id){
-                $data = AccessRole::all();
-                return fractal()->collection($data)->transformWith(new RoleListTransformer())->toArray();
+                $data = AccessRole::paginate(env('PER_PAGE', 20));
+                return fractal()->collection($data)->transformWith(new RoleListTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             }else{
                 $data = AccessRole::where('udid',$id)->first();
                 return fractal()->item($data)->transformWith(new RoleListTransformer())->toArray();
