@@ -61,10 +61,10 @@ class GeneralParameterService
         try {
             if (!$id) {
                 if ($request->all) {
-                    $data = GeneralParameterGroup::with('generalParameter')->orderBy('createdAt', 'DESC')->get();
+                    $data = GeneralParameterGroup::where('name','LIKE', '%' . $request->search . '%')->with('generalParameter')->orderBy('createdAt', 'DESC')->get();
                     return fractal()->collection($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
                 } else {
-                    $data = GeneralParameterGroup::with('generalParameter')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
+                    $data = GeneralParameterGroup::where('name','LIKE', '%' . $request->search . '%')->with('generalParameter')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
                     return fractal()->collection($data)->transformWith(new GeneralParameterGroupTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 }
             } else {

@@ -223,6 +223,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('appointment/today', 'Api\v1\AppointmentController@todayAppointment');
     $router->get('appointment[/{id}]', 'Api\v1\AppointmentController@appointmentList');
     $router->post('appointment[/{id}]', 'Api\v1\AppointmentController@addAppointment');
+    $router->delete('appointment/{id}', 'Api\v1\AppointmentController@deleteAppointment');
 
     // Communication Routes
     $router->get('communication/count', 'Api\v1\CommunicationController@countCommunication');

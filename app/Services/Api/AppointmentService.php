@@ -193,8 +193,17 @@ class AppointmentService
     public function appointmentUpdate($request, $id)
     {
         $input = ['updatedBy' => Auth::id(), 'startDateTime' => Helper::date($request->startDateTime)];
-        Appointment::where('id', $id)->update($input);
-        $data = Appointment::where('id', $id)->first();
+        Appointment::where([['patientId', auth()->user()->patient->id],['udid',$id]])->update($input);
+        $data = Appointment::where([['patientId', auth()->user()->patient->id],['udid',$id]])->first();
         return fractal()->item($data)->transformWith(new AppointmentTransformer())->toArray();
     }
+
+    public function appointmentDelete($request, $id)
+    {
+        $input = ['deletedBy' => Auth::id(), 'isDelete' => 1,'isActive'=>0];
+        Appointment::where([['patientId', auth()->user()->patient->id],['udid',$id]])->update($input);
+        Appointment::where([['patientId', auth()->user()->patient->id],['udid',$id],['startDateTime','>=',Carbon::now()->subMinutes(60)]])->delete();
+        return response()->json(['message'=>trans('messages.deletedSuccesfully')]);
+    }
+
 }

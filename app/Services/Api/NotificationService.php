@@ -104,7 +104,7 @@ class NotificationService
 
                     $input = [
                         'patientId' => $patient->id,
-                        'statusId' => 47,
+                        'callStatusId' => 47,
                         'udid' => Str::uuid()->toString(),
                         'referenceId' => 'CONF' . $appointment->id,
                         'entityType' => 'conferenceCall'
