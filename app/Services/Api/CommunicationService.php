@@ -38,7 +38,7 @@ class CommunicationService
             return response()->json(['message' => trans('messages.unauthenticated')],  401);
         }
         $staffFrom = Staff::where('udid', $request->from)->first();
-        $staffFromId = $staffFrom->id;
+        $staffFromId = $staffFrom->userId;
         $newReferenceId = $newReference->userId;
         $input = [
             'from' => $staffFromId,
