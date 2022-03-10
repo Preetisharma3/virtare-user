@@ -36,7 +36,8 @@ class CPTCodeController extends Controller
         return (new CPTCodeService)->deleteCPTCode($request,$id);
     }
 
-    public function cptCodeReport(Request $request,$id){
+    public function cptCodeReport(Request $request,$id)
+    {
         if($id)
         {
             $reportType = "cpt_code_report";

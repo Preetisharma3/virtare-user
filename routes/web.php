@@ -23,8 +23,11 @@ use App\Services\Api\PushNotificationService;
 
 
 $router->get('timelog/report/export/{id}', 'Api\v1\TimeLogController@timeLogReport');
-$router->get('task/report/export/{id}', 'Api\v1\TaskController@timeLogReport');
+$router->get('task/report/export/{id}', 'Api\v1\TaskController@taskReport');
 $router->get('cptCode/report/export/{id}', 'Api\v1\CPTCodeController@cptCodeReport');
+$router->get('generalParameter/report/export/{id}', 'Api\v1\GeneralParameterController@generalParameterReport');
+$router->get('template/report/export/{id}', 'Api\v1\TemplateController@templateReport');
+$router->get('inventory/report/export/{id}', 'Api\v1\InventoryController@inventoryReport');
 
 $router->get('/linkstorage', function () use ($router) {
 
