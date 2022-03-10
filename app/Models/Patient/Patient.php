@@ -12,6 +12,7 @@ use App\Models\Patient\PatientVital;
 use App\Models\GlobalCode\GlobalCode;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Patient\PatientCondition;
+use App\Models\Patient\PatientInsurance;
 use App\Models\Patient\PatientInventory;
 use App\Models\Patient\PatientFamilyMember;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -32,9 +33,9 @@ class Patient extends Model
 
 
     // public function initials(): string
-	// {
-	// 	return substr($this->firstName, 0, 1);
-	// }
+    // {
+    // 	return substr($this->firstName, 0, 1);
+    // }
 
 
     public function gender()
@@ -66,7 +67,7 @@ class Patient extends Model
     {
         return $this->hasOne(GlobalCode::class, 'id', 'stateId');
     }
-    
+
 
     public function country()
     {
@@ -80,7 +81,7 @@ class Patient extends Model
 
     public function family()
     {
-        return $this->belongsTo(PatientFamilyMember::class, 'id','patientId');
+        return $this->belongsTo(PatientFamilyMember::class, 'id', 'patientId');
     }
 
     public function emergency()
@@ -89,47 +90,49 @@ class Patient extends Model
     }
 
     public function vitals()
-	{
+    {
         $patentId = $this->id;
-		return $this->hasMany(PatientVital::class, 'patientId')->whereIn(DB::raw('(patientVitals.takeTime,vitalFieldId)'), function ($query) use($patentId) {
+        return $this->hasMany(PatientVital::class, 'patientId')->whereIn(DB::raw('(patientVitals.takeTime,vitalFieldId)'), function ($query) use ($patentId) {
             return $query->from('patientVitals')
                 ->selectRaw('max(`takeTime`),vitalFieldId')
-                ->where('patientId',$patentId)
+                ->where('patientId', $patentId)
                 ->groupBy("vitalFieldId");
-                
         })->groupBy('vitalFieldId');
-	}
+    }
 
     public function conditions()
-	{
-		return $this->belongsTo(PatientCondition::class, 'id','patientId');
-	}
+    {
+        return $this->belongsTo(PatientCondition::class, 'id', 'patientId');
+    }
 
     public function flags()
-	{
-		return $this->hasMany(PatientFlag::class, 'patientId');
-	}
+    {
+        return $this->hasMany(PatientFlag::class, 'patientId');
+    }
 
     public function inventories()
-	{
-		return $this->hasMany(PatientInventory::class, 'patientId');
-	}
+    {
+        return $this->hasMany(PatientInventory::class, 'patientId');
+    }
 
     public function patientStaff()
-	{
-		return $this->belongsTo(PatientStaff::class, 'id','patientId');
-	}
+    {
+        return $this->belongsTo(PatientStaff::class, 'id', 'patientId');
+    }
 
     public function vital()
-	{
-		return $this->hasMany(PatientVital::class, 'patientId')->whereRaw('id IN (select MAX(id) FROM patientVitals GROUP BY vitalFieldId)')
-        ->orderBy('createdAt','desc');
-	}
+    {
+        return $this->hasMany(PatientVital::class, 'patientId')->whereRaw('id IN (select MAX(id) FROM patientVitals GROUP BY vitalFieldId)')
+            ->orderBy('createdAt', 'desc');
+    }
 
     public function notes()
-   {
-       return $this->hasMany(Note::class,'referenceId');
-   }
+    {
+        return $this->hasMany(Note::class, 'referenceId');
+    }
 
-
+    public function insurance()
+    {
+        return $this->hasOne(PatientInsurance::class,'patientId');
+    }
 }

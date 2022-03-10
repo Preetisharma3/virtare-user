@@ -82,14 +82,14 @@ class AppointmentService
     public function appointmentList($request, $id)
     {
         if (!$id) {
-                $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('createdAt', 'DESC')->get();
+                $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('startDateTime', 'ASC')->get();
                 $results = Helper::dateGroup($data, 'startDateTime');
                 return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
         } elseif ($id) {
                 $patient = Helper::entity('patient', $id);
                 $access = Helper::haveAccess($patient);
                 if(!$access){
-                    $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->latest('createdAt')->get();
+                    $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->latest('startDateTime')->get();
                     $results = Helper::dateGroup($data, 'startDateTime');
                     return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
                 }
@@ -100,7 +100,7 @@ class AppointmentService
     public function newAppointments()
     {
         try {
-            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->latest('createdAt')->take(3)->get();
+            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->latest('startDateTime')->take(3)->get();
             return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
@@ -112,9 +112,9 @@ class AppointmentService
         try {
             if (!$id) {
                 if (auth()->user()->patient) {
-                    $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', auth()->user()->patient->id]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('createdAt', 'DESC')->get();
+                    $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', auth()->user()->patient->id]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('startDateTime', 'ASC')->get();
                 } elseif (auth()->user()->staff) {
-                    $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['staffId', auth()->user()->staff->id]])->whereDate('startDateTime', '=', Carbon::today())->order('createdAt', 'DESC')->get();
+                    $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['staffId', auth()->user()->staff->id]])->whereDate('startDateTime', '=', Carbon::today())->order('startDateTime', 'ASC')->get();
                 }
             } elseif ($id) {
                 $patient=Helper::entity('patient',$id);
@@ -122,19 +122,19 @@ class AppointmentService
                 if($access){
                     $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $patient]])->exists();
                     if ($familyMember == true) {
-                        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $patient]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('createdAt', 'DESC')->get();
+                        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $patient]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('startDateTime', 'ASC')->get();
                     } else {
                         return response()->json(['message' => trans('messages.unauthenticated')], 401);
                     }
                 } elseif (auth()->user()->roleId == 3) {
                     $staff = PatientStaff::where([['staffId', auth()->user()->staff->id], ['patientId', $patient]])->exists();
                     if ($staff) {
-                        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $patient]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('createdAt', 'DESC')->get();
+                        $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $patient]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('startDateTime', 'ASC')->get();
                     } else {
                         return response()->json(['message' => trans('messages.unauthenticated')], 401);
                     }
                 } else {
-                    $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $patient]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('createdAt', 'DESC')->get();
+                    $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $patient]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('startDateTime', 'ASC')->get();
                 }
             }
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
@@ -194,7 +194,7 @@ class AppointmentService
     {
         $input = ['updatedBy' => Auth::id(), 'startDateTime' => Helper::date($request->startDateTime)];
         Appointment::where([['patientId', auth()->user()->patient->id],['udid',$id]])->update($input);
-        $data = Appointment::where([['patientId', auth()->user()->patient->id],['udid',$id]])->first()->orderBy('createdAt', 'DESC');
+        $data = Appointment::where([['patientId', auth()->user()->patient->id],['udid',$id]])->orderBy('startDateTime', 'ASC')->first();
         return fractal()->item($data)->transformWith(new AppointmentTransformer())->toArray();
     }
 
