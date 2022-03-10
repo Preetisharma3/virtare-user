@@ -15,8 +15,8 @@ class FamilyMemberService
             $patient=Helper::entity('patient',$id);
             $access=Helper::haveAccess($patient);
             if(!$access){
-                $data = PatientFamilyMember::whereHas('patients')->where([['patientId', $patient], ['userId', auth()->user()->id]])->first();
-                return fractal()->item($data->patients)->transformWith(new PatientTransformer(false))->toArray();
+                $data = PatientFamilyMember::whereHas('patient')->where([['patientId', $patient], ['userId', auth()->user()->id]])->first();
+                return fractal()->item($data->patient)->transformWith(new PatientTransformer(false))->toArray();
             }
         } elseif (!$id) {
             $data=Patient::whereHas('family',function($query){
