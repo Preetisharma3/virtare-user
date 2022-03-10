@@ -4,6 +4,7 @@ namespace App\Services\Api;
 
 use Illuminate\Support\Facades\DB;
 use App\Transformers\Patient\PatientCountTransformer;
+use App\Transformers\Patient\NewPatientCountTransformer;
 
 
 
@@ -14,7 +15,7 @@ class TimelineService
             $data = DB::select(
                 'CALL getTotalPatientSummaryCount('.$timelineId.')',
              );
-        return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+        return fractal()->collection($data)->transformWith(new NewPatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
     public function appointmentTotal($request){
@@ -22,6 +23,6 @@ class TimelineService
             $data = DB::select(
                 'CALL getTotalAppointmentSummaryCount('.$timelineId.')',
              );
-        return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+        return fractal()->collection($data)->transformWith(new NewPatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 }
