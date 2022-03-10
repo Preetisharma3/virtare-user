@@ -24,7 +24,7 @@ class PatientTimeLogTransformer extends TransformerAbstract
             'performedId'=>$data->performedId,
             'performedBy'=>(!empty($data->performedBy))?$data->performedBy:@$data->performed->firstName,
             'date'=>strtotime($data->date),
-            'timeAmount'=>strtotime($data->timeAmount),
+            'timeAmount'=>$data->timeAmount,
             'patient'=>(!empty($data->patientName))?$data->patientname:@$data->patient->firstName.' '.@$data->patient->middleName.' '.@$data->patient->lastName,
             'patientId'=>(!empty($data->patientId))?$data->patientId:$data->patient->udid,
             'staff'=>@$data->performed->firstName.' '.@$data->performed->lastName,

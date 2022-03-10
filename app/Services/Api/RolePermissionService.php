@@ -55,23 +55,31 @@ class RolePermissionService
     public function updateRole($request, $id)
     {
         try{
-        $role = array();
-        if(!empty($request->input('name'))){
-            $role['roles'] =  $request->input('name');
-        }
-        if(!empty($request->input('description'))){
-            $role['roleDescription'] =  $request->input('description');
-        }
-        if (empty($request->input('status'))) {
-            $role['isActive'] =  0;
-        }else{
-            $role['isActive']=1;
-        }
-        $role['updatedBy'] =  Auth::id();
-        
-        if(!empty($role)){
-            AccessRole::where('udid', $id)->update($role);
-        }
+            $role = AccessRole::where('udid',$id)->first();
+            $roleId = $role->id;
+            if(($roleId == 1)){
+                return response()->json(['message' => 'unauthorized']);
+            }else{
+                $role = array();
+                if(!empty($request->input('name'))){
+                    $role['roles'] =  $request->input('name');
+                }
+                if(!empty($request->input('description'))){
+                    $role['roleDescription'] =  $request->input('description');
+                }
+                if (empty($request->input('status'))) {
+                    $role['isActive'] =  0;
+                }else{
+                    $role['isActive']=1;
+                }
+                $role['updatedBy'] =  Auth::id();
+                
+                if(!empty($role)){
+
+                    AccessRole::where('id', $roleId)->update($role);
+                }
+            }
+       
             return response()->json(['message' => trans('messages.updatedSuccesfully')]);
         }catch (Exception $e){
             return response()->json(['message' => $e->getMessage()], 500);  
@@ -82,10 +90,15 @@ class RolePermissionService
     {
         try {
             $role = AccessRole::where('udid', $id)->first();
+            $roleId = $role->id;
+            if(($roleId == 1)){
+            return response()->json(['message' => 'unauthorized']);
+            }else{
             $input=['deletedBy'=>Auth::id(),'isActive'=>0,'isDelete'=>1];
-            AccessRole::where('udid', $id)->update($input);
-            AccessRole::where('udid', $id)->delete();
+            AccessRole::where('id', $roleId)->update($input);
+            AccessRole::where('id', $roleId)->delete();
             return response()->json(['message' => "Deleted Successfully"]);
+        }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

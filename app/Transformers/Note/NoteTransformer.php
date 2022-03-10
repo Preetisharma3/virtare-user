@@ -2,6 +2,7 @@
 
 namespace App\Transformers\Note;
 
+use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\User\UserTransformer;
 
@@ -31,7 +32,8 @@ class NoteTransformer extends TransformerAbstract
             'type' => $data->type,
             'note' => $data->note,
             'addedBy'=>(!empty(@$data->firstName))?ucfirst(@$data->firstName).' '.ucfirst(@$data->lastName):ucfirst(@$data->user->staff->firstName).' '.ucfirst(@$data->user->staff->lastName),
-            'addedByDetail'=>@$data->user?fractal()->item($data->user)->transformWith(new UserTransformer(false))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray():[],
+            'profilePhoto'=>(!empty(@$data->profilePhoto)) && (!is_null(@$data->profilePhoto)) ? str_replace("public", "", URL::to('/')) . '/' . @$data->profilePhoto :(!empty(@$data->profilePhoto)) && (!is_null(@$data->profilePhoto))? str_replace("public", "", URL::to('/')) . '/' . @$data->user->profilePhoto:'',
+            'specialization'=>(!empty(@$data->specialization))?@$data->specialization:@$data->user->staff->specialization->name,
             'flag'=>'#39B5C2'
         ];
     }
