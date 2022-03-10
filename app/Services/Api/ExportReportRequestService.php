@@ -61,11 +61,11 @@ class ExportReportRequestService
     }
     
 
-    public function checkReportRequest($id = "")
+    public function checkReportRequest($id = "",$reportType="")
     {
-        if($id)
+        if(!empty($id) && !empty($reportType))
         {
-            $resultData = ExportReportRequest::where('udid', $id)->where('isActive', "1")->first();
+            $resultData = ExportReportRequest::where('reportType', $reportType)->where('udid', $id)->where('isActive', "1")->first();
             if(!empty($resultData))
             {
                 return true;
