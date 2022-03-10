@@ -38,9 +38,11 @@ class CommunicationService
             return response()->json(['message' => trans('messages.unauthenticated')],  401);
         }
         $staffFrom = Staff::where('udid', $request->from)->first();
+        $staffFromId = $staffFrom->id;
+        $newReferenceId = $newReference->userId;
         $input = [
-            'from' => $staffFrom->userId,
-            'referenceId' => $newReference->userId,
+            'from' => $staffFromId,
+            'referenceId' => $newReferenceId,
             'messageTypeId' => $request->messageTypeId,
             'subject' => $request->subject,
             'priorityId' => $request->priorityId,
@@ -49,7 +51,9 @@ class CommunicationService
             'entityType' => $request->entityType,
             'udid' => Str::uuid()->toString()
         ];
-        $exdata = Communication::where([['from', $staffFrom->userId], ['referenceId', $newReference->userId]])->exists();
+        $exdata = DB::table('communications')->where([['from', '=', $staffFromId],['referenceId','=',$newReferenceId],['messageTypeId','=',102]])->orWhere(function ($query)use($staffFromId,$newReferenceId) {
+                $query->where([['from', '=', $newReferenceId],['referenceId',$staffFromId]])->where('messageTypeId','=',102);
+            })->exists();
         if ($exdata == false) {
             $data = Communication::create($input);
             CommunicationMessage::create([
