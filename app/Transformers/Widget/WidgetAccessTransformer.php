@@ -14,10 +14,10 @@ class WidgetAccessTransformer extends TransformerAbstract
 	public function transform($data)
 	{
 		return [
-               'id' => $data->widget->id,
-               'udid'=> $data->widget->udid,
-               'name'=> $data->widget->widgetName,
-               'title'=> $data->widget->title,              
+               'id' => @$data->widget->id,
+               'udid'=> @$data->widget->udid,
+               'name'=> @$data->widget->widgetName,
+               'title'=> @$data->widget->title,              
 		];
 	}
 }
