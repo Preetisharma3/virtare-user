@@ -18,14 +18,6 @@ class WidgetTransformer extends TransformerAbstract
             'udid'=>$data->udid,
             'widgetName'=>$data->widgetName,
             'title'=>$data->title,
-            'dataEndPoint'=>$data->dataEndPoint,
-            'rows'=>$data->rows,
-            'columns'=>$data->columns,
-            'widgetType'=>[
-                'id' =>@$data->widgetType->id,
-                'udid'=>@$data->widgetType->udid,
-                'widgetType'=>@$data->widgetType->name,
-            ],
 		];
 	}
 }
