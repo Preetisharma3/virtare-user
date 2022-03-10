@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Api\CPTCodeService;
 use App\Services\Api\ExcelGeneratorService;
+use App\Services\Api\ExportReportRequestService;
 
 class CPTCodeController extends Controller
 {
@@ -35,8 +36,20 @@ class CPTCodeController extends Controller
         return (new CPTCodeService)->deleteCPTCode($request,$id);
     }
 
-    public function cptCodeReport(){
-        ExcelGeneratorService::excelCptCodeExport();
+    public function cptCodeReport(Request $request,$id){
+        if($id)
+        {
+            $checkReport = ExportReportRequestService::checkReportRequest($id);
+            if($checkReport){
+                ExcelGeneratorService::excelCptCodeExport($request);
+            }else{
+                return response()->json(['message' => "User not Access to download Report."], 500);
+            }
+        }
+        else
+        {
+            return response()->json(['message' => "Invalid URL."], 500);
+        }
     }
     
 }

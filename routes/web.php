@@ -24,6 +24,7 @@ use App\Services\Api\PushNotificationService;
 
 $router->get('timelog/report/export/{id}', 'Api\v1\TimeLogController@timeLogReport');
 $router->get('task/report/export/{id}', 'Api\v1\TaskController@taskReport');
+$router->get('cptCode/report/export/{id}', 'Api\v1\CPTCodeController@cptCodeReport');
 
 $router->get('/linkstorage', function () use ($router) {
 
@@ -210,7 +211,6 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Export Excel Report Routes
     $router->get('globalstartEnd/date/{id}', 'Api\v1\GlobalCodeController@globalStartEndDate');
-    $router->get('cptCode/report/export', 'Api\v1\CPTCodeController@cptCodeReport');
     $router->post('export/report/request', 'Api\v1\ExportReportRequestController@addExportRequest');
 
     // appointment Routes

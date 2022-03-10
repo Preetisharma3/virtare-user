@@ -106,7 +106,7 @@ class ExcelGeneratorService
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-
+        
         $writer = new Xlsx($spreadsheet);
         $post = $request->all();
         if(isset($post["fromDate"]) && !empty($post["fromDate"])){
@@ -135,19 +135,40 @@ class ExcelGeneratorService
         }
 
         $excelObj = array();
-        if(!empty($result)){
-            foreach($result as $data){
+        $cat_list = "";
+        if(!empty($result))
+        {
+            foreach($result as $data)
+            {
+                if(!empty($data->taskCategory))
+                {
+                    $taskCategory = fractal()->collection($data->taskCategory)->transformWith(new TaskCategoryTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                    if(!empty($taskCategory))
+                    {
+                        $cat_list = "";
+                        foreach($taskCategory as $cat)
+                        {
+                            $cat_list .= $cat["taskCategory"].",";
+                        }
+                        $cat_string = substr($cat_list, 0, -2);
+                    }
+                    
+                }
+                else
+                {
+                    $cat_string = "";
+                }
+
                 $excelObj[] = array(
                     'title'=>$data->title,
                     'taskStatus'=>$data->taskStatus->name,
                     'priority'=>$data->priority->name,
-                    'category'=>$data->taskCategory  ? fractal()->collection($data->taskCategory)->transformWith(new TaskCategoryTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
-                    'dueDate'=>strtotime($data->dueDate),
+                    'category'=> $cat_string,
+                    'dueDate'=>date('D d, Y',strtotime($data->dueDate)),
                     'assignedBy'=>$data->user->email
                 );
             }
         }
-
         
         $headingFrom = "A1"; // or any value
         $headingTo = "F1"; // or any value
@@ -187,7 +208,7 @@ class ExcelGeneratorService
         $writer->save('php://output');
     }
 
-    public function excelCptCodeExport()
+    public function excelCptCodeExport($request)
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
