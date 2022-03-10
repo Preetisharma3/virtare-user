@@ -44,7 +44,8 @@ class TimeLogController extends Controller
     public function timeLogReport(Request $request,$id){
         if($id)
         {
-            $checkReport = ExportReportRequestService::checkReportRequest($id);
+            $reportType = "patient_time_log_report";
+            $checkReport = ExportReportRequestService::checkReportRequest($id,$reportType);
             if($checkReport){
                 ExcelGeneratorService::excelTimeLogExport($request);
             }else{

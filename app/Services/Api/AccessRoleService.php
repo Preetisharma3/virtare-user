@@ -74,24 +74,26 @@ class AccessRoleService
                     'CALL assignedRolesWidgetsList('.$staff.')',
                 );
             }else{
-                $data = [];
+                $actions = [];
+                $widgets = [];
             }
-            $action= [];
-            $widget= [];
-            foreach( $actions as $new){
-                $actionidx = $new->actionId;
-                array_push($action,$actionidx);
-            }
-            foreach( $widgets as $new){
-                $widgetidx = $new->widgetId;
-                array_push($widget,$widgetidx);
-            }
-
+            
             $daat = [
-                'actionId'=>$action,
-                'widgetId'=>$widget,
+                'actionId'=>$actions,
+                'widgetId'=>$widgets,
             ];
             return $daat;
+
+            // $action= [];
+            // $widget= [];
+            // foreach( $actions as $new){
+            //     $actionidx = $new->actionId;
+            //     array_push($action,$actionidx);
+            // }
+            // foreach( $widgets as $new){
+            //     $widgetidx = $new->widgetId;
+            //     array_push($widget,$widgetidx);
+            // }
 
             //  $finalAction['action']=fractal()->collection($data)->transformWith(new AssignedRoleActionTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
             //  $finalWidget['widget']=fractal()->collection($data)->transformWith(new AssignedRoleWidgetTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();

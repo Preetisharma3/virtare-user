@@ -15,6 +15,7 @@ class PatientRequest extends FormRequest
     {
         return [
             'email' => 'required|unique:users,email',
+            'familyEmail' => 'unique:users,email',
             'firstName' => 'required',
             'lastName' => 'required',
             'dob' => 'required',
@@ -27,6 +28,7 @@ class PatientRequest extends FormRequest
         return [
             'email.required' => 'Patient Email must be required',
             'email.unique' => 'Patient Email must be unique',
+            'familyEmail.unique' => 'Family Email must be unique',
             'firstName.required' => 'Patient firstName must be required',
             'lastName.required' => 'Patient lastName must be required',
             'dob.required' => 'Patient Date Of Birth must be required',

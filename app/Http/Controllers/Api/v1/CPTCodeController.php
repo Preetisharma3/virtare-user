@@ -39,7 +39,8 @@ class CPTCodeController extends Controller
     public function cptCodeReport(Request $request,$id){
         if($id)
         {
-            $checkReport = ExportReportRequestService::checkReportRequest($id);
+            $reportType = "cpt_code_report";
+            $checkReport = ExportReportRequestService::checkReportRequest($id,$reportType);
             if($checkReport){
                 ExcelGeneratorService::excelCptCodeExport($request);
             }else{
@@ -48,7 +49,7 @@ class CPTCodeController extends Controller
         }
         else
         {
-            return response()->json(['message' => "Invalid URL."], 500);
+            return response()->json(['message' => "invalid URL."], 500);
         }
     }
     

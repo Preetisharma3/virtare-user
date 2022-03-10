@@ -80,14 +80,14 @@ class PatientService
 
                 //Added Family in patientFamilyMember Table
                 if (!empty($request->input('familyEmail'))) {
-                    $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 4]])->first();
+                    $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
                     if ($userData) {
                         $userEmail = $userData->id;
                         $familyMember = [
                             'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                             'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
-                            'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id, 'vital' => $request->input('vitalAuthorization'),
-                            'messages' => $request->input('messageAuthorization'),
+                            'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id, 'vital' => 1,
+                            'messages' => 1,
                             'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1
                         ];
                         PatientFamilyMember::create($familyMember);
@@ -95,7 +95,7 @@ class PatientService
                         // Added family in user Table
                         $familyMemberUser = [
                             'password' => Hash::make('password'), 'udid' => Str::uuid()->toString(), 'email' => $request->input('familyEmail'),
-                            'emailVerify' => 1, 'createdBy' => Auth::id(), 'roleId' => 4
+                            'emailVerify' => 1, 'createdBy' => Auth::id(), 'roleId' => 6
                         ];
                         $fam = User::create($familyMemberUser);
                         //Added Family in patientFamilyMember Table
@@ -103,8 +103,8 @@ class PatientService
                             'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                             'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                             'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
-                            'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => $request->input('vitalAuthorization'),
-                            'messages' => $request->input('messageAuthorization'),
+                            'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => 1,
+                            'messages' => 1,
                         ];
                         if (!empty($familyMember)) {
                             PatientFamilyMember::create($familyMember);
@@ -178,7 +178,7 @@ class PatientService
                     PatientFamilyMember::where('id', $request->familyMemberId)->update($familyMember);
                 } else {
                     if (!empty($request->input('familyEmail'))) {
-                        $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 4]])->first();
+                        $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
                         if ($userData) {
                             $userEmail = $userData->id;
                             $familyMember = [
@@ -193,7 +193,7 @@ class PatientService
                             // Added family in user Table
                             $familyMemberUser = [
                                 'password' => Hash::make('password'), 'udid' => Str::uuid()->toString(), 'email' => $request->input('familyEmail'),
-                                'emailVerify' => 1, 'createdBy' => Auth::id(), 'roleId' => 4
+                                'emailVerify' => 1, 'createdBy' => Auth::id(), 'roleId' => 6
                             ];
                             $fam = User::create($familyMemberUser);
                             //Added Family in patientFamilyMember Table
