@@ -60,7 +60,8 @@ class TaskController extends Controller
     public function taskReport(Request $request,$id){
         if($id)
         {
-            $checkReport = ExportReportRequestService::checkReportRequest($id);
+            $reportType = "task_report";
+            $checkReport = ExportReportRequestService::checkReportRequest($id,$reportType);
             if($checkReport){
                 ExcelGeneratorService::taskReportExport($request);
             }else{

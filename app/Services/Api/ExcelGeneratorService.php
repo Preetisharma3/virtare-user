@@ -187,7 +187,7 @@ class ExcelGeneratorService
         $writer->save('php://output');
     }
 
-    public function excelCptCodeExport()
+    public function excelCptCodeExport( $request )
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
