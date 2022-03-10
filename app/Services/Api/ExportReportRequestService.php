@@ -12,7 +12,7 @@ use App\Transformers\ExportReportRequest\ExportReportRequestTransformer;
 
 class ExportReportRequestService
 {
-    public function insertExportRequest($request)
+    public static function insertExportRequest($request)
     {
         try {
 
@@ -61,7 +61,7 @@ class ExportReportRequestService
     }
     
 
-    public function checkReportRequest($id = "",$reportType="")
+    public static function checkReportRequest($id = "",$reportType="")
     {
         if(!empty($id) && !empty($reportType))
         {
