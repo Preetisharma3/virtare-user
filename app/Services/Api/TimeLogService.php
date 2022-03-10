@@ -59,7 +59,7 @@ class TimeLogService
                 ];
                 Note::create($noteData);
             }
-            $staffid = Helper::entity('staff', $request->input('staff'));
+            $staffid = Helper::entity('staff', $request->input('staffId'));
             $patient = Helper::entity('patient', $request->input('patientId'));
             $input = ['performedId' => $staffid, 'patientId' => $patient, 'timeAmount' => $request->input('timeAmount'), 'updatedBy' => Auth::id()];
             PatientTimeLog::where('udid', $id)->update($input);
