@@ -33,6 +33,7 @@ class ConversationListTransformer extends TransformerAbstract
      */
     public function transform($data): array
     {
+        // dd($data->sender);
         return [
             'id' => $data->id,
             'senderId'=>$data->from,

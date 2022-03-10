@@ -60,8 +60,7 @@ class CommunicationService
             ]);
             return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
         } elseif ($exdata == true) {
-            $conversation = Communication::where([['from', $staffFrom->userId], ['referenceId', $newReference->userId]])->with('sender', 'receiver')->first();
-            return fractal()->item($conversation)->transformWith(new ConversationListTransformer(true))->toArray();
+            return response()->json(['message' => 'Conversation already Exists!']);
         } else {
             return response()->json(['message' => trans('messages.unauthenticated')], 401);
         }
@@ -90,7 +89,7 @@ class CommunicationService
                 'statusId' => $request->status,
                 'createdBy' => Auth::id(),
                 'udid' => $udid,
-                'startTime', 
+                'startTime',
                 'endTime',
                 'referenceId',
                 'entityType'
@@ -109,7 +108,7 @@ class CommunicationService
             ];
         }
         CommunicationCallRecord::create($input);
-        $call=[];
+        $call = [];
         CallRecord::create();
         return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
     }
