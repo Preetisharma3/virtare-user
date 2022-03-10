@@ -22,9 +22,9 @@ class WidgetTransformer extends TransformerAbstract
             'rows'=>$data->rows,
             'columns'=>$data->columns,
             'widgetType'=>[
-                'id' =>$data->widgetType->id,
-                'udid'=>$data->widgetType->udid,
-                'widgetType'=>$data->widgetType->name,
+                'id' =>@$data->widgetType->id,
+                'udid'=>@$data->widgetType->udid,
+                'widgetType'=>@$data->widgetType->name,
             ],
 		];
 	}
