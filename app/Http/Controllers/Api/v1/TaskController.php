@@ -57,7 +57,8 @@ class TaskController extends Controller
         return (new TaskService)->taskPerCategory();
     }
 
-    public function taskReport(Request $request,$id){
+    public function taskReport(Request $request,$id)
+    {
         if($id)
         {
             $reportType = "task_report";

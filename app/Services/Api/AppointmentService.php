@@ -100,7 +100,7 @@ class AppointmentService
     public function newAppointments()
     {
         try {
-            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->latest('startDateTime')->take(3)->get();
+            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->orderBy('startDateTime', 'ASC')->take(3)->get();
             return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
