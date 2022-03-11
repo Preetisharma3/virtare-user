@@ -40,7 +40,8 @@ class InventoryService
         try {
             $isAvailable = $request->isAvailable;
             $deviceType = $request->deviceType;
-            $data = DB::select('CALL inventoryList("' . $isAvailable . '","' . $deviceType . '")');
+            $active = $request->active;
+            $data = DB::select('CALL inventoryList("' . $isAvailable . '","' . $deviceType . '","' . $active . '")');
             return fractal()->collection($data)->transformWith(new InventoryListTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
