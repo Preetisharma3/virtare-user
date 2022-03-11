@@ -4,7 +4,6 @@ namespace App\Services\Api;
 
 use Exception;
 use App\Helper;
-use App\Models\Communication\CallRecord;
 use Carbon\Carbon;
 use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
@@ -14,6 +13,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Communication\Communication;
 use App\Models\Communication\CommunicationMessage;
+use App\Models\Communication\CallRecord;
 use App\Models\Communication\CommunicationCallRecord;
 use App\Transformers\Communication\CallRecordTransformer;
 use App\Transformers\Communication\CallStatusTransformer;
@@ -51,10 +51,26 @@ class CommunicationService
             'entityType' => $request->entityType,
             'udid' => Str::uuid()->toString()
         ];
-        $exdata = DB::table('communications')->where([['from', '=', $staffFromId],['referenceId','=',$newReferenceId],['messageTypeId','=',102]])->orWhere(function ($query)use($staffFromId,$newReferenceId) {
-                $query->where([['from', '=', $newReferenceId],['referenceId',$staffFromId]])->where('messageTypeId','=',102);
-            })->exists();
-        if ($exdata == false) {
+        if($request->messageTypeId=='102'){
+
+            $exdata = DB::table('communications')->where([['from', '=', $staffFromId],['referenceId','=',$newReferenceId],['messageTypeId','=',102]])->orWhere(function ($query)use($staffFromId,$newReferenceId) {
+                    $query->where([['from', '=', $newReferenceId],['referenceId',$staffFromId]])->where('messageTypeId','=',102);
+                })->exists();
+            if ($exdata == false) {
+                $data = Communication::create($input);
+                CommunicationMessage::create([
+                    'communicationId' => $data->id,
+                    'message' => $request->message,
+                    'createdBy' => $data->createdBy,
+                    'udid' => Str::uuid()->toString()
+                ]);
+                return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
+            } elseif ($exdata == true) {
+                return response()->json(['message' => 'Conversation already Exists!']);
+            } else {
+                return response()->json(['message' => trans('messages.unauthenticated')], 401);
+            }
+        }else{
             $data = Communication::create($input);
             CommunicationMessage::create([
                 'communicationId' => $data->id,
@@ -63,10 +79,6 @@ class CommunicationService
                 'udid' => Str::uuid()->toString()
             ]);
             return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
-        } elseif ($exdata == true) {
-            return response()->json(['message' => 'Conversation already Exists!']);
-        } else {
-            return response()->json(['message' => trans('messages.unauthenticated')], 401);
         }
     }
 
@@ -127,7 +139,7 @@ class CommunicationService
     // calls Per Staff API
     public function callCountPerStaff()
     {
-        $data = CommunicationCallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->orderBy('createdAt', 'DESC')->get();
+        $data = CallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->orderBy('createdAt', 'DESC')->get();
         return fractal()->collection($data)->transformWith(new CallRecordTransformer())->toArray();
     }
 
