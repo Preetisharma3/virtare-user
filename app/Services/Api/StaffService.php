@@ -55,7 +55,7 @@ class StaffService
             ];
             $newData = Staff::create($staff);
             $staffData = Staff::where('id', $newData->id)->first();
-            $message = ["message" => trans('messages.created_succesfully')];
+            $message = ["message" => trans('messages.createdSuccesfully')];
             $resp =  fractal()->item($staffData)->transformWith(new StaffTransformer())->toArray();
             $endData = array_merge($message, $resp);
             Helper::updateFreeswitchUser();
@@ -121,7 +121,7 @@ class StaffService
                 $staffId = $staff->id;
                 DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
                 $staffContactData = StaffContact::where('udid', $udid)->first();
-                $message = ["message" => trans('messages.created_succesfully')];
+                $message = ["message" => trans('messages.createdSuccesfully')];
                 $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
                 $endData = array_merge($message, $resp);
                 return $endData;
@@ -263,7 +263,7 @@ class StaffService
                 $accessRoleId = $roleId;
                 DB::select('CALL createstaffRole("' . $udid . '","' . $staffId . '","' . $accessRoleId . '")');
             }
-            return response()->json(['message' => trans('messages.created_succesfully')], 200);
+            return response()->json(['message' => trans('messages.createdSuccesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
