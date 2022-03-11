@@ -7,6 +7,7 @@ use App\Models\User\User;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Patient\PatientFamilyMember;
@@ -42,10 +43,16 @@ class FamilyService
             } else {
                 $patient = PatientFamilyMember::where('udid', $familyId)->first();
                 $usersId = $patient->userId;
-                $familyMemberUser = [
-                    'email' => $request->input('email'),'profilePhoto'=>str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->input('profilePhoto')),
-                    'updatedBy' => Auth::id()
-                ];
+
+
+                $familyMemberUser = array();
+                if (!empty($request->input('profilePhoto'))) {
+                    $familyMemberUser['profilePhoto'] = str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->input('profilePhoto'));
+                }
+                if (!empty($request->input('email'))) {
+                    $familyMemberUser['email'] = $request->input('email');
+                }
+                $familyMemberUser['updatedBy']=Auth::id();
                 $fam = User::where('id', $usersId)->update($familyMemberUser);
 
                 //updated Family in patientFamilyMember Table
