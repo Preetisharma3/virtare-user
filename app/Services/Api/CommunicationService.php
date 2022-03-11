@@ -51,10 +51,26 @@ class CommunicationService
             'entityType' => $request->entityType,
             'udid' => Str::uuid()->toString()
         ];
-        $exdata = DB::table('communications')->where([['from', '=', $staffFromId],['referenceId','=',$newReferenceId],['messageTypeId','=',102]])->orWhere(function ($query)use($staffFromId,$newReferenceId) {
-                $query->where([['from', '=', $newReferenceId],['referenceId',$staffFromId]])->where('messageTypeId','=',102);
-            })->exists();
-        if ($exdata == false) {
+        if($request->messageTypeId=='102'){
+
+            $exdata = DB::table('communications')->where([['from', '=', $staffFromId],['referenceId','=',$newReferenceId],['messageTypeId','=',102]])->orWhere(function ($query)use($staffFromId,$newReferenceId) {
+                    $query->where([['from', '=', $newReferenceId],['referenceId',$staffFromId]])->where('messageTypeId','=',102);
+                })->exists();
+            if ($exdata == false) {
+                $data = Communication::create($input);
+                CommunicationMessage::create([
+                    'communicationId' => $data->id,
+                    'message' => $request->message,
+                    'createdBy' => $data->createdBy,
+                    'udid' => Str::uuid()->toString()
+                ]);
+                return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
+            } elseif ($exdata == true) {
+                return response()->json(['message' => 'Conversation already Exists!']);
+            } else {
+                return response()->json(['message' => trans('messages.unauthenticated')], 401);
+            }
+        }else{
             $data = Communication::create($input);
             CommunicationMessage::create([
                 'communicationId' => $data->id,
@@ -63,10 +79,6 @@ class CommunicationService
                 'udid' => Str::uuid()->toString()
             ]);
             return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
-        } elseif ($exdata == true) {
-            return response()->json(['message' => 'Conversation already Exists!']);
-        } else {
-            return response()->json(['message' => trans('messages.unauthenticated')], 401);
         }
     }
 

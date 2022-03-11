@@ -128,33 +128,39 @@ class ConversationService
     public function showConversation($request, $id)
     {
         try {
-            if (!$id) {
-                $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
-                if ($familyMember == true) {
-                    return response()->json(['message' => trans('messages.unauthenticated')], 401);
+            $conversationId = $request->conversationId;
+            if($conversationId){
+                $input = Communication::where([['id', $conversationId]])->exists();
+                if ($input == true) {
+                    $data = ConversationMessage::where([['communicationId', $conversationId]])->get();
                 } else {
-                    $senderId = auth()->user()->id;
+                    $data = ConversationMessage::where([['communicationId', $conversationId]])->get();
                 }
-            } elseif ($id == auth()->user()->id) {
-                return response()->json(['message' => trans('messages.unauthenticated')], 401);
-            } elseif ($id) {
-                $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
-                if ($familyMember == true) {
-                    $senderId = $id;
+                return fractal()->collection($data)->transformWith(new ConversationTransformer)->toArray();
+            }else{
+                
+                if (!$id) {
+                    $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
+                    if ($familyMember == true) {
+                        return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                    } else {
+                        $senderId = auth()->user()->id;
+                    }
+                } elseif ($id == auth()->user()->id) {
+                    return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                } elseif ($id) {
+                    $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
+                    if ($familyMember == true) {
+                        $senderId = $id;
+                    } else {
+                        return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                    }
                 } else {
                     return response()->json(['message' => trans('messages.unauthenticated')], 401);
                 }
-            } else {
-                return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                
             }
-            $communicationId = $request->conversationId;
-            $input = Communication::where([['from', $senderId], ['id', $communicationId]])->orWhere([['from', $senderId], ['id', $communicationId]])->exists();
-            if ($input == true) {
-                $data = ConversationMessage::where([['communicationId', $communicationId]])->get();
-            } else {
-                $data = ConversationMessage::where([['communicationId', $communicationId]])->get();
-            }
-            return fractal()->collection($data)->transformWith(new ConversationTransformer)->toArray();
+            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
