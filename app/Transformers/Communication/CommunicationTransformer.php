@@ -44,7 +44,7 @@ class CommunicationTransformer extends TransformerAbstract
             'priority'=>$data->priority->name,
             'createdAt'=>strtotime($data->createdAt),
             'senderId' => $data->from,
-            'sender' => $data->sender->patient ? $data->sender->patient->firstName . ' ' . $data->sender->patient->lastName : $data->sender->staff->firstName . ' ' . $data->sender->staff->lastName,
+            'sender' => @$data->sender->patient ? @$data->sender->patient->firstName . ' ' . @$data->sender->patient->lastName : @$data->sender->staff->firstName . ' ' . @$data->sender->staff->lastName,
             'receiverId' => $data->referenceId,
             'profile_photo' => (!empty($data->receiver->profilePhoto)) && (!is_null($data->receiver->profilePhoto)) ? URL::to('/') . '/' . $data->receiver->profilePhoto : "",
             'profilePhoto' => (!empty($data->receiver->profilePhoto)) && (!is_null($data->receiver->profilePhoto)) ? URL::to('/') . '/' . $data->receiver->profilePhoto : "",

@@ -33,7 +33,7 @@ class StaffRequest extends FormRequest
             'firstName.required' => 'Staff firstName is required',
             'lastName.required' => 'Staff lastName is required',
             'genderId.required' => 'Staff gender is required',
-            'phoneNumber.required' => 'Staff phoneNumber is required',
+            'phoneNumber.required' => 'Staff Phone Number is required',
             'phoneNumber.numeric' => 'Staff Phone Number is numeric',
             'specializationId.required' =>'Staff specialization is required',
             'networkId.required' => 'Staff network is required',

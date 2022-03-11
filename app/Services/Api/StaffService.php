@@ -98,9 +98,7 @@ class StaffService
             'specializationId' => $request->specializationId,
             'designationId' => $request->designationId,
             'networkId' => $request->networkId,
-            'providerId' => $request->providerId,
-            'roleId' => 3,
-            'createdBy' => 1
+            'updatedBy' => 1
         ];
         Staff::where('udid', $id)->update($staff);
         $staffData = Staff::where('udid', $id)->first();
