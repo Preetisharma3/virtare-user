@@ -155,7 +155,7 @@ class PatientService
                     'stateId' => $request->input('state'), 'city' => $request->input('city'), 'zipCode' => $request->input('zipCode'), 'appartment' => $request->input('appartment'),
                     'address' => $request->input('address'), 'updatedBy' => Auth::id(), 'height' => $request->input('height'), 'weight' => $request->input('weight')
                 ];
-                $newData = Patient::where('id', $id)->update($patient);
+                $newData = Patient::where('udid', $id)->update($patient);
                 // Updated family in user Table
                 if ($request->input('familyMemberId')) {
                     $family = $request->input('familyMemberId');
@@ -175,7 +175,7 @@ class PatientService
                         'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
                         'messages' => $request->input('messageAuthorization'),
                     ];
-                    PatientFamilyMember::where('id', $request->familyMemberId)->update($familyMember);
+                    PatientFamilyMember::where('id', $usersId->id)->update($familyMember);
                 } else {
                     if (!empty($request->input('familyEmail'))) {
                         $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
@@ -218,7 +218,7 @@ class PatientService
                         'contactTimeId' => $request->input('emergencyContactTime'), 'genderId' => $request->input('emergencyGender'),
                         'updatedBy' => Auth::id(), 'email' => $request->input('emergencyEmail'), 'sameAsFamily' => $request->input('sameAsFamily')
                     ];
-                    $emg = PatientEmergencyContact::where('id', $request->emergencyId)->update($emergencyContact);
+                    $emg = PatientEmergencyContact::where('udid', $request->emergencyId)->update($emergencyContact);
                 } else {
                     if (!empty($request->input('emergencyEmail'))) {
                         $emergencyContact = [
