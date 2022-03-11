@@ -54,10 +54,19 @@ class Helper
     public static function relation($value, $gender)
     {
         $data = Relation::where([['relationId', $value], ['genderId', $gender]])->with('relation')->first();
-        $newData = [
-            'relationId' => $data->reverseRelationId,
-            'relation' => $data->relation->name,
-        ];
+         if(!empty($data)){
+
+            $newData = [
+                'relationId' => @$data->reverseRelationId,
+                'relation' => @$data->relation->name,
+            ];
+            
+        }else{
+            $newData = [
+                'relationId' => "",
+                'relation' => "",
+            ];
+        }
         return   $newData;
     }
 
