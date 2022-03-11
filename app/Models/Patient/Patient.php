@@ -81,7 +81,11 @@ class Patient extends Model
 
     public function family()
     {
-        return $this->belongsTo(PatientFamilyMember::class, 'id', 'patientId');
+        if (auth()->user()->roleId == 6) {
+            return $this->belongsTo(PatientFamilyMember::class, 'id', 'patientId')->where('userId', auth()->user()->id);
+        } else {
+            return $this->belongsTo(PatientFamilyMember::class, 'id', 'patientId');
+        }
     }
 
     public function emergency()
@@ -133,6 +137,6 @@ class Patient extends Model
 
     public function insurance()
     {
-        return $this->hasOne(PatientInsurance::class,'patientId');
+        return $this->hasOne(PatientInsurance::class, 'patientId');
     }
 }
