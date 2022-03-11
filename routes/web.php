@@ -237,7 +237,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Global Codes Routes
     $router->get('globalCodeCategory[/{id}]', 'Api\v1\GlobalCodeController@globalCodeCategory');
-    $router->get('globalCode/{id}', 'Api\v1\GlobalCodeController@globalCode');
+    $router->get('globalCode[/{id}]', 'Api\v1\GlobalCodeController@globalCode');
     $router->post('globalCode', 'Api\v1\GlobalCodeController@createGlobalCode');
     $router->patch('globalCode[/{id}]', 'Api\v1\GlobalCodeController@updateGlobalCode');
     $router->delete('globalCode[/{id}]', 'Api\v1\GlobalCodeController@deleteGlobalCode');

@@ -1143,14 +1143,13 @@ class PatientService
         try {
             $patient = Helper::entity('patient', $id);
             PatientInsurance::where('patientId', $patient)->delete();
-            $udid = Str::uuid()->toString();
             $insurance = $request->input('insurance');
             foreach ($insurance as $value) {
                 $input = [
                     'insuranceNumber' => $value['insuranceNumber'], 'expirationDate' => $value['expirationDate'],  'createdBy' => Auth::id(),
-                    'insuranceNameId' => $value['insuranceName'], 'insuranceTypeId' => $value['insuranceType'], 'patientId' => $patient, 'udid' => $udid
+                    'insuranceNameId' => $value['insuranceName'], 'insuranceTypeId' => $value['insuranceType'], 'patientId' => $patient, 'udid' =>Str::uuid()->toString()
                 ];
-                $patient = PatientInsurance::create($input);
+                PatientInsurance::create($input);
                 $getPatient = PatientInsurance::where('patientId', $patient)->with('patient')->get();
                 $userdata = fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
                 $message = ['message' => 'create successfully'];

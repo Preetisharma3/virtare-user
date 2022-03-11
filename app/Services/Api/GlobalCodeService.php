@@ -31,7 +31,11 @@ class GlobalCodeService
      {
           try {
                if (!$id) {
-                    $global = GlobalCode::where('predefined',0)->orderBy('name','ASC')->get();
+                    if($request->active){
+                         $global = GlobalCode::orderBy('name','ASC')->get();
+                    }else{
+                         $global = GlobalCode::where('isActive',1)->orderBy('name','ASC')->get();
+                    }
                     return fractal()->collection($global)->transformWith(new GlobalCodeTransformer())->toArray();
                } else {
                     $global = GlobalCode::where('id', $id)->first();
