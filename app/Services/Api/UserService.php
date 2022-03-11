@@ -46,7 +46,7 @@ class UserService
                     "updatedBy" => Auth::user()->id,
                 ]);
                 User::where('id', Auth::user()->id)->update([
-                    "profilePhoto" => str_replace(URL::to('/') . '/', "", $request->path),
+                    "profilePhoto" => str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->path),
                 ]);
                 $user = User::where('udid', Auth::user()->udid)->first();
                 return fractal()->item($user)->transformWith(new PatientTransformer(false))->toArray();
@@ -58,7 +58,7 @@ class UserService
                     "updatedBy" => Auth::user()->id,
                 ]);
                 User::where('id', Auth::user()->id)->update([
-                    "profilePhoto" => str_replace(URL::to('/') . '/', "", $request->path),
+                    "profilePhoto" => str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->path),
                 ]);
                 $user = PatientFamilyMember::where('userId', auth()->user()->id)->first();
                 return fractal()->item($user)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
@@ -68,7 +68,7 @@ class UserService
                     "updatedBy" => Auth::user()->id,
                 ]);
                 User::where('id', Auth::user()->id)->update([
-                    "profilePhoto" => str_replace(URL::to('/') . '/', "", $request->path),
+                    "profilePhoto" => str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->path),
                 ]);
                 $user = User::where('udid', Auth::user()->udid)->first();
                 return fractal()->item($user)->transformWith(new UserTransformer(true))->toArray();
