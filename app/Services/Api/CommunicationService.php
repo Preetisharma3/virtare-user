@@ -4,7 +4,6 @@ namespace App\Services\Api;
 
 use Exception;
 use App\Helper;
-use App\Models\Communication\CallRecord;
 use Carbon\Carbon;
 use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
@@ -14,6 +13,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Communication\Communication;
 use App\Models\Communication\CommunicationMessage;
+use App\Models\Communication\CallRecord;
 use App\Models\Communication\CommunicationCallRecord;
 use App\Transformers\Communication\CallRecordTransformer;
 use App\Transformers\Communication\CallStatusTransformer;
@@ -139,7 +139,7 @@ class CommunicationService
     // calls Per Staff API
     public function callCountPerStaff()
     {
-        $data = CommunicationCallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->orderBy('createdAt', 'DESC')->get();
+        $data = CallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->orderBy('createdAt', 'DESC')->get();
         return fractal()->collection($data)->transformWith(new CallRecordTransformer())->toArray();
     }
 
