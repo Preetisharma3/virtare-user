@@ -45,28 +45,13 @@ class ExcelGeneratorService
 
         if(!empty($fromDate) && !empty($toDate))
         {
-            $patientData = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->whereBetween('date', [$fromDate, $toDate])->get();
+            $responseData = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->whereBetween('date', [$fromDate, $toDate])->get();
         }
         else
         {
-            $patientData = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->get();
+            $responseData = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->get();
         }
-
-        $excelObj = array();
-        if(!empty($patientData)){
-            foreach($patientData as $data){
-                $excelObj[] = array(
-                    "staff_name" => @$data->performed->firstName.' '.@$data->performed->lastName,
-                    "patient_name" => @$data->patient->firstName.' '.@$data->patient->middleName.' '.@$data->patient->lastName,
-                    "cpt_code" =>(!empty($data->cptCode->name))?$data->cptCode->name:'',
-                    "time" =>$data->timeAmount,
-                    "notes"=> (!empty($data->notes->note))?$data->notes->note:''
-                );
-            }
-        }
-
-        $excelData = array($excelObj);
-        
+ 
         $headingFrom = "A1"; // or any value
         $headingTo = "E1"; // or any value
         $sheet->setCellValue('A1', 'Patient TimeLog Report')->mergeCells('A1:E1');
@@ -85,20 +70,26 @@ class ExcelGeneratorService
                 ->setCellValue('D2', 'Time')
                 ->setCellValue('E2', 'Notes');
         $k = 3;
-        for ($i = 0; $i < count($excelObj); $i++) {
-            $sheet->setCellValue('A' . $k, $excelObj[$i]["staff_name"]);
-            $sheet->setCellValue('B' . $k, $excelObj[$i]["patient_name"]);
-            $sheet->setCellValue('C' . $k, $excelObj[$i]["cpt_code"]);
-            $sheet->setCellValue('D' . $k, $excelObj[$i]["time"]);
-            $sheet->setCellValue('E' . $k, $excelObj[$i]["notes"]);
-            $k++;
-        }
-        
-        $fileName = "timeLogReport_".time().".xlsx";
+        if(!empty($responseData)){
+            $dataObj = $responseData;
+            for ($i = 0; $i < count($dataObj); $i++) {
+                $staff_name = @$dataObj[$i]->performed->firstName.' '.@$dataObj[$i]->performed->lastName;
+                $patient_name = @$dataObj[$i]->patient->firstName.' '.@$dataObj[$i]->patient->middleName.' '.@$dataObj[$i]->patient->lastName;
+                $cpt_code = (!empty($dataObj[$i]->cptCode->name))?$dataObj[$i]->cptCode->name:'';
+                $time = $dataObj[$i]->timeAmount/60;
+                $notes = (!empty($dataObj[$i]->notes->note))?$dataObj[$i]->notes->note:'';
 
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
-        $writer->save('php://output');
+                $sheet->setCellValue('A' . $k, $staff_name);
+                $sheet->setCellValue('B' . $k, $patient_name);
+                $sheet->setCellValue('C' . $k, $cpt_code);
+                $sheet->setCellValue('D' . $k, $time);
+                $sheet->setCellValue('E' . $k, $notes);
+                $k++;
+            }
+        }
+        $fileName = "timeLogReport_".time().".xlsx";
+        ExcelGeneratorService:: writerSave($writer,$fileName);
+        exit;
     }
 
 
@@ -127,47 +118,11 @@ class ExcelGeneratorService
 
         if(!empty($fromDate) && !empty($toDate))
         {
-            $result = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->whereBetween('dueDate', [$fromDate, $toDate])->latest()->get();
+            $resultData = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->whereBetween('dueDate', [$fromDate, $toDate])->latest()->get();
         }
         else
         {
-            $result = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
-        }
-
-        $excelObj = array();
-        $cat_list = "";
-        if(!empty($result))
-        {
-            foreach($result as $data)
-            {
-                if(!empty($data->taskCategory))
-                {
-                    $taskCategory = fractal()->collection($data->taskCategory)->transformWith(new TaskCategoryTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
-                    if(!empty($taskCategory))
-                    {
-                        $cat_list = "";
-                        foreach($taskCategory as $cat)
-                        {
-                            $cat_list .= $cat["taskCategory"].",";
-                        }
-                        $cat_string = substr($cat_list, 0, -2);
-                    }
-                    
-                }
-                else
-                {
-                    $cat_string = "";
-                }
-
-                $excelObj[] = array(
-                    'title'=>$data->title,
-                    'taskStatus'=>$data->taskStatus->name,
-                    'priority'=>$data->priority->name,
-                    'category'=> $cat_string,
-                    'dueDate'=>date('D d, Y',strtotime($data->dueDate)),
-                    'assignedBy'=>$data->user->email
-                );
-            }
+            $resultData = Task::with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
         }
         
         $headingFrom = "A1"; // or any value
@@ -190,21 +145,42 @@ class ExcelGeneratorService
                 ->setCellValue('E2', 'Due Date')
                 ->setCellValue('F2', 'Assigned By');
         $k = 3;
-        for ($i = 0; $i < count($excelObj); $i++) {
-            $sheet->setCellValue('A' . $k, $excelObj[$i]["title"]);
-            $sheet->setCellValue('B' . $k, $excelObj[$i]["taskStatus"]);
-            $sheet->setCellValue('C' . $k, $excelObj[$i]["priority"]);
-            $sheet->setCellValue('D' . $k, $excelObj[$i]["category"]);
-            $sheet->setCellValue('E' . $k, $excelObj[$i]["dueDate"]);
-            $sheet->setCellValue('F' . $k, $excelObj[$i]["assignedBy"]);
-            $k++;
-        }
-        
-        $fileName = "TaskReport_".time().".xlsx";
+        if(!empty($resultData))
+        {
+            $cat_list = "";
+            for ($i = 0; $i < count($resultData); $i++) {
+                if(!empty($resultData[$i]->taskCategory))
+                {
+                    $taskCategory = fractal()->collection($resultData[$i]->taskCategory)->transformWith(new TaskCategoryTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                    if(!empty($taskCategory))
+                    {
+                        $cat_list = "";
+                        foreach($taskCategory as $cat)
+                        {
+                            $cat_list .= $cat["taskCategory"].",";
+                        }
+                        $cat_string = substr($cat_list, 0, -2);
+                    }  
+                }
+                else
+                {
+                    $cat_string = "";
+                }
 
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
-        $writer->save('php://output');
+                $dueDate=date('D d, Y',strtotime($resultData[$i]->dueDate));
+
+                $sheet->setCellValue('A' . $k, $resultData[$i]->title);
+                $sheet->setCellValue('B' . $k, $resultData[$i]->taskStatus->name);
+                $sheet->setCellValue('C' . $k, $resultData[$i]->priority->name);
+                $sheet->setCellValue('D' . $k, $cat_string);
+                $sheet->setCellValue('E' . $k, $dueDate);
+                $sheet->setCellValue('F' . $k, $resultData[$i]->user->email);
+                $k++;
+            }
+        }
+        $fileName = "TaskReport_".time().".xlsx";
+        ExcelGeneratorService:: writerSave($writer,$fileName);
+        exit;
     }
 
     public static function excelCptCodeExport($request)
@@ -215,18 +191,6 @@ class ExcelGeneratorService
         $writer = new Xlsx($spreadsheet);
         $resultData = CPTCode::with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->get();
        
-        $excelObj = array();
-        if(!empty($resultData)){
-            foreach($resultData as $data){
-                $excelObj[] = array(
-                    "cpt_code" =>$data->name,
-                    'description' => $data->description,
-                    'billingAmout'=>$data->billingAmout,
-                    'status'=> $data->isActive ? "True" : "False"
-                );
-            }
-        }
-        
         $headingFrom = "A1"; // or any value
         $headingTo = "D1"; // or any value
         $sheet->setCellValue('A1', 'Cpt Code Report')->mergeCells('A1:D1');
@@ -243,20 +207,20 @@ class ExcelGeneratorService
                 ->setCellValue('C2', 'Billing Amout')
                 ->setCellValue('D2', 'Active/Inactive');
         $k = 3;
-        for ($i = 0; $i < count($excelObj); $i++) {
-            $sheet->setCellValue('A' . $k, $excelObj[$i]["cpt_code"]);
-            $sheet->setCellValue('B' . $k, $excelObj[$i]["description"]);
-            $sheet->setCellValue('C' . $k, $excelObj[$i]["billingAmout"]);
-            $sheet->setCellValue('D' . $k, $excelObj[$i]["status"]);
-            $k++;
+        if(!empty($resultData)){
+            for ($i = 0; $i < count($resultData); $i++) {
+                $status = $resultData[$i]->isActive ? "True" : "False";
+                $sheet->setCellValue('A' . $k, $resultData[$i]->name);
+                $sheet->setCellValue('B' . $k, $resultData[$i]->description);
+                $sheet->setCellValue('C' . $k, $resultData[$i]->billingAmout);
+                $sheet->setCellValue('D' . $k, $status);
+                $k++;
+            }
         }
         
-        // $writer->save('hello world.xlsx');
         $fileName = "cptCodeReport_".time().".xlsx";
-
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
-        $writer->save('php://output');
+        ExcelGeneratorService:: writerSave($writer,$fileName);
+        exit;
     }
 
     public static function generalParameterExcelExport($request)
@@ -266,36 +230,6 @@ class ExcelGeneratorService
 
         $writer = new Xlsx($spreadsheet);
         $resultData = GeneralParameterGroup::with('generalParameter')->orderBy('createdAt', 'DESC')->get();
-
-        $excelObj = array();
-        if(!empty($resultData)){
-            foreach($resultData as $data){
-                $generalParameter = fractal()->collection($data->generalParameter)->transformWith(new GeneralParameterTransformer())->toArray();
-                if(count($generalParameter["data"]) > 0){
-                    for($l = 0; $l < count($generalParameter["data"]); $l++)
-                    {
-                        $excelObj[] = array(
-                            'groupName'=>$data->name,
-                            'deviceType'=>(!empty($data->deviceType->name))?$data->deviceType->name:'',
-                            'type'=>isset($generalParameter["data"][$l]["vitalFieldName"])?$generalParameter["data"][$l]["vitalFieldName"]:'',
-                            'highLimit'=>isset($generalParameter["data"][$l]["highLimit"])?$generalParameter["data"][$l]["highLimit"]:'',
-                            'lowLimit'=>isset($generalParameter["data"][$l]["lowLimit"])?$generalParameter["data"][$l]["lowLimit"]:''
-                        );
-                    }
-                }
-                else
-                {
-                    $excelObj[] = array(
-                        'groupName'=>$data->name,
-                        'deviceType'=>(!empty($data->deviceType->name))?$data->deviceType->name:'',
-                        'type'=>'',
-                        'highLimit'=>'',
-                        'lowLimit'=>''
-                    );
-                }
-            }
-        }
-        
         $headingFrom = "A1"; // or any value
         $headingTo = "E1"; // or any value
         $sheet->setCellValue('A1', 'General Parameter Report')->mergeCells('A1:E1');
@@ -314,20 +248,46 @@ class ExcelGeneratorService
                 ->setCellValue('D2', 'High Limit')
                 ->setCellValue('E2', 'Low Limit');
         $k = 3;
-        for ($i = 0; $i < count($excelObj); $i++) {
-            $sheet->setCellValue('A' . $k, $excelObj[$i]["groupName"]);
-            $sheet->setCellValue('B' . $k, $excelObj[$i]["deviceType"]);
-            $sheet->setCellValue('C' . $k, $excelObj[$i]["type"]);
-            $sheet->setCellValue('D' . $k, $excelObj[$i]["highLimit"]);
-            $sheet->setCellValue('E' . $k, $excelObj[$i]["lowLimit"]);
-            $k++;
+        if(!empty($resultData)){
+            $generalParameter = array();
+            for ($i = 0; $i < count($resultData); $i++) {
+                $generalParameter = fractal()->collection($resultData[$i]->generalParameter)->transformWith(new GeneralParameterTransformer())->toArray();
+                if(count($generalParameter["data"]) > 0){
+                    for($j = 0; $j < count($generalParameter["data"]); $j++)
+                    {
+                        $deviceType =   (!empty($resultData[$i]->deviceType->name))?$resultData[$i]->deviceType->name:'';
+                        $type   =  isset($generalParameter["data"][$j]["vitalFieldName"])?$generalParameter["data"][$j]["vitalFieldName"]:'';
+                        $highLimit  = isset($generalParameter["data"][$j]["highLimit"])?$generalParameter["data"][$j]["highLimit"]:'';
+                        $lowLimit   =  isset($generalParameter["data"][$j]["lowLimit"])?$generalParameter["data"][$j]["lowLimit"]:'';
+
+                        $sheet->setCellValue('A' . $k, $resultData[$i]->name);
+                        $sheet->setCellValue('B' . $k, $deviceType);
+                        $sheet->setCellValue('C' . $k, $type);
+                        $sheet->setCellValue('D' . $k, $highLimit);
+                        $sheet->setCellValue('E' . $k, $lowLimit);
+                        $k++;
+                    }
+                }
+                else
+                {
+                    $deviceType =  (!empty($resultData[$i]->deviceType->name))?$resultData[$i]->deviceType->name:'';
+                    $type       =   "";
+                    $highLimit  =   "";
+                    $lowLimit   =   "";
+                    $sheet->setCellValue('A' . $k, $resultData[$i]->name);
+                    $sheet->setCellValue('B' . $k, $deviceType);
+                    $sheet->setCellValue('C' . $k, $type);
+                    $sheet->setCellValue('D' . $k, $highLimit);
+                    $sheet->setCellValue('E' . $k, $lowLimit);
+                    $k++;
+                }
+                
+            }
         }
         
         $fileName = "generalParameterReport_".time().".xlsx";
-
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
-        $writer->save('php://output');
+        ExcelGeneratorService:: writerSave($writer,$fileName);
+        exit;
     }
 
     public static function templateExcelExport($request)
@@ -337,16 +297,6 @@ class ExcelGeneratorService
 
         $writer = new Xlsx($spreadsheet);
         $resultData = Template::all();
-
-        $excelObj = array();
-        if(!empty($resultData)){
-            foreach($resultData as $data){
-                $excelObj[] = array(
-                    'name' => $data->name,
-                    'status' =>$data->isActive ? "true":"false"
-                );
-            }
-        }
         
         $headingFrom = "A1"; // or any value
         $headingTo = "B1"; // or any value
@@ -359,18 +309,20 @@ class ExcelGeneratorService
         $sheet->getColumnDimension('B')->setWidth(80, 'pt');
         $sheet->setCellValue('A2', 'Template')
                 ->setCellValue('B2', 'Status');
+                
         $k = 3;
-        for ($i = 0; $i < count($excelObj); $i++) {
-            $sheet->setCellValue('A' . $k, $excelObj[$i]["name"]);
-            $sheet->setCellValue('B' . $k, $excelObj[$i]["status"]);
-            $k++;
+        if(!empty($resultData)){
+            for ($i = 0; $i < count($resultData); $i++) {
+                $status = $resultData[$i]->isActive ? "true":"false";
+                $sheet->setCellValue('A' . $k, $resultData[$i]->name);
+                $sheet->setCellValue('B' . $k, $status);
+                $k++;
+            }
         }
         
         $fileName = "templateReport_".time().".xlsx";
-
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
-        $writer->save('php://output');
+        ExcelGeneratorService:: writerSave($writer,$fileName);
+        exit;
     }
 
     public static function inventoryExcelExport($request,$isAvailable="1",$deviceType="99")
@@ -381,17 +333,6 @@ class ExcelGeneratorService
         $writer = new Xlsx($spreadsheet);
         $resultData = DB::select('CALL inventoryList("' . $isAvailable . '","' . $deviceType . '")');
         $excelObj = array();
-        if(!empty($resultData)){
-            foreach($resultData as $data){
-                $excelObj[] = array(
-                    'deviceType' => (!empty($data->model->deviceType->name)) ? $data->model->deviceType->name : $data->deviceType,
-                    'modelNumber' => $data->modelNumber ? $data->modelNumber : $data->model->modelName,
-                    'serialNumber' => $data->serialNumber,
-                    'macAddress' => $data->macAddress,
-                    'status' => $data->isActive ? "True" : "False"
-                );
-            }
-        }
         
         $headingFrom = "A1"; // or any value
         $headingTo = "E1"; // or any value
@@ -411,17 +352,27 @@ class ExcelGeneratorService
                 ->setCellValue('D2', 'Mac Address')
                 ->setCellValue('E2', 'Active/Inactive');
         $k = 3;
-        for ($i = 0; $i < count($excelObj); $i++) {
-            $sheet->setCellValue('A' . $k, $excelObj[$i]["deviceType"]);
-            $sheet->setCellValue('B' . $k, $excelObj[$i]["modelNumber"]);
-            $sheet->setCellValue('C' . $k, $excelObj[$i]["serialNumber"]);
-            $sheet->setCellValue('D' . $k, $excelObj[$i]["macAddress"]);
-            $sheet->setCellValue('E' . $k, $excelObj[$i]["status"]);
-            $k++;
-        }
-        
-        $fileName = "inventoryReport_".time().".xlsx";
 
+        if(!empty($resultData)){
+            for ($i = 0; $i < count($resultData); $i++) {
+                $deviceType = (!empty($resultData[$i]->model->deviceType->name)) ? $resultData[$i]->model->deviceType->name : $resultData[$i]->deviceType;
+                $modelNumber = $resultData[$i]->modelNumber ? $resultData[$i]->modelNumber : $resultData[$i]->model->modelName;
+                $status = $resultData[$i]->isActive ? "True" : "False";
+                $sheet->setCellValue('A' . $k, $deviceType);
+                $sheet->setCellValue('B' . $k, $modelNumber);
+                $sheet->setCellValue('C' . $k, $resultData[$i]->serialNumber);
+                $sheet->setCellValue('D' . $k, $resultData[$i]->macAddress);
+                $sheet->setCellValue('E' . $k, $status);
+                $k++;
+            }
+        }
+        $fileName = "inventoryReport_".time().".xlsx";
+        ExcelGeneratorService:: writerSave($writer,$fileName);
+        exit;
+    }
+    
+    public static function writerSave($writer,$fileName)
+    {
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
         $writer->save('php://output');
