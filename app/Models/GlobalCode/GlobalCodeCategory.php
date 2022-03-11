@@ -22,6 +22,11 @@ class GlobalCodeCategory extends Model
 
     public function globalCode()
     {
-        return $this->hasMany(GlobalCode::class,'globalCodeCategoryId')->where('isActive','1');
+        if(request()->active){
+
+            return $this->hasMany(GlobalCode::class,'globalCodeCategoryId');
+        }else{
+            return $this->hasMany(GlobalCode::class,'globalCodeCategoryId')->where('isActive','1');
+        }
     }
 }
