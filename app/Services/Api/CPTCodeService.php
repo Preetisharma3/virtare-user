@@ -28,7 +28,11 @@ class CPTCodeService
                     }
                     return fractal()->collection($data)->transformWith(new CPTCodeTransformer())->toArray();
                 }else{
-                    $data = CPTCode::with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
+                    if($request->active){
+                        $data = CPTCode::with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
+                    }else{
+                        $data = CPTCode::where('isActive',1)->with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
+                    }
                     return fractal()->collection($data)->transformWith(new CPTCodeTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 }
                 }
