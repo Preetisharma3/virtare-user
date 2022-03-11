@@ -45,9 +45,11 @@ class UserService
                     "phoneNumber" => $request->contact_no,
                     "updatedBy" => Auth::user()->id,
                 ]);
-                User::where('id', Auth::user()->id)->update([
-                    "profilePhoto" => str_replace(URL::to('/') . '/', "", $request->path),
-                ]);
+                $file = array();
+                if (!empty($request->path)) {
+                    $file['profilePhoto'] = str_replace(URL::to('/') . '/', "", $request->path);
+                }
+                User::where('id', Auth::user()->id)->update($file);
                 $user = User::where('udid', Auth::user()->udid)->first();
                 return fractal()->item($user)->transformWith(new PatientTransformer(false))->toArray();
             } elseif (auth()->user()->roleId == 6) {
@@ -57,9 +59,12 @@ class UserService
                     "contactTimeId" => $request->contactTime,
                     "updatedBy" => Auth::user()->id,
                 ]);
-                User::where('id', Auth::user()->id)->update([
-                    "profilePhoto" => str_replace(URL::to('/') . '/', "", $request->path),
-                ]);
+                $file = array();
+                if (!empty($request->path)) {
+                    $file['profilePhoto'] = str_replace(URL::to('/') . '/', "", $request->path);
+                }
+                User::where('id', Auth::user()->id)->update($file);
+               
                 $user = PatientFamilyMember::where('userId', auth()->user()->id)->first();
                 return fractal()->item($user)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
             } else {
@@ -67,9 +72,12 @@ class UserService
                     "phoneNumber" => $request->phoneNumber,
                     "updatedBy" => Auth::user()->id,
                 ]);
-                User::where('id', Auth::user()->id)->update([
-                    "profilePhoto" => str_replace(URL::to('/') . '/', "", $request->path),
-                ]);
+                $file = array();
+                if (!empty($request->path)) {
+                    $file['profilePhoto'] = str_replace(URL::to('/') . '/', "", $request->path);
+                }
+                User::where('id', Auth::user()->id)->update($file);
+               
                 $user = User::where('udid', Auth::user()->udid)->first();
                 return fractal()->item($user)->transformWith(new UserTransformer(true))->toArray();
             }
@@ -100,8 +108,8 @@ class UserService
     public function passwordChange(Request $request)
     {
         try {
-            User::find(auth()->user()->id)->update(['password'=> Hash::make($request->newPassword)]);
-            return response()->json(['message'=>trans('messages.changePassword')]);
+            User::find(auth()->user()->id)->update(['password' => Hash::make($request->newPassword)]);
+            return response()->json(['message' => trans('messages.changePassword')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
