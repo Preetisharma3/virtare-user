@@ -48,7 +48,7 @@ class UserService
 
                 $file = array();
                 if (!empty($request->path)) {
-                    $file['profilePhoto'] = str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->path),;
+                    $file['profilePhoto'] = str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->path);
                 }
                 User::where('id', Auth::user()->id)->update($file);
                 $user = User::where('udid', Auth::user()->udid)->first();
@@ -63,7 +63,7 @@ class UserService
 
                 $file = array();
                 if (!empty($request->path)) {
-                    $file['profilePhoto'] = str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->path),;
+                    $file['profilePhoto'] = str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->path);
                 }
                 User::where('id', Auth::user()->id)->update($file);
                
