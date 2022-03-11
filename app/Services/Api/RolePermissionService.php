@@ -12,6 +12,7 @@ use App\Transformers\Role\RoleListTransformer;
 use App\Transformers\RolePermission\RolePerTransformer;
 use App\Transformers\RolePermission\PermissionTransformer;
 use App\Transformers\RolePermission\RolePermissionTransformer;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
@@ -110,6 +111,9 @@ class RolePermissionService
     {
         try{
             $role = AccessRole::where('udid',$id)->first();
+            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1,'deletedAt'=>Carbon::now()];
+            RolePermission::where('accessRoleId', $role->id)->update($input);
+            
             $action = $request->actions;
             foreach($action as $actionId ){
                 $udid = Str::uuid()->toString();
