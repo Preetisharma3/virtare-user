@@ -31,7 +31,7 @@ class WidgetService
             'widgetPath' => $request->widgetPath,
             'roleId' => $request->roleId,
             'canNotViewModifyOrDelete' => $request->canNotViewModifyOrDelete,
-            'createdBy'=>1
+            'createdBy'=>Auth::id()
         ];
         DashboardWidgetByRole::create($input);
         return response()->json(['message' => trans('messages.createdSuccesfully')], 200);

@@ -145,7 +145,7 @@ class TeamService
                             return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(true))->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                         }
                     } else {
-                        $data = PatientFamilyMember::with('roles')->where([['patientId', $patientId], ['udid', $id]])->first();
+                        $data = PatientFamilyMember::with('roles')->where([['patientId', $patient], ['udid', $id]])->first();
                         if (!empty($data)) {
                             return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
                         } else {

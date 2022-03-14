@@ -87,7 +87,7 @@ class StaffService
         $uId = $staffId->userId;
         $user = [
             'email' => $request->input('email'),
-            'updatedBy' => 1
+            'updatedBy' => Auth::id()
         ];
         User::where('id', $uId)->update($user);
         $staff = [
@@ -174,7 +174,7 @@ class StaffService
         try {
             if (!empty($request->staffId)) {
                 $staff = Staff::where('udid', $staffId)->first();
-                $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
+                $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
                 StaffContact::where([['staffId', $staff->id], ['udid', $id]])->update($input);
                 StaffContact::where([['staffId', $staff->id], ['udid', $id]])->delete();
                 return response()->json(['message' => "Deleted Successfully"]);
@@ -243,7 +243,7 @@ class StaffService
     {
         try {
             $staff = Staff::where('udid', $staffId)->first();
-            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
+            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
             StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->update($input);
             StaffAvailability::where([['staffId', $staff->id], ['udid', $id]])->delete();
             return response()->json(['message' => "Deleted Successfully"]);
@@ -299,7 +299,7 @@ class StaffService
     {
         try {
             $staff = Staff::where('udid', $staffId)->first();
-            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
+            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
             UserRole::where([['staffId', $staff->id], ['udid', $id]])->update($input);
             UserRole::where([['staffId', $staff->id], ['udid', $id]])->delete();
             return response()->json(['message' => "Deleted Successfully"]);
@@ -358,7 +358,7 @@ class StaffService
     {
         try {
             $staff = Staff::where('udid', $staffId)->first();
-            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
+            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
             StaffProvider::where([['staffId', $staff->id], ['udid', $id]])->update($input);
             StaffProvider::where([['staffId', $staff->id], ['udid', $id]])->delete();
             return response()->json(['message' => "Deleted Successfully"]);

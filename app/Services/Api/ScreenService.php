@@ -4,6 +4,7 @@ namespace App\Services\Api;
 
 use Exception;
 use App\Models\Screen\Screen;
+use Illuminate\Support\Facades\Auth;
 use App\Transformers\Screen\ScreenTransformer;
 
 class ScreenService
@@ -14,7 +15,7 @@ class ScreenService
             $screen = [
                 'name' => $request->name,
                 'moduleId' => $request->moduleId,
-                'createdBy' => 1
+                'createdBy' => Auth::id()
             ];
              Screen::create($screen);
            return response()->json(['message' => trans('messages.createdSuccesfully')],200);
