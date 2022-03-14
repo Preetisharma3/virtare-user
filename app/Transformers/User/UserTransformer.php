@@ -28,6 +28,9 @@ class UserTransformer extends TransformerAbstract
 
 	public function transform($user): array
 	{
+		ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 		return [
 			'id' => $user->id,
 			'udid' => $user->udid,
@@ -53,7 +56,7 @@ class UserTransformer extends TransformerAbstract
 			'deviceToken' => $user->deviceToken,
 			'patient'=>$this->showData && $user->patient ? fractal()->item($user->patient)->transformWith(new PatientTransformer(false))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
 			'staff'=>$user->staff ? fractal()->item($user->staff)->transformWith(new StaffTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
-			'famailyMember'=>$user->familyMember ? fractal()->item($user->familyMember)->transformWith(new PatientFamilyMemberTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
+			'famailyMember'=>$user->familyMember ? fractal()->item($user->familyMember)->transformWith(new PatientFamilyMemberTransformer(false))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
 
 		];
 	}

@@ -11,7 +11,10 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 	protected $defaultIncludes = [];
 
 	protected $availableIncludes = [];
-
+	public function __construct($showData = true)
+    {
+        $this->showData = $showData;
+    }
 	public function transform($data): array
 	{
 			return [
@@ -32,7 +35,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'isPrimary'=>(!empty($data->isPrimary))?$data->isPrimary:'',
 				'vital'=>(!empty($data->vital))?$data->vital:0,
 				'message'=>(!empty($data->messages))?$data->messages:0,
-				'user' =>$data->user? fractal()->item($data->user)->transformWith(new UserTransformer())->toArray():[],
+				'user' =>($data->user) && ($this->showData)? fractal()->item($data->user)->transformWith(new UserTransformer())->toArray():[],
 			];
 	}
 }
