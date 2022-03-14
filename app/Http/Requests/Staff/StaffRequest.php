@@ -13,16 +13,33 @@ class StaffRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'email' => 'required|unique:users,email',
-            'firstName' => 'required',
-            'lastName' => 'required',
-            'designationId' => 'required',
-            'genderId' => 'required',
-            'phoneNumber' => 'required|numeric',
-            'specializationId' => 'required',
-            'networkId' => 'required'
-        ];
+        $staff_udid = request()->segment(2);
+
+        if(!empty($staff_udid)){
+            $staff = Staff::where('udid',$staff_udid)->first();
+            return [
+                'email' => 'required|unique:users,email,'.$staff['userId'].'udid',
+                'firstName' => 'required',
+                'lastName' => 'required',
+                'designationId' => 'required',
+                'genderId' => 'required',
+                'phoneNumber' => 'required|numeric',
+                'specializationId' => 'required',
+                'networkId' => 'required'
+            ];
+        }else{
+
+            return [
+                'email' => 'required|unique:users,email',
+                'firstName' => 'required',
+                'lastName' => 'required',
+                'designationId' => 'required',
+                'genderId' => 'required',
+                'phoneNumber' => 'required|numeric',
+                'specializationId' => 'required',
+                'networkId' => 'required'
+            ];
+        }
     }
 
     public function messages()
