@@ -8,6 +8,7 @@ use App\Services\Api\BitrixService;
 use App\Services\Api\FamilyService;
 use App\Http\Controllers\Controller;
 use App\Services\Api\PatientService;
+use App\Http\Requests\Family\FamilyRequest;
 use App\Http\Requests\Patient\PatientRequest;
 use App\Http\Requests\Patient\PatientProgramRequest;
 use App\Http\Requests\Patient\PatientReferalRequest;
@@ -20,11 +21,6 @@ class PatientController extends Controller
 {
 
   public function createPatient(PatientRequest $request, $id = null)
-  {
-    return (new PatientService)->patientCreate($request, $id);
-  }
-
-  public function updatePatient(Request $request, $id)
   {
     return (new PatientService)->patientCreate($request, $id);
   }
@@ -74,7 +70,7 @@ class PatientController extends Controller
     return (new PatientService)->patientPhysicianCreate($request, $id, $physicianId);
   }
 
-  public function updatePatientPhysician(Request $request, $id, $physicianId = null)
+  public function updatePatientPhysician(PatientPhysicianRequest $request, $id, $physicianId = null)
   {
     return (new PatientService)->patientPhysicianCreate($request, $id, $physicianId);
   }
@@ -237,7 +233,7 @@ class PatientController extends Controller
 
 
   // Family 
-  public function createFamily(Request $request, $id, $familyId = null)
+  public function createFamily(FamilyRequest $request, $id, $familyId = null)
   {
     return (new FamilyService)->familyCreate($request, $id, $familyId);
   }

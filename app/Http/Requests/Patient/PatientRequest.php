@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Patient;
 
+use App\Models\Patient\Patient;
+use App\Models\Patient\PatientFamilyMember;
 use Urameshibr\Requests\FormRequest;
 
 class PatientRequest extends FormRequest
@@ -13,14 +15,41 @@ class PatientRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'email' => 'required|unique:users,email',
-            'familyEmail' => 'unique:users,email',
-            'firstName' => 'required',
-            'lastName' => 'required',
-            'dob' => 'required',
-            'phoneNumber' => 'required',
-        ];
+        $patient_udid=request()->segment(2);
+        if(!empty($patient_udid)){
+            $patient = Patient::where('udid',$patient_udid)->first();
+            $family = PatientFamilyMember::where('patientId',$patient->id)->first();
+            if(!empty($family)){
+                return [
+                    'email' => 'required|unique:users,email,'.$patient['userId'].'udid',
+                    'familyEmail' => 'unique:users,email,'.$family['userId'].'udid',
+                    'firstName' => 'required',
+                    'lastName' => 'required',
+                    'dob' => 'required',
+                    'phoneNumber' => 'required',
+                ];
+            }else{
+                return [
+                    'email' => 'required|unique:users,email,'.$patient['userId'].'udid',
+                    'familyEmail' => 'unique:users,email',
+                    'firstName' => 'required',
+                    'lastName' => 'required',
+                    'dob' => 'required',
+                    'phoneNumber' => 'required',
+                ];
+            }
+            
+        }else{
+            return [
+                'email' => 'required|unique:users,email',
+                'familyEmail' => 'unique:users,email',
+                'firstName' => 'required',
+                'lastName' => 'required',
+                'dob' => 'required',
+                'phoneNumber' => 'required',
+            ];
+        }
+        
     }
 
     public function messages()

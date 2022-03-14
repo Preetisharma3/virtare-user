@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Patient;
+namespace App\Http\Requests\Family;
 
-use App\Models\Patient\PatientPhysician;
+use App\Models\Patient\PatientFamilyMember;
 use Urameshibr\Requests\FormRequest;
 
-class PatientPhysicianRequest extends FormRequest
+class FamilyRequest extends FormRequest
 {
     public function authorize()
     {
@@ -16,19 +16,27 @@ class PatientPhysicianRequest extends FormRequest
     {
         $id=request()->segment(4);
         if(!empty($id)){
-            $patient = PatientPhysician::where('udid',$id)->first();
+            $patient = PatientFamilyMember::where('udid',$id)->first();
             return [
                 'email' => 'required|unique:users,email,'.$patient['userId'].'udid',
-                'name' => 'required',
-                'designation' => 'required',
+                'fullName' => 'required',
                 'phoneNumber' => 'required',
+                'contactType' => 'required',
+                'gender' => 'required',
+                'relation' => 'required',
+                'vitalAuthorization' => 'required',
+                'messageAuthorization' => 'required',
             ];
         }else{
             return [
                 'email' => 'required|unique:users,email',
-                'name' => 'required',
-                'designation' => 'required',
+                'fullName' => 'required',
                 'phoneNumber' => 'required',
+                'contactType' => 'required',
+                'gender' => 'required',
+                'relation' => 'required',
+                'vitalAuthorization' => 'required',
+                'messageAuthorization' => 'required',
             ];
         }
     }
