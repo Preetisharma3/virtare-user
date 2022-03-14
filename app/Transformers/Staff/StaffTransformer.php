@@ -51,6 +51,7 @@ class StaffTransformer extends TransformerAbstract
             'sipId' => "UR".$data->userId,
             'title' => $data->firstName,
             'summary' => $data->summary ? $data->summary : '',
+            'fullName' => $data->firstName . ' ' . $data->lastName,
             'firstName' => $data->firstName ,
             'lastName' => $data->lastName,
             'lastName' => $data->lastName,
