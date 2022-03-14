@@ -25,7 +25,7 @@ class StaffController extends Controller
         return (new StaffService)->listStaff($request,$id);
     }
 
-    public function updateStaff(Request $request, $id)
+    public function updateStaff(StaffRequest $request, $id)
     {
         return (new StaffService)->updateStaff($request, $id); 
     }
