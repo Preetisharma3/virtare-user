@@ -9,7 +9,7 @@ use App\Transformers\Role\RoleTransformer;
 use App\Transformers\Staff\StaffTransformer;
 use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Contact\ContactTypeTransformer;
-
+use App\Transformers\Patient\PatientFamilyMemberTransformer;
 class UserTransformer extends TransformerAbstract
 {
 
@@ -53,6 +53,7 @@ class UserTransformer extends TransformerAbstract
 			'deviceToken' => $user->deviceToken,
 			'patient'=>$this->showData && $user->patient ? fractal()->item($user->patient)->transformWith(new PatientTransformer(false))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
 			'staff'=>$user->staff ? fractal()->item($user->staff)->transformWith(new StaffTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
+			'famailyMember'=>$user->familyMember ? fractal()->item($data->familyMember)->transformWith(new PatientFamilyMemberTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
 
 		];
 	}
