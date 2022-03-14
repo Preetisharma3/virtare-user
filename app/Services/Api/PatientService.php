@@ -294,42 +294,50 @@ class PatientService
             } else {
                 if ($roleId == 3) {
                     if ($request->all) {
-                        $staff = Patient::where('firstname','LIKE', '%' . $request->search . '%')->orWhere('lastName','LIKE', '%' . $request->search . '%')->whereHas('patientStaff', function ($query) {
-                            $query->where('staffId', auth()->user()->staff->id);
-                        })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
+                        $staff = Patient::whereHas('patientStaff', function ($query) use($request) {
+                            $query->where('staffId', auth()->user()->staff->id)->whereHas('patient', function ($q) use ($request) {
+                                $q->where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%');
+                            });
+                        })->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
                         if (!empty($staff)) {
                             return fractal()->collection($staff)->transformWith(new PatientTransformer())->toArray();
                         }
                     } else {
-                        $staff = Patient::where('firstname','LIKE', '%' . $request->search . '%')->orWhere('lastName','LIKE', '%' . $request->search . '%')->whereHas('patientStaff', function ($query) {
-                            $query->where('staffId', auth()->user()->staff->id);
-                        })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->paginate(env('PER_PAGE', 20));
+                        $staff = Patient::whereHas('patientStaff', function ($query) use($request) {
+                            $query->where('staffId', auth()->user()->staff->id)->whereHas('patient', function ($q) use ($request) {
+                                $q->where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%');
+                            });
+                        })->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->paginate(env('PER_PAGE', 20));
                         if (!empty($staff)) {
                             return fractal()->collection($staff)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($staff))->toArray();
                         }
                     }
                 } elseif ($roleId == 6) {
                     if ($request->all) {
-                        $family = Patient::where('firstname','LIKE', '%' . $request->search . '%')->orWhere('lastName','LIKE', '%' . $request->search . '%')->whereHas('family', function ($query) {
-                            $query->where('id', auth()->user()->familyMember->id);
-                        })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
+                        $family = Patient::whereHas('family', function ($query) use($request){
+                            $query->where('id', auth()->user()->familyMember->id)->whereHas('patient',function($q) use($request){
+                                $q->where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%');
+                            });
+                        })->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
                         if (!empty($family)) {
                             return fractal()->collection($family)->transformWith(new PatientTransformer())->toArray();
                         }
                     } else {
-                        $family = Patient::where('firstname','LIKE', '%' . $request->search . '%')->orWhere('lastName','LIKE', '%' . $request->search . '%')->whereHas('family', function ($query) {
-                            $query->where('id', auth()->user()->familyMember->id);
-                        })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->paginate(env('PER_PAGE', 20));
+                        $family = Patient::whereHas('family', function ($query) use($request){
+                            $query->where('id', auth()->user()->familyMember->id)->whereHas('patient',function($q) use($request){
+                                $q->where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%');
+                            });
+                        })->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->paginate(env('PER_PAGE', 20));
                         if (!empty($family)) {
                             return fractal()->collection($family)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($family))->toArray();
                         }
                     }
                 } elseif ($roleId == 1) {
                     if ($request->all) {
-                        $patient = Patient::where('firstname','LIKE', '%' . $request->search . '%')->orWhere('lastName','LIKE', '%' . $request->search . '%')->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
+                        $patient = Patient::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
                         return fractal()->collection($patient)->transformWith(new PatientTransformer())->toArray();
                     } else {
-                        $patient = Patient::where('firstname','LIKE', '%' . $request->search . '%')->orWhere('lastName','LIKE', '%' . $request->search . '%')->orderBy('firstName','ASC')->orderBy('lastName','ASC')->paginate(env('PER_PAGE', 20));
+                        $patient = Patient::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->paginate(env('PER_PAGE', 20));
                         return fractal()->collection($patient)->transformWith(new PatientTransformer())->paginateWith(new IlluminatePaginatorAdapter($patient))->toArray();
                     }
                 } elseif ($roleId == 4) {
@@ -530,7 +538,7 @@ class PatientService
                 ];
                 $userData = User::where('id', $uId)->update($user);
                 $input = [
-                    'sameAsReferal' => $request->input('sameAsAbove'), 'patientId' => $id, 'fax' => $request->input('fax'),
+                    'sameAsReferal' => $request->input('sameAsAbove'),'fax' => $request->input('fax'),
                     'updatedBy' => Auth::id(), 'phoneNumber' => $request->input('phoneNumber'), 'designationId' => $request->input('designation'),
                     'name' => $request->input('name'),
                 ];
@@ -1147,7 +1155,7 @@ class PatientService
             foreach ($insurance as $value) {
                 $input = [
                     'insuranceNumber' => $value['insuranceNumber'], 'expirationDate' => $value['expirationDate'],  'createdBy' => Auth::id(),
-                    'insuranceNameId' => $value['insuranceName'], 'insuranceTypeId' => $value['insuranceType'], 'patientId' => $patient, 'udid' =>Str::uuid()->toString()
+                    'insuranceNameId' => $value['insuranceName'], 'insuranceTypeId' => $value['insuranceType'], 'patientId' => $patient, 'udid' => Str::uuid()->toString()
                 ];
                 PatientInsurance::create($input);
                 $getPatient = PatientInsurance::where('patientId', $patient)->with('patient')->get();

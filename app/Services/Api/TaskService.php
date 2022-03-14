@@ -133,7 +133,7 @@ class TaskService
     public function deleteTask($id)
     {
         try {
-            $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
+            $data = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
             Task::where('id', $id)->update($data);
             Task::where('id', $id)->delete();
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
