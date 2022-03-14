@@ -599,8 +599,8 @@ class PatientService
         try {
             if (!$programId) {
                 $patient = Helper::entity('patient', $id);
-                $onboardingScheduleDate = Helper::date($request->input('onboardingScheduleDate'));
-                $dischargeDate = Helper::date($request->input('dischargeDate'));
+                $onboardingScheduleDate = Helper::dateOnly($request->input('onboardingScheduleDate'));
+                $dischargeDate = Helper::dateOnly($request->input('dischargeDate'));
                 $input = [
                     'programtId' => $request->input('program'), 'onboardingScheduleDate' => $onboardingScheduleDate, 'dischargeDate' => $dischargeDate,
                     'patientId' => $patient, 'createdBy' => Auth::id(), 'isActive' => $request->input('status'), 'udid' => Str::uuid()->toString()
@@ -610,8 +610,8 @@ class PatientService
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientProgramTransformer())->toArray();
                 $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
-                $onboardingScheduleDate = Helper::date($request->input('onboardingScheduleDate'));
-                $dischargeDate = Helper::date($request->input('dischargeDate'));
+                $onboardingScheduleDate = Helper::dateOnly($request->input('onboardingScheduleDate'));
+                $dischargeDate = Helper::dateOnly($request->input('dischargeDate'));
                 $input = [
                     'programtId' => $request->input('program'), 'onboardingScheduleDate' => $onboardingScheduleDate, 'dischargeDate' => $dischargeDate,
                     'updatedBy' => Auth::id(), 'isActive' => $request->input('status')
