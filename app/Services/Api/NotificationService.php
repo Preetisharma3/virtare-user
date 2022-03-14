@@ -71,12 +71,12 @@ class NotificationService
 
     public function appointmentConfrence()
     {
-        $toDate = Helper::date(strtotime('+5 minutes'));
+       $toDate = Helper::date(strtotime('+5 minutes'));
 
         $fromDate = Helper::date(time());
 
         $appointments = DB::select(
-            'CALL appointmentList("' . $fromDate . '","' . $toDate . '")',
+            'CALL appointmentList("' . $fromDate . '","' . $toDate . '","")',
         );
         if (!empty($appointments)) {
             foreach ($appointments as $appointment) {
@@ -116,7 +116,7 @@ class NotificationService
             }
         }
         $confrence =  Appointment::whereNotNull('conferenceId')->get();
-        Helper::updateFreeswitchConfrence($confrence);
+       // Helper::updateFreeswitchConfrence($confrence);
     }
 
     public function appointmentConfrenceIdUpdate()
