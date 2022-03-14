@@ -1047,7 +1047,7 @@ class PatientService
             } else {
                 $patient = Helper::entity('patient', $id);
                 $access = Helper::haveAccess($patient);
-                if ($access) {
+                if (!$access) {
                     $getPatient = PatientMedicalHistory::where('patientId', $patient)->with('patient')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
                 }
@@ -1118,7 +1118,7 @@ class PatientService
             } else {
                 $patient = Helper::entity('patient', $id);
                 $access = Helper::haveAccess($patient);
-                if ($access) {
+                if (!$access) {
                     $getPatient = PatientMedicalRoutine::where('patientId', $patient)->with('patient')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
                 }
