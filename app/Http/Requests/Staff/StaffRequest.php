@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Staff;
 
+use App\Models\Staff\Staff;
 use Urameshibr\Requests\FormRequest;
 
 class StaffRequest extends FormRequest

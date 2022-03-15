@@ -185,8 +185,8 @@ class PatientService
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                                 'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
-                                'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1, 'vital' => $request->input('vitalAuthorization'),
-                                'messages' => $request->input('messageAuthorization'),
+                                'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1, 'vital' => 1,
+                                'messages' => 1,
                             ];
                             PatientFamilyMember::create($familyMember);
                         } else {
@@ -201,8 +201,8 @@ class PatientService
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                                 'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
-                                'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => $request->input('vitalAuthorization'),
-                                'messages' => $request->input('messageAuthorization'),
+                                'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => 1,
+                                'messages' => 1,
                             ];
                             if (!empty($familyMember)) {
                                 $patientFamily = PatientFamilyMember::create($familyMember);
@@ -599,8 +599,8 @@ class PatientService
         try {
             if (!$programId) {
                 $patient = Helper::entity('patient', $id);
-                $onboardingScheduleDate = Helper::dateOnly($request->input('onboardingScheduleDate'));
-                $dischargeDate = Helper::dateOnly($request->input('dischargeDate'));
+                $onboardingScheduleDate = Helper::date($request->input('onboardingScheduleDate'));
+                $dischargeDate = Helper::date($request->input('dischargeDate'));
                 $input = [
                     'programtId' => $request->input('program'), 'onboardingScheduleDate' => $onboardingScheduleDate, 'dischargeDate' => $dischargeDate,
                     'patientId' => $patient, 'createdBy' => Auth::id(), 'isActive' => $request->input('status'), 'udid' => Str::uuid()->toString()
@@ -610,8 +610,8 @@ class PatientService
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientProgramTransformer())->toArray();
                 $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
-                $onboardingScheduleDate = Helper::dateOnly($request->input('onboardingScheduleDate'));
-                $dischargeDate = Helper::dateOnly($request->input('dischargeDate'));
+                $onboardingScheduleDate = Helper::date($request->input('onboardingScheduleDate'));
+                $dischargeDate = Helper::date($request->input('dischargeDate'));
                 $input = [
                     'programtId' => $request->input('program'), 'onboardingScheduleDate' => $onboardingScheduleDate, 'dischargeDate' => $dischargeDate,
                     'updatedBy' => Auth::id(), 'isActive' => $request->input('status')
