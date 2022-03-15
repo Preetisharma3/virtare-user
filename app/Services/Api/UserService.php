@@ -101,7 +101,7 @@ class UserService
                     $query->where('userId', $id);
                 })->first();
             }
-            return fractal()->item($user)->transformWith(new UserTransformer(false))->toArray();
+            return fractal()->item($user)->transformWith(new UserTransformer(true))->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
