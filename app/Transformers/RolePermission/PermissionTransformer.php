@@ -37,9 +37,15 @@ class PermissionTransformer extends TransformerAbstract
     {
         return [
                 "id" => $data->id,
-                "name" => $data->name,
+                "name" => PermissionTransformer::from_camel_case($data->name),
                 "description"=>$data->description,
                 "screens" => fractal()->collection($data->screens)->transformWith(new ScreenTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray()
         ];
     }
+
+    function from_camel_case($input) {
+        $pattern = ucwords($input);
+        return str_replace("And","and",$pattern);
+    }
+      
 }
