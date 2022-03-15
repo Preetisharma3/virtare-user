@@ -47,6 +47,7 @@ class ConversationListTransformer extends TransformerAbstract
             'receiver' => $data->receiver->patient ? $data->receiver->patient->firstName . ' ' . $data->receiver->patient->lastName : $data->receiver->staff->firstName . ' ' . $data->receiver->staff->lastName,
             'message' => (!empty($data->conversationMessages->last()->message)) ? $data->conversationMessages->last()->message : '',
             'type' => (!empty($data->conversationMessages->last()->type)) ? $data->conversationMessages->last()->type : '',
+            'messageSender' => (!empty($data->conversationMessages->last()->senderId)) ? $data->conversationMessages->last()->senderId : '',
             'isRead' => (!empty($data->conversationMessages->last()->isRead)) ? 1 : 0,
             "createdAt" => (!empty($data->conversationMessages->last()->createdAt)) ? strtotime($data->conversationMessages->last()->createdAt) : '',
         ];
