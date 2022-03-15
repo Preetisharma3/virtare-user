@@ -171,11 +171,11 @@ class ConversationService
 
         try {
             if (!$id) {
-                $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id]])->exists();
+                $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
                     return response()->json(['message' => trans('messages.unauthenticated')], 401);
                 } else {
-                    $senderId = $id;
+                    $senderId = auth()->user()->id;
                 }
             } elseif ($id == auth()->user()->id) {
                 return response()->json(['message' => trans('messages.unauthenticated')], 401);
