@@ -48,8 +48,8 @@ class StaffRequest extends FormRequest
         return [
             'email.required' => 'Staff Email is required',
             'email.unique' => 'This Email Already for Existing Care Co-ordinator, Please add an unique email.',
-            'firstName.required' => 'Staff firstName is required',
-            'lastName.required' => 'Staff lastName is required',
+            'firstName.required' => 'Staff first name is required',
+            'lastName.required' => 'Staff last name is required',
             'genderId.required' => 'Staff gender is required',
             'phoneNumber.required' => 'Staff Phone Number is required',
             'phoneNumber.numeric' => 'Staff Phone Number is numeric',
