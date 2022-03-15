@@ -1215,7 +1215,7 @@ class PatientService
             $patientId = $patient->id;
             $access = Helper::haveAccess($patientId);
             if (!$access) {
-                $getPatient = PatientInventory::where('patientId', $patientId)->with('patient', 'inventory', 'deviceTypes')->get();
+                $getPatient = PatientInventory::where('patientId', $patientId)->with('patient', 'inventory', 'deviceTypes')->where('isActive','1')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             }
         } catch (Exception $e) {
