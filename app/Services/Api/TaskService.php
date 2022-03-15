@@ -32,6 +32,7 @@ class TaskService
             'taskStatusId' => $request->taskStatus,
             'createdBy' => Auth::user()->id,
         ];
+        
         $task = Task::create($input);
         $taskCategoryId = $request->taskCategory;
         foreach ($taskCategoryId as $taskCategory) {
@@ -51,6 +52,7 @@ class TaskService
             ];
             TaskAssignedTo::create($assigned);
         }
+        
         $taskData =  Task::where('id', $task->id)->with('assignedTo.assigned', 'assignedTo.patient')->first();
         $message = ['message' => trans('messages.createdSuccesfully')];
         $result = fractal()->item($taskData)->transformWith(new TaskTransformer())->toArray();
