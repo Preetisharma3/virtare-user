@@ -96,8 +96,8 @@ class AppointmentService
             return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
         } elseif ($id) {
             $patient = Helper::entity('patient', $id);
-            $access = Helper::haveAccess($patient);
-            if (!$access) {
+            $notAccess = Helper::haveAccess($patient);
+            if (!$notAccess) {
                 $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('startDateTime', 'ASC')->get();
                 $results = Helper::dateGroup($data, 'startDateTime');
                 return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
@@ -126,8 +126,8 @@ class AppointmentService
                 }
             } elseif ($id) {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if ($access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $patient]])->exists();
                     if ($familyMember == true) {
                         $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->where([['patientId', $patient]])->whereDate('startDateTime', '=', Carbon::today())->orderBy('startDateTime', 'ASC')->get();

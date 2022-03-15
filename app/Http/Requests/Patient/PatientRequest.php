@@ -22,7 +22,7 @@ class PatientRequest extends FormRequest
             if(!empty($family)){
                 return [
                     'email' => 'required|unique:users,email,'.$patient['userId'].'udid',
-                    'familyEmail' => 'unique:users,email,'.$family['userId'].'udid',
+                    // 'familyEmail' => 'unique:users,email,'.$family['userId'].'udid',
                     'firstName' => 'required',
                     'lastName' => 'required',
                     'dob' => 'required',
@@ -31,7 +31,7 @@ class PatientRequest extends FormRequest
             }else{
                 return [
                     'email' => 'required|unique:users,email,'.$patient['userId'].'udid',
-                    'familyEmail' => 'unique:users,email',
+                    // 'familyEmail' => 'unique:users,email',
                     'firstName' => 'required',
                     'lastName' => 'required',
                     'dob' => 'required',
@@ -42,7 +42,7 @@ class PatientRequest extends FormRequest
         }else{
             return [
                 'email' => 'required|unique:users,email',
-                'familyEmail' => 'unique:users,email',
+                // 'familyEmail' => 'unique:users,email',
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'dob' => 'required',

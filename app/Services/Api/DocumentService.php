@@ -71,8 +71,8 @@ class DocumentService
         try {
             $reference = Helper::entity($entity, $id);
             if ($entity == 'patient') {
-                $access = Helper::haveAccess($reference);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($reference);
+                if (!$notAccess) {
                     if ($documentId) {
                         $getDocument = Document::where([['udid', $documentId], ['entityType', $entity]])->with('documentType', 'tag.tags')->first();
                         return fractal()->item($getDocument)->transformWith(new DocumentTransformer())->toArray();

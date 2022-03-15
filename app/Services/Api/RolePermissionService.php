@@ -23,7 +23,11 @@ class RolePermissionService
     {
         try{
             if(!$id){
-                $data = AccessRole::paginate(env('PER_PAGE', 20));
+                if($request->active==1){
+                    $data = AccessRole::paginate(env('PER_PAGE', 20));
+                }else{
+                $data = AccessRole::where('isActive',1)->paginate(env('PER_PAGE', 20));
+                }
                 return fractal()->collection($data)->transformWith(new RoleListTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             }else{
                 $data = AccessRole::where('udid',$id)->first();
