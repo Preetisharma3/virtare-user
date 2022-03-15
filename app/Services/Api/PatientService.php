@@ -820,7 +820,7 @@ class PatientService
                     $message = ['message' => trans('messages.createdSuccesfully')];
                 } else {
 
-                    return response()->json(['message' => 'Device Already Assigned to Patient']);
+                    return response()->json(['message' => 'Device Already Assigned to Patient'],409);
                 }
             } else {
                 $input = [
