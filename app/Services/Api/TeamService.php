@@ -93,8 +93,8 @@ class TeamService
             }
         } elseif ($patientId) {
             $patient = Helper::entity('patient', $patientId);
-            $access = Helper::haveAccess($patient);
-            if (!$access) {
+            $notAccess = Helper::haveAccess($patient);
+            if (!$notAccess) {
                 if ($type == 'staff') {
                     if (!$id) {
                         if ($request->all) {

@@ -159,24 +159,37 @@ class PatientService
                 $newData = Patient::where('udid', $id)->update($patient);
                 // Updated family in user Table
                 if ($request->input('familyMemberId')) {
-                    $family = $request->input('familyMemberId');
+                    $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
+                    if($userData){
+                    //Updated Family in patientFamilyMember Table
+                        $familyMember = [
+                            'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
+                            'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                            'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
+                            'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
+                            'messages' => $request->input('messageAuthorization'),
+                        ];
+                        PatientFamilyMember::where('id', $usersId->id)->update($familyMember);
+                    }else{
+                        $family = $request->input('familyMemberId');
                     $usersId = PatientFamilyMember::where('udid', $family)->first();
                     $familyId = $usersId->userId;
-                    $familyMemberUser = [
-                        'email' => $request->input('familyEmail'),
-                        'updatedBy' => Auth::id()
-                    ];
-                    $fam = User::where('id', $familyId)->update($familyMemberUser);
-
-                    //Updated Family in patientFamilyMember Table
-                    $familyMember = [
-                        'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
-                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
-                        'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
-                        'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
-                        'messages' => $request->input('messageAuthorization'),
-                    ];
-                    PatientFamilyMember::where('id', $usersId->id)->update($familyMember);
+                        $familyMemberUser = [
+                            'email' => $request->input('familyEmail'),
+                            'updatedBy' => Auth::id()
+                        ];
+                        $fam = User::where('id', $familyId)->update($familyMemberUser);
+                        //Updated Family in patientFamilyMember Table
+                        $familyMember = [
+                            'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
+                            'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                            'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
+                            'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
+                            'messages' => $request->input('messageAuthorization'),
+                        ];
+                        PatientFamilyMember::where('id', $usersId->id)->update($familyMember);
+                    }
+                    
                 } else {
                     if (!empty($request->input('familyEmail'))) {
                         $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
@@ -271,8 +284,8 @@ class PatientService
             $roleId = auth()->user()->roleId;
             if ($id) {
                 $patient = Helper::entity('patient', $id);
-                $role = Helper::haveAccess($patient);
-                if (!$role) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     if ($roleId == 3) {
                         $staff = Patient::where('id', $patient)->whereHas('patientStaff', function ($query) use ($patient) {
                             $query->where('patientId', $patient);
@@ -459,8 +472,8 @@ class PatientService
                 return fractal()->item($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
             } else {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $getPatient = PatientCondition::where('patientId', $patient)->with('patient', 'condition')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
                 }
@@ -530,8 +543,8 @@ class PatientService
                 return fractal()->item($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
             } else {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $getPatient = PatientReferal::where('patientId', $patient)->with('patient', 'designation')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
                 }
@@ -638,8 +651,8 @@ class PatientService
                 return fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
             } else {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $getPatient = PatientPhysician::where('patientId', $patient)->with('patient', 'designation', 'user')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
                 }
@@ -736,8 +749,8 @@ class PatientService
                 return fractal()->item($getPatient)->transformWith(new PatientProgramTransformer())->toArray();
             } else {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $getPatient = PatientProgram::where('patientId', $patient)->with('patient', 'program')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientProgramTransformer())->toArray();
                 }
@@ -837,8 +850,8 @@ class PatientService
                 return fractal()->item($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             } else {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $getPatient = PatientInventory::where('patientId', $patient)->with('patient', 'inventory', 'deviceTypes')->latest()->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
                 }
@@ -1014,8 +1027,8 @@ class PatientService
         try {
             if ($id) {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $patient]])->get();
                     if ($familyMember == true) {
                         $patientIdx = $patient;
@@ -1054,8 +1067,8 @@ class PatientService
                 return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
             } else {
                 $patient = auth()->user()->patient->id;
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $patient]])->get();
                     if ($familyMember == true) {
                         $patientIdx = $patient;
@@ -1114,8 +1127,8 @@ class PatientService
             $patient = Helper::entity('patient', $id);
             $patientIdx = $patient;
         }
-        $access = Helper::haveAccess($patientIdx);
-        if (!$access) {
+        $notAccess = Helper::haveAccess($patientIdx);
+        if (!$notAccess) {
             $result = DB::select(
                 "CALL getVitals('" . $patientIdx . "','" . $request->type . "')"
             );
@@ -1215,8 +1228,8 @@ class PatientService
                 return fractal()->item($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
             } else {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $getPatient = PatientMedicalHistory::where('patientId', $patient)->with('patient')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
                 }
@@ -1310,8 +1323,8 @@ class PatientService
                 return fractal()->item($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
             } else {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $getPatient = PatientMedicalRoutine::where('patientId', $patient)->with('patient')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
                 }
@@ -1397,8 +1410,8 @@ class PatientService
                 return fractal()->item($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
             } else {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $getPatient = PatientInsurance::where('patientId', $patient)->with('patient', 'insuranceName', 'insuranceType')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
                 }
@@ -1446,8 +1459,8 @@ class PatientService
         try {
             $patient = Patient::where('userId', Auth::id())->first();
             $patientId = $patient->id;
-            $access = Helper::haveAccess($patientId);
-            if (!$access) {
+            $notAccess = Helper::haveAccess($patientId);
+            if (!$notAccess) {
                 $getPatient = PatientInventory::where('patientId', $patientId)->with('patient', 'inventory', 'deviceTypes')->where('isActive','1')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             }
@@ -1593,8 +1606,8 @@ class PatientService
                 $getPatient = PatientDevice::where('patientId', $patientId)->with('patient')->get();
             } else {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $getPatient = PatientDevice::where('patientId', $patient)->with('patient')->get();
                 }
             }
@@ -1617,8 +1630,8 @@ class PatientService
     {
         try {
             $patient = Helper::entity('patient', $id);
-            $access = Helper::haveAccess($patient);
-            if (!$access) {
+            $notAccess = Helper::haveAccess($patient);
+            if (!$notAccess) {
                 $getPatient = PatientTimeLine::where('patientId', $patient)->with('patient')->orderBy('id', 'DESC')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientTimelineTransformer())->toArray();
             }
@@ -1674,8 +1687,8 @@ class PatientService
         try {
             if (!$flagId) {
                 $patient = Helper::entity('patient', $id);
-                $access = Helper::haveAccess($patient);
-                if (!$access) {
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
                     $getPatient = PatientFlag::where('patientId', $patient)->with('flag')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientFlagTransformer())->toArray();
                 }

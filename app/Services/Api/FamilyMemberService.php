@@ -13,8 +13,8 @@ class FamilyMemberService
     {
         if ($id) {
             $patient=Helper::entity('patient',$id);
-            $access=Helper::haveAccess($patient);
-            if(!$access){
+            $notAccess=Helper::haveAccess($patient);
+            if(!$notAccess){
                 $data = PatientFamilyMember::whereHas('patients')->where([['patientId', $patient], ['userId', auth()->user()->id]])->first();
                 return fractal()->item($data->patients)->transformWith(new PatientTransformer(true))->toArray();
             }

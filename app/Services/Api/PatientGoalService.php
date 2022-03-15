@@ -17,8 +17,8 @@ class PatientGoalService
         if ($id) {
             $patient = Helper::entity('patient', $id);
             if ($goalId) {
-                $access = Helper::haveAccess($patient);
-                if ($access) {
+                $notAccess = Helper::haveAccess($patient);
+                if ($notAccess) {
                     $data = PatientGoal::where([['patientId', $patient], ['udid', $goalId]])->get();
                 }
             } elseif (!$goalId) {
