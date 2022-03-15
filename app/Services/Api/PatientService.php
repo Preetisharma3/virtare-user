@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use App\Models\Vital\VitalField;
 use App\Models\Document\Document;
+use App\Library\ErrorLogGenerator;
 use App\Models\Device\DeviceModel;
 use Illuminate\Support\Facades\DB;
 use App\Models\Inventory\Inventory;
@@ -251,7 +252,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -346,7 +355,15 @@ class PatientService
                 }
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -386,7 +403,15 @@ class PatientService
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -413,7 +438,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -433,7 +466,15 @@ class PatientService
                 }
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -468,7 +509,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -488,7 +537,15 @@ class PatientService
                 }
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -504,7 +561,15 @@ class PatientService
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -552,7 +617,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -572,7 +645,15 @@ class PatientService
                 }
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -588,7 +669,15 @@ class PatientService
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -626,7 +715,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -646,7 +743,15 @@ class PatientService
                 }
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -662,7 +767,15 @@ class PatientService
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -703,7 +816,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -723,7 +844,15 @@ class PatientService
                 }
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -750,7 +879,15 @@ class PatientService
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -859,7 +996,15 @@ class PatientService
             return $message;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -949,7 +1094,15 @@ class PatientService
                 return fractal()->collection($data)->transformWith(new PatientVitalTransformer())->toArray();
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1000,7 +1153,15 @@ class PatientService
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1033,7 +1194,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1053,7 +1222,15 @@ class PatientService
                 }
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1069,7 +1246,15 @@ class PatientService
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1104,7 +1289,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1124,7 +1317,15 @@ class PatientService
                 }
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1140,7 +1341,15 @@ class PatientService
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1167,7 +1376,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1187,7 +1404,15 @@ class PatientService
                 }
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1203,7 +1428,15 @@ class PatientService
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1219,7 +1452,15 @@ class PatientService
                 return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1268,7 +1509,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1322,7 +1571,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1343,7 +1600,15 @@ class PatientService
             }
             return fractal()->collection($getPatient)->transformWith(new PatientDeviceTransformer())->toArray();
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1358,7 +1623,15 @@ class PatientService
                 return fractal()->collection($getPatient)->transformWith(new PatientTimelineTransformer())->toArray();
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1383,7 +1656,15 @@ class PatientService
             return $endData;
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -1403,7 +1684,15 @@ class PatientService
                 return fractal()->item($getPatient)->transformWith(new PatientFlagTransformer())->toArray();
             }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if(isset(auth()->user()->id)){
+                $userId = auth()->user()->id;
+            }else{
+                $userId = "";
+            }
+           
+            ErrorLogGenerator::createLog($request,$e,$userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 }
