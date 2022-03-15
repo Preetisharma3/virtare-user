@@ -800,7 +800,7 @@ class PatientService
         try {
             if (!$inventoryId) {
                 $deviceAssigned = PatientInventory::where('inventoryId', $request->input('inventory'))->first();
-                if ($deviceAssigned) {
+                if (!$deviceAssigned) {
                     $patientData = Patient::where('udid', $id)->first();
                     $input = [
                         'inventoryId' => $request->input('inventory'), 'patientId' => $patientData->id, 'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
