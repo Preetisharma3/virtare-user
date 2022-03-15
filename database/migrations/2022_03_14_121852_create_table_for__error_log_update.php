@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableForGetStartAndEndDate extends Migration
+class CreateTableForErrorLogUpdate extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,16 @@ class CreateTableForGetStartAndEndDate extends Migration
      */
     public function up()
     {
-        Schema::create('globalStartEndDate', function (Blueprint $table) {
+        Schema::create('errorLog', function (Blueprint $table) {
             $table->id();
             $table->string('udid');
-            $table->text('globalCodeId');
-            $table->text('intervalType');
-            $table->text('condition');
-            $table->text('number');
+            $table->bigInteger('userId')->unsigned();
+            $table->foreign('userId')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('requestUrl');
+            $table->string('requestParameter');
+            $table->string('requestMethod');
+            $table->string('file');
+            $table->longText('errorSummary');
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
@@ -42,6 +45,6 @@ class CreateTableForGetStartAndEndDate extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('globalStartEndDate');
+        Schema::dropIfExists('errorLog');
     }
 }

@@ -28,6 +28,7 @@ $router->get('cptCode/report/export/{id}', 'Api\v1\CPTCodeController@cptCodeRepo
 $router->get('generalParameter/report/export/{id}', 'Api\v1\GeneralParameterController@generalParameterReport');
 $router->get('template/report/export/{id}', 'Api\v1\TemplateController@templateReport');
 $router->get('inventory/report/export/{id}', 'Api\v1\InventoryController@inventoryReport');
+$router->get('error/logs/{id}', 'Api\v1\ErrorLogController@listErrorLog');
 
 $router->get('/linkstorage', function () use ($router) {
 
