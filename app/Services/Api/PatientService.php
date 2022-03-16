@@ -197,10 +197,11 @@ class PatientService
                         $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
                         if ($userData) {
                             $userEmail = $userData->id;
+                            $patient=Helper::entity('patient',$id);
                             $familyMember = [
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
-                                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
+                                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $patient,
                                 'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1, 'vital' => 1,
                                 'messages' => 1,
                             ];
@@ -213,10 +214,11 @@ class PatientService
                             ];
                             $fam = User::create($familyMemberUser);
                             //Added Family in patientFamilyMember Table
+                            $patient=Helper::entity('patient',$id);
                             $familyMember = [
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
-                                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $id,
+                                'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $patient,
                                 'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => 1,
                                 'messages' => 1,
                             ];
