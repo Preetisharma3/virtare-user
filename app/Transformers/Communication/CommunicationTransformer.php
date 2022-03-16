@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Staff\StaffTransformer;
 use App\Transformers\GlobalCode\GlobalCodeTransformer;
+use Illuminate\Support\Facades\Auth;
 
 class CommunicationTransformer extends TransformerAbstract
 {
@@ -75,9 +76,12 @@ class CommunicationTransformer extends TransformerAbstract
                 
             }
             $dataArray['patientName'] = @$data->receiver->patient->firstName . ' ' . @$data->receiver->patient->lastName ;
+        }elseif(auth()->user()->id == $data->sender['Id']){
+            $dataArray['patientPic'] = str_replace("public", "", URL::to('/')) . '/' . $data->receiver['profilePhoto'];
+            $dataArray['patientName'] = @$data->receiver->staff->firstName . ' ' . @$data->receiver->staff->lastName;
         }else{
-            $dataArray['patientPic'] = '';
-            $dataArray['patientName'] = '';
+            $dataArray['patientPic'] = str_replace("public", "", URL::to('/')) . '/' . $data->sender['profilePhoto'];
+            $dataArray['patientName'] = @$data->sender->staff->firstName . ' ' . @$data->sender->staff->lastName;
         }
         return $dataArray;
     }
