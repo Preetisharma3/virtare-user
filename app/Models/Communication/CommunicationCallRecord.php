@@ -20,10 +20,7 @@ class CommunicationCallRecord extends Model
     use HasFactory;
 	protected $guarded = [];
 
-    public function staff()
-    {
-        return $this->hasOne(Staff::class,'id','staffId');
-    }
+    
 
     public function status(){
         return $this->belongsTo(GlobalCode::class,'callStatusId');
