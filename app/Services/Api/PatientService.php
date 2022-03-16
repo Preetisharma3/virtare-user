@@ -799,9 +799,10 @@ class PatientService
         DB::beginTransaction();
         try {
             if (!$inventoryId) {
-                $deviceAssigned = PatientInventory::where('inventoryId', $request->input('inventory'))->first();
+                $patientData = Patient::where('udid', $id)->first();
+                $deviceAssigned = PatientInventory::where('inventoryId', $request->input('inventory'))->where('patientId', $patientData->id)->first();
                 if (!$deviceAssigned) {
-                    $patientData = Patient::where('udid', $id)->first();
+                    
                     $input = [
                         'inventoryId' => $request->input('inventory'), 'patientId' => $patientData->id, 'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
                     ];
