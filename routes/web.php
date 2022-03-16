@@ -352,6 +352,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // change password
     $router->post('changePassword', 'Api\v1\UserController@changePassword');
+
+    // Change Audit Log API
+    $router->get('changeAuditLog/{id}', 'Api\v1\TimeLogController@changeAuditLog');
+
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');

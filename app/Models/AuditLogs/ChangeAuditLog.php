@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\Communication;
+namespace App\Models\AuditLogs;
 
-use App\Models\Staff\Staff;
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class CallRecord extends Model
+class ChangeAuditLog extends Model
 {
     use SoftDeletes;
     protected $softDelete = true;
@@ -15,17 +15,12 @@ class CallRecord extends Model
     const CREATED_AT = 'createdAt';
     const UPDATED_AT = 'updatedAt';
     public $timestamps = false;
-	protected $table = 'callRecords';
+    protected $table = 'changeAuditLogs';
     use HasFactory;
-	protected $guarded = [];
+    protected $guarded = [];
 
-    public function communicationCallRecord()
+    public function user()
     {
-        return $this->hasOne(CommunicationCallRecord::class,'id');
+        return $this->belongsTo(User::class, 'createdBy');
     }
-    public function staff()
-    {
-        return $this->hasOne(Staff::class,'id','staffId');
-    }
-
 }

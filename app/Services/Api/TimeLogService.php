@@ -4,15 +4,18 @@ namespace App\Services\Api;
 
 use Exception;
 use App\Helper;
-use App\Models\CPTCode\CPTCode;
 use App\Models\Note\Note;
 use Illuminate\Support\Str;
+use App\Models\CPTCode\CPTCode;
 use App\Models\Patient\Patient;
+use App\Models\TimeLog\TimeLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Patient\PatientTimeLog;
+use App\Models\AuditLogs\ChangeAuditLog;
 use App\Transformers\Patient\PatientTimeLogTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use App\Transformers\AuditTimeLog\AuditTimeLogTransformer;
 
 class TimeLogService
 {
@@ -20,20 +23,20 @@ class TimeLogService
     {
         if (!$id) {
             if ($request->all) {
-                if($request->toDate || $request->fromDate){
-                    $fromDate=Helper::dateOnly($request->fromDate);
-                    $toDate=Helper::dateOnly($request->toDate);
+                if ($request->toDate || $request->fromDate) {
+                    $fromDate = Helper::dateOnly($request->fromDate);
+                    $toDate = Helper::dateOnly($request->toDate);
                     $data = PatientTimeLog::where('date', '>=', $fromDate)->where('date', '<=', $toDate)->with('category', 'logged', 'performed', 'notes')->get();
-                }else{
+                } else {
                     $data = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->get();
                 }
                 return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->toArray();
             } else {
-                if($request->toDate || $request->fromDate){
-                    $fromDate=Helper::dateOnly($request->fromDate);
-                    $toDate=Helper::dateOnly($request->toDate);
+                if ($request->toDate || $request->fromDate) {
+                    $fromDate = Helper::dateOnly($request->fromDate);
+                    $toDate = Helper::dateOnly($request->toDate);
                     $data = PatientTimeLog::where('date', '>=', $fromDate)->where('date', '<=', $toDate)->with('category', 'logged', 'performed', 'notes')->paginate(env('PER_PAGE', 20));
-                }else{
+                } else {
                     $data = PatientTimeLog::with('category', 'logged', 'performed', 'notes')->paginate(env('PER_PAGE', 20));
                 }
                 return fractal()->collection($data)->transformWith(new PatientTimeLogTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
@@ -59,9 +62,17 @@ class TimeLogService
                 ];
                 Note::create($noteData);
             }
-           
             $input = ['timeAmount' => $request->input('timeAmount'), 'updatedBy' => Auth::id()];
             PatientTimeLog::where('udid', $id)->update($input);
+            $patientTimelogId = PatientTimeLog::where('udid', $id)->first();
+
+            $timeLog = [
+                'udid' => Str::uuid()->toString(), 'timeAmount' => $request->input('timeAmount'), 'note' => $request->input('note'),
+                'createdBy' => Auth::id(), 'patientTimeLogId' => $patientTimelogId->id
+            ];
+            ChangeAuditLog::create($timeLog);
+
+
             $data = PatientTimeLog::where('udid', $id)->with('category', 'logged', 'performed', 'patient.notes')->first();
             $userdata = fractal()->item($data)->transformWith(new PatientTimeLogTransformer())->toArray();
             $message = ['message' => trans('messages.updatedSuccesfully')];
@@ -92,23 +103,28 @@ class TimeLogService
                 $patientId = Patient::where('udid', $id)->first();
                 $performedBy = Helper::entity('staff', $request->input('performedBy'));
                 $loggedBy = Helper::entity('staff', $request->input('loggedBy'));
-                $cpt=CPTCode::where('udid',$request->cptCode)->first();
+                $cpt = CPTCode::where('udid', $request->cptCode)->first();
                 $input = [
                     'categoryId' => $request->input('category'), 'loggedId' => $loggedBy, 'udid' => Str::uuid()->toString(),
                     'performedId' => $performedBy, 'date' => $dateConvert, 'timeAmount' => $request->input('timeAmount'),
-                    'createdBy' => Auth::id(), 'patientId' => $patientId->id,'cptCodeId'=>$cpt->id
+                    'createdBy' => Auth::id(), 'patientId' => $patientId->id, 'cptCodeId' => $cpt->id
                 ];
                 $data = PatientTimeLog::create($input);
                 if ($request->input('note')) {
                     $note = [
                         'note' => $request->input('note'), 'entityType' => 'auditlog', 'referenceId' => $data->id, 'udid' => Str::uuid()->toString(), 'createdBy' => Auth::id()
                     ];
-                    Note::create($note);
+                    $noteData = Note::create($note);
                 }
+                $timeLog = [
+                    'udid' => Str::uuid()->toString(), 'timeAmount' => $request->input('timeAmount'), 'note' => $request->input('note'),
+                    'createdBy' => Auth::id(), 'patientTimeLogId' => $data->id
+                ];
+                ChangeAuditLog::create($timeLog);
                 $data = response()->json(['message' => trans('messages.createdSuccesfully')]);
             } else {
                 $dateConvert = Helper::date($request->input('date'));
-                $cpt=CPTCode::where('udid',$request->cptCode)->first();
+                $cpt = CPTCode::where('udid', $request->cptCode)->first();
                 $timeLog = array();
                 if (!empty($request->category)) {
                     $timeLog['categoryId'] = $request->category;
@@ -144,6 +160,13 @@ class TimeLogService
                     ];
                     $note = Note::create($noteData);
                 }
+                $patientTimeLogId = PatientTimeLog::where('udid', $timelogId)->first();
+
+                $timeLog = [
+                    'udid' => Str::uuid()->toString(), 'timeAmount' => $request->input('timeAmount'), 'note' => $request->input('note'),
+                    'createdBy' => Auth::id(), 'patientTimeLogId' => $patientTimeLogId->id
+                ];
+                ChangeAuditLog::create($timeLog);
                 $data = response()->json(['message' => trans('messages.updatedSuccesfully')]);
             }
             DB::commit();
@@ -183,6 +206,19 @@ class TimeLogService
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             DB::rollback();
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // Change Audit Time Log
+
+    public function auditLogChange($request,$id)
+    {
+        try {
+            $patientTimeLogId=PatientTimeLog::where('udid',$id)->first();
+            $data=ChangeAuditLog::where('patientTimeLogId',$patientTimeLogId->id)->get();
+            return fractal()->collection($data)->transformWith(new AuditTimeLogTransformer())->toArray();
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }

@@ -66,7 +66,7 @@ class StaffTransformer extends TransformerAbstract
             'uuid' => $data->udid,
             'type' => $data->roles->roles,
             'username' => $data->email,
-            'email' => $data->user->email,
+            'email' => @$data->user->email,
             'first_login' => 0,
             'nickname' => $data->nickname ? $data->nickname : '',
             'gender' => $data->gender->name,
