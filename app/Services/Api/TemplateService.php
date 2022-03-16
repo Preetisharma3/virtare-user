@@ -58,19 +58,18 @@ class TemplateService
         if(!empty($request->input('templateType'))){
             $template['templateType'] =  $request->input('templateType');
         }
-        if(!empty($request->input('isActive'))){
-            $template['isActive'] =  $request->input('isActive');
+        if(empty($request->input('isActive'))){
+            $template['isActive'] =  0;
+        }else{
+            $template['isActive'] = 1;
         }
         $template['updatedBy'] =  Auth::id();
         
         if(!empty($template)){
             Template::where('udid', $id)->update($template);
         }
-            $newtemplate = Template::where('udid', $id)->first();
-            $message = ["message" => trans('messages.updatedSuccesfully')];
-            $resp =  fractal()->item($newtemplate)->transformWith(new TemplateTransformer())->toArray();
-            $endData = array_merge($message, $resp);
-            return $endData; 
+        return response()->json(['message' => trans('messages.updatedSuccesfully')]);
+        
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
