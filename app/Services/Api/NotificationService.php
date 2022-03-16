@@ -127,7 +127,7 @@ class NotificationService
 
     public function appointmentConfrenceIdUpdate()
     {
-        $fromDate = date('Y-m-d H:i:s', strtotime('+2 hours'));
+        $fromDate = date('Y-m-d H:i:s', strtotime('-2 hours'));
         return DB::select(
             'CALL appointmentConferenceIdUpdate("' . $fromDate . '")',
         );
