@@ -200,10 +200,22 @@ class AppointmentService
 
     public function appointmentUpdate($request, $id)
     {
-        $input = ['updatedBy' => Auth::id(), 'startDateTime' => Helper::date($request->startDateTime)];
-        Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->update($input);
-        $data = Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->orderBy('startDateTime', 'ASC')->first();
-        return fractal()->item($data)->transformWith(new AppointmentTransformer())->toArray();
+        $appointment = Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->first();
+
+        $existence = DB::select(
+            "CALL appointmentExist('" . $appointment['staffId'] . "','" . Helper::date($request->startDateTime) . "')",
+        );
+        foreach($existence as $exists){
+            if ($exists->isExist == false) {
+
+                $input = ['updatedBy' => Auth::id(), 'startDateTime' => Helper::date($request->startDateTime)];
+                Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->update($input);
+                $data = Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->orderBy('startDateTime', 'ASC')->first();
+                return fractal()->item($data)->transformWith(new AppointmentTransformer())->toArray();
+            }else {
+                return response()->json(['message' => 'Appointment already exist!']);
+            }
+        }
     }
 
     public function appointmentDelete($request, $id)

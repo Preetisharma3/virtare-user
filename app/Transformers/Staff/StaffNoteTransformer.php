@@ -32,10 +32,10 @@ class StaffNoteTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id'=>$data->id,
-            'notes'=>$data->note,
-            'type'=>$data->appointmentType->name,
-            'date'=>$data->startDate
+            'id'=>@$data->notes->id,
+            'notes'=>@$data->notes->note,
+            'type'=>@$data->appointmentType->name,
+            'date'=>strtotime(@$data->notes->createdAt)
         ];
     }
 }
