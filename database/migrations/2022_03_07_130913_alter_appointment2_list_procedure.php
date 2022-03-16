@@ -35,7 +35,7 @@ class AlterAppointment2ListProcedure extends Migration
         JOIN patients ON appointments.patientId = patients.id
         JOIN globalCodes ON appointments.durationId = globalCodes.id
         JOIN globalCodes as appointmentType ON appointments.appointmentTypeId = appointmentType.id
-        WHERE   (startDateTime >= fromDate OR fromDate = "") AND (startDateTime <= toDate  OR toDate="") AND (staffId IN (SELECT * FROM JSON_TABLE( staffIdx, "$[*]" COLUMNS( Value INT PATH "$" ) ) as s) OR staffIdx = "" )
+        WHERE   (startDateTime >= fromDate OR fromDate = "") AND (startDateTime <= toDate  OR toDate="") AND (staffId IN (SELECT * FROM JSON_TABLE( staffIdx, "$[*]" COLUMNS( Value INT PATH "$" ) ) as s) OR staffIdx = "" ) AND appointments.deletedAt IS NULL
         ORDER BY startDateTime DESC;
         
         END;';
