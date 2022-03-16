@@ -1283,12 +1283,15 @@ class PatientService
     {
         DB::beginTransaction();
         try {
+            $startDate = Helper::date($request->input('startDate'));
+            $endDate = Helper::date($request->input('endDate'));
             if (!$medicalRoutineId) {
                 $udid = Str::uuid()->toString();
                 $patient = Helper::entity('patient', $id);
+
                 $input = [
                     'medicine' => $request->input('medicine'), 'frequency' => $request->input('frequency'),  'createdBy' => Auth::id(),
-                    'startDate' => date("Y-m-d", $request->input('startDate')), 'endDate' => date("Y-m-d", $request->input('endDate')), 'patientId' => $patient, 'udid' => $udid
+                    'startDate' => $startDate, 'endDate' => $endDate, 'patientId' => $patient, 'udid' => $udid
                 ];
                 $patient = PatientMedicalRoutine::create($input);
                 $getPatient = PatientMedicalRoutine::where('id', $patient->id)->with('patient')->first();
@@ -1297,7 +1300,7 @@ class PatientService
             } else {
                 $input = [
                     'medicine' => $request->input('medicine'), 'frequency' => $request->input('frequency'),  'updatedBy' => Auth::id(),
-                    'startDate' => $request->input('startDate'), 'endDate' => $request->input('endDate')
+                    'startDate' => $startDate, 'endDate' => $endDate
                 ];
                 $patient = PatientMedicalRoutine::where('udid', $medicalRoutineId)->update($input);
                 $getPatient = PatientMedicalRoutine::where('udid', $medicalRoutineId)->with('patient')->first();

@@ -23,5 +23,9 @@ class CallRecord extends Model
     {
         return $this->hasOne(CommunicationCallRecord::class,'id');
     }
+    public function staff()
+    {
+        return $this->hasOne(Staff::class,'id','staffId');
+    }
 
 }
