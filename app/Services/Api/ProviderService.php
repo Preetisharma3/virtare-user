@@ -68,10 +68,18 @@ class ProviderService
     {
         if (!$id) {
             if($request->all){
-                $data = Provider::all();
+                if($request->active==1){
+                    $data = Provider::all();
+                }else{
+                $data = Provider::where('isActive',1)->get();
+                }
                 return fractal()->collection($data)->transformWith(new ProviderTransformer())->toArray();
             }else{
-                $data = Provider::paginate(env('PER_PAGE', 20));
+                if($request->active){
+                    $data = Provider::paginate(env('PER_PAGE', 20));
+                }else{
+                $data = Provider::where('isActive',1)->paginate(env('PER_PAGE', 20));
+                }
                 return fractal()->collection($data)->transformWith(new ProviderTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();    
             }
             } elseif ($id) {

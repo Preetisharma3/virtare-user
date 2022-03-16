@@ -41,20 +41,23 @@ class TimeLogController extends Controller
         return (new TimeLogService)->patientTimeLogDelete($request, $entityType, $id, $timelogId);
     }
 
-    public function timeLogReport(Request $request,$id){
-        if($id)
-        {
+    public function timeLogReport(Request $request, $id)
+    {
+        if ($id) {
             $reportType = "patient_time_log_report";
-            $checkReport = ExportReportRequestService::checkReportRequest($id,$reportType);
-            if($checkReport){
+            $checkReport = ExportReportRequestService::checkReportRequest($id, $reportType);
+            if ($checkReport) {
                 ExcelGeneratorService::excelTimeLogExport($request);
-            }else{
+            } else {
                 return response()->json(['message' => "User not Access to download Report."], 500);
             }
-        }
-        else
-        {
+        } else {
             return response()->json(['message' => "invalid URL."], 500);
         }
+    }
+
+    public function changeAuditLog(Request $request,$id)
+    {
+        return (new TimeLogService)->auditLogChange($request,$id);
     }
 }
