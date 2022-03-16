@@ -45,12 +45,7 @@ class PatientController extends Controller
     return (new PatientService)->patientConditionList($request, $id, $conditionId);
   }
 
-  public function createPatientReferals(PatientReferalRequest $request, $id, $referalsId = null)
-  {
-    return (new PatientService)->patientReferalsCreate($request, $id, $referalsId);
-  }
-
-  public function updatePatientReferals(Request $request, $id, $referalsId = null)
+  public function createPatientReferals(Request $request, $id, $referalsId = null)
   {
     return (new PatientService)->patientReferalsCreate($request, $id, $referalsId);
   }
