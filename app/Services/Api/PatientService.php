@@ -799,14 +799,19 @@ class PatientService
         DB::beginTransaction();
         try {
             if (!$inventoryId) {
-                $deviceAssigned = PatientInventory::where('inventoryId', $request->input('inventory'))->first();
+               $patientData = Patient::where('udid', $id)->first();
+                $deviceType = Inventory::where('id',$request->input('inventory'))->with('model')->first();
+                $deviceAssigned = PatientInventory::where('patientId', $patientData->id)->join('inventories','inventories.id','=','patientInventories.inventoryId')->join('deviceModels','deviceModels.id', '=',  'inventories.deviceModelId')->where('deviceModels.deviceTypeId',$deviceType->model['deviceTypeId'])->first();
                 if (!$deviceAssigned) {
-                    $patientData = Patient::where('udid', $id)->first();
+                    
                     $input = [
                         'inventoryId' => $request->input('inventory'), 'patientId' => $patientData->id, 'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
                     ];
                     $patient = PatientInventory::create($input);
                     $inventory = Inventory::where('id', $patient->inventoryId)->first();
+                    
+                    Inventory::where('id', $patient->inventoryId)->update(array('isAvailable'=>0));
+
                     $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
                     $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
                     $deviceType = $device->name;
@@ -884,6 +889,10 @@ class PatientService
             $patient = PatientInventory::where('udid', $inventoryId)->first();
             $patientData = Patient::where('udid', $id)->first();
             $inventory = Inventory::where('id', $patient->inventoryId)->first();
+
+
+            Inventory::where('id', $patient->inventoryId)->update(array('isAvailable'=>1));
+
             $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
             $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
             $deviceType = $device->name;
