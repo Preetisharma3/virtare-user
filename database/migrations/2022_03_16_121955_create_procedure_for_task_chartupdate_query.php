@@ -37,7 +37,7 @@ class CreateProcedureForTaskChartupdateQuery extends Migration
         RIGHT JOIN globalCodes ON tasks.taskStatusId = globalCodes.id
         WHERE tasks.deletedAt IS NULL
         AND tasks.startDate > date_sub(now(), interval 7 day) 
-        AND tasks.startDate < DATE_ADD(now(), interval 7 day) AND tasks.startDate <= CURDATE();
+        AND tasks.startDate <= CURDATE();
         END;";
         DB::unprepared($procedure);
     }
