@@ -15,41 +15,25 @@ class PatientRequest extends FormRequest
 
     public function rules()
     {
-        $patient_udid=request()->segment(2);
-        if(!empty($patient_udid)){
-            $patient = Patient::where('udid',$patient_udid)->first();
-            $family = PatientFamilyMember::where('patientId',$patient->id)->first();
-            if(!empty($family)){
-                return [
-                    'email' => 'required|unique:users,email,'.$patient['userId'].'udid',
-                    // 'familyEmail' => 'unique:users,email,'.$family['userId'].'udid',
-                    'firstName' => 'required',
-                    'lastName' => 'required',
-                    'dob' => 'required',
-                    'phoneNumber' => 'required',
-                ];
-            }else{
-                return [
-                    'email' => 'required|unique:users,email,'.$patient['userId'].'udid',
-                    // 'familyEmail' => 'unique:users,email',
-                    'firstName' => 'required',
-                    'lastName' => 'required',
-                    'dob' => 'required',
-                    'phoneNumber' => 'required',
-                ];
-            }
-            
-        }else{
+        $patient_udid = request()->segment(2);
+        if (!empty($patient_udid)) {
+            $patient = Patient::where('udid', $patient_udid)->first();
+            return [
+                'email' => 'required|unique:users,email,' . $patient['userId'] . 'udid',
+                'firstName' => 'required',
+                'lastName' => 'required',
+                'dob' => 'required',
+                'phoneNumber' => 'required',
+            ];
+        } else {
             return [
                 'email' => 'required|unique:users,email',
-                // 'familyEmail' => 'unique:users,email',
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'dob' => 'required',
                 'phoneNumber' => 'required',
             ];
         }
-        
     }
 
     public function messages()
@@ -64,5 +48,4 @@ class PatientRequest extends FormRequest
             'phoneNumber.required' => 'Patient phoneNumber must be required',
         ];
     }
-
 }

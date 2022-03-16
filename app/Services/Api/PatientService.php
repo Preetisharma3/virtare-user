@@ -167,7 +167,7 @@ class PatientService
                         $familyMember = [
                             'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                             'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
-                            'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
+                            'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),'userId'=>$userData->id,
                             'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
                             'messages' => $request->input('messageAuthorization'),
                         ];
