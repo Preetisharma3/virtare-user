@@ -142,7 +142,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('staff[/{id}]', 'Api\v1\StaffController@listStaff');
     $router->put('staff/{id}', 'Api\v1\StaffController@updateStaff');
     $router->post('patient/{id}/referals', 'Api\v1\PatientController@createPatientReferals');
-    $router->put('patient/{id}/referals/{referalsId}', 'Api\v1\PatientController@updatePatientReferals');
+    $router->put('patient/{id}/referals/{referalsId}', 'Api\v1\PatientController@createPatientReferals');
     $router->get('patient/{id}/referals[/{referalsId}]', 'Api\v1\PatientController@listPatientReferals');
     $router->delete('patient/{id}/referals/{referalsId}', 'Api\v1\PatientController@deletePatientReferals');
     $router->post('patient/{id}/physician', 'Api\v1\PatientController@createPatientPhysician');

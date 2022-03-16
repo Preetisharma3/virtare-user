@@ -161,7 +161,7 @@ class PatientService
                 $newData = Patient::where('udid', $id)->update($patient);
                 // Updated family in user Table
                 if ($request->input('familyMemberId')) {
-                    $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
+                    $userData = User::where('email', $request->input('familyEmail'))->first();
                     if ($userData) {
                         //Updated Family in patientFamilyMember Table
                         $familyMember = [
