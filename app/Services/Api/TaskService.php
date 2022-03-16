@@ -12,6 +12,7 @@ use App\Models\Task\TaskAssignedTo;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Task\TaskTransformer;
 use App\Transformers\Patient\PatientCountTransformer;
+use App\Transformers\Task\TaskDurationCountTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class TaskService
@@ -108,6 +109,15 @@ class TaskService
         );
         $data = array_merge($tasks, $total);
         return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+    }
+
+    // get task with duration,time for 24hurs
+    public function taskTotalWithTimeDuration($request){
+        $timelineId =  $request->timelineId;
+            $data = DB::select(
+                'CALL getTotalTaskSummaryCountInGraph()',
+             );
+             return fractal()->collection($data)->transformWith(new TaskDurationCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
     public function updateTask($request, $id)

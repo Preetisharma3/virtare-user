@@ -74,4 +74,9 @@ class TaskController extends Controller
             return response()->json(['message' => "invalid URL."], 500);
         }
     }
+
+    public function taskTotalWithTimeDuration(request $request)
+    {
+        return (new TaskService)->taskTotalWithTimeDuration($request);
+    }
 }
