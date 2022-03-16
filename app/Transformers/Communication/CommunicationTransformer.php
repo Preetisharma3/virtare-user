@@ -35,7 +35,7 @@ class CommunicationTransformer extends TransformerAbstract
      */
     public function transform($data): array
     {
-        return [
+        $dataArray =  [
              'id'=>$data->id,
             'from'=>$data->sender->patient ? @$data->sender->patient->firstName . ' ' . @$data->sender->patient->lastName : @$data->sender->staff->firstName . ' ' . @$data->sender->staff->lastName,
             'type'=>$data->type->name,
@@ -58,5 +58,27 @@ class CommunicationTransformer extends TransformerAbstract
             'isRead' => (!empty($data->conversationMessages->last()->isRead)) ? 1 : 0,
             "created_at" => (!empty($data->conversationMessages->last()->createdAt)) ? strtotime($data->conversationMessages->last()->createdAt) : '',
         ];
+
+
+        if(@$data->sender->patient){
+            if((!empty($data->sender['profilePhoto'])) && (!is_null($data->sender['profilePhoto']))){
+                $dataArray['patientPic'] = str_replace("public", "", URL::to('/')) . '/' . $data->sender['profilePhoto'];
+            }else{
+                $dataArray['patientPic'] = '';
+            }
+            $dataArray['patientName'] = @$data->sender->patient->firstName . ' ' . @$data->sender->patient->lastName ;
+        }elseif($data->receiver->patient){
+            if((!empty($data->receiver['profilePhoto'])) && (!is_null($data->receiver['profilePhoto']))){
+                $dataArray['patientPic'] = str_replace("public", "", URL::to('/')) . '/' . $data->receiver['profilePhoto'];
+            }else{
+                $dataArray['patientPic'] = '';
+                
+            }
+            $dataArray['patientName'] = @$data->receiver->patient->firstName . ' ' . @$data->receiver->patient->lastName ;
+        }else{
+            $dataArray['patientPic'] = '';
+            $dataArray['patientName'] = '';
+        }
+        return $dataArray;
     }
 }
