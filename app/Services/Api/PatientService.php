@@ -808,6 +808,9 @@ class PatientService
                     ];
                     $patient = PatientInventory::create($input);
                     $inventory = Inventory::where('id', $patient->inventoryId)->first();
+                    
+                    Inventory::where('id', $patient->inventoryId)->update(array('isAvailable'=>0));
+
                     $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
                     $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
                     $deviceType = $device->name;
@@ -885,6 +888,10 @@ class PatientService
             $patient = PatientInventory::where('udid', $inventoryId)->first();
             $patientData = Patient::where('udid', $id)->first();
             $inventory = Inventory::where('id', $patient->inventoryId)->first();
+
+
+            Inventory::where('id', $patient->inventoryId)->update(array('isAvailable'=>1));
+
             $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
             $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
             $deviceType = $device->name;
