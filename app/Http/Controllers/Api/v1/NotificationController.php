@@ -8,11 +8,13 @@ use App\Services\Api\NotificationService;
 
 class NotificationController extends Controller
 {
-    public function appointmentNotification(Request $request){
+    public function appointmentNotification(Request $request)
+    {
         return (new NotificationService)->appointmentNotification($request);
     }
 
-    public function callUpdate(Request $request,$id){
-        return (new NotificationService)->updateCall($request,$id);
+    public function newPatientFlag(Request $request)
+    {
+        return (new NotificationService)->removeNewPatientFlag($request);
     }
 }

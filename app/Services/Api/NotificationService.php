@@ -14,6 +14,7 @@ use App\Models\Notification\Notification;
 use App\Services\Api\PushNotificationService;
 use App\Models\Appointment\AppointmentNotification;
 use App\Models\Communication\CommunicationCallRecord;
+use App\Models\Patient\PatientFlag;
 use Carbon\Carbon;
 use GuzzleHttp\Psr7\Request;
 
@@ -71,7 +72,7 @@ class NotificationService
 
     public function appointmentConfrence()
     {
-       $toDate = Helper::date(strtotime('+5 minutes'));
+        $toDate = Helper::date(strtotime('+5 minutes'));
 
         $fromDate = Helper::date(time());
 
@@ -116,7 +117,7 @@ class NotificationService
             }
         }
         $confrence =  Appointment::whereNotNull('conferenceId')->get();
-       // Helper::updateFreeswitchConfrence($confrence);
+        // Helper::updateFreeswitchConfrence($confrence);
     }
 
     public function appointmentConfrenceIdUpdate()
@@ -127,25 +128,12 @@ class NotificationService
         );
     }
 
-
-    public function updateCall($request, $id)
+    public function removeNewPatientFlag()
     {
-        $start = '';
-        $end = '';
-        if ($request->status == 'start') {
-            $start = Carbon::now();
-        } elseif ($request->status == 'end') {
-            $end = Carbon::now();
-        }
-        $comm = array();
-       if (!empty($start)){
-            $comm['startTime'] = $start;
-        }
-        if (!empty($end)){
-            $comm['endTime'] = $end;
-        }
-        $comm['updatedBy']=Auth::id();
-        CommunicationCallRecord::where('referenceId',$id)->update($comm);
-        return response()->json(['message'=>trans('messages.updatedSuccesfully')]);
+        PatientFlag::whereHas('patient', function ($query) {
+            $query->where('createdAt', '>=', Carbon::now()->subDay());
+        })->delete();
+
+        return response()->json(['message'=>trans('messages.deletedSuccesfully')]);
     }
 }

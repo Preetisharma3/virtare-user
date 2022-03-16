@@ -67,7 +67,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Call Router
 
-    $router->patch('call/notification/{id}','Api\v1\NotificationController@callUpdate');
+    $router->patch('communicationCallRecord/{id}','Api\v1\CommunicationController@callUpdate');
 
     // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
@@ -355,6 +355,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Change Audit Log API
     $router->get('changeAuditLog/{id}', 'Api\v1\TimeLogController@changeAuditLog');
+
+    // delete new patient flad
+    $router->delete('newPatientFlag', 'Api\v1\NotificationController@newPatientFlag');
 
 });
 

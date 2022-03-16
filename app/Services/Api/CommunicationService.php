@@ -95,40 +95,7 @@ class CommunicationService
         }
     }
 
-    //Create A call Api
-    public function addCallRecord($request)
-    {
-        $udid = Str::uuid()->toString();
-        if (Auth::user()->roleId == 4) {
-            $input = [
-                'patientId' => auth()->user()->patient->id,
-                'statusId' => $request->status,
-                'createdBy' => Auth::id(),
-                'udid' => $udid,
-                'startTime',
-                'endTime',
-                'referenceId',
-                'entityType'
-            ];
-        } elseif (Auth::user()->roleId == 3) {
-            $patientId = Helper::entity('patient', $request->patient);
-            $input = [
-                'patientId' => $patientId,
-                'statusId' => $request->status,
-                'createdBy' => Auth::id(),
-                'udid' => $udid,
-                'startTime',
-                'endTime',
-                'referenceId',
-                'entityType'
-            ];
-        }
-        CommunicationCallRecord::create($input);
-        $call = [];
-        CallRecord::create();
-        return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
-    }
-
+    
     //Call Status API's
     public function callStatus()
     {
@@ -193,5 +160,28 @@ class CommunicationService
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
+    }
+
+
+    // Call Update 
+    public function updateCall($request, $id)
+    {
+        $start = '';
+        $end = '';
+        if ($request->status == 'start') {
+            $start = Carbon::now();
+        } elseif ($request->status == 'end') {
+            $end = Carbon::now();
+        }
+        $comm = array();
+       if (!empty($start)){
+            $comm['startTime'] = $start;
+        }
+        if (!empty($end)){
+            $comm['endTime'] = $end;
+        }
+        $comm['updatedBy']=Auth::id();
+        CommunicationCallRecord::where('referenceId',$id)->update($comm);
+        return response()->json(['message'=>trans('messages.updatedSuccesfully')]);
     }
 }
