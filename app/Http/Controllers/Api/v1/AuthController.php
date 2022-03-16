@@ -34,6 +34,12 @@ class AuthController extends Controller
           $pushNotification = new PushNotificationService();
           $deviceToken = $pushNotification->ios_token($deviceToken);
       }
+
+
+      User::where('deviceToken', $deviceToken)->update([
+          "deviceToken"=>"",
+          "deviceType"=>""
+        ]);
         User::where('id', Auth::id())->update([
           "deviceToken"=>$deviceToken,
           "deviceType"=>$deviceType,
