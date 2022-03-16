@@ -82,7 +82,7 @@ class StaffTransformer extends TransformerAbstract
             'vital' => (!empty($data->userFamilyAuthorization)) ? $data->userFamilyAuthorization->vital == 0 ? 0 : $data->userFamilyAuthorization->vital : '',
             'message' => (!empty($data->userFamilyAuthorization)) ? $data->userFamilyAuthorization->message == 0 ? 0 : $data->userFamilyAuthorization->message : '',
             'availability' => $data->availability ? fractal()->collection($data->availability)->transformWith(new StaffAvailabilityTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
-            'notes' => $data->appointment  ? fractal()->collection($data->appointment)->transformWith(new StaffNoteTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
+            'notes' => $data->appointment->notes  ? fractal()->collection($data->appointment)->transformWith(new StaffNoteTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : array(),
         ];
     }
 }
