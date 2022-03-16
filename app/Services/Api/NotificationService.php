@@ -28,9 +28,9 @@ class NotificationService
         if (!empty($appointments)) {
             foreach ($appointments as $appointment) {
 
-                $to_time = strtotime($appointment->startDateTime);
+                $to_time = strtotime($appointment->startTime);
                 $from_time = time();
-                $minutes =  round(abs($to_time - $from_time) / 60,2);
+                $minutes =  (int)round(abs($to_time - $from_time) / 60,0);
 
                 $patient = Patient::where('id', $appointment->patientId)->first();
                 $userId = $patient->userId;
