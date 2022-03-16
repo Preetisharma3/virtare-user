@@ -27,10 +27,15 @@ class NotificationService
         );
         if (!empty($appointments)) {
             foreach ($appointments as $appointment) {
+
+                $to_time = strtotime($appointment->startDateTime);
+                $from_time = time();
+                $minutes =  round(abs($to_time - $from_time) / 60,2);
+
                 $patient = Patient::where('id', $appointment->patientId)->first();
                 $userId = $patient->userId;
                 $notification = Notification::create([
-                    'body' => 'You have a Appointment in 30 minutes.',
+                    'body' => 'You have a Appointment in '.$minutes.' minutes.',
                     'title' => 'Appointment Reminder',
                     'userId' => $appointment->patientUserId,
                     'isSent' => 0,
