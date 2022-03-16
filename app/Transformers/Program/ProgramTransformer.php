@@ -17,7 +17,7 @@ class ProgramTransformer extends TransformerAbstract
 			'id'=>$data->id,
 			'name'=>$data->name,
             'description'=>$data->description,
-            'type'=>$data->type->name,
+            'type'=>$data->type ? $data->type->name : '',
 			'typeId' => $data->typeId,
 			'status' =>$data->isActive,
 		];

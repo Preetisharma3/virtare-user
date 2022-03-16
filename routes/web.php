@@ -349,6 +349,12 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // change password
     $router->post('changePassword', 'Api\v1\UserController@changePassword');
+
+    //program
+    $router->post('program', 'Api\v1\ProgramController@createProgram');
+    $router->get('program[/{id}]', 'Api\v1\ProgramController@listProgram');
+    $router->put('program/{id}', 'Api\v1\ProgramController@updateProgram');
+    $router->delete('program/{id}', 'Api\v1\ProgramController@deleteProgram');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
@@ -428,8 +434,4 @@ $router->post('template', 'Api\v1\TemplateController@createTemplate');
 $router->put('template/{id}', 'Api\v1\TemplateController@updateTemplate');
 $router->delete('template/{id}', 'Api\v1\TemplateController@deleteTemplate');
 
-//program
-$router->post('program', 'Api\v1\ProgramController@createProgram');
-$router->get('program[/{id}]', 'Api\v1\ProgramController@listProgram');
-$router->put('program/{id}', 'Api\v1\ProgramController@updateProgram');
-$router->delete('program/{id}', 'Api\v1\ProgramController@deleteProgram');
+
