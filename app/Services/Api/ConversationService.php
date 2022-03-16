@@ -137,7 +137,7 @@ class ConversationService
                     $data = ConversationMessage::where([['communicationId', $conversationId]])->get();
                 }
                 $senderId = auth()->user()->id;
-                $data = ConversationMessage::where([['communicationId', $conversationId], ['senderId', "!=", $senderId]])->update(['isRead' => 1]);
+                ConversationMessage::where([['communicationId', $conversationId], ['senderId', "!=", $senderId]])->update(['isRead' => 1]);
 
                 return fractal()->collection($data)->transformWith(new ConversationTransformer)->toArray();
             }else{
