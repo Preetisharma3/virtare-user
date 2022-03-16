@@ -161,7 +161,7 @@ class PatientService
                 $newData = Patient::where('udid', $id)->update($patient);
                 // Updated family in user Table
                 if ($request->input('familyMemberId')) {
-                    $userData = User::where('email', $request->input('familyEmail'))->first();
+                    $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
                     if ($userData) {
                         //Updated Family in patientFamilyMember Table
                         $familyMember = [
@@ -172,8 +172,8 @@ class PatientService
                             'messages' => $request->input('messageAuthorization'),
                         ];
                         PatientFamilyMember::where('id', $usersId->id)->update($familyMember);
-                    } else {
-                        $family = $request->input('familyMemberId');
+                    } else {                    
+                         $family = $request->input('familyMemberId');
                         $usersId = PatientFamilyMember::where('udid', $family)->first();
                         $familyId = $usersId->userId;
                         $familyMemberUser = [
@@ -181,6 +181,7 @@ class PatientService
                             'updatedBy' => Auth::id()
                         ];
                         $fam = User::where('id', $familyId)->update($familyMemberUser);
+                       
                         //Updated Family in patientFamilyMember Table
                         $familyMember = [
                             'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
