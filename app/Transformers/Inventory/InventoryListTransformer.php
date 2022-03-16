@@ -21,6 +21,7 @@ class InventoryListTransformer extends TransformerAbstract
             'id' => $data->id,
             'deviceModelId'=>$data->deviceModelId,
             'deviceType' => (!empty($data->model->deviceType->name)) ? $data->model->deviceType->name : $data->deviceType,
+            'deviceTypeId' => (!empty($data->model->deviceType->id)) ? $data->model->deviceType->id : $data->deviceTypeId,
             'modelNumber' => $data->modelNumber ? $data->modelNumber : $data->model->modelName,
             'serialNumber' => $data->serialNumber,
             'macAddress' => $data->macAddress,
