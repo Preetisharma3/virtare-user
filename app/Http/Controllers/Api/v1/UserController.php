@@ -29,4 +29,9 @@ class UserController extends Controller
   {
     return (new UserService)->passwordChange($request);
   }
+
+  public function firstLogin(Request $request)
+  {
+    return (new UserService)->loginFirst($request);
+  }
 }
