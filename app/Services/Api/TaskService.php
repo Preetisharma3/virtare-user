@@ -136,8 +136,11 @@ class TaskService
         $timelineId =  $request->timelineId;
             $data = DB::select(
                 'CALL taskCompletedRates()',
-             );
-             return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+            );
+            if(isset($data[0])){
+                $data = $data[0];
+            }
+            return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
     public function updateTask($request, $id)
