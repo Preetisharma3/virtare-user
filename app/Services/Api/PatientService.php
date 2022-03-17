@@ -1766,15 +1766,11 @@ class PatientService
         try {
 
             $patient = Helper::entity('patient', $id);
-            if(!empty($request->isRead)){
-                if($request->isRead==1){
-                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',1]])->get();
+            if(!is_null($request->isRead)){
+              
+                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',$request->isRead]])->get();
                     return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
-                   
-                }elseif($request->isRead==0){
-                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',0]])->get();
-                    return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
-                }
+               
             }
             else{
                 $data = PatientCriticalNote::where('patientId',$patient)->get();
@@ -1801,6 +1797,32 @@ class PatientService
 
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function updatePatientCriticalNote($request,$id,$noteId)
+    {
+        try {
+            $patient = Helper::entity('patient', $id);
+            $note = PatientCriticalNote::where('udid',$noteId)->first();
+            $noteId = $note->id;
+            $note = array();
+                if(!empty($request->input('criticalNote'))){
+                    $note['criticalNote'] =  $request->input('criticalNote');
+                }
+                if (empty($request->input('isRead'))) {
+                    $note['isRead'] =  0;
+                }else{
+                    $note['isRead']=1;
+                }
+                $note['updatedBy'] =  Auth::id();
+                
+                if(!empty($note)){
+                    PatientCriticalNote::where([['patientId', $patient],['id',$noteId]])->update($note);
+                }
+            return response()->json(['message' => trans('messages.updatedSuccesfully')],  200);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
