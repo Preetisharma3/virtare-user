@@ -19,13 +19,17 @@ class DashboardService
             $count = DB::select(
                 'CALL getPatientConditionsCount(' . $timelineId . ')',
             );
+            $countNew = DB::select(
+                'CALL getNewPatientCount(' . $timelineId . ')',
+            );
             $patient = DB::select(
                 'CALL getPatientsCount()',
             );
             $data = array_merge(
                 $total,
                 $count,
-                $patient
+                $patient,
+                $countNew
             );
             return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
         } catch (Exception $e) {
