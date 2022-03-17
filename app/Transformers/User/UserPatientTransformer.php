@@ -5,7 +5,9 @@ namespace App\Transformers\User;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Role\RoleTransformer;
 use Illuminate\Support\Facades\URL;
-
+use App\Transformers\Staff\StaffTransformer;
+use App\Transformers\Patient\PatientTransformer;
+use App\Transformers\Patient\PatientFamilyMemberTransformer;
 class UserPatientTransformer extends TransformerAbstract
 {
 
@@ -54,6 +56,9 @@ class UserPatientTransformer extends TransformerAbstract
 			'vital'=>(!empty($user->userFamilyAuthorization)) ? $user->userFamilyAuthorization->vital==0 ? 0 :$user->userFamilyAuthorization->vital : '',
 		    'message'=>(!empty($user->userFamilyAuthorization))? $user->userFamilyAuthorization->message==0 ? 0 :$user->userFamilyAuthorization->message : '',
 			'emailverified' =>$user->emailVerify ? true : false,
+			'patient'=> $user->patient ? fractal()->item($user->patient)->transformWith(new PatientTransformer(false))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
+			'staff'=>$user->staff ? fractal()->item($user->staff)->transformWith(new StaffTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
+			'famailyMember'=>$user->familyMember ? fractal()->item($user->familyMember)->transformWith(new PatientFamilyMemberTransformer(false))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
 			
 		];
 	}
