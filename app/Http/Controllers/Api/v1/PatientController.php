@@ -230,6 +230,11 @@ class PatientController extends Controller
     return (new PatientService)->createPatientCriticalNote($request, $id);
   }
 
+  public function deletePatientCriticalNote(Request $request , $id)
+  {
+    return (new PatientService)->deletePatientCriticalNote($request, $id);
+  }
+
 
 
 
