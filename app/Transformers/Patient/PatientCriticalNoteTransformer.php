@@ -37,6 +37,7 @@ class PatientCriticalNoteTransformer extends TransformerAbstract
             'udid' => $data->udid,
             'patientId' => $data->patientId,
             'criticalNote' => $data->criticalNote,
+            'isRead' =>$data->isRead,
             
 		];
     }
