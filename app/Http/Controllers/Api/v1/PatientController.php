@@ -220,6 +220,11 @@ class PatientController extends Controller
     return (new PatientService)->patientFlagList($request, $id, $flagId);
   }
 
+  public function createPatientCriticalNote(Request $request , $id)
+  {
+    return (new PatientService)->createPatientCriticalNote($request, $id);
+  }
+
 
 
 
