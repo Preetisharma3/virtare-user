@@ -4,7 +4,7 @@ namespace App\Transformers\Patient;
 
 use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
-
+use Illuminate\Support\Facades\URL;
 class PatientVitalTransformer extends TransformerAbstract
 {
 	protected $defaultIncludes = [];
