@@ -5,6 +5,7 @@ namespace App\Services\Api;
 use Exception;
 use App\Helper;
 use App\Models\Tag\Tag;
+use App\Models\Flag\Flag;
 use App\Models\Note\Note;
 use App\Models\User\User;
 use Illuminate\Support\Str;
@@ -1680,7 +1681,8 @@ class PatientService
         try {
             $patientId = Patient::where('udid', $id)->first();
             $udid = Str::uuid()->toString();
-            $input = ['udid' => $udid, 'patientId' => $patientId->id, 'flagId' => $request->input('flag'), 'icon' => $request->input('icon')];
+            $flag=Flag::where('udid',$request->input('flag'))->first();
+            $input = ['udid' => $udid, 'patientId' => $patientId->id, 'flagId' => $flag->id,'icon'=>''];
             $flags = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
             PatientFlag::where('patientId', $patientId)->update($flags);
             PatientFlag::where('patientId', $patientId)->delete();
