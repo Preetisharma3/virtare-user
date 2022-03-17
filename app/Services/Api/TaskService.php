@@ -64,10 +64,22 @@ class TaskService
     public function listTask($request)
     {
         if ($request->all) {
-            $data = Task::where('title','LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
+            if(auth()->user()->roleId==3){
+                $data = Task::whereHas('assignedTo',function($query){
+                    $query->where('assignedTo',auth()->user()->staff->id);
+                })->where('title','LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
+                }else{
+                $data = Task::where('title','LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
+                }
             return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
         } else {
+            if(auth()->user()->roleId==3){
+            $data = Task::whereHas('assignedTo',function($query){
+                $query->where([['assignedTo',auth()->user()->staff->id],['entityType','staff']]);
+            })->where('title','LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->paginate(env('PER_PAGE', 20));
+            }else{
             $data = Task::where('title','LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->paginate(env('PER_PAGE', 20));
+            }
             return fractal()->collection($data)->transformWith(new TaskTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         }
     }
@@ -124,8 +136,11 @@ class TaskService
         $timelineId =  $request->timelineId;
             $data = DB::select(
                 'CALL taskCompletedRates()',
-             );
-             return fractal()->collection($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+            );
+            if(isset($data[0])){
+                $data = $data[0];
+            }
+            return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
     public function updateTask($request, $id)

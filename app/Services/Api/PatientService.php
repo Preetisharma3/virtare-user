@@ -5,6 +5,7 @@ namespace App\Services\Api;
 use Exception;
 use App\Helper;
 use App\Models\Tag\Tag;
+use App\Models\Flag\Flag;
 use App\Models\Note\Note;
 use App\Models\User\User;
 use Illuminate\Support\Str;
@@ -34,6 +35,7 @@ use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
+use App\Transformers\Flag\PatientCriticalNoteTransformer;
 use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Patient\PatientFlagTransformer;
 use App\Transformers\Patient\PatientVitalTransformer;
@@ -43,6 +45,7 @@ use App\Transformers\Patient\PatientProgramTransformer;
 use App\Transformers\Patient\PatientReferalTransformer;
 use App\Transformers\Patient\PatientTimelineTransformer;
 use App\Transformers\Patient\PatientConditionTransformer;
+use App\Transformers\Patient\PatientCriticalNoteTransformer as PatientPatientCriticalNoteTransformer;
 use App\Transformers\Patient\PatientInsuranceTransformer;
 use App\Transformers\Patient\PatientInventoryTransformer;
 use App\Transformers\Patient\PatientPhysicianTransformer;
@@ -1693,7 +1696,8 @@ class PatientService
         try {
             $patientId = Patient::where('udid', $id)->first();
             $udid = Str::uuid()->toString();
-            $input = ['udid' => $udid, 'patientId' => $patientId->id, 'flagId' => $request->input('flag'), 'icon' => $request->input('icon')];
+            $flag=Flag::where('udid',$request->input('flag'))->first();
+            $input = ['udid' => $udid, 'patientId' => $patientId->id, 'flagId' => $flag->id,'icon'=>''];
             $flags = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
             PatientFlag::where('patientId', $patientId)->update($flags);
             PatientFlag::where('patientId', $patientId)->delete();
@@ -1726,7 +1730,7 @@ class PatientService
                 $patient = Helper::entity('patient', $id);
                 $notAccess = Helper::haveAccess($patient);
                 if (!$notAccess) {
-                    $getPatient = PatientFlag::where('patientId', $patient)->with('flag')->get();
+                    $getPatient = PatientFlag::where('patientId', $patient)->with('flag')->latest()->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientFlagTransformer())->toArray();
                 }
             } else {
@@ -1746,6 +1750,18 @@ class PatientService
         }
     }
 
+    public function listPatientCriticalNote($request,$id)
+    {
+        try {
+            $patient = Helper::entity('patient', $id);
+            $data = PatientCriticalNote::where('patientId',$patient)->get();
+            return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
+            
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }  
+    }
+
     public function createPatientCriticalNote($request,$id)
     {
         try {
@@ -1753,7 +1769,6 @@ class PatientService
             $patientCriticalNote =[
                 'udid' => Str::uuid()->toString(),
                 'criticalNote' => $request->input('criticalNote'),
-                'isRead' => $request->input('isRead'),
                 'patientId' => $patient,
             ];
             $newData = PatientCriticalNote::create($patientCriticalNote);
