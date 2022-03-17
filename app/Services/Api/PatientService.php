@@ -977,7 +977,7 @@ class PatientService
                                     );
 
                     $vitalRecord['flagId'] = '2';
-                    if($vitalRecord['value'] <= $vitalState[0]->low]){
+                    if($vitalRecord['value'] <= $vitalState[0]->low){
                         $vitalRecord['flagId'] = '1';
                     }
                     if($vitalRecord['value'] >= $vitalState[0]->high){
