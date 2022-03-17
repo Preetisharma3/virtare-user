@@ -52,7 +52,7 @@ class UserTransformer extends TransformerAbstract
 			'relation' => @$user->familyMember->relation->name ?  @$user->familyMember->relation->name : '',
 			'deviceType' => $user->deviceType,
 			'deviceToken' => $user->deviceToken,
-			'patient'=>$this->showData && $user->patient ? fractal()->item($user->patient)->transformWith(new PatientTransformer(false))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
+			'patient'=> $user->patient ? fractal()->item($user->patient)->transformWith(new PatientTransformer(false))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
 			'staff'=>$user->staff ? fractal()->item($user->staff)->transformWith(new StaffTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
 			'famailyMember'=>$user->familyMember ? fractal()->item($user->familyMember)->transformWith(new PatientFamilyMemberTransformer(false))->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
 
