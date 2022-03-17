@@ -46,6 +46,6 @@ class PatientVital extends Model
 
     public function icons()
     {
-        return $this->hasOne(VitalFlags::class, 'flageId');
+       return $this->hasOne(VitalFlags::class, 'id','flagId');
     }
 }
