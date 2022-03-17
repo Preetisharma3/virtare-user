@@ -111,7 +111,7 @@ class PatientService
                             'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                             'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
                             'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => 1,
-                            'messages' => 1,
+                            'messages' => 1, 'isPrimary' => 1
                         ];
                         if (!empty($familyMember)) {
                             PatientFamilyMember::create($familyMember);
