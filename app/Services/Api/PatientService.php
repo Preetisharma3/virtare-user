@@ -34,6 +34,7 @@ use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
+use App\Transformers\Flag\PatientCriticalNoteTransformer;
 use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Patient\PatientFlagTransformer;
 use App\Transformers\Patient\PatientVitalTransformer;
@@ -43,6 +44,7 @@ use App\Transformers\Patient\PatientProgramTransformer;
 use App\Transformers\Patient\PatientReferalTransformer;
 use App\Transformers\Patient\PatientTimelineTransformer;
 use App\Transformers\Patient\PatientConditionTransformer;
+use App\Transformers\Patient\PatientCriticalNoteTransformer as PatientPatientCriticalNoteTransformer;
 use App\Transformers\Patient\PatientInsuranceTransformer;
 use App\Transformers\Patient\PatientInventoryTransformer;
 use App\Transformers\Patient\PatientPhysicianTransformer;
@@ -1734,6 +1736,18 @@ class PatientService
         }
     }
 
+    public function listPatientCriticalNote($request,$id)
+    {
+        try {
+            $patient = Helper::entity('patient', $id);
+            $data = PatientCriticalNote::where('patientId',$patient)->get();
+            return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
+            
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }  
+    }
+
     public function createPatientCriticalNote($request,$id)
     {
         try {
@@ -1741,7 +1755,6 @@ class PatientService
             $patientCriticalNote =[
                 'udid' => Str::uuid()->toString(),
                 'criticalNote' => $request->input('criticalNote'),
-                'isRead' => $request->input('isRead'),
                 'patientId' => $patient,
             ];
             $newData = PatientCriticalNote::create($patientCriticalNote);
