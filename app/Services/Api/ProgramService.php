@@ -6,7 +6,6 @@ use Exception;
 use App\Models\Program\Program;
 use Illuminate\Support\Str;
 use App\Transformers\Program\ProgramTransformer;
-use Illuminate\Support\Facades\DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class ProgramService

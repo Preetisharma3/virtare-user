@@ -67,15 +67,26 @@ class StaffService
 
     public function listStaff($request, $id)
     {
-        if(!$id){
-            if($request->all){
-                $data = Staff::where('firstname','LIKE', '%' . $request->search . '%')->orWhere('lastName','LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
+        if (!$id) {
+            if ($request->all) {
+                $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
                 return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
-            }else{
-                $data = Staff::where('firstname','LIKE', '%' . $request->search . '%')->orWhere('lastName','LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName','ASC')->orderBy('lastName','ASC')->paginate(env('PER_PAGE',20));
-                return fractal()->collection($data)->transformWith(new StaffTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();    
+            } else {
+                if (auth()->user()->roleId == 3) {
+                    $data = Staff::whereHas('patientStaff', function ($query) use ($request) {
+                        $query->where('staffId', auth()->user()->staff->id)->whereHas('staff', function ($q) use ($request) {
+                            $q->where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%');
+                        });
+                    })->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->first();
+                    return fractal()->item($data)->transformWith(new StaffTransformer())->toArray();
+                
+                } else {
+                    $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->paginate(env('PER_PAGE', 20));
+                    return fractal()->collection($data)->transformWith(new StaffTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
+               
+                }
             }
-           } else {
+        } else {
             $data = Staff::where('udid', $id)->with('roles', 'appointment')->first();
             return fractal()->item($data)->transformWith(new StaffTransformer())->toArray();
         }
@@ -195,8 +206,8 @@ class StaffService
             $timeEnd = Helper::time($request->input('endTime'));
             $startTime = $timeStart;
             $endTime = $timeEnd;
-            $staffId = Helper::entity('staff',$id);
-            DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId. '")');
+            $staffId = Helper::entity('staff', $id);
+            DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');
             $staffAvailability = StaffAvailability::where('udid', $udid)->first();
             $message = ["message" => trans('messages.createdSuccesfully')];
             $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
@@ -397,7 +408,7 @@ class StaffService
         return fractal()->collection($data)->transformWith(new PatientTransformer())->toArray();
     }
 
-    public function appointmentList($request,$id)
+    public function appointmentList($request, $id)
     {
         if ($id) {
             $staff = Staff::where('udid', $id)->first();
@@ -405,16 +416,16 @@ class StaffService
         } else {
             $staffId = auth()->user()->staff->id;
         }
-        if($request->all){
+        if ($request->all) {
             $data = Appointment::where([['staffId', $staffId], ['startDateTime', '>=', Carbon::today()]])->get();
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
-        }else{
+        } else {
             $data = Appointment::where([['staffId', $staffId], ['startDateTime', '>=', Carbon::today()]])->paginate(5);
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         }
-        }
+    }
 
-    public function patientAppointment($request,$id)
+    public function patientAppointment($request, $id)
     {
         if ($id) {
             $patient = Patient::where('udid', $id)->first();
@@ -422,12 +433,12 @@ class StaffService
         } else {
             $patientId = auth()->user()->patient->id;
         }
-        if($request->all){
+        if ($request->all) {
             $data = Appointment::where('patientId', $patientId)->whereDate('startDateTime', '=', Carbon::today())->get();
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
-        }else{
+        } else {
             $data = Appointment::where('patientId', $patientId)->whereDate('startDateTime', '=', Carbon::today())->paginate(5);
-            return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();    
+            return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         }
-        }
+    }
 }
