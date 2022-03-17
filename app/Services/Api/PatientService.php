@@ -5,6 +5,7 @@ namespace App\Services\Api;
 use Exception;
 use App\Helper;
 use App\Models\Tag\Tag;
+use App\Models\Flag\Flag;
 use App\Models\Note\Note;
 use App\Models\User\User;
 use Illuminate\Support\Str;
@@ -74,8 +75,8 @@ class PatientService
                     'address' => $request->input('address'), 'createdBy' => Auth::id(), 'height' => $request->input('height'), 'weight' => $request->input('weight'), 'udid' => Str::uuid()->toString()
                 ];
                 $newData = Patient::create($patient);
-                $flag = ['udid' => Str::uuid()->toString(), 'createdBy' => Auth::id(), 'patientId' => $newData->id, 'flagId' => 4];
-                PatientFlag::create($flag);
+                /*$flag = ['udid' => Str::uuid()->toString(), 'createdBy' => Auth::id(), 'patientId' => $newData->id, 'flagId' => 4];
+                PatientFlag::create($flag);*/
                 $timeLine = [
                     'patientId' => $newData->id, 'heading' => 'Patient Register', 'title' => $newData->firstName . ' ' . $newData->lastName . ' ' . 'Added to platform', 'type' => 1,
                     'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
@@ -1681,7 +1682,8 @@ class PatientService
         try {
             $patientId = Patient::where('udid', $id)->first();
             $udid = Str::uuid()->toString();
-            $input = ['udid' => $udid, 'patientId' => $patientId->id, 'flagId' => $request->input('flag'), 'icon' => $request->input('icon')];
+            $flag=Flag::where('udid',$request->input('flag'))->first();
+            $input = ['udid' => $udid, 'patientId' => $patientId->id, 'flagId' => $flag->id,'icon'=>''];
             $flags = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
             PatientFlag::where('patientId', $patientId)->update($flags);
             PatientFlag::where('patientId', $patientId)->delete();
@@ -1714,7 +1716,7 @@ class PatientService
                 $patient = Helper::entity('patient', $id);
                 $notAccess = Helper::haveAccess($patient);
                 if (!$notAccess) {
-                    $getPatient = PatientFlag::where('patientId', $patient)->with('flag')->get();
+                    $getPatient = PatientFlag::where('patientId', $patient)->with('flag')->latest()->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientFlagTransformer())->toArray();
                 }
             } else {
