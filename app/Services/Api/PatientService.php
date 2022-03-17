@@ -1831,9 +1831,12 @@ class PatientService
         try {
             $patient = Helper::entity('patient', $id);
             $note = PatientCriticalNote::where('udid',$noteId)->first();
-            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
-            PatientCriticalNote::where([['patientId', $patient],['id',$note->id]])->update($input);
-            PatientCriticalNote::where([['patientId', $patient],['id',$note->id]])->delete();
+            if(!empty($note)){
+                
+                $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
+                PatientCriticalNote::where([['patientId', $patient],['id',$note->id]])->update($input);
+                PatientCriticalNote::where([['patientId', $patient],['id',$note->id]])->delete();
+            }
             return response()->json(['message' => trans('messages.deletedSuccesfully')],  200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
