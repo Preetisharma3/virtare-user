@@ -6,6 +6,7 @@ use App\Models\Note\Note;
 use App\Models\Patient\Patient;
 use App\Models\Vital\VitalField;
 use App\Models\GlobalCode\GlobalCode;
+use App\Models\Vital\VitalFlags;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,5 +42,10 @@ class PatientVital extends Model
     public function notes()
     {
         return $this->hasOne(Note::class, 'referenceId');
+    }
+
+    public function icons()
+    {
+        return $this->hasOne(VitalFlags::class, 'id');
     }
 }

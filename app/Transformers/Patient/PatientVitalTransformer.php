@@ -2,6 +2,7 @@
 
 namespace App\Transformers\Patient;
 
+use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 
 class PatientVitalTransformer extends TransformerAbstract
@@ -26,7 +27,7 @@ class PatientVitalTransformer extends TransformerAbstract
 			'comment'=>@$data->note,
 			'lastReadingDate'=>$data->createdAt,
 			'deviceInfo'=>$data->deviceInfo,
-			'icon'=>(!empty($data->icon))?str_replace("public", "", URL::to('/')) . '/' .$data->icon:'',
+			'icon'=>(!empty(@$data->icon))?str_replace("public", "", URL::to('/')) . '/' .@$data->icon:str_replace("public", "", URL::to('/')) . '/' .@$data->icons->icon,
 			'color'=>(!empty($data->color))?$data->color:''
 		];
 	}
