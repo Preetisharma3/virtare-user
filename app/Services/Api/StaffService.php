@@ -74,7 +74,7 @@ class StaffService
                         $query->where('staffId', auth()->user()->staff->id)->whereHas('staff', function ($q) use ($request) {
                             $q->where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%');
                         });
-                    })->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->first();
+                    })->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
                 } else {
                     $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
                 }
