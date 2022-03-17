@@ -5,7 +5,9 @@ namespace App\Transformers\User;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\Role\RoleTransformer;
 use Illuminate\Support\Facades\URL;
-
+use App\Transformers\Staff\StaffTransformer;
+use App\Transformers\Patient\PatientTransformer;
+use App\Transformers\Patient\PatientFamilyMemberTransformer;
 class UserPatientTransformer extends TransformerAbstract
 {
 
