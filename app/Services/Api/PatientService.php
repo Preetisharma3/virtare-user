@@ -35,6 +35,7 @@ use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
+use App\Transformers\Flag\PatientCriticalNoteTransformer;
 use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Patient\PatientFlagTransformer;
 use App\Transformers\Patient\PatientVitalTransformer;
@@ -44,6 +45,7 @@ use App\Transformers\Patient\PatientProgramTransformer;
 use App\Transformers\Patient\PatientReferalTransformer;
 use App\Transformers\Patient\PatientTimelineTransformer;
 use App\Transformers\Patient\PatientConditionTransformer;
+use App\Transformers\Patient\PatientCriticalNoteTransformer as PatientPatientCriticalNoteTransformer;
 use App\Transformers\Patient\PatientInsuranceTransformer;
 use App\Transformers\Patient\PatientInventoryTransformer;
 use App\Transformers\Patient\PatientPhysicianTransformer;
@@ -969,6 +971,18 @@ class PatientService
                     if (!empty($vital['type'])) {
                         $vitalRecord['vitalFieldId'] = $vital['type'];
                     }
+
+                    $vitalState = DB::select(
+                                                'CALL patientVitalGoal("' . $vitalRecord['patientId'] . '","' . $vitalRecord['vitalFieldId'] . '")',
+                                    );
+
+                    $vitalRecord['flagId'] = '2';
+                    if($vitalRecord['value'] <= $vitalState[0]->low){
+                        $vitalRecord['flagId'] = '1';
+                    }
+                    if($vitalRecord['value'] >= $vitalState[0]->high){
+                        $vitalRecord['flagId'] = '3';
+                    }
                     $vitalRecord['createdBy'] = Auth::id();
                     $vitalRecord['udid'] = Str::uuid()->toString();
                     $vitalData = PatientVital::create($vitalRecord);
@@ -1009,6 +1023,17 @@ class PatientService
                         'createdType' => $vital['createdType'],
                         'deviceInfo' => json_encode($vital['deviceInfo'])
                     ];
+
+                     $vitalState = DB::select(
+                                                'CALL patientVitalGoal("' . $data['patientId'] . '","' . $data['vitalFieldId'] . '")',
+                                    );
+                    $data['flagId'] = '2';
+                    if($data['value'] <= $vitalState[0]->low){
+                        $data['flagId'] = '1';
+                    }
+                    if($data['value'] >= $vitalState[0]->high){
+                        $data['flagId'] = '3';
+                    }
                     $vitalData = PatientVital::create($data);
                     $note = ['createdBy' => Auth::id(), 'note' => $vital['comment'], 'udid' => Str::uuid()->toString(), 'entityType' => 'patientVital', 'referenceId' => $vitalData->id];
                     Note::create($note);
@@ -1736,6 +1761,32 @@ class PatientService
         }
     }
 
+    public function listPatientCriticalNote($request,$id)
+    {
+        try {
+
+            $patient = Helper::entity('patient', $id);
+            if(!empty($request->isRead)){
+                if($request->isRead==1){
+                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',1]])->get();
+                    return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
+                   
+                }elseif($request->isRead==0){
+                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',0]])->get();
+                    return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
+                }
+            }
+            else{
+                $data = PatientCriticalNote::where('patientId',$patient)->get();
+                return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
+            }
+            
+            
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }  
+    }
+
     public function createPatientCriticalNote($request,$id)
     {
         try {
@@ -1743,7 +1794,6 @@ class PatientService
             $patientCriticalNote =[
                 'udid' => Str::uuid()->toString(),
                 'criticalNote' => $request->input('criticalNote'),
-                'isRead' => $request->input('isRead'),
                 'patientId' => $patient,
             ];
             $newData = PatientCriticalNote::create($patientCriticalNote);
@@ -1751,6 +1801,19 @@ class PatientService
 
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function deletePatientCriticalNote($request,$id)
+    {
+        try {
+            $patient = Helper::entity('patient', $id);
+            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
+            PatientCriticalNote::where('patientId', $patient)->update($input);
+            PatientCriticalNote::where('patientId', $patient)->delete();
+            return response()->json(['message' => trans('messages.deletedSuccesfully')],  200);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 }
