@@ -174,6 +174,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
     $router->get('patient/{id}/timeLine', 'Api\v1\PatientController@listPatientTimeline');
 
+    $router->post('patient/{id}/criticalNote', 'Api\v1\PatientController@createPatientCriticalNote');
+
 
     // Patient Staff Routes
     $router->post('patient/{id}/staff', 'Api\v1\PatientStaffController@assignStaff');
@@ -254,6 +256,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('task/{id}', 'Api\v1\TaskController@deleteTask');
     $router->get('task/{id}', 'Api\v1\TaskController@taskById');
     $router->get('task/status/summery', 'Api\v1\TaskController@taskTotalWithTimeDuration');
+    $router->get('task/completion/rates', 'Api\v1\TaskController@taskCompletedRates');
 
     
 

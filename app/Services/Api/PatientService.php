@@ -27,6 +27,7 @@ use App\Models\Patient\PatientProgram;
 use App\Models\Patient\PatientReferal;
 use App\Models\Patient\PatientTimeLine;
 use App\Models\Patient\PatientCondition;
+use App\Models\Patient\PatientCriticalNote;
 use App\Models\Patient\PatientInsurance;
 use App\Models\Patient\PatientInventory;
 use App\Models\Patient\PatientPhysician;
@@ -74,8 +75,8 @@ class PatientService
                     'address' => $request->input('address'), 'createdBy' => Auth::id(), 'height' => $request->input('height'), 'weight' => $request->input('weight'), 'udid' => Str::uuid()->toString()
                 ];
                 $newData = Patient::create($patient);
-                $flag = ['udid' => Str::uuid()->toString(), 'createdBy' => Auth::id(), 'patientId' => $newData->id, 'flagId' => 4];
-                PatientFlag::create($flag);
+                /*$flag = ['udid' => Str::uuid()->toString(), 'createdBy' => Auth::id(), 'patientId' => $newData->id, 'flagId' => 4];
+                PatientFlag::create($flag);*/
                 $timeLine = [
                     'patientId' => $newData->id, 'heading' => 'Patient Register', 'title' => $newData->firstName . ' ' . $newData->lastName . ' ' . 'Added to platform', 'type' => 1,
                     'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
@@ -1732,6 +1733,24 @@ class PatientService
             ErrorLogGenerator::createLog($request, $e, $userId);
             $response = ['message' => $e->getMessage()];
             return response()->json($response,  500);
+        }
+    }
+
+    public function createPatientCriticalNote($request,$id)
+    {
+        try {
+            $patient = Helper::entity('patient', $id);
+            $patientCriticalNote =[
+                'udid' => Str::uuid()->toString(),
+                'criticalNote' => $request->input('criticalNote'),
+                'isRead' => $request->input('isRead'),
+                'patientId' => $patient,
+            ];
+            $newData = PatientCriticalNote::create($patientCriticalNote);
+            return response()->json(['message' => trans('messages.createdSuccesfully')]);
+
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
         }
     }
 }
