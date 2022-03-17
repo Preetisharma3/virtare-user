@@ -1716,7 +1716,7 @@ class PatientService
                 $patient = Helper::entity('patient', $id);
                 $notAccess = Helper::haveAccess($patient);
                 if (!$notAccess) {
-                    $getPatient = PatientFlag::where('patientId', $patient)->with('flag')->get();
+                    $getPatient = PatientFlag::where('patientId', $patient)->with('flag')->latest()->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientFlagTransformer())->toArray();
                 }
             } else {
