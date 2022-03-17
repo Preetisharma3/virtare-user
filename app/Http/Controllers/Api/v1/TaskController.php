@@ -40,21 +40,21 @@ class TaskController extends Controller
         return (new TaskService)->updateTask($request, $id);
     }
 
-    public function taskById($id){
-        return (new TaskService)->taskById($id);
+    public function taskById(request $request,$id){
+        return (new TaskService)->taskById($request, $id);
     }
 
-    public function deleteTask($id)
+    public function deleteTask(request $request,$id)
     { 
-        return (new TaskService)->deleteTask($id);
+        return (new TaskService)->deleteTask($request, $id);
     }
 
-    public function taskPerStaff(){
-        return (new TaskService)->taskPerStaff();
+    public function taskPerStaff(request $request){
+        return (new TaskService)->taskPerStaff($request);
     }
 
-    public function taskPerCategory(){
-        return (new TaskService)->taskPerCategory();
+    public function taskPerCategory(request $request){
+        return (new TaskService)->taskPerCategory($request);
     }
 
     public function taskReport(Request $request,$id)
