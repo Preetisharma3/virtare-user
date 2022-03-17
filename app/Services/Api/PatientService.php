@@ -111,7 +111,7 @@ class PatientService
                             'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                             'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $newData->id,
                             'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => 1,
-                            'messages' => 1,
+                            'messages' => 1, 'isPrimary' => 1
                         ];
                         if (!empty($familyMember)) {
                             PatientFamilyMember::create($familyMember);
@@ -1768,12 +1768,12 @@ class PatientService
             $patient = Helper::entity('patient', $id);
             if(!is_null($request->isRead)){
               
-                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',$request->isRead]])->get();
+                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',$request->isRead]])->orderBy('id', 'DESC')->get();
                     return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
                
             }
             else{
-                $data = PatientCriticalNote::where('patientId',$patient)->get();
+                $data = PatientCriticalNote::where('patientId',$patient)->orderBy('id', 'DESC')->get();
                 return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
             }
             
