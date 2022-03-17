@@ -51,6 +51,7 @@ class UserPatientTransformer extends TransformerAbstract
 			'deviceType'=>$user->deviceType,
 			'isDeviceAdded'=>$user->patient->isDeviceAdded,
 			'deviceToken'=>$user->deviceToken,
+			'firstLogin' => $user->firstLogin,
 			'roleId' => $this->showData ? fractal()->item($user->roles)->transformWith(new RoleTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray() : new \stdClass(),
 			'vital'=>(!empty($user->userFamilyAuthorization)) ? $user->userFamilyAuthorization->vital==0 ? 0 :$user->userFamilyAuthorization->vital : '',
 		    'message'=>(!empty($user->userFamilyAuthorization))? $user->userFamilyAuthorization->message==0 ? 0 :$user->userFamilyAuthorization->message : '',

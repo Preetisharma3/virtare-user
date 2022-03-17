@@ -368,6 +368,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // Flag Route
     $router->get('flag','Api\v1\FlagController@listFlag');
 
+    // update firstLogin
+    $router->put('user/firstLogin','Api\v1\UserController@firstLogin');
+
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
