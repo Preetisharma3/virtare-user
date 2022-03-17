@@ -25,6 +25,7 @@ use App\Models\Patient\PatientProgram;
 use App\Models\Patient\PatientReferal;
 use App\Models\Patient\PatientTimeLine;
 use App\Models\Patient\PatientCondition;
+use App\Models\Patient\PatientCriticalNote;
 use App\Models\Patient\PatientInsurance;
 use App\Models\Patient\PatientInventory;
 use App\Models\Patient\PatientPhysician;
@@ -1395,6 +1396,24 @@ class PatientService
                 $getPatient = PatientFlag::where('udid', $flagId)->with('flag')->first();
                 return fractal()->item($getPatient)->transformWith(new PatientFlagTransformer())->toArray();
             }
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function createPatientCriticalNote($request,$id)
+    {
+        try {
+            $patient = Helper::entity('patient', $id);
+            $patientCriticalNote =[
+                'udid' => Str::uuid()->toString(),
+                'criticalNote' => $request->input('criticalNote'),
+                'isRead' => $request->input('isRead'),
+                'patientId' => $patient,
+            ];
+            $newData = PatientCriticalNote::create($patientCriticalNote);
+            return response()->json(['message' => trans('messages.createdSuccesfully')]);
+
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
