@@ -76,7 +76,7 @@ class CommunicationTransformer extends TransformerAbstract
                 
             }
             $dataArray['patientName'] = @$data->receiver->patient->firstName . ' ' . @$data->receiver->patient->lastName ;
-        }elseif(auth()->user()->id == $data->sender['Id']){
+        }elseif(auth()->user()->Id == $data->sender['Id']){
             $dataArray['patientPic'] = str_replace("public", "", URL::to('/')) . '/' . $data->receiver['profilePhoto'];
             $dataArray['patientName'] = @$data->receiver->staff->firstName . ' ' . @$data->receiver->staff->lastName;
         }else{

@@ -91,7 +91,7 @@ class CommunicationService
         } else {
             if (auth()->user()->roleId == 3) {
                 $data = Communication::whereHas('sender', function ($query) {
-                    $query->where('from', auth()->user()->id)->orWhere('to', auth()->user()->id);
+                    $query->where('from', auth()->user()->id)->orWhere('referenceId', auth()->user()->id);
                 })->with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')
                     ->paginate(15, ['*'], 'page', $request->page);
             } else {

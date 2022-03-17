@@ -20,7 +20,7 @@ class CreatePatientCriticalNotesTable extends Migration
             $table->bigInteger('patientId')->unsigned();
             $table->foreign('patientId')->references('id')->on('patients')->onDelete('cascade')->onUpdate('cascade');
             $table->text('criticalNote')->nullable();
-            $table->boolean('isRead')->default(1);
+            $table->boolean('isRead')->default(0);
             $table->boolean('isActive')->default(1);
             $table->boolean('isDelete')->default(0);
             $table->bigInteger('createdBy')->unsigned()->nullable();
