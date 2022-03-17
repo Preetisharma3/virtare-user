@@ -120,6 +120,14 @@ class TaskService
              return fractal()->collection($data)->transformWith(new TaskDurationCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
+    public function taskCompletedRates($request){
+        $timelineId =  $request->timelineId;
+            $data = DB::select(
+                'CALL taskCompletedRates()',
+             );
+             return fractal()->collection($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+    }
+
     public function updateTask($request, $id)
     {
         $input = [

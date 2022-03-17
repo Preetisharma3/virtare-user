@@ -254,6 +254,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('task/{id}', 'Api\v1\TaskController@deleteTask');
     $router->get('task/{id}', 'Api\v1\TaskController@taskById');
     $router->get('task/status/summery', 'Api\v1\TaskController@taskTotalWithTimeDuration');
+    $router->get('task/completion/rates', 'Api\v1\TaskController@taskCompletedRates');
 
     
 
