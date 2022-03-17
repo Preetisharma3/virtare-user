@@ -34,6 +34,7 @@ class FlagTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
+            'id'=>$data->udid,
             'name'=>$data->name,
             'color'=>$data->color
 		];

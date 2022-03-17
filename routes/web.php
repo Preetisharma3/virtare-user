@@ -359,6 +359,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // delete new patient flad
     $router->delete('newPatientFlag', 'Api\v1\NotificationController@newPatientFlag');
 
+    // Flag Route
+    $router->get('flag','Api\v1\FlagController@listFlag');
+
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
