@@ -39,6 +39,7 @@ class MessageTypeTransformer extends TransformerAbstract
         return [
             'text' => $data->messageName,
             'count' => $data->count,
+            'duration' => strtotime($data->duration),
             'time' => $data->time,
         ];
     }
