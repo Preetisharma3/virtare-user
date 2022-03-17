@@ -33,8 +33,7 @@ class PatientCriticalNoteTransformer extends TransformerAbstract
     public function transform($data): array
     {
         return [
-            'id' => $data->id,
-            'udid' => $data->udid,
+            'id' => $data->udid,
             'patientId' => $data->patientId,
             'criticalNote' => $data->criticalNote,
             'isRead' =>$data->isRead,

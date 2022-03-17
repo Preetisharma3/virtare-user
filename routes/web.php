@@ -176,7 +176,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     $router->get('patient/{id}/criticalNote', 'Api\v1\PatientController@listPatientCriticalNote');
     $router->post('patient/{id}/criticalNote', 'Api\v1\PatientController@createPatientCriticalNote');
-    $router->delete('patient/{id}/criticalNote', 'Api\v1\PatientController@deletePatientCriticalNote');
+    $router->delete('patient/{id}/criticalNote/{noteId}', 'Api\v1\PatientController@deletePatientCriticalNote');
 
 
     // Patient Staff Routes
