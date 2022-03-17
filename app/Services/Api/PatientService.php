@@ -968,6 +968,18 @@ class PatientService
                     if (!empty($vital['type'])) {
                         $vitalRecord['vitalFieldId'] = $vital['type'];
                     }
+
+                    $vitalState = DB::select(
+                                                'CALL patientVitalGoal("' . $vitalRecord['patientId'] . '","' . $vitalRecord['vitalFieldId'] . '")',
+                                    );
+
+                    $vitalRecord['flagId'] = '2';
+                    if($vitalRecord['value'] <= $vitalState[0]['low']){
+                        $vitalRecord['flagId'] = '1';
+                    }
+                    if($vitalRecord['value'] >= $vitalState[0]['high']){
+                        $vitalRecord['flagId'] = '3';
+                    }
                     $vitalRecord['createdBy'] = Auth::id();
                     $vitalRecord['udid'] = Str::uuid()->toString();
                     $vitalData = PatientVital::create($vitalRecord);
