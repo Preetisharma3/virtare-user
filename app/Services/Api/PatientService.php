@@ -1768,12 +1768,12 @@ class PatientService
             $patient = Helper::entity('patient', $id);
             if(!is_null($request->isRead)){
               
-                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',$request->isRead]])->get();
+                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',$request->isRead]])->orderBy('id', 'DESC')->get();
                     return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
                
             }
             else{
-                $data = PatientCriticalNote::where('patientId',$patient)->get();
+                $data = PatientCriticalNote::where('patientId',$patient)->orderBy('id', 'DESC')->get();
                 return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
             }
             
