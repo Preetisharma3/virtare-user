@@ -125,7 +125,7 @@ class TaskService
             $data = DB::select(
                 'CALL taskCompletedRates()',
              );
-             return fractal()->collection($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+             return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
     }
 
     public function updateTask($request, $id)
