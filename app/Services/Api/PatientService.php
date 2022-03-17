@@ -977,10 +977,10 @@ class PatientService
                                     );
 
                     $vitalRecord['flagId'] = '2';
-                    if($vitalRecord['value'] <= $vitalState[0]['low']){
+                    if($vitalRecord['value'] <= $vitalState[0]->low]){
                         $vitalRecord['flagId'] = '1';
                     }
-                    if($vitalRecord['value'] >= $vitalState[0]['high']){
+                    if($vitalRecord['value'] >= $vitalState[0]->high){
                         $vitalRecord['flagId'] = '3';
                     }
                     $vitalRecord['createdBy'] = Auth::id();
@@ -1023,6 +1023,17 @@ class PatientService
                         'createdType' => $vital['createdType'],
                         'deviceInfo' => json_encode($vital['deviceInfo'])
                     ];
+
+                     $vitalState = DB::select(
+                                                'CALL patientVitalGoal("' . $data['patientId'] . '","' . $data['vitalFieldId'] . '")',
+                                    );
+                    $data['flagId'] = '2';
+                    if($data['value'] <= $vitalState[0]->low){
+                        $data['flagId'] = '1';
+                    }
+                    if($data['value'] >= $vitalState[0]->high){
+                        $data['flagId'] = '3';
+                    }
                     $vitalData = PatientVital::create($data);
                     $note = ['createdBy' => Auth::id(), 'note' => $vital['comment'], 'udid' => Str::uuid()->toString(), 'entityType' => 'patientVital', 'referenceId' => $vitalData->id];
                     Note::create($note);
