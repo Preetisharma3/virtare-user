@@ -22,6 +22,7 @@ class PatientFlagTransformer extends TransformerAbstract
             'flags'=> (!empty($data->flag))?fractal()->item($data->flag)->transformWith(new FlagTransformer())->toArray():'',
 			'flagName'=>(!empty($data->flagName))?$data->flagName:',',
 			'flagColor'=>(!empty($data->flagColor))?$data->flagColor:',',
+			'color'=>(!empty($data->flag->color))?$data->flag->color:'',
 		];
 	}
 

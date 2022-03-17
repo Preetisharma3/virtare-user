@@ -14,7 +14,7 @@ class AddNewPatientProcedure extends Migration
     public function up()
     {
          $procedure = "DROP PROCEDURE IF EXISTS `getNewPatientCount`;
-        CREATE PROCEDURE `getNewPatientCount`()
+        CREATE PROCEDURE `getNewPatientCount`(timelineId INT(20))
         BEGIN
         IF timelineId = 122 THEN
             SELECT
@@ -24,9 +24,7 @@ class AddNewPatientProcedure extends Migration
                 '#FFFFFF' AS textColor
                 FROM patients
             WHERE
-             patients.createdAt > date_sub(now(), interval 1 day) AND patients.deletedAt IS NULL 
-            GROUP BY
-            patients.Id;
+             patients.createdAt > date_sub(now(), interval 1 day) AND patients.deletedAt IS NULL ;
         ELSEIF timelineId = 123 THEN
              SELECT
                 COUNT(patients.id) AS total,
@@ -35,9 +33,7 @@ class AddNewPatientProcedure extends Migration
                 '#FFFFFF' AS textColor
                 FROM patients
             WHERE patients.createdAt > date_sub(now(), interval 1 week) AND
-            patients.deletedAt IS NULL 
-            GROUP BY
-            patients.Id;
+            patients.deletedAt IS NULL;
         ELSEIF timelineId = 124 THEN
              SELECT
                 COUNT(patients.id) AS total,
@@ -46,9 +42,7 @@ class AddNewPatientProcedure extends Migration
                 '#FFFFFF' AS textColor
                 FROM patients
             WHERE
-            patients.deletedAt IS NULL AND patients.createdAt > date_sub(now(), interval 1 month)
-            GROUP BY
-            patients.Id;
+            patients.deletedAt IS NULL AND patients.createdAt > date_sub(now(), interval 1 month);
         ELSEIF timelineId = 125 THEN
              SELECT
                 COUNT(patients.id) AS total,
@@ -57,9 +51,7 @@ class AddNewPatientProcedure extends Migration
                 '#FFFFFF' AS textColor
                 FROM patients
             WHERE
-            patients.deletedAt IS NULL AND patients.createdAt > date_sub(now(), interval 1 year)
-            GROUP BY
-            patients.Id;
+            patients.deletedAt IS NULL AND patients.createdAt > date_sub(now(), interval 1 year);
         END IF;
         END";
         DB::unprepared($procedure);

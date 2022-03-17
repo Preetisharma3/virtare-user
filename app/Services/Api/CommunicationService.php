@@ -51,11 +51,11 @@ class CommunicationService
             'entityType' => $request->entityType,
             'udid' => Str::uuid()->toString()
         ];
-        if($request->messageTypeId=='102'){
+        if ($request->messageTypeId == '102') {
 
-            $exdata = DB::table('communications')->where([['from', '=', $staffFromId],['referenceId','=',$newReferenceId],['messageTypeId','=',102]])->orWhere(function ($query)use($staffFromId,$newReferenceId) {
-                    $query->where([['from', '=', $newReferenceId],['referenceId',$staffFromId]])->where('messageTypeId','=',102);
-                })->exists();
+            $exdata = DB::table('communications')->where([['from', '=', $staffFromId], ['referenceId', '=', $newReferenceId], ['messageTypeId', '=', 102]])->orWhere(function ($query) use ($staffFromId, $newReferenceId) {
+                $query->where([['from', '=', $newReferenceId], ['referenceId', $staffFromId]])->where('messageTypeId', '=', 102);
+            })->exists();
             if ($exdata == false) {
                 $data = Communication::create($input);
                 CommunicationMessage::create([
@@ -70,7 +70,7 @@ class CommunicationService
             } else {
                 return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }
-        }else{
+        } else {
             $data = Communication::create($input);
             CommunicationMessage::create([
                 'communicationId' => $data->id,
@@ -89,13 +89,20 @@ class CommunicationService
             $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')->get();
             return fractal()->collection($data)->transformWith(new CommunicationTransformer())->toArray();
         } else {
-            $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')
-                ->paginate(15, ['*'], 'page', $request->page);
+            if (auth()->user()->roleId == 3) {
+                $data = Communication::whereHas('sender', function ($query) {
+                    $query->where('from', auth()->user()->id)->orWhere('to', auth()->user()->id);
+                })->with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')
+                    ->paginate(15, ['*'], 'page', $request->page);
+            } else {
+                $data = Communication::with('communicationMessage', 'patient', 'staff', 'globalCode', 'priority', 'type', 'staffs')->orderBy('createdAt', 'DESC')
+                    ->paginate(15, ['*'], 'page', $request->page);
+            }
             return fractal()->collection($data)->transformWith(new CommunicationTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
         }
     }
 
-    
+
     //Call Status API's
     public function callStatus()
     {
@@ -174,14 +181,14 @@ class CommunicationService
             $end = Carbon::now();
         }
         $comm = array();
-       if (!empty($start)){
+        if (!empty($start)) {
             $comm['startTime'] = $start;
         }
-        if (!empty($end)){
+        if (!empty($end)) {
             $comm['endTime'] = $end;
         }
-        $comm['updatedBy']=Auth::id();
-        CommunicationCallRecord::where('referenceId',$id)->update($comm);
-        return response()->json(['message'=>trans('messages.updatedSuccesfully')]);
+        $comm['updatedBy'] = Auth::id();
+        CommunicationCallRecord::where('referenceId', $id)->update($comm);
+        return response()->json(['message' => trans('messages.updatedSuccesfully')]);
     }
 }

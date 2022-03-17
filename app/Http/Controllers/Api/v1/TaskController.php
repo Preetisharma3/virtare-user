@@ -79,4 +79,9 @@ class TaskController extends Controller
     {
         return (new TaskService)->taskTotalWithTimeDuration($request);
     }
+
+    public function taskCompletedRates(request $request)
+    {
+        return (new TaskService)->taskCompletedRates($request);
+    }
 }
