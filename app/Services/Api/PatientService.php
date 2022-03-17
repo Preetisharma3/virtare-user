@@ -1764,9 +1764,23 @@ class PatientService
     public function listPatientCriticalNote($request,$id)
     {
         try {
+
             $patient = Helper::entity('patient', $id);
-            $data = PatientCriticalNote::where('patientId',$patient)->get();
-            return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
+            if(!empty($request->isRead)){
+                if($request->isRead==1){
+                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',1]])->get();
+                    return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
+                   
+                }elseif($request->isRead==0){
+                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',0]])->get();
+                    return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
+                }
+            }
+            else{
+                $data = PatientCriticalNote::where('patientId',$patient)->get();
+                return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
+            }
+            
             
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
@@ -1787,6 +1801,19 @@ class PatientService
 
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function deletePatientCriticalNote($request,$id)
+    {
+        try {
+            $patient = Helper::entity('patient', $id);
+            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
+            PatientCriticalNote::where('patientId', $patient)->update($input);
+            PatientCriticalNote::where('patientId', $patient)->delete();
+            return response()->json(['message' => trans('messages.deletedSuccesfully')],  200);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 }
