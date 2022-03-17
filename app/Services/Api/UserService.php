@@ -48,7 +48,7 @@ class UserService
 
                 $file = array();
                 if (!empty($request->path)) {
-                    $file['profilePhoto'] = str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->path);
+                    $file['profilePhoto'] = str_replace(str_replace("public", "", URL::to('/') . '/'), "", $request->path);
                 }
                 User::where('id', Auth::user()->id)->update($file);
                 $user = User::where('udid', Auth::user()->udid)->first();
@@ -63,10 +63,10 @@ class UserService
 
                 $file = array();
                 if (!empty($request->path)) {
-                    $file['profilePhoto'] = str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->path);
+                    $file['profilePhoto'] = str_replace(str_replace("public", "", URL::to('/') . '/'), "", $request->path);
                 }
                 User::where('id', Auth::user()->id)->update($file);
-               
+
                 $user = PatientFamilyMember::where('userId', auth()->user()->id)->first();
                 return fractal()->item($user)->transformWith(new PatientFamilyMemberTransformer(true))->toArray();
             } else {
@@ -77,7 +77,7 @@ class UserService
 
                 $file = array();
                 if (!empty($request->path)) {
-                    $file['profilePhoto'] = str_replace(str_replace("public","",URL::to('/') . '/'), "", $request->path);
+                    $file['profilePhoto'] = str_replace(str_replace("public", "", URL::to('/') . '/'), "", $request->path);
                 }
                 User::where('id', Auth::user()->id)->update($file);
                 $user = User::where('udid', Auth::user()->udid)->first();
@@ -112,6 +112,16 @@ class UserService
         try {
             User::find(auth()->user()->id)->update(['password' => Hash::make($request->newPassword)]);
             return response()->json(['message' => trans('messages.changePassword')]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function loginFirst(Request $request)
+    {
+        try {
+            User::where('id',auth()->user()->id)->update(['firstLogin' => 0]);
+            return response()->json(['message' => trans('messages.updatedSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

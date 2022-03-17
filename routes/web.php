@@ -176,6 +176,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     $router->get('patient/{id}/criticalNote', 'Api\v1\PatientController@listPatientCriticalNote');
     $router->post('patient/{id}/criticalNote', 'Api\v1\PatientController@createPatientCriticalNote');
+    $router->put('patient/{id}/criticalNote/{noteId}', 'Api\v1\PatientController@updatePatientCriticalNote');
     $router->delete('patient/{id}/criticalNote/{noteId}', 'Api\v1\PatientController@deletePatientCriticalNote');
 
 
@@ -366,6 +367,9 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Flag Route
     $router->get('flag','Api\v1\FlagController@listFlag');
+
+    // update firstLogin
+    $router->put('user/firstLogin','Api\v1\UserController@firstLogin');
 
 });
 
