@@ -27,7 +27,8 @@ class PatientVitalTransformer extends TransformerAbstract
 			'lastReadingDate'=>$data->createdAt,
 			'deviceInfo'=>$data->deviceInfo,
 			'icon'=>(!empty(@$data->icon))?str_replace("public", "", URL::to('/')) . '/' .@$data->icon:str_replace("public", "", URL::to('/')) . '/' .@$data->icons->icon,
-			'color'=>(!empty($data->color))?$data->color:''
+			'color'=>(!empty(@$data->color))?@$data->color:@$data->icons->color,
+			'flagId'=>3
 		];
 	}
 }
