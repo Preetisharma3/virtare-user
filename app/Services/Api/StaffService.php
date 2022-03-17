@@ -69,7 +69,15 @@ class StaffService
     {
         if (!$id) {
             if ($request->all) {
-                $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
+                if (auth()->user()->roleId == 3) {
+                    $data = Staff::whereHas('patientStaff', function ($query) use ($request) {
+                        $query->where('staffId', auth()->user()->staff->id)->whereHas('staff', function ($q) use ($request) {
+                            $q->where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%');
+                        });
+                    })->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->first();
+                } else {
+                    $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
+                }
                 return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
             } else {
                 if (auth()->user()->roleId == 3) {
@@ -78,13 +86,10 @@ class StaffService
                             $q->where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%');
                         });
                     })->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->first();
-                    return fractal()->item($data)->transformWith(new StaffTransformer())->toArray();
-                
                 } else {
                     $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->paginate(env('PER_PAGE', 20));
-                    return fractal()->collection($data)->transformWith(new StaffTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
-               
                 }
+                return fractal()->collection($data)->transformWith(new StaffTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             }
         } else {
             $data = Staff::where('udid', $id)->with('roles', 'appointment')->first();
