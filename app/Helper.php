@@ -7,10 +7,12 @@ use App\Models\User\User;
 use App\Models\Staff\Staff;
 use App\Models\Patient\Patient;
 use App\Models\Relation\Relation;
+use Illuminate\Support\Facades\DB;
 use App\Models\Patient\PatientStaff;
 use App\Models\Patient\PatientVital;
 use App\Models\Patient\PatientTimeLog;
 use App\Models\Patient\PatientPhysician;
+use App\Models\Communication\Communication;
 use App\Models\Patient\PatientFamilyMember;
 
 class Helper
@@ -54,14 +56,13 @@ class Helper
     public static function relation($value, $gender)
     {
         $data = Relation::where([['relationId', $value], ['genderId', $gender]])->with('relation')->first();
-         if(!empty($data)){
+        if (!empty($data)) {
 
             $newData = [
                 'relationId' => @$data->reverseRelationId,
                 'relation' => @$data->relation->name,
             ];
-            
-        }else{
+        } else {
             $newData = [
                 'relationId' => "",
                 'relation' => "",
@@ -236,5 +237,14 @@ class Helper
                 return response()->json(['message', trans('messages.unauthorized')], 401);
             }
         }
+    }
+
+    public static function lastMessage($id)
+    {
+        $patient = Patient::where('id', $id)->first();
+        $data = DB::select(
+            'CALL lastConversationMessage("' . $patient->userId . '")',
+        );
+        return $data[0];
     }
 }
