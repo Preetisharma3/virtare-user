@@ -65,7 +65,7 @@ class PatientTransformer extends TransformerAbstract
             'isActive' => $data->isActive == 1 ? 'Active' : 'Inactive',
             'nonCompliance' => 'N/A',
             'lastReadingDate' => 'N/A',
-            'lastMessageSent' => 'N/A',
+            'lastMessageSent' => Helper::lastMessage($data->id),
             'flagName' => 'jhj',
             'flagColor' => 'fhghg',
             'insuranceId' => (!empty($data->insurance->udid))?$data->insurance->udid:'',
