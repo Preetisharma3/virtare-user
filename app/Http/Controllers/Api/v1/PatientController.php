@@ -261,10 +261,22 @@ class PatientController extends Controller
     return (new PatientService)->phycisianPatient($request, $id);
   }
 
-  public function patientEmergency(Request $request,$id)
+
+  public function addPatientEmergency(Request $request,$id,$emergencyId=null)
   {
-    return (new PatientService)->emergencyPatient($request, $id);
+    return (new PatientService)->patientEmergencyAdd($request, $id,$emergencyId);
   }
+
+  public function listPatientEmergency(Request $request,$id,$emergencyId=null)
+  {
+    return (new PatientService)->patientEmergencyList($request, $id,$emergencyId);
+  }
+
+  public function deletePatientEmergency(Request $request,$id,$emergencyId=null)
+  {
+    return (new PatientService)->patientEmergencyDelete($request, $id,$emergencyId);
+  }
+
 
 
 

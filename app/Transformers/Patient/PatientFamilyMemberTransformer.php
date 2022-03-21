@@ -36,6 +36,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'vital'=>(!empty($data->vital))?$data->vital:0,
 				'message'=>(!empty($data->messages))?$data->messages:0,
 				'email'=>(!empty($data->user->email))?$data->user->email:'',
+				'emergencyEmail'=>(!empty($data->email))?$data->email:'',
 				'user' =>($data->user) && ($this->showData)? fractal()->item($data->user)->transformWith(new UserTransformer())->toArray():[],
 			];
 	}

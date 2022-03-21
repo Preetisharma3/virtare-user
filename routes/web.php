@@ -179,15 +179,17 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
     $router->get('patient/{id}/timeLine', 'Api\v1\PatientController@listPatientTimeline');
 
-    // patient all family member
+    // patient summary family member
     $router->post('patient/{id}/familyAdd', 'Api\v1\PatientController@addPatientFamily');
     $router->get('patient/{id}/family[/{familyId}]', 'Api\v1\PatientController@listPatientFamily');
     $router->put('patient/{id}/familyUpdate/{familyId}', 'Api\v1\PatientController@addPatientFamily');
     $router->delete('patient/{id}/family/{familyId}', 'Api\v1\PatientController@deletePatientFamily');
 
-    // patient all emergency contact
-    $router->get('patient/{id}/emergency', 'Api\v1\PatientController@patientEmergency');
-
+    // patient summary emergency contact
+    $router->post('patient/{id}/emergency', 'Api\v1\PatientController@addPatientEmergency');
+    $router->get('patient/{id}/emergency[/{emergencyId}]', 'Api\v1\PatientController@listPatientEmergency');
+    $router->put('patient/{id}/emergency/{emergencyId}', 'Api\v1\PatientController@addPatientEmergency');
+    $router->delete('patient/{id}/emergency/{emergencyId}', 'Api\v1\PatientController@deletePatientEmergency');
 
     $router->get('patient/{id}/criticalNote', 'Api\v1\PatientController@listPatientCriticalNote');
     $router->post('patient/{id}/criticalNote', 'Api\v1\PatientController@createPatientCriticalNote');
