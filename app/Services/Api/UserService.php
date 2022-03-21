@@ -126,4 +126,31 @@ class UserService
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
+    public function forgotPassword(Request $request)
+    {
+        try {
+            $post = $request->all();
+            if(isset($post["email"]) && !empty($post["email"])){
+                $email = $post["email"];
+            }else{
+                $email = "";
+            }
+
+            if(isset($post["phone"]) && !empty($post["phone"])){
+                $phone = $post["phone"];
+            }else{
+                $phone = "";
+            }
+
+            if(empty($email) && empty($phone)){
+                return response()->json(['message' => "Invalid Email or Phone Number !."], 500);
+            }else{
+                User::where('email',$email);
+                return response()->json(['message' => "Message sent successfully."]);    
+            }
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
 }

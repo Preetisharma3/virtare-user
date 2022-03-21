@@ -34,4 +34,9 @@ class UserController extends Controller
   {
     return (new UserService)->loginFirst($request);
   }
+  
+  public function forgotPassword(Request $request)
+  {
+    return (new UserService)->forgotPassword($request);
+  }
 }
