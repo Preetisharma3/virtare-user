@@ -150,7 +150,7 @@ class UserService
                 if($result){
                     $code = base64_encode($email)."##".$result->udid;
                     $forgotUrl = URL()."/generate/newPassword?code=".$code;
-                    return response()->json(["forgotURl" =>$forgotUrl,"forgotCode" =>$code,'message' => "Url Generated Successfully."]);
+                    return response()->json(["url" =>$forgotUrl,"code" =>$code,'message' => "Url Generated Successfully."]);
                 }else{
                     return response()->json(['message' => "Invalid Email."], 500);
                 } 
