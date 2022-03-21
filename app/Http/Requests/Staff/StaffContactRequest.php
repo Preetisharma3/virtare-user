@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Staff;
 
+use App\Models\Staff\Staff;
 use Urameshibr\Requests\FormRequest;
 
 class StaffContactRequest extends FormRequest
@@ -13,8 +14,10 @@ class StaffContactRequest extends FormRequest
 
     public function rules()
     {
+        $udid = request()->segment(2);
+        $staff = Staff::where('udid', $udid)->first();
         return [
-            'email' => 'required|unique:staffContacts,email',
+            'email' => 'required|unique:staffContacts,email,' . $staff['id'] . 'staffId',
             'firstName' => 'required',
             'phoneNumber' => 'required|numeric'
         ];
