@@ -133,7 +133,11 @@ class AppointmentService
     public function newAppointments($request)
     {
         try {
-            $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration') ->whereRaw('conferenceId != "" OR conferenceId IS NOT NULL')->orderBy('startDateTime', 'ASC')->take(3)->get();
+            if(auth()->user()->roleId==3){
+                $data = Appointment::where('staffId',auth()->user()->staff->id)->with('patient', 'staff', 'appointmentType', 'duration') ->whereRaw('conferenceId != "" OR conferenceId IS NOT NULL')->orderBy('startDateTime', 'ASC')->take(3)->get();
+            }else{
+                $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration') ->whereRaw('conferenceId != "" OR conferenceId IS NOT NULL')->orderBy('startDateTime', 'ASC')->take(3)->get();
+            }
             return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
         } catch (Exception $e) {
             if (isset(auth()->user()->id)) {
@@ -216,6 +220,10 @@ class AppointmentService
                     array_push($staff_array, $staff_id);
                 }
                 $staffIdx = json_encode($staff_array);
+            }else{
+                if(auth()->user()->roleId==3){
+                    $staffIdx = auth()->user()->staff->id;  
+                }
             }
 
             $data = DB::select(
@@ -237,14 +245,34 @@ class AppointmentService
 
     public function AppointmentConference($request)
     {
-        $data = Appointment::whereRaw('conferenceId is not null')->where('startDateTime', '>=', Carbon::now()->subMinute(30))->get();
-        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
+        try{
+            if(auth()->user()->roleId==3){
+                $data = Appointment::where('staffId',auth()->user()->staff->id)->whereRaw('conferenceId is not null')->where('startDateTime', '>=', Carbon::now()->subMinute(30))->get();
+            }else{
+                $data = Appointment::whereRaw('conferenceId is not null')->where('startDateTime', '>=', Carbon::now()->subMinute(30))->get();
+            }
+            return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
+        } catch (Exception $e) {
+            if (isset(auth()->user()->id)) {
+                $userId = auth()->user()->id;
+            } else {
+                $userId = "";
+            }
+
+            ErrorLogGenerator::createLog($request, $e, $userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
+        }
     }
 
     public function AppointmentConferenceId($request, $id)
     {
         try{
-            $data = Appointment::where([['startDateTime', '>=', Carbon::now()->subMinute(30)], ['conferenceId', $id]])->get();
+            if(auth()->user()->roleId==3){
+                $data = Appointment::where([['startDateTime', '>=', Carbon::now()->subMinute(30)], ['conferenceId', $id]],['staffId',auth()->user()->staff->id])->get();
+            }else{
+                $data = Appointment::where([['startDateTime', '>=', Carbon::now()->subMinute(30)], ['conferenceId', $id]])->get();
+            }
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
         } catch (Exception $e) {
             if (isset(auth()->user()->id)) {

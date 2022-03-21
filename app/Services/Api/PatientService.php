@@ -1768,12 +1768,12 @@ class PatientService
             $patient = Helper::entity('patient', $id);
             if(!is_null($request->isRead)){
               
-                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',$request->isRead]])->get();
+                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',$request->isRead]])->orderBy('id', 'DESC')->get();
                     return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
                
             }
             else{
-                $data = PatientCriticalNote::where('patientId',$patient)->get();
+                $data = PatientCriticalNote::where('patientId',$patient)->orderBy('id', 'DESC')->get();
                 return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
             }
             
@@ -1805,21 +1805,23 @@ class PatientService
         try {
             $patient = Helper::entity('patient', $id);
             $note = PatientCriticalNote::where('udid',$noteId)->first();
-            $noteId = $note->id;
-            $note = array();
-                if(!empty($request->input('criticalNote'))){
-                    $note['criticalNote'] =  $request->input('criticalNote');
-                }
-                if (empty($request->input('isRead'))) {
-                    $note['isRead'] =  0;
-                }else{
-                    $note['isRead']=1;
-                }
-                $note['updatedBy'] =  Auth::id();
-                
-                if(!empty($note)){
-                    PatientCriticalNote::where([['patientId', $patient],['id',$noteId]])->update($note);
-                }
+            if(!empty($note)){
+                $noteId = $note->id;
+                $note = array();
+                    if(!empty($request->input('criticalNote'))){
+                        $note['criticalNote'] =  $request->input('criticalNote');
+                    }
+                    if (empty($request->input('isRead'))) {
+                        $note['isRead'] =  0;
+                    }else{
+                        $note['isRead']=1;
+                    }
+                    $note['updatedBy'] =  Auth::id();
+                    
+                    if(!empty($note)){
+                        PatientCriticalNote::where([['patientId', $patient],['id',$noteId]])->update($note);
+                    }
+            }
             return response()->json(['message' => trans('messages.updatedSuccesfully')],  200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -1831,9 +1833,12 @@ class PatientService
         try {
             $patient = Helper::entity('patient', $id);
             $note = PatientCriticalNote::where('udid',$noteId)->first();
-            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
-            PatientCriticalNote::where([['patientId', $patient],['id',$note->id]])->update($input);
-            PatientCriticalNote::where([['patientId', $patient],['id',$note->id]])->delete();
+            if(!empty($note)){
+
+                $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
+                PatientCriticalNote::where([['patientId', $patient],['id',$note->id]])->update($input);
+                PatientCriticalNote::where([['patientId', $patient],['id',$note->id]])->delete();
+            }
             return response()->json(['message' => trans('messages.deletedSuccesfully')],  200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);

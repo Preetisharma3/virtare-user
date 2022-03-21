@@ -38,6 +38,7 @@ class CommunicationTransformer extends TransformerAbstract
     {
         $dataArray =  [
              'id'=>$data->id,
+
             'from'=>$data->sender->patient ? @$data->sender->patient->firstName . ' ' . @$data->sender->patient->lastName : @$data->sender->staff->firstName . ' ' . @$data->sender->staff->lastName,
             'type'=>$data->type->name,
             'to'=>$data->receiver->patient ? @$data->receiver->patient->firstName . ' ' . @$data->receiver->patient->lastName : @$data->receiver->staff->firstName . ' ' . @$data->receiver->staff->lastName,
@@ -58,6 +59,8 @@ class CommunicationTransformer extends TransformerAbstract
             'messageSender' => (!empty($data->conversationMessages->last()->senderId)) ? $data->conversationMessages->last()->senderId : '',
             'isRead' => (!isset($data->conversationMessages)) && ($data->conversationMessages->last()->isRead==0) ? 0 : 1,
             "created_at" => (!empty($data->conversationMessages->last()->createdAt)) ? strtotime($data->conversationMessages->last()->createdAt) : '',
+            "is_sender_patient" => false,
+            "is_receiver_patient" => false,
         ];
 
 
@@ -68,6 +71,7 @@ class CommunicationTransformer extends TransformerAbstract
                 $dataArray['patientPic'] = '';
             }
             $dataArray['patientName'] = @$data->sender->patient->firstName . ' ' . @$data->sender->patient->lastName ;
+            $dataArray['is_sender_patient'] = true ;
         }elseif($data->receiver->patient){
             if((!empty($data->receiver['profilePhoto'])) && (!is_null($data->receiver['profilePhoto']))){
                 $dataArray['patientPic'] = str_replace("public", "", URL::to('/')) . '/' . $data->receiver['profilePhoto'];
@@ -76,6 +80,7 @@ class CommunicationTransformer extends TransformerAbstract
                 
             }
             $dataArray['patientName'] = @$data->receiver->patient->firstName . ' ' . @$data->receiver->patient->lastName ;
+            $dataArray['is_receiver_patient'] = true ;
         }elseif(auth()->user()->Id == $data->sender['Id']){
             $dataArray['patientPic'] = str_replace("public", "", URL::to('/')) . '/' . $data->receiver['profilePhoto'];
             $dataArray['patientName'] = @$data->receiver->staff->firstName . ' ' . @$data->receiver->staff->lastName;
