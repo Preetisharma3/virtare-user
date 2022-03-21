@@ -174,6 +174,13 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
     $router->get('patient/{id}/timeLine', 'Api\v1\PatientController@listPatientTimeline');
 
+    // patient all family member
+    $router->get('patient/{id}/family','Api\v1\PatientController@patientFamily');
+
+    // patient all emergency contact
+    $router->get('patient/{id}/emergency','Api\v1\PatientController@patientEmergency');
+
+
     $router->get('patient/{id}/criticalNote', 'Api\v1\PatientController@listPatientCriticalNote');
     $router->post('patient/{id}/criticalNote', 'Api\v1\PatientController@createPatientCriticalNote');
     $router->put('patient/{id}/criticalNote/{noteId}', 'Api\v1\PatientController@updatePatientCriticalNote');

@@ -29,7 +29,8 @@ class FamilyService
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),
                         'contactTypeId' => $request->input('contactType'), 'contactTimeId' => $request->input('contactTime'),
                         'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'), 'patientId' => $patientId,
-                        'createdBy' => Auth::id(), 'userId' => $userData->id, 'udid' => Str::uuid()->toString(), 'vital' => $request->input('vitalAuthorization'), 'messages' => $request->input('messageAuthorization')
+                        'createdBy' => Auth::id(), 'userId' => $userData->id, 'udid' => Str::uuid()->toString(),
+                         'vital' => $request->input('vitalAuthorization'), 'messages' => $request->input('messageAuthorization'),'isPrimary'=>0
                     ];
                 } else {
                     $familyMemberUser = [
@@ -43,7 +44,8 @@ class FamilyService
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),
                         'contactTypeId' => $request->input('contactType'), 'contactTimeId' => $request->input('contactTime'),
                         'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'), 'patientId' => $patientId,
-                        'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => $request->input('vitalAuthorization'), 'messages' => $request->input('messageAuthorization')
+                        'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(),
+                         'vital' => $request->input('vitalAuthorization'), 'messages' => $request->input('messageAuthorization'),'isPrimary'=>0
                     ];
                 }
                 $familyData = PatientFamilyMember::create($familyMember);
@@ -69,7 +71,8 @@ class FamilyService
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),'userId'=>$userData->id,
                         'contactTypeId' => $request->input('contactType'), 'contactTimeId' => $request->input('contactTime'),
                         'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'),
-                        'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'), 'messages' => $request->input('messageAuthorization'),
+                        'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'), 
+                        'messages' => $request->input('messageAuthorization'),
                     ];
                 }else{
                     $fam = User::where('id', $usersId)->update($familyMemberUser);
@@ -78,7 +81,8 @@ class FamilyService
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),
                         'contactTypeId' => $request->input('contactType'), 'contactTimeId' => $request->input('contactTime'),
                         'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'),
-                        'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'), 'messages' => $request->input('messageAuthorization'),
+                        'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'), 
+                        'messages' => $request->input('messageAuthorization'),
                     ];
                 }
                 $familyData = PatientFamilyMember::where('udid', $familyId)->update($familyMember);
