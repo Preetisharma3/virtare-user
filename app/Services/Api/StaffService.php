@@ -69,23 +69,11 @@ class StaffService
     {
         if (!$id) {
             if ($request->all) {
-                if (auth()->user()->roleId == 3) {
-                    $data = Staff::whereHas('patientStaff', function ($query) use ($request) {
-                        $query->where('staffId', auth()->user()->staff->id)->whereHas('staff', function ($q) use ($request) {
-                            $q->where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%');
-                        });
-                    })->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
-                } else {
                     $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
-                }
                 return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
             } else {
                 if (auth()->user()->roleId == 3) {
-                    $data = Staff::whereHas('patientStaff', function ($query) use ($request) {
-                        $query->where('staffId', auth()->user()->staff->id)->whereHas('staff', function ($q) use ($request) {
-                            $q->where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%');
-                        });
-                    })->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->paginate(env('PER_PAGE', 20));
+                    $data = Staff::where('id', auth()->user()->staff->id)->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->paginate(env('PER_PAGE', 20));
                 } else {
                     $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->paginate(env('PER_PAGE', 20));
                 }
