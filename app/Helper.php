@@ -245,6 +245,10 @@ class Helper
         $data = DB::select(
             'CALL lastConversationMessage("' . $patient->userId . '")',
         );
-        return $data[0];
+        if (!empty($data)) {
+            return $data[0]->message;
+        } else {
+            return '';
+        }
     }
 }
