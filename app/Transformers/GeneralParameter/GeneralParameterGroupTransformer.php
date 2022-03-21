@@ -17,7 +17,9 @@ class GeneralParameterGroupTransformer extends TransformerAbstract
             'name'=>$data->name,
             'deviceType'=>(!empty($data->deviceType->name))?$data->deviceType->name:'',
             'deviceTypeId'=>(!empty($data->deviceType->id))?$data->deviceType->id:'',
-            'generalparameter'=> fractal()->collection($data->generalParameter)->transformWith(new GeneralParameterTransformer())->toArray()
+            'generalparameter'=> \DB::select(
+                "CALL getGenralParameter('" . $data->id . "')",
+            )
         ];
     }
 }
