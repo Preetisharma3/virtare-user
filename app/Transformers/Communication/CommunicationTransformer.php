@@ -57,7 +57,7 @@ class CommunicationTransformer extends TransformerAbstract
             'message' => (!empty($data->conversationMessages->last()->message)) ? $data->conversationMessages->last()->message : '',
             'messageType' => (!empty($data->conversationMessages->last()->type)) ? $data->conversationMessages->last()->type : '',
             'messageSender' => (!empty($data->conversationMessages->last()->senderId)) ? $data->conversationMessages->last()->senderId : '',
-            'isRead' => (!isset($data->conversationMessages)) && ($data->conversationMessages->last()->isRead==0) ? 0 : 1,
+            'isRead' => (isset($data->conversationMessages)) && ($data->conversationMessages->last()->isRead==0) ? 0 : 1,
             "created_at" => (!empty($data->conversationMessages->last()->createdAt)) ? strtotime($data->conversationMessages->last()->createdAt) : '',
             "is_sender_patient" => false,
             "is_receiver_patient" => false,
