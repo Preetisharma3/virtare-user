@@ -144,13 +144,59 @@ class UserService
             }
 
             if(empty($email) && empty($phone)){
-                return response()->json(['message' => "Invalid Email or Phone Number !."], 500);
+                return response()->json(['message' => "Invalid Email"], 500);
             }else{
-                User::where('email',$email);
-                return response()->json(['message' => "Message sent successfully."]);    
+                $result = User::where('email',$email)->first();
+                if($result){
+                    $code = base64_encode($email)."##".$result->udid;
+                    $forgotUrl = URL()."/generate/newPassword?code=".$code;
+                    return response()->json(["forgotURl" =>$forgotUrl,"forgotCode" =>$code,'message' => "Url Generated Successfully."]);
+                }else{
+                    return response()->json(['message' => "Invalid Email."], 500);
+                } 
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function newPassword(Request $request)
+    {
+        $get = $request->all();
+        if(isset($get["code"]) && !empty($get["code"]))
+        {
+            $codeObj = explode("##",$get["code"]);
+            if(isset($codeObj[0])){
+                $email = base64_decode($codeObj[0]);
+            }else{
+                $email = "";
+            }
+
+            if(isset($codeObj[1])){
+                $udid = base64_decode($codeObj[1]);
+            }else{
+                $udid = "";
+            }
+
+            if(isset($get["newPassword"]) && !empty($get["newPassword"]))
+            {
+                $newPassword = $get["newPassword"];
+            }else{
+                $newPassword = "";
+            }
+
+
+            $result = User::where('email',$email)
+                        ->where('udid',$udid)->first();
+            if($result){
+                User::find($result->id)->update(['password' => Hash::make($newPassword)]);
+                return response()->json(['message' => "Password Changed Successfully."]);
+            }else{
+                return response()->json(['message' => "Invalid code."], 500);
+            }
+
+        }else{
+            return response()->json(['message' => "Invalid code."], 500);
         }
     }
 }

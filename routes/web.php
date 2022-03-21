@@ -30,6 +30,11 @@ $router->get('template/report/export/{id}', 'Api\v1\TemplateController@templateR
 $router->get('inventory/report/export/{id}', 'Api\v1\InventoryController@inventoryReport');
 $router->get('error/logs/{id}', 'Api\v1\ErrorLogController@listErrorLog');
 
+// forgot password
+$router->post('forgot/password', 'Api\v1\UserController@forgotPassword');
+$router->get('/generate/newPassword/', 'Api\v1\UserController@forgotPassword');
+
+
 $router->get('/linkstorage', function () use ($router) {
 
     /*$public = getcwd();
@@ -173,6 +178,13 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/{id}/insurance[/{insuranceId}]', 'Api\v1\PatientController@listPatientInsurance');
     $router->delete('patient/{id}/insurance/{insuranceId}', 'Api\v1\PatientController@deletePatientInsurance');
     $router->get('patient/{id}/timeLine', 'Api\v1\PatientController@listPatientTimeline');
+
+    // patient all family member
+    $router->get('patient/{id}/family','Api\v1\PatientController@patientFamily');
+
+    // patient all emergency contact
+    $router->get('patient/{id}/emergency','Api\v1\PatientController@patientEmergency');
+
 
     $router->get('patient/{id}/criticalNote', 'Api\v1\PatientController@listPatientCriticalNote');
     $router->post('patient/{id}/criticalNote', 'Api\v1\PatientController@createPatientCriticalNote');

@@ -27,15 +27,14 @@ use App\Models\Patient\PatientProgram;
 use App\Models\Patient\PatientReferal;
 use App\Models\Patient\PatientTimeLine;
 use App\Models\Patient\PatientCondition;
-use App\Models\Patient\PatientCriticalNote;
 use App\Models\Patient\PatientInsurance;
 use App\Models\Patient\PatientInventory;
 use App\Models\Patient\PatientPhysician;
+use App\Models\Patient\PatientCriticalNote;
 use App\Models\Patient\PatientFamilyMember;
 use App\Models\Patient\PatientMedicalHistory;
 use App\Models\Patient\PatientMedicalRoutine;
 use App\Models\Patient\PatientEmergencyContact;
-use App\Transformers\Flag\PatientCriticalNoteTransformer;
 use App\Transformers\Patient\PatientTransformer;
 use App\Transformers\Patient\PatientFlagTransformer;
 use App\Transformers\Patient\PatientVitalTransformer;
@@ -45,12 +44,13 @@ use App\Transformers\Patient\PatientProgramTransformer;
 use App\Transformers\Patient\PatientReferalTransformer;
 use App\Transformers\Patient\PatientTimelineTransformer;
 use App\Transformers\Patient\PatientConditionTransformer;
-use App\Transformers\Patient\PatientCriticalNoteTransformer as PatientPatientCriticalNoteTransformer;
 use App\Transformers\Patient\PatientInsuranceTransformer;
 use App\Transformers\Patient\PatientInventoryTransformer;
 use App\Transformers\Patient\PatientPhysicianTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use App\Transformers\Patient\PatientFamilyMemberTransformer;
 use App\Transformers\Patient\PatientMedicalRoutineTransformer;
+use App\Transformers\Patient\PatientCriticalNoteTransformer as PatientPatientCriticalNoteTransformer;
 
 class PatientService
 {
@@ -178,13 +178,13 @@ class PatientService
                         $familyMember = [
                             'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                             'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
-                            'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),'userId'=>$userData->id,
+                            'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'userId' => $userData->id,
                             'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
                             'messages' => $request->input('messageAuthorization'),
                         ];
                         PatientFamilyMember::where('id', $usersId->id)->update($familyMember);
-                    } else {                    
-                         $family = $request->input('familyMemberId');
+                    } else {
+                        $family = $request->input('familyMemberId');
                         $usersId = PatientFamilyMember::where('udid', $family)->first();
                         $familyId = $usersId->userId;
                         $familyMemberUser = [
@@ -192,7 +192,7 @@ class PatientService
                             'updatedBy' => Auth::id()
                         ];
                         $fam = User::where('id', $familyId)->update($familyMemberUser);
-                       
+
                         //Updated Family in patientFamilyMember Table
                         $familyMember = [
                             'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
@@ -208,7 +208,7 @@ class PatientService
                         $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
                         if ($userData) {
                             $userEmail = $userData->id;
-                            $patient=Helper::entity('patient',$id);
+                            $patient = Helper::entity('patient', $id);
                             $familyMember = [
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
@@ -225,7 +225,7 @@ class PatientService
                             ];
                             $fam = User::create($familyMemberUser);
                             //Added Family in patientFamilyMember Table
-                            $patient=Helper::entity('patient',$id);
+                            $patient = Helper::entity('patient', $id);
                             $familyMember = [
                                 'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                                 'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
@@ -250,7 +250,7 @@ class PatientService
                     PatientEmergencyContact::where('udid', $request->emergencyId)->update($emergencyContact);
                 } else {
                     if (!empty($request->input('emergencyEmail'))) {
-                        $patient=Helper::entity('patient',$id);
+                        $patient = Helper::entity('patient', $id);
 
                         $emergencyContact = [
                             'fullName' => $request->input('emergencyFullName'), 'phoneNumber' => $request->input('emergencyPhoneNumber'), 'contactTypeId' => json_encode($request->input('emergencyContactType')),
@@ -815,18 +815,18 @@ class PatientService
         DB::beginTransaction();
         try {
             if (!$inventoryId) {
-               $patientData = Patient::where('udid', $id)->first();
-                $deviceType = Inventory::where('id',$request->input('inventory'))->with('model')->first();
-                $deviceAssigned = PatientInventory::where('patientId', $patientData->id)->join('inventories','inventories.id','=','patientInventories.inventoryId')->join('deviceModels','deviceModels.id', '=',  'inventories.deviceModelId')->where('deviceModels.deviceTypeId',$deviceType->model['deviceTypeId'])->first();
+                $patientData = Patient::where('udid', $id)->first();
+                $deviceType = Inventory::where('id', $request->input('inventory'))->with('model')->first();
+                $deviceAssigned = PatientInventory::where('patientId', $patientData->id)->join('inventories', 'inventories.id', '=', 'patientInventories.inventoryId')->join('deviceModels', 'deviceModels.id', '=',  'inventories.deviceModelId')->where('deviceModels.deviceTypeId', $deviceType->model['deviceTypeId'])->first();
                 if (!$deviceAssigned) {
-                    
+
                     $input = [
                         'inventoryId' => $request->input('inventory'), 'patientId' => $patientData->id, 'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
                     ];
                     $patient = PatientInventory::create($input);
                     $inventory = Inventory::where('id', $patient->inventoryId)->first();
-                    
-                    Inventory::where('id', $patient->inventoryId)->update(array('isAvailable'=>0));
+
+                    Inventory::where('id', $patient->inventoryId)->update(array('isAvailable' => 0));
 
                     $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
                     $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
@@ -841,7 +841,7 @@ class PatientService
                     $message = ['message' => trans('messages.createdSuccesfully')];
                 } else {
 
-                    return response()->json(['message' => 'Device Already Assigned to Patient'],409);
+                    return response()->json(['message' => 'Device Already Assigned to Patient'], 409);
                 }
             } else {
                 $input = [
@@ -907,7 +907,7 @@ class PatientService
             $inventory = Inventory::where('id', $patient->inventoryId)->first();
 
 
-            Inventory::where('id', $patient->inventoryId)->update(array('isAvailable'=>1));
+            Inventory::where('id', $patient->inventoryId)->update(array('isAvailable' => 1));
 
             $deviceModel = DeviceModel::where('id', $inventory->deviceModelId)->first();
             $device = GlobalCode::where('id', $deviceModel->deviceTypeId)->first();
@@ -980,14 +980,14 @@ class PatientService
                     }
 
                     $vitalState = DB::select(
-                                                'CALL patientVitalGoal("' . $vitalRecord['patientId'] . '","' . $vitalRecord['vitalFieldId'] . '")',
-                                    );
+                        'CALL patientVitalGoal("' . $vitalRecord['patientId'] . '","' . $vitalRecord['vitalFieldId'] . '")',
+                    );
 
                     $vitalRecord['flagId'] = '2';
-                    if($vitalRecord['value'] <= $vitalState[0]->low){
+                    if ($vitalRecord['value'] <= $vitalState[0]->low) {
                         $vitalRecord['flagId'] = '1';
                     }
-                    if($vitalRecord['value'] >= $vitalState[0]->high){
+                    if ($vitalRecord['value'] >= $vitalState[0]->high) {
                         $vitalRecord['flagId'] = '3';
                     }
                     $vitalRecord['createdBy'] = Auth::id();
@@ -1031,14 +1031,14 @@ class PatientService
                         'deviceInfo' => json_encode($vital['deviceInfo'])
                     ];
 
-                     $vitalState = DB::select(
-                                                'CALL patientVitalGoal("' . $data['patientId'] . '","' . $data['vitalFieldId'] . '")',
-                                    );
+                    $vitalState = DB::select(
+                        'CALL patientVitalGoal("' . $data['patientId'] . '","' . $data['vitalFieldId'] . '")',
+                    );
                     $data['flagId'] = '2';
-                    if($data['value'] <= $vitalState[0]->low){
+                    if ($data['value'] <= $vitalState[0]->low) {
                         $data['flagId'] = '1';
                     }
-                    if($data['value'] >= $vitalState[0]->high){
+                    if ($data['value'] >= $vitalState[0]->high) {
                         $data['flagId'] = '3';
                     }
                     $vitalData = PatientVital::create($data);
@@ -1714,8 +1714,8 @@ class PatientService
         try {
             $patientId = Patient::where('udid', $id)->first();
             $udid = Str::uuid()->toString();
-            $flag=Flag::where('udid',$request->input('flag'))->first();
-            $input = ['udid' => $udid, 'patientId' => $patientId->id, 'flagId' => $flag->id,'icon'=>''];
+            $flag = Flag::where('udid', $request->input('flag'))->first();
+            $input = ['udid' => $udid, 'patientId' => $patientId->id, 'flagId' => $flag->id, 'icon' => ''];
             $flags = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
             PatientFlag::where('patientId', $patientId)->update($flags);
             PatientFlag::where('patientId', $patientId)->delete();
@@ -1768,66 +1768,61 @@ class PatientService
         }
     }
 
-    public function listPatientCriticalNote($request,$id)
+    public function listPatientCriticalNote($request, $id)
     {
         try {
 
             $patient = Helper::entity('patient', $id);
-            if(!is_null($request->isRead)){
-              
-                    $data = PatientCriticalNote::where([['patientId',$patient],['isRead',$request->isRead]])->orderBy('id', 'DESC')->get();
-                    return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
-               
-            }
-            else{
-                $data = PatientCriticalNote::where('patientId',$patient)->orderBy('id', 'DESC')->get();
+            if (!is_null($request->isRead)) {
+
+                $data = PatientCriticalNote::where([['patientId', $patient], ['isRead', $request->isRead]])->orderBy('id', 'DESC')->get();
+                return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
+            } else {
+                $data = PatientCriticalNote::where('patientId', $patient)->orderBy('id', 'DESC')->get();
                 return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
             }
-            
-            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
-        }  
+        }
     }
 
-    public function createPatientCriticalNote($request,$id)
+    public function createPatientCriticalNote($request, $id)
     {
         try {
             $patient = Helper::entity('patient', $id);
-            $patientCriticalNote =[
+            $patientCriticalNote = [
                 'udid' => Str::uuid()->toString(),
                 'criticalNote' => $request->input('criticalNote'),
                 'patientId' => $patient,
             ];
             $newData = PatientCriticalNote::create($patientCriticalNote);
             return response()->json(['message' => trans('messages.createdSuccesfully')]);
-
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
 
-    public function updatePatientCriticalNote($request,$id,$noteId)
+    public function updatePatientCriticalNote($request, $id, $noteId)
     {
         try {
             $patient = Helper::entity('patient', $id);
-            $note = PatientCriticalNote::where('udid',$noteId)->first();
-            if(!empty($note)){
+            $note = PatientCriticalNote::where('udid', $noteId)->first();
+            if (!empty($note)) {
                 $noteId = $note->id;
                 $note = array();
-                    if(!empty($request->input('criticalNote'))){
-                        $note['criticalNote'] =  $request->input('criticalNote');
-                    }
-                    if (empty($request->input('isRead'))) {
-                        $note['isRead'] =  0;
-                    }else{
-                        $note['isRead']=1;
-                    }
-                    $note['updatedBy'] =  Auth::id();
-                    
-                    if(!empty($note)){
-                        PatientCriticalNote::where([['patientId', $patient],['id',$noteId]])->update($note);
-                    }
+                if (!empty($request->input('criticalNote'))) {
+                    $note['criticalNote'] =  $request->input('criticalNote');
+                }
+                if (empty($request->input('isRead'))) {
+                    $note['isRead'] =  0;
+                } else {
+                    $note['isRead'] = 1;
+                }
+                $note['updatedBy'] =  Auth::id();
+
+                if (!empty($note)) {
+                    PatientCriticalNote::where([['patientId', $patient], ['id', $noteId]])->update($note);
+                }
             }
             return response()->json(['message' => trans('messages.updatedSuccesfully')],  200);
         } catch (Exception $e) {
@@ -1835,20 +1830,53 @@ class PatientService
         }
     }
 
-    public function deletePatientCriticalNote($request,$id,$noteId)
+    public function deletePatientCriticalNote($request, $id, $noteId)
     {
         try {
             $patient = Helper::entity('patient', $id);
-            $note = PatientCriticalNote::where('udid',$noteId)->first();
-            if(!empty($note)){
+            $note = PatientCriticalNote::where('udid', $noteId)->first();
+            if (!empty($note)) {
 
                 $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
-                PatientCriticalNote::where([['patientId', $patient],['id',$note->id]])->update($input);
-                PatientCriticalNote::where([['patientId', $patient],['id',$note->id]])->delete();
+                PatientCriticalNote::where([['patientId', $patient], ['id', $note->id]])->update($input);
+                PatientCriticalNote::where([['patientId', $patient], ['id', $note->id]])->delete();
             }
             return response()->json(['message' => trans('messages.deletedSuccesfully')],  200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function familyPatient($request, $id)
+    {
+        try {
+            $patient=Helper::entity('patient',$id);
+           $data= PatientFamilyMember::where('patientId',$patient)->orderBy('isPrimary','DESC')->get();
+           return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function phycisianPatient($request, $id)
+    {
+        try {
+            $patient=Helper::entity('patient',$id);
+           $data= PatientFamilyMember::where('patientId',$patient)->orderBy('isPrimary','DESC')->get();
+           return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function emergencyPatient($request, $id)
+    {
+        try {
+            $patient=Helper::entity('patient',$id);
+           $data= PatientEmergencyContact::where('patientId',$patient)->orderBy('isPrimary','DESC')->get();
+           return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
         }
     }
 }
