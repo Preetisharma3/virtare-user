@@ -194,7 +194,7 @@ class StaffService
             $udid = Str::uuid()->toString();
             $startTime = Helper::time($request->input('startTime'));
             $endTime = Helper::time($request->input('endTime'));
-            $data = StaffAvailability::where([['staffId', $staffId],['startTime',$startTime],['endTime',$endTime]])->get();
+            $data = StaffAvailability::where([['staffId', $staffId],['startTime',$startTime],['endTime',$endTime]])->first();
            if(is_null($data)){
                 DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');
                 $staffAvailability = StaffAvailability::where('udid', $udid)->first();
