@@ -20,7 +20,7 @@ class GeneralParameterGroupTransformer extends TransformerAbstract
             'generalparameter'=> ["data" => \DB::select(
                 "CALL getGenralParameter('" . $data->id . "')"
             )],
-            )
+            
         ];
     }
 }
