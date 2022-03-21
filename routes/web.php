@@ -141,6 +141,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     //Push Notification
 
     $router->get('notification', 'Api\v1\PushNotificationController@notificationShow');
+    $router->get('unreadNotification', 'Api\v1\PushNotificationController@showUnreadNotification');
 
     // Conversation Routes
     $router->get('conversation/list[/{id}]', 'Api\v1\ConversationController@allConversation');
