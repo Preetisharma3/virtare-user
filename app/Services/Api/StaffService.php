@@ -206,7 +206,7 @@ class StaffService
                     'startTime' => ['Start time is unique'],
                     'endDate' => ['End time time is unique'],
                 ];
-             return response()->json($rules);
+             return response()->json($rules,422);
            }
             return $endData;
         } catch (Exception $e) {
