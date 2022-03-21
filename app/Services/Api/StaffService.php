@@ -69,7 +69,7 @@ class StaffService
     {
         if (!$id) {
             if ($request->all) {
-                    $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
+                $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
                 return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
             } else {
                 if (auth()->user()->roleId == 3) {
@@ -115,19 +115,19 @@ class StaffService
     public function addStaffContact($request, $id)
     {
         try {
-                $staff = Staff::where('udid', $id)->first();
-                $udid = Str::uuid()->toString();
-                $firstName = $request->input('firstName');
-                $lastName = $request->input('lastName');
-                $email = $request->input('email');
-                $phoneNumber = $request->input('phoneNumber');
-                $staffId = $staff->id;
-                DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
-                $staffContactData = StaffContact::where('udid', $udid)->first();
-                $message = ["message" => trans('messages.createdSuccesfully')];
-                $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
-                $endData = array_merge($message, $resp);
-                return $endData;
+            $staff = Staff::where('udid', $id)->first();
+            $udid = Str::uuid()->toString();
+            $firstName = $request->input('firstName');
+            $lastName = $request->input('lastName');
+            $email = $request->input('email');
+            $phoneNumber = $request->input('phoneNumber');
+            $staffId = $staff->id;
+            DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
+            $staffContactData = StaffContact::where('udid', $udid)->first();
+            $message = ["message" => trans('messages.createdSuccesfully')];
+            $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
+            $endData = array_merge($message, $resp);
+            return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

@@ -20,9 +20,9 @@ class UserController extends Controller
     return (new UserService)->profile($request);
   }
 
-  public function listUser(Request $request,$id)
+  public function listUser(Request $request, $id)
   {
-    return (new UserService)->userList($request,$id);
+    return (new UserService)->userList($request, $id);
   }
 
   public function changePassword(CurrentPasswordRequest $request)
@@ -34,7 +34,7 @@ class UserController extends Controller
   {
     return (new UserService)->loginFirst($request);
   }
-  
+
   public function forgotPassword(Request $request)
   {
     return (new UserService)->forgotPassword($request);

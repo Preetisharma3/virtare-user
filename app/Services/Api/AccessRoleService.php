@@ -6,9 +6,7 @@ use Exception;
 use App\Helper;
 use Illuminate\Support\Facades\DB;
 use App\Transformers\AccessRoles\AccessRoleTransformer;
-use App\Transformers\AccessRoles\AssignedRoleActionTransformer;
 use App\Transformers\AccessRoles\AssignedRolesTransformer;
-use App\Transformers\AccessRoles\AssignedRoleWidgetTransformer;
 
 class AccessRoleService
 {
@@ -31,19 +29,19 @@ class AccessRoleService
             if ($id) {
                 $staff = Helper::entity('staff', $id);
             } else {
-                
-                if(isset(auth()->user()->staff->id)){
+
+                if (isset(auth()->user()->staff->id)) {
                     $staff = auth()->user()->staff->id;
-                }else{
+                } else {
                     $staff = "";
                 }
             }
 
-            if(!empty($staff)){
+            if (!empty($staff)) {
                 $data = DB::select(
                     'CALL assignedRolesList(' . $staff . ')',
                 );
-            }else{
+            } else {
                 $data = [];
             }
             return fractal()->collection($data)->transformWith(new AssignedRolesTransformer())->toArray();
@@ -59,28 +57,28 @@ class AccessRoleService
             if ($id) {
                 $staff = Helper::entity('staff', $id);
             } else {
-                
-                if(isset(auth()->user()->staff->id)){
+
+                if (isset(auth()->user()->staff->id)) {
                     $staff = auth()->user()->staff->id;
-                }else{
+                } else {
                     $staff = "";
                 }
             }
-            if(!empty($staff)){
+            if (!empty($staff)) {
                 $actions = DB::select(
-                    'CALL assignedRolesActionsList('.$staff.')',
+                    'CALL assignedRolesActionsList(' . $staff . ')',
                 );
                 $widgets = DB::select(
-                    'CALL assignedRolesWidgetsList('.$staff.')',
+                    'CALL assignedRolesWidgetsList(' . $staff . ')',
                 );
-            }else{
+            } else {
                 $actions = [];
                 $widgets = [];
             }
-            
+
             $daat = [
-                'actionId'=>$actions,
-                'widgetId'=>$widgets,
+                'actionId' => $actions,
+                'widgetId' => $widgets,
             ];
             return $daat;
 
@@ -98,7 +96,7 @@ class AccessRoleService
             //  $finalAction['action']=fractal()->collection($data)->transformWith(new AssignedRoleActionTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
             //  $finalWidget['widget']=fractal()->collection($data)->transformWith(new AssignedRoleWidgetTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
             //    return array_merge($finalAction,$finalWidget);
-            } catch (Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }

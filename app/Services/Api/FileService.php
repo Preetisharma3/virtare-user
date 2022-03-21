@@ -16,7 +16,7 @@ class FileService
         try {
             $file = Storage::disk('local')->put('public' . "/" . date("Y") . "/" . date("m"), $request->file);
             $data = [
-                "URL" => str_replace("public", "", URL::to('/'))."/storage/app/" . $file,
+                "URL" => str_replace("public", "", URL::to('/')) . "/storage/app/" . $file,
                 "path" => "storage/app/" . $file,
             ];
             DB::commit();

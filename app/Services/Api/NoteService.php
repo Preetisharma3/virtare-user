@@ -29,7 +29,7 @@ class NoteService
         }
     }
 
-    public function noteList($request, $entity, $id,$noteId)
+    public function noteList($request, $entity, $id, $noteId)
     {
         try {
 
@@ -37,12 +37,9 @@ class NoteService
                 $referenceId = Helper::entity($entity, $id);
                 $note = DB::select('CALL NotesListByPatientId(' . $referenceId . ')',);
                 // $note = Note::where([['referenceId', $referenceId], ['entityType', $entity]])->with('typeName', 'category')->latest('createdAt')->get();
-                if(!empty($note))
-                {
+                if (!empty($note)) {
                     return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
-                }
-                else
-                {
+                } else {
                     $note = [];
                     return $note;
                 }
@@ -50,12 +47,9 @@ class NoteService
                 // $note = Note::where('entityType', $entity)->with('typeName', 'category')->get();
                 $referenceId = Helper::entity($entity, $id);
                 $note = DB::select('CALL NotesListByPatientId(' . $referenceId . ')',);
-                if(!empty($note))
-                {
+                if (!empty($note)) {
                     return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
-                }
-                else
-                {
+                } else {
                     $note = [];
                     return $note;
                 }
@@ -68,7 +62,7 @@ class NoteService
     public function patientNoteList($request)
     {
         try {
-            $note=Note::where([['referenceId',auth()->user()->patient->id],['entityType','patient']])->get();
+            $note = Note::where([['referenceId', auth()->user()->patient->id], ['entityType', 'patient']])->get();
             return fractal()->collection($note)->transformWith(new NoteTransformer(false))->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);

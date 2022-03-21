@@ -10,41 +10,38 @@ use App\Services\Api\ExportReportRequestService;
 
 class TemplateController extends Controller
 {
-   
+
     public function listTemplate(Request $request)
     {
-        return (new TemplateService())->listTemplate($request);  
-    } 
+        return (new TemplateService())->listTemplate($request);
+    }
 
     public function createTemplate(Request $request)
     {
-        return (new TemplateService())->createTemplate( $request);
+        return (new TemplateService())->createTemplate($request);
     }
 
-    public function updateTemplate(Request $request,$id)
+    public function updateTemplate(Request $request, $id)
     {
-        return (new TemplateService())->updateTemplate( $request,$id);
+        return (new TemplateService())->updateTemplate($request, $id);
     }
 
-    public function deleteTemplate(Request $request,$id)
+    public function deleteTemplate(Request $request, $id)
     {
-        return (new TemplateService())->deleteTemplate( $request,$id);
+        return (new TemplateService())->deleteTemplate($request, $id);
     }
 
-    public function templateReport(Request $request,$id)
+    public function templateReport(Request $request, $id)
     {
-        if($id)
-        {
+        if ($id) {
             $reportType = "template_report";
-            $checkReport = ExportReportRequestService::checkReportRequest($id,$reportType);
-            if($checkReport){
+            $checkReport = ExportReportRequestService::checkReportRequest($id, $reportType);
+            if ($checkReport) {
                 ExcelGeneratorService::templateExcelExport($request);
-            }else{
+            } else {
                 return response()->json(['message' => "User not Access to download Report."], 500);
             }
-        }
-        else
-        {
+        } else {
             return response()->json(['message' => "invalid URL."], 500);
         }
     }

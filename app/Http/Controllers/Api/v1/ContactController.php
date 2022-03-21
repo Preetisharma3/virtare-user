@@ -15,10 +15,12 @@ class ContactController extends Controller
     {
         return (new ContactService)->requestCall($request);
     }
+
     public function contactMessage(ContactTextRequest $request)
     {
         return (new ContactService)->contactMessage($request);
     }
+    
     public function contactEmail(ContactEmailRequest $request)
     {
         return (new ContactService)->contactEmail($request);

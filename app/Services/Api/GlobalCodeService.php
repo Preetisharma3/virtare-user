@@ -16,7 +16,7 @@ class GlobalCodeService
      {
           try {
                if (!$id) {
-                    $global = GlobalCodeCategory::with('globalCode')->orderBy('name','ASC')->get();
+                    $global = GlobalCodeCategory::with('globalCode')->orderBy('name', 'ASC')->get();
                     return fractal()->collection($global)->transformWith(new GlobalCodeCategoryTransformer())->toArray();
                } else {
                     $global = GlobalCodeCategory::where('id', $id)->with('globalCode')->first();
@@ -31,10 +31,10 @@ class GlobalCodeService
      {
           try {
                if (!$id) {
-                    if($request->active){
-                         $global = GlobalCode::orderBy('name','ASC')->get();
-                    }else{
-                         $global = GlobalCode::where('isActive',1)->orderBy('name','ASC')->get();
+                    if ($request->active) {
+                         $global = GlobalCode::orderBy('name', 'ASC')->get();
+                    } else {
+                         $global = GlobalCode::where('isActive', 1)->orderBy('name', 'ASC')->get();
                     }
                     return fractal()->collection($global)->transformWith(new GlobalCodeTransformer())->toArray();
                } else {
@@ -49,10 +49,10 @@ class GlobalCodeService
      public function globalCodeCreate($request)
      {
           try {
-              $input=[
+               $input = [
                     'globalCodeCategoryId' => $request->globalCodeCategory, 'createdBy' => 1,
-                    'udid' => Str::uuid()->toString(), 'isActive' => $request->status,'name'=>$request->input('name'),
-                    'description'=>$request->input('description')
+                    'udid' => Str::uuid()->toString(), 'isActive' => $request->status, 'name' => $request->input('name'),
+                    'description' => $request->input('description')
                ];
                $global = GlobalCode::create($input);
                $data = GlobalCode::whereHas('globalCodeCategory', function ($q) use ($global) {
@@ -109,14 +109,11 @@ class GlobalCodeService
      }
 
      public function getGlobalStartEndDate($request, $globalCodeId)
-     {    
-          if($globalCodeId)
-          {
+     {
+          if ($globalCodeId) {
                $data = DB::select('CALL getGlobalStartEndDate(' . $globalCodeId . ')');
                return fractal()->item($data)->transformWith(new GlobalCodeTransformer())->toArray();
-          }
-          else
-          {
+          } else {
                return response()->json(['message' => "globalCodeId required"],  500);
           }
      }

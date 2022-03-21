@@ -11,13 +11,11 @@ class FileController extends Controller
 {
     public function createFile(FileRequest $request)
     {
-        return (new FileService)->fileCreate( $request);
+        return (new FileService)->fileCreate($request);
     }
 
     public function deleteFile(Request $request)
     {
         return (new FileService)->fileDelete($request);
     }
-
-
 }

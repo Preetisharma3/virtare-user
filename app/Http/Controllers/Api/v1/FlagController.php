@@ -10,9 +10,6 @@ class FlagController extends Controller
 {
     public function listFlag(Request $request)
     {
-        return (new FlagService)->flagList( $request);
+        return (new FlagService)->flagList($request);
     }
-
-
-
 }

@@ -12,5 +12,4 @@ class ExportReportRequestController extends Controller
     {
         return (new ExportReportRequestService)->insertExportRequest($request);
     }
-
 }
