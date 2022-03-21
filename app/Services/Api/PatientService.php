@@ -83,7 +83,7 @@ class PatientService
 
                 $medicalRecordNumber ="VH".date('y').str_pad($newData->id,8,"0", STR_PAD_LEFT);
 
-                Patient::where("id",$newData->id)->update(['medicalRecordNumber',$medicalRecordNumber]);
+                Patient::where("id",$newData->id)->update(['medicalRecordNumber'=>$medicalRecordNumber]);
                 /*$flag = ['udid' => Str::uuid()->toString(), 'createdBy' => Auth::id(), 'patientId' => $newData->id, 'flagId' => 4];
                 PatientFlag::create($flag);*/
                 $timeLine = [
