@@ -14,6 +14,7 @@ use App\Http\Requests\Patient\PatientProgramRequest;
 use App\Http\Requests\Patient\PatientReferalRequest;
 use App\Http\Requests\Patient\PatientConditionRequest;
 use App\Http\Requests\Patient\PatientPhysicianRequest;
+use App\Http\Requests\Patient\PatientFamilymemberRequest;
 use App\Http\Requests\Patient\PatientMedicalHistoryRequest;
 use App\Http\Requests\Patient\PatientMedicalRoutineRequest;
 
@@ -240,7 +241,7 @@ class PatientController extends Controller
     return (new PatientService)->deletePatientCriticalNote($request, $id,$noteId);
   }
 
-  public function addPatientFamily(Request $request,$id,$familyId=null)
+  public function addPatientFamily(PatientFamilymemberRequest $request,$id,$familyId=null)
   {
     return (new PatientService)->patientFamilyAdd($request, $id,$familyId);
   }
@@ -248,6 +249,11 @@ class PatientController extends Controller
   public function listPatientFamily(Request $request,$id,$familyId=null)
   {
     return (new PatientService)->patientFamilyList($request, $id,$familyId);
+  }
+
+  public function deletePatientFamily(Request $request,$id,$familyId=null)
+  {
+    return (new PatientService)->patientFamilyDelete($request, $id,$familyId);
   }
 
   public function patientPhycisian(Request $request,$id)

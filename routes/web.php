@@ -183,7 +183,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->post('patient/{id}/familyAdd', 'Api\v1\PatientController@addPatientFamily');
     $router->get('patient/{id}/family[/{familyId}]', 'Api\v1\PatientController@listPatientFamily');
     $router->put('patient/{id}/familyUpdate/{familyId}', 'Api\v1\PatientController@addPatientFamily');
-    $router->delete('patient/{id}/family', 'Api\v1\PatientController@deletePatientFamily');
+    $router->delete('patient/{id}/family/{familyId}', 'Api\v1\PatientController@deletePatientFamily');
 
     // patient all emergency contact
     $router->get('patient/{id}/emergency', 'Api\v1\PatientController@patientEmergency');
