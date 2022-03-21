@@ -18,7 +18,7 @@ class GetGenralParameterList extends Migration
         $procedure = "
         CREATE PROCEDURE `getGenralParameter`(In Idx INT)
         BEGIN
-        SELECT generalParameters.udid as id,vitalTypeFields.vitalFieldId as vitalFieldId, generalParameterGroups.name as generalParameterGroup, vitalFields.name as vitalFieldName,generalParameters.highLimit as highLimit,generalParameters.lowLimit as lowLimit FROM `vitalTypeFields` inner join vitalFields on vitalFields.id = vitalTypeFields.vitalFieldId inner join generalParameterGroups on generalParameterGroups.deviceTypeId = vitalTypeFields.vitalTypeId LEFT join generalParameters on generalParameters.vitalFieldId = vitalFields.id where generalParameterGroups.id = Idx;
+        SELECT * FROM `generalParameterGroups` inner join vitalTypeFields on generalParameterGroups.deviceTypeId = vitalTypeFields.vitalTypeId inner join vitalFields on vitalFields.id = vitalTypeFields.vitalFieldId LEFT join generalParameters on generalParameters.generalParameterGroupId = generalParameterGroups.id and generalParameters.vitalFieldId = vitalFields.id   where generalParameterGroups.id = Idx and generalParameters.deletedAt IS NULL ;
         END;";
         DB::unprepared($procedure);
     }
