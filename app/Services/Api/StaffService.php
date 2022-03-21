@@ -190,17 +190,24 @@ class StaffService
     public function addStaffAvailability($request, $id)
     {
         try {
-            $udid = Str::uuid()->toString();
-            $timeStart = Helper::time($request->input('startTime'));
-            $timeEnd = Helper::time($request->input('endTime'));
-            $startTime = $timeStart;
-            $endTime = $timeEnd;
             $staffId = Helper::entity('staff', $id);
-            DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');
-            $staffAvailability = StaffAvailability::where('udid', $udid)->first();
-            $message = ["message" => trans('messages.createdSuccesfully')];
-            $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
-            $endData = array_merge($message, $resp);
+            $udid = Str::uuid()->toString();
+            $startTime = Helper::time($request->input('startTime'));
+            $endTime = Helper::time($request->input('endTime'));
+            $data = StaffAvailability::where([['staffId', $staffId],['startTime',$startTime],['endTime',$endTime]])->get();
+           if(is_null($data)){
+                DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');
+                $staffAvailability = StaffAvailability::where('udid', $udid)->first();
+                $message = ["message" => trans('messages.createdSuccesfully')];
+                $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
+                $endData = array_merge($message, $resp);
+           }else{
+                $rules = [
+                    'startTime' => ['Start time is unique'],
+                    'endDate' => ['End time time is unique'],
+                ];
+             return response()->json($rules);
+           }
             return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
