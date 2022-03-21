@@ -115,13 +115,12 @@ class StaffService
     public function addStaffContact($request, $id)
     {
         try {
-            if (!empty($request->id)) {
                 $staff = Staff::where('udid', $id)->first();
                 $udid = Str::uuid()->toString();
-                $firstName = $request->firstName;
-                $lastName = $request->lastName;
-                $email = $request->email;
-                $phoneNumber = $request->phoneNumber;
+                $firstName = $request->input('firstName');
+                $lastName = $request->input('lastName');
+                $email = $request->input('email');
+                $phoneNumber = $request->input('phoneNumber');
                 $staffId = $staff->id;
                 DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
                 $staffContactData = StaffContact::where('udid', $udid)->first();
@@ -129,9 +128,6 @@ class StaffService
                 $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
                 $endData = array_merge($message, $resp);
                 return $endData;
-            } else {
-                return response()->json(['message' => trans('messages.error')]);
-            }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
