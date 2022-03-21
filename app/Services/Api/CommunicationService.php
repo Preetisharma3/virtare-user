@@ -140,10 +140,10 @@ class CommunicationService
             $tommorrowTo = strtotime("+ 24 hours",$todayTo);
             $weekFrom = strtotime("- 7 days",$todayFrom);
 
-            $today = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$todayFrom.' '.$todayTo)->count();
-            $yesterday = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$yesterdayFrom.' '.$yesterdayTo)->count();
-            $tomorrow = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$tommorrowFrom.' '.$tommorrowTo)->count();
-            $week = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$weekFrom.' '.$todayTo)->count();
+            $today = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$todayFrom.' AND '.$todayTo)->count();
+            $yesterday = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$yesterdayFrom.' AND '.$yesterdayTo)->count();
+            $tomorrow = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$tommorrowFrom.' AND '.$tommorrowTo)->count();
+            $week = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$weekFrom.' AND '.$todayTo)->count();
             $Today = ['text' => 'Today', 'count' => $today, 'backgroundColor' => '#91BDFF', 'textColor' => '#FFFFFF'];
             $Yesterday = ['text' => 'Yesterday', 'count' => $yesterday, 'backgroundColor' => '#8E60FF', 'textColor' => '#FFFFFF'];
             $Tomorrow = ['text' => 'Tomorrow', 'count' => $tomorrow, 'backgroundColor' => '#90EEF5', 'textColor' => '#FFFFFF'];
