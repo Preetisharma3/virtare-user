@@ -1925,8 +1925,21 @@ class PatientService
     {
         try {
             $patient = Helper::entity('patient', $id);
-            $data = PatientFamilyMember::where('patientId', $patient)->orderBy('isPrimary', 'DESC')->get();
+            $data = PatientFamilyMember::where('patientId', $patient)->orderBy('createdAt', 'DESC')->get();
             return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    // delete patient family member
+    public function patientFamilyDelete($request, $id, $familyId)
+    {
+        try {
+            $input = ['deletedBy' => Auth::id(), 'isActive' => 0, 'isDelete' => 1];
+             PatientFamilyMember::where('udid', $familyId)->update($input);
+             PatientFamilyMember::where('udid', $familyId)->delete();
+            return response()->json(['message'=>trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
