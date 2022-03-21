@@ -15,6 +15,7 @@ use App\Models\Communication\Communication;
 use App\Models\Communication\CommunicationMessage;
 use App\Models\Communication\CallRecord;
 use App\Models\Communication\CommunicationCallRecord;
+use App\Models\Appointment\Appointment;
 use App\Transformers\Communication\CallRecordTransformer;
 use App\Transformers\Communication\CallStatusTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
@@ -129,10 +130,19 @@ class CommunicationService
     {
         try {
             $date2 = Carbon::parse($request->date)->setTimezone('UTC');
-            $today = CommunicationCallRecord::whereDate('createdAt', $date2)->count();
-            $yesterday = CommunicationCallRecord::whereDate('createdAt',  $date2->subDays(1))->count();
-            $tomorrow = CommunicationCallRecord::whereDate('createdAt', $date2->addDays(1))->count();
-            $week = CommunicationCallRecord::whereDate('createdAt', $date2->subDays(7))->count();
+
+            $todayFrom = strtotime($request->date." 00:00:00");
+            $todayTo = strtotime($request->date." 23:59:59");
+            $yesterdayFrom = strtotime("- 24 hours",$todayFrom);
+            $yesterdayTo = strtotime("- 24 hours",$todayTo);
+            $tommorrowFrom = strtotime("+ 24 hours",$todayFrom);
+            $tommorrowTo = strtotime("+ 24 hours",$todayTo);
+            $weekFrom = strtotime("- 7 days",$todayFrom);
+
+            $today = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$todayFrom.' AND '.$todayTo)->count();
+            $yesterday = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$yesterdayFrom.' AND '.$yesterdayTo)->count();
+            $tomorrow = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$tommorrowFrom.' AND '.$tommorrowTo)->count();
+            $week = Appointment::whereRaw('UNIX_TIMESTAMP(startDateTime) between '.$weekFrom.' AND '.$todayTo)->count();
             $Today = ['text' => 'Today', 'count' => $today, 'backgroundColor' => '#91BDFF', 'textColor' => '#FFFFFF'];
             $Yesterday = ['text' => 'Yesterday', 'count' => $yesterday, 'backgroundColor' => '#8E60FF', 'textColor' => '#FFFFFF'];
             $Tomorrow = ['text' => 'Tomorrow', 'count' => $tomorrow, 'backgroundColor' => '#90EEF5', 'textColor' => '#FFFFFF'];

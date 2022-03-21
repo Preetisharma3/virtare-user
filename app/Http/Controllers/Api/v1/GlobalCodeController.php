@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Services\Api\GlobalCodeService;
 use App\Http\Requests\GlobalCode\GlobalCodeRequest;
+use App\Http\Requests\GlobalCode\GlobalCodeUpdateRequest;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class GlobalCodeController extends BaseController
@@ -24,7 +25,7 @@ class GlobalCodeController extends BaseController
         return (new GlobalCodeService)->globalCodeCreate($request);
     }
 
-    public function updateGlobalCode(Request $request, $id)
+    public function updateGlobalCode(GlobalCodeUpdateRequest $request, $id)
     {
         return (new GlobalCodeService)->globalCodeUpdate($request, $id);
     }
