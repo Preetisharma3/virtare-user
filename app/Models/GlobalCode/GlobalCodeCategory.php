@@ -24,7 +24,7 @@ class GlobalCodeCategory extends Model
     {
         if(request()->active){
 
-            return $this->hasMany(GlobalCode::class,'globalCodeCategoryId');
+            return $this->hasMany(GlobalCode::class,'globalCodeCategoryId')->where("predefined",1);
         }else{
             return $this->hasMany(GlobalCode::class,'globalCodeCategoryId')->where('isActive','1');
         }
