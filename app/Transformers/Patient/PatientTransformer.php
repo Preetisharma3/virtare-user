@@ -23,11 +23,11 @@ class PatientTransformer extends TransformerAbstract
 
     public function transform($data): array
     {
-        if ($data->family) {
-            if (!$data->family->relationId || !$data->genderId) {
+        if ($data->familyRealtion) {
+            if (!$data->familyRealtion->relationId || !$data->genderId) {
                 $relation = '';
             } else {
-                $relation = Helper::relation($data->family->relationId, $data->genderId);
+                $relation = Helper::relation($data->familyRealtion->relationId, $data->genderId);
             }
         } else {
             $relation = '';
@@ -77,7 +77,7 @@ class PatientTransformer extends TransformerAbstract
             'medicalRecordNumber' => (!empty($data->medicalRecordNumber)) ? $data->medicalRecordNumber : '',
             'profile_photo' => (!empty($data->user->profilePhoto)) && (!is_null($data->user->profilePhoto)) ? str_replace("public", "", URL::to('/')) . '/' . $data->user->profilePhoto : "",
             'profilePhoto' => (!empty($data->user->profilePhoto)) && (!is_null($data->user->profilePhoto)) ? str_replace("public", "", URL::to('/')) . '/' . $data->user->profilePhoto : "",
-            'patientFamilyMember' => $this->showData && $data->family ? fractal()->item($data->family)->transformWith(new PatientFamilyMemberTransformer())->toArray() : [],
+            'patientFamilyMember' => $this->showData && $data->family ? fractal()->collection($data->family)->transformWith(new PatientFamilyMemberTransformer())->toArray() : [],
             'emergencyContact' => $this->showData && $data->emergency ? fractal()->item($data->emergency)->transformWith(new PatientFamilyMemberTransformer())->toArray() : [],
             'patientFlags' => $this->showData && $data->flags ? fractal()->collection($data->flags)->transformWith(new PatientFlagTransformer())->toArray() : [],
             'patientVitals' => $this->showData && $data->vitals ? fractal()->collection($data->vitals)->transformWith(new PatientVitalTransformer())->toArray() : [],

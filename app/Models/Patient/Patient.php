@@ -82,9 +82,18 @@ class Patient extends Model
     public function family()
     {
         if (auth()->user()->roleId == 6) {
-            return $this->belongsTo(PatientFamilyMember::class, 'id', 'patientId')->where('userId', auth()->user()->id);
+            return $this->hasMany(PatientFamilyMember::class, 'patientId','id')->where('userId', auth()->user()->id);
         } else {
-            return $this->belongsTo(PatientFamilyMember::class, 'id', 'patientId');
+            return $this->hasMany(PatientFamilyMember::class, 'patientId','id')->orderBy('isPrimary','ASC');
+        }
+    }
+
+    public function familyRealtion()
+    {
+        if (auth()->user()->roleId == 6) {
+            return $this->belongsTo(PatientFamilyMember::class, 'id','patientId')->where('userId', auth()->user()->id);
+        } else {
+            return $this->belongsTo(PatientFamilyMember::class,'id', 'patientId');
         }
     }
 

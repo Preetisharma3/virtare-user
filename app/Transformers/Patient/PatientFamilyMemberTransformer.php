@@ -32,7 +32,7 @@ class PatientFamilyMemberTransformer extends TransformerAbstract
 				'contactTimeId' => (!empty($data->contactTimeId))?$data->contactTimeId:[],
 				'relation' => (!empty($data->relation->name))?$data->relation->name:'',
 				'relationId' => (!empty($data->relationId))?$data->relationId:'',
-				'isPrimary'=>(!empty($data->isPrimary))?$data->isPrimary:'',
+				'isPrimary'=>(!empty($data->isPrimary))?$data->isPrimary:0,
 				'vital'=>(!empty($data->vital))?$data->vital:0,
 				'message'=>(!empty($data->messages))?$data->messages:0,
 				'email'=>(!empty($data->user->email))?$data->user->email:'',
