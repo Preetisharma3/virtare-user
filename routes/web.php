@@ -30,6 +30,11 @@ $router->get('template/report/export/{id}', 'Api\v1\TemplateController@templateR
 $router->get('inventory/report/export/{id}', 'Api\v1\InventoryController@inventoryReport');
 $router->get('error/logs/{id}', 'Api\v1\ErrorLogController@listErrorLog');
 
+// forgot password
+$router->post('forgot/password', 'Api\v1\UserController@forgotPassword');
+$router->get('/generate/newPassword/', 'Api\v1\UserController@newPassword');
+
+
 $router->get('/linkstorage', function () use ($router) {
 
     /*$public = getcwd();
