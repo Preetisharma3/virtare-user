@@ -1847,12 +1847,86 @@ class PatientService
         }
     }
 
-    public function familyPatient($request, $id)
+    // add patient family member
+    public function patientFamilyAdd($request, $id, $familyId)
     {
         try {
-            $patient=Helper::entity('patient',$id);
-           $data= PatientFamilyMember::where('patientId',$patient)->orderBy('isPrimary','DESC')->get();
-           return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
+            if (!$familyId) {
+                $patient = Helper::entity('patient', $id);
+                $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
+                if ($userData) {
+                    $userEmail = $userData->id;
+                    $familyMember = [
+                        'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
+                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                        'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $patient, 'vital' => 1,
+                        'messages' => 1,
+                        'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1
+                    ];
+                    $data = PatientFamilyMember::create($familyMember);
+                } else {
+                    // Added family in user Table
+                    $familyMemberUser = [
+                        'password' => Hash::make('password'), 'udid' => Str::uuid()->toString(), 'email' => $request->input('familyEmail'),
+                        'emailVerify' => 1, 'createdBy' => Auth::id(), 'roleId' => 6
+                    ];
+                    $fam = User::create($familyMemberUser);
+                    //Added Family in patientFamilyMember Table
+                    $familyMember = [
+                        'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
+                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                        'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $patient,
+                        'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => 1,
+                        'messages' => 1, 'isPrimary' => 1
+                    ];
+                    $data = PatientFamilyMember::create($familyMember);
+                }
+
+            return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
+
+            } else {
+                    $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
+                    if ($userData) {
+                        //Updated Family in patientFamilyMember Table
+                        $familyMember = [
+                            'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
+                            'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                            'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'userId' => $userData->id,
+                            'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
+                            'messages' => $request->input('messageAuthorization'),
+                        ];
+                        PatientFamilyMember::where('udid', $familyId)->update($familyMember);
+                }else{
+                    $familyMemberUser = [
+                        'email' => $request->input('familyEmail'),'updatedBy' => Auth::id()
+                    ];
+                    $family=PatientFamilyMember::where('udid',$familyId)->first();
+                    $fam = User::where('id',$family->userId)->update($familyMemberUser);
+                    $familyMember = [
+                        'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
+                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                        'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
+                        'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
+                        'messages' => $request->input('messageAuthorization'),
+                    ];
+                    PatientFamilyMember::where('udid', $familyId)->update($familyMember); 
+                }
+                $data=PatientFamilyMember::where('udid',$familyId)->first();
+            return fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
+            }
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+
+    // list patient family member
+    public function patientFamilyList($request, $id, $familyId)
+    {
+        try {
+            $patient = Helper::entity('patient', $id);
+            $data = PatientFamilyMember::where('patientId', $patient)->orderBy('isPrimary', 'DESC')->get();
+            return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -1861,9 +1935,9 @@ class PatientService
     public function phycisianPatient($request, $id)
     {
         try {
-            $patient=Helper::entity('patient',$id);
-           $data= PatientFamilyMember::where('patientId',$patient)->orderBy('isPrimary','DESC')->get();
-           return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
+            $patient = Helper::entity('patient', $id);
+            $data = PatientFamilyMember::where('patientId', $patient)->orderBy('isPrimary', 'DESC')->get();
+            return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -1872,9 +1946,9 @@ class PatientService
     public function emergencyPatient($request, $id)
     {
         try {
-            $patient=Helper::entity('patient',$id);
-           $data= PatientEmergencyContact::where('patientId',$patient)->orderBy('isPrimary','DESC')->get();
-           return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
+            $patient = Helper::entity('patient', $id);
+            $data = PatientEmergencyContact::where('patientId', $patient)->orderBy('isPrimary', 'DESC')->get();
+            return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }

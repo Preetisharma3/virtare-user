@@ -72,7 +72,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     // Call Router
 
-    $router->patch('communicationCallRecord/{id}','Api\v1\CommunicationController@callUpdate');
+    $router->patch('communicationCallRecord/{id}', 'Api\v1\CommunicationController@callUpdate');
 
     // Staff Routes   
     $router->get('staff/access', 'Api\v1\AccessRoleController@assignedRoles');
@@ -180,10 +180,13 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('patient/{id}/timeLine', 'Api\v1\PatientController@listPatientTimeline');
 
     // patient all family member
-    $router->get('patient/{id}/family','Api\v1\PatientController@patientFamily');
+    $router->post('patient/{id}/familyAdd', 'Api\v1\PatientController@addPatientFamily');
+    $router->get('patient/{id}/family[/{familyId}]', 'Api\v1\PatientController@listPatientFamily');
+    $router->put('patient/{id}/familyUpdate/{familyId}', 'Api\v1\PatientController@addPatientFamily');
+    $router->delete('patient/{id}/family', 'Api\v1\PatientController@deletePatientFamily');
 
     // patient all emergency contact
-    $router->get('patient/{id}/emergency','Api\v1\PatientController@patientEmergency');
+    $router->get('patient/{id}/emergency', 'Api\v1\PatientController@patientEmergency');
 
 
     $router->get('patient/{id}/criticalNote', 'Api\v1\PatientController@listPatientCriticalNote');
@@ -273,7 +276,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->get('task/status/summery', 'Api\v1\TaskController@taskTotalWithTimeDuration');
     $router->get('task/completion/rates', 'Api\v1\TaskController@taskCompletedRates');
 
-    
+
 
 
 
@@ -379,11 +382,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->delete('newPatientFlag', 'Api\v1\NotificationController@newPatientFlag');
 
     // Flag Route
-    $router->get('flag','Api\v1\FlagController@listFlag');
+    $router->get('flag', 'Api\v1\FlagController@listFlag');
 
     // update firstLogin
-    $router->put('user/firstLogin','Api\v1\UserController@firstLogin');
-
+    $router->put('user/firstLogin', 'Api\v1\UserController@firstLogin');
 });
 
 $router->post('screenAction', 'Api\v1\ScreenActionController@creatScreenAction');
