@@ -35,7 +35,7 @@ class TaskService
                 'taskStatusId' => $request->taskStatus,
                 'createdBy' => Auth::user()->id,
             ];
-            
+
             $task = Task::create($input);
             $taskCategoryId = $request->taskCategory;
             foreach ($taskCategoryId as $taskCategory) {
@@ -55,7 +55,7 @@ class TaskService
                 ];
                 TaskAssignedTo::create($assigned);
             }
-            
+
             $taskData =  Task::where('id', $task->id)->with('assignedTo.assigned', 'assignedTo.patient')->first();
             $message = ['message' => trans('messages.createdSuccesfully')];
             $result = fractal()->item($taskData)->transformWith(new TaskTransformer())->toArray();
@@ -78,21 +78,21 @@ class TaskService
     {
         try {
             if ($request->all) {
-                if(auth()->user()->roleId==3){
-                    $data = Task::whereHas('assignedTo',function($query){
-                        $query->where('assignedTo',auth()->user()->staff->id);
-                    })->where('title','LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
-                    }else{
-                    $data = Task::where('title','LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
-                    }
+                if (auth()->user()->roleId == 3) {
+                    $data = Task::whereHas('assignedTo', function ($query) {
+                        $query->where('assignedTo', auth()->user()->staff->id);
+                    })->where('title', 'LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
+                } else {
+                    $data = Task::where('title', 'LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
+                }
                 return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
             } else {
-                if(auth()->user()->roleId==3){
-                $data = Task::whereHas('assignedTo',function($query){
-                    $query->where([['assignedTo',auth()->user()->staff->id],['entityType','staff']]);
-                })->where('title','LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->paginate(env('PER_PAGE', 20));
-                }else{
-                $data = Task::where('title','LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->paginate(env('PER_PAGE', 20));
+                if (auth()->user()->roleId == 3) {
+                    $data = Task::whereHas('assignedTo', function ($query) {
+                        $query->where([['assignedTo', auth()->user()->staff->id], ['entityType', 'staff']]);
+                    })->where('title', 'LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->paginate(env('PER_PAGE', 20));
+                } else {
+                    $data = Task::where('title', 'LIKE', '%' . $request->search . '%')->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->paginate(env('PER_PAGE', 20));
                 }
                 return fractal()->collection($data)->transformWith(new TaskTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             }
@@ -109,19 +109,19 @@ class TaskService
         }
     }
 
-    public function entityTaskList($request,$entity,$id)
+    public function entityTaskList($request, $entity, $id)
     {
         try {
             if ($request->all) {
-                $reference=Helper::entity($entity,$id);
-                $data = Task::whereHas('assignedTo',function($query) use($entity,$reference){
-                    $query->where([['entityType',$entity],['assignedTo',$reference]]);
+                $reference = Helper::entity($entity, $id);
+                $data = Task::whereHas('assignedTo', function ($query) use ($entity, $reference) {
+                    $query->where([['entityType', $entity], ['assignedTo', $reference]]);
                 })->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->get();
                 return fractal()->collection($data)->transformWith(new TaskTransformer())->toArray();
             } else {
-                $reference=Helper::entity($entity,$id);
-                $data = Task::whereHas('assignedTo',function($query) use($entity,$reference){
-                    $query->where([['entityType',$entity],['assignedTo',$reference]]);
+                $reference = Helper::entity($entity, $id);
+                $data = Task::whereHas('assignedTo', function ($query) use ($entity, $reference) {
+                    $query->where([['entityType', $entity], ['assignedTo', $reference]]);
                 })->with('taskCategory', 'taskType', 'priority', 'taskStatus', 'user')->latest()->paginate(env('PER_PAGE', 20));
                 return fractal()->collection($data)->transformWith(new TaskTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
             }
@@ -162,7 +162,7 @@ class TaskService
     // Task List According to statuses
     public function statusTask($request)
     {
-        try {    
+        try {
             $tasks = DB::select(
                 'CALL taskStatusCount()',
             );
@@ -181,37 +181,39 @@ class TaskService
             ErrorLogGenerator::createLog($request, $e, $userId);
             $response = ['message' => $e->getMessage()];
             return response()->json($response,  500);
-        }    
+        }
     }
 
     // get task with duration,time for 24hurs
-    public function taskTotalWithTimeDuration($request){
+    public function taskTotalWithTimeDuration($request)
+    {
         try {
             $timelineId =  $request->timelineId;
             $data = DB::select(
                 'CALL getTotalTaskSummaryCountInGraph()',
-             );
-             return fractal()->collection($data)->transformWith(new TaskDurationCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+            );
+            return fractal()->collection($data)->transformWith(new TaskDurationCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
         } catch (Exception $e) {
-                if (isset(auth()->user()->id)) {
-                    $userId = auth()->user()->id;
-                } else {
-                    $userId = "";
-                }
-    
-                ErrorLogGenerator::createLog($request, $e, $userId);
-                $response = ['message' => $e->getMessage()];
-                return response()->json($response,  500);
+            if (isset(auth()->user()->id)) {
+                $userId = auth()->user()->id;
+            } else {
+                $userId = "";
+            }
+
+            ErrorLogGenerator::createLog($request, $e, $userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
-    public function taskCompletedRates($request){
+    public function taskCompletedRates($request)
+    {
         try {
-        $timelineId =  $request->timelineId;
+            $timelineId =  $request->timelineId;
             $data = DB::select(
                 'CALL taskCompletedRates()',
             );
-            if(isset($data[0])){
+            if (isset($data[0])) {
                 $data = $data[0];
             }
             return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
@@ -262,7 +264,7 @@ class TaskService
         }
     }
 
-    public function deleteTask($request,$id)
+    public function deleteTask($request, $id)
     {
         try {
             $data = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
@@ -282,9 +284,9 @@ class TaskService
         }
     }
 
-    public function taskById($request,$id)
+    public function taskById($request, $id)
     {
-        try{
+        try {
             $data = Task::where('id', $id)->first();
             return fractal()->item($data)->transformWith(new TaskTransformer())->toArray();
         } catch (Exception $e) {
@@ -302,7 +304,7 @@ class TaskService
 
     public function taskPerStaff($request)
     {
-        try{
+        try {
             $tasks = DB::select(
                 'CALL taskPerStaff()',
             );

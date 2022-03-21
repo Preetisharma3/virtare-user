@@ -61,7 +61,6 @@ class PatientService
         try {
             if (!$id) {
 
-
                 // Added Ptient details in User Table
                 $user = [
                     'password' => Hash::make('password'), 'email' => $request->input('email'), 'udid' => Str::uuid()->toString(),
@@ -516,7 +515,7 @@ class PatientService
             if (!$referalsId) {
                 $patient = Helper::entity('patient', $id);
                 $input = [
-                    'name' => $request->input('name'), 'designationId' => $request->input('designation'), 'email' => $request->input('email'),'udid'=>Str::uuid()->toString(),
+                    'name' => $request->input('name'), 'designationId' => $request->input('designation'), 'email' => $request->input('email'), 'udid' => Str::uuid()->toString(),
                     'patientId' => $patient, 'fax' => $request->input('fax'), 'createdBy' => Auth::id(), 'phoneNumber' => $request->input('phoneNumber')
                 ];
                 $patientData = PatientReferal::create($input);
@@ -614,22 +613,22 @@ class PatientService
                     'email' => $request->input('email'), 'emailVerify' => 1, 'createdBy' => Auth::id(), 'roleId' => 5, 'udid' => Str::uuid()->toString()
                 ];
                 $userData = User::create($user);
-                PatientPhysician::where('patientId',$patient)->update(['isPrimary'=>0]);
+                PatientPhysician::where('patientId', $patient)->update(['isPrimary' => 0]);
                 $input = [
                     'sameAsReferal' => $request->input('sameAsAbove'), 'patientId' => $patient, 'fax' => $request->input('fax'),
                     'createdBy' => Auth::id(), 'phoneNumber' => $request->input('phoneNumber'), 'userId' => $userData->id, 'designationId' => $request->input('designation'),
-                    'name' => $request->input('name'), 'udid' =>Str::uuid()->toString(),'isPrimary'=>1
+                    'name' => $request->input('name'), 'udid' => Str::uuid()->toString(), 'isPrimary' => 1
                 ];
                 $patientData = PatientPhysician::create($input);
                 $getPatient = PatientPhysician::where('id', $patientData->id)->with('patient', 'designation', 'user')->first();
                 $userdata = fractal()->item($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
                 $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
-                if($request->input('isPrimary')){
-                PatientPhysician::where('patientId',$patient)->update(['isPrimary'=>0]);
-                $isPrimary=$request->input('isPrimary');
-                }else{
-                $isPrimary=$request->input('isPrimary');
+                if ($request->input('isPrimary')) {
+                    PatientPhysician::where('patientId', $patient)->update(['isPrimary' => 0]);
+                    $isPrimary = $request->input('isPrimary');
+                } else {
+                    $isPrimary = $request->input('isPrimary');
                 }
 
                 $usersId = PatientPhysician::where('udid', $physicianId)->first();
@@ -641,7 +640,7 @@ class PatientService
                 $input = [
                     'sameAsReferal' => $request->input('sameAsAbove'), 'fax' => $request->input('fax'),
                     'updatedBy' => Auth::id(), 'phoneNumber' => $request->input('phoneNumber'), 'designationId' => $request->input('designation'),
-                    'name' => $request->input('name'),'isPrimary'=>$isPrimary
+                    'name' => $request->input('name'), 'isPrimary' => $isPrimary
                 ];
                 $patient = PatientPhysician::where('udid', $physicianId)->update($input);
                 $getPatient = PatientPhysician::where('udid', $physicianId)->with('patient', 'designation', 'user')->first();
@@ -1894,19 +1893,19 @@ class PatientService
                 if ($request->input('isPrimary') == 1) {
                     PatientFamilyMember::where('patientId', $patient)->update(['isPrimary' => 0]);
                     $isPrimary = $request->input('isPrimary');
-                }else{
+                } else {
                     $isPrimary = $request->input('isPrimary');
                 }
                 $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
                 if ($userData) {
                     //Updated Family in patientFamilyMember Table
-                   
+
                     $familyMember = [
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
                         'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'userId' => $userData->id,
                         'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
-                        'messages' => $request->input('messageAuthorization'),'isPrimary'=>$isPrimary
+                        'messages' => $request->input('messageAuthorization'), 'isPrimary' => $isPrimary
                     ];
                     PatientFamilyMember::where('udid', $familyId)->update($familyMember);
                 } else {
@@ -1920,7 +1919,7 @@ class PatientService
                         'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
                         'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
-                        'messages' => $request->input('messageAuthorization'),'isPrimary'=>$isPrimary
+                        'messages' => $request->input('messageAuthorization'), 'isPrimary' => $isPrimary
                     ];
                     PatientFamilyMember::where('udid', $familyId)->update($familyMember);
                 }

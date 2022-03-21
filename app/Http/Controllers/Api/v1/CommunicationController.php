@@ -18,7 +18,6 @@ class CommunicationController extends Controller
         return (new CommunicationService)->getCommunication($request);
     }
 
-
     public function callStatus(request $request)
     {
         return (new CommunicationService)->callStatus($request);
@@ -44,8 +43,8 @@ class CommunicationController extends Controller
         return (new CommunicationService)->communicationSearch($request);
     }
 
-    public function callUpdate(Request $request,$id){
-        return (new CommunicationService)->updateCall($request,$id);
-
+    public function callUpdate(Request $request, $id)
+    {
+        return (new CommunicationService)->updateCall($request, $id);
     }
 }

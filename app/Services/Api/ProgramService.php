@@ -10,22 +10,21 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class ProgramService
 {
-    public function programList($request,$id)
+    public function programList($request, $id)
     {
-        try{
-            if(!$id){
-                if($request->all()){
+        try {
+            if (!$id) {
+                if ($request->all()) {
                     $getProgram = Program::with('type')->get();
                     return fractal()->collection($getProgram)->transformWith(new ProgramTransformer())->toArray();
-                }else{
-                    $getProgram = Program::with('type')->paginate(env('PER_PAGE',20));
-                    return fractal()->collection($getProgram)->transformWith(new ProgramTransformer())->paginateWith(new IlluminatePaginatorAdapter($getProgram))->toArray();    
+                } else {
+                    $getProgram = Program::with('type')->paginate(env('PER_PAGE', 20));
+                    return fractal()->collection($getProgram)->transformWith(new ProgramTransformer())->paginateWith(new IlluminatePaginatorAdapter($getProgram))->toArray();
                 }
-                 }else{
-                $program = Program::where('udid',$id)->get();
+            } else {
+                $program = Program::where('udid', $id)->get();
                 return fractal()->collection($program)->transformWith(new ProgramTransformer())->toArray();
             }
-            
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
@@ -52,44 +51,44 @@ class ProgramService
         }
     }
 
-    public function updateProgram($request,$id)
+    public function updateProgram($request, $id)
     {
         try {
             $program = array();
-            if(!empty($request->input('typeId'))){
+            if (!empty($request->input('typeId'))) {
                 $program['typeId'] =  $request->input('typeId');
             }
-            if(!empty($request->input('description'))){
+            if (!empty($request->input('description'))) {
                 $program['description'] =  $request->input('description');
             }
-            if(!empty($request->input('name'))){
+            if (!empty($request->input('name'))) {
                 $program['name'] =  $request->input('name');
             }
             if (empty($request->input('status'))) {
                 $program['isActive'] =  0;
-            }else{
-                $program['isActive']=1;
+            } else {
+                $program['isActive'] = 1;
             }
             $program['updatedBy'] =  1;
-            
-            if(!empty($program)){
+
+            if (!empty($program)) {
                 Program::where('udid', $id)->update($program);
             }
             $newData = Program::where('udid', $id)->first();
             $message = ["message" => "updated Successfully"];
             $resp =  fractal()->item($newData)->transformWith(new ProgramTransformer())->toArray();
             $endData = array_merge($message, $resp);
-            return $endData; 
+            return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-    public function deleteProgram($request,$id)
+    public function deleteProgram($request, $id)
     {
         try {
             $program = Program::where('udid', $id)->first();
-            $input=['deletedBy'=>1,'isActive'=>0,'isDelete'=>1];
+            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
             Program::where('udid', $id)->update($input);
             Program::where('udid', $id)->delete();
             return response()->json(['message' => "Deleted Successfully"]);

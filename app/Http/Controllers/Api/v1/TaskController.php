@@ -20,9 +20,9 @@ class TaskController extends Controller
         return (new TaskService)->listTask($request);
     }
 
-    public function taskListEntity(request $request,$entity,$id)
+    public function taskListEntity(request $request, $entity, $id)
     {
-        return (new TaskService)->entityTaskList($request,$entity,$id);
+        return (new TaskService)->entityTaskList($request, $entity, $id);
     }
 
     public function priorityTask(request $request)
@@ -40,37 +40,37 @@ class TaskController extends Controller
         return (new TaskService)->updateTask($request, $id);
     }
 
-    public function taskById(request $request,$id){
+    public function taskById(request $request, $id)
+    {
         return (new TaskService)->taskById($request, $id);
     }
 
-    public function deleteTask(request $request,$id)
-    { 
+    public function deleteTask(request $request, $id)
+    {
         return (new TaskService)->deleteTask($request, $id);
     }
 
-    public function taskPerStaff(request $request){
+    public function taskPerStaff(request $request)
+    {
         return (new TaskService)->taskPerStaff($request);
     }
 
-    public function taskPerCategory(request $request){
+    public function taskPerCategory(request $request)
+    {
         return (new TaskService)->taskPerCategory($request);
     }
 
-    public function taskReport(Request $request,$id)
+    public function taskReport(Request $request, $id)
     {
-        if($id)
-        {
+        if ($id) {
             $reportType = "task_report";
-            $checkReport = ExportReportRequestService::checkReportRequest($id,$reportType);
-            if($checkReport){
+            $checkReport = ExportReportRequestService::checkReportRequest($id, $reportType);
+            if ($checkReport) {
                 ExcelGeneratorService::taskReportExport($request);
-            }else{
+            } else {
                 return response()->json(['message' => "User not Access to download Report."], 500);
             }
-        }
-        else
-        {
+        } else {
             return response()->json(['message' => "invalid URL."], 500);
         }
     }

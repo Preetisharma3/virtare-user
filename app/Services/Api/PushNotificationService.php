@@ -14,17 +14,17 @@ use App\Transformers\Notification\UnreadNotificationTransformer;
 
 class PushNotificationService
 {
-    public function sendNotification(array $users,$data)
+    public function sendNotification(array $users, $data)
     {
         try {
             $deviceToken = array();
             $currentUser = Auth::id();
-            if(empty($currentUser)){
+            if (empty($currentUser)) {
                 $currentUser = 1;
             }
             foreach ($users as $userId) {
                 $user = User::find($userId);
-                array_push($deviceToken,$user->deviceToken);
+                array_push($deviceToken, $user->deviceToken);
             }
             $fcm = new FCM();
             $fcm->deviceId($deviceToken);
@@ -46,17 +46,17 @@ class PushNotificationService
     public function  showNotification($request)
     {
         try {
-            $notification = Notification::where('userId', Auth::id())->orderBy("id","DESC")->get();
-            $notificationUnread = Notification::where('userId', Auth::id())->where('isRead','0')->count();
-            if($notificationUnread > 0 && empty($request->count)){
-                Notification::where('userId', Auth::id())->update(['isRead'=>'1']);
+            $notification = Notification::where('userId', Auth::id())->orderBy("id", "DESC")->get();
+            $notificationUnread = Notification::where('userId', Auth::id())->where('isRead', '0')->count();
+            if ($notificationUnread > 0 && empty($request->count)) {
+                Notification::where('userId', Auth::id())->update(['isRead' => '1']);
             }
             $notification = Helper::dateGroup($notification, 'createdAt');
             $notificationList = fractal()->collection($notification)->transformWith(new NotificationListTransformer)->toArray();
-            if(empty($request->count)){
-                return array_merge($notificationList,['count'=>$notificationUnread]);
-            }else{
-                return ['count'=>$notificationUnread];
+            if (empty($request->count)) {
+                return array_merge($notificationList, ['count' => $notificationUnread]);
+            } else {
+                return ['count' => $notificationUnread];
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
@@ -66,13 +66,13 @@ class PushNotificationService
     public function showUnreadNotification($request)
     {
         try {
-            $notification = Notification::where([['userId', Auth::id()],['isRead','0']])->orderBy("id","DESC")->get();
+            $notification = Notification::where([['userId', Auth::id()], ['isRead', '0']])->orderBy("id", "DESC")->get();
             return fractal()->collection($notification)->transformWith(new UnreadNotificationTransformer)->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
-    
+
     public function ios_token($deviceToken)
     {
         $serverKey = env("FCM_SERVER_KEY");
@@ -93,7 +93,7 @@ class PushNotificationService
                 'headers' => $headers,
                 "body" => json_encode($fields),
             ]);
-            $response = json_decode($request->getBody()->getContents(),true);
+            $response = json_decode($request->getBody()->getContents(), true);
             return $response['results'][0]['registration_token'];
         } catch (Exception $e) {
             return $e;

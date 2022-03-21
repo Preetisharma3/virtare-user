@@ -10,17 +10,13 @@ use App\Services\Api\ExportReportRequestService;
 
 class InventoryController extends Controller
 {
-    public function index(request $request,$id=NULL)
+    public function index(request $request, $id = NULL)
     {
-        if(!empty($id))
-        {
+        if (!empty($id)) {
             return (new InventoryService)->geVentoryById($id);
-        }
-        else
-        {
+        } else {
             return (new InventoryService)->index($request);
         }
-        
     }
 
     public function store(Request $request)
@@ -30,7 +26,7 @@ class InventoryController extends Controller
 
     public function update(Request $request, $id)
     {
-       return (new InventoryService)->update($request, $id);
+        return (new InventoryService)->update($request, $id);
     }
 
     public function destroy($id)
@@ -38,24 +34,22 @@ class InventoryController extends Controller
         return (new InventoryService)->destroy($id);
     }
 
-    public function getModels(Request $request){
+    public function getModels(Request $request)
+    {
         return (new InventoryService)->getModels($request);
     }
 
-    public function inventoryReport(Request $request,$id)
+    public function inventoryReport(Request $request, $id)
     {
-        if($id)
-        {
+        if ($id) {
             $reportType = "inventory_report";
-            $checkReport = ExportReportRequestService::checkReportRequest($id,$reportType);
-            if($checkReport){
+            $checkReport = ExportReportRequestService::checkReportRequest($id, $reportType);
+            if ($checkReport) {
                 ExcelGeneratorService::inventoryExcelExport($request);
-            }else{
+            } else {
                 return response()->json(['message' => "User not Access to download Report."], 500);
             }
-        }
-        else
-        {
+        } else {
             return response()->json(['message' => "invalid URL."], 500);
         }
     }

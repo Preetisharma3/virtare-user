@@ -4,14 +4,12 @@ namespace App\Http\Controllers\Api\v1;
 
 use \App\Library\BitrixApi;
 use Illuminate\Http\Request;
-use App\Services\Api\BitrixService;
 use App\Services\Api\FamilyService;
 use App\Http\Controllers\Controller;
 use App\Services\Api\PatientService;
 use App\Http\Requests\Family\FamilyRequest;
 use App\Http\Requests\Patient\PatientRequest;
 use App\Http\Requests\Patient\PatientProgramRequest;
-use App\Http\Requests\Patient\PatientReferalRequest;
 use App\Http\Requests\Patient\PatientConditionRequest;
 use App\Http\Requests\Patient\PatientPhysicianRequest;
 use App\Http\Requests\Patient\PatientFamilymemberRequest;
@@ -196,12 +194,12 @@ class PatientController extends Controller
     return (new PatientService)->inventoryUpdate($request, $id);
   }
 
-  public function createPatientDevice(Request $request, $id=null, $deviceId = null)
+  public function createPatientDevice(Request $request, $id = null, $deviceId = null)
   {
     return (new PatientService)->patientDeviceCreate($request, $id, $deviceId);
   }
 
-  public function listPatientDevice(Request $request, $id=null, $deviceId = null)
+  public function listPatientDevice(Request $request, $id = null, $deviceId = null)
   {
     return (new PatientService)->patientDeviceList($request, $id, $deviceId);
   }
@@ -221,60 +219,59 @@ class PatientController extends Controller
     return (new PatientService)->patientFlagList($request, $id, $flagId);
   }
 
-  public function listPatientCriticalNote(Request $request , $id = null)
+  public function listPatientCriticalNote(Request $request, $id = null)
   {
     return (new PatientService)->listPatientCriticalNote($request, $id);
   }
 
-  public function createPatientCriticalNote(Request $request , $id)
+  public function createPatientCriticalNote(Request $request, $id)
   {
     return (new PatientService)->createPatientCriticalNote($request, $id);
   }
 
-  public function updatePatientCriticalNote(Request $request , $id, $noteId)
+  public function updatePatientCriticalNote(Request $request, $id, $noteId)
   {
-    return (new PatientService)->updatePatientCriticalNote($request, $id,$noteId);
+    return (new PatientService)->updatePatientCriticalNote($request, $id, $noteId);
   }
 
-  public function deletePatientCriticalNote(Request $request , $id, $noteId)
+  public function deletePatientCriticalNote(Request $request, $id, $noteId)
   {
-    return (new PatientService)->deletePatientCriticalNote($request, $id,$noteId);
+    return (new PatientService)->deletePatientCriticalNote($request, $id, $noteId);
   }
 
-  public function addPatientFamily(PatientFamilymemberRequest $request,$id,$familyId=null)
+  public function addPatientFamily(PatientFamilymemberRequest $request, $id, $familyId = null)
   {
-    return (new PatientService)->patientFamilyAdd($request, $id,$familyId);
+    return (new PatientService)->patientFamilyAdd($request, $id, $familyId);
   }
 
-  public function listPatientFamily(Request $request,$id,$familyId=null)
+  public function listPatientFamily(Request $request, $id, $familyId = null)
   {
-    return (new PatientService)->patientFamilyList($request, $id,$familyId);
+    return (new PatientService)->patientFamilyList($request, $id, $familyId);
   }
 
-  public function deletePatientFamily(Request $request,$id,$familyId=null)
+  public function deletePatientFamily(Request $request, $id, $familyId = null)
   {
-    return (new PatientService)->patientFamilyDelete($request, $id,$familyId);
+    return (new PatientService)->patientFamilyDelete($request, $id, $familyId);
   }
 
-  public function patientPhycisian(Request $request,$id)
+  public function patientPhycisian(Request $request, $id)
   {
     return (new PatientService)->phycisianPatient($request, $id);
   }
 
-
-  public function addPatientEmergency(Request $request,$id,$emergencyId=null)
+  public function addPatientEmergency(Request $request, $id, $emergencyId = null)
   {
-    return (new PatientService)->patientEmergencyAdd($request, $id,$emergencyId);
+    return (new PatientService)->patientEmergencyAdd($request, $id, $emergencyId);
   }
 
-  public function listPatientEmergency(Request $request,$id,$emergencyId=null)
+  public function listPatientEmergency(Request $request, $id, $emergencyId = null)
   {
-    return (new PatientService)->patientEmergencyList($request, $id,$emergencyId);
+    return (new PatientService)->patientEmergencyList($request, $id, $emergencyId);
   }
 
-  public function deletePatientEmergency(Request $request,$id,$emergencyId=null)
+  public function deletePatientEmergency(Request $request, $id, $emergencyId = null)
   {
-    return (new PatientService)->patientEmergencyDelete($request, $id,$emergencyId);
+    return (new PatientService)->patientEmergencyDelete($request, $id, $emergencyId);
   }
 
 

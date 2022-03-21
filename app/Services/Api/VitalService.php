@@ -9,18 +9,16 @@ use App\Transformers\Vital\VitalTypeFieldTransformer;
 class VitalService
 {
 
-    public function VitalTypeFieldList($request,$id)
+    public function VitalTypeFieldList($request, $id)
     {
         try {
-           if($id)
-           {
-            $getVital = VitalTypeField::where('vitalTypeId', $id)->get();
-            return fractal()->collection($getVital)->transformWith(new VitalTypeFieldTransformer())->toArray();
-           }
-           else{
-            $getVital = VitalTypeField::get();
-            return fractal()->collection($getVital)->transformWith(new VitalTypeFieldTransformer())->toArray();
-           }
+            if ($id) {
+                $getVital = VitalTypeField::where('vitalTypeId', $id)->get();
+                return fractal()->collection($getVital)->transformWith(new VitalTypeFieldTransformer())->toArray();
+            } else {
+                $getVital = VitalTypeField::get();
+                return fractal()->collection($getVital)->transformWith(new VitalTypeFieldTransformer())->toArray();
+            }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }

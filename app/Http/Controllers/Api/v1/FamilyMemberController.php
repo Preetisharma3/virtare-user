@@ -8,7 +8,8 @@ use App\Services\Api\FamilyMemberService;
 
 class FamilyMemberController extends Controller
 {
-    public function listPatient(Request $request,$id = null){
-        return (new FamilyMemberService)->listPatient($request,$id);
+    public function listPatient(Request $request, $id = null)
+    {
+        return (new FamilyMemberService)->listPatient($request, $id);
     }
 }

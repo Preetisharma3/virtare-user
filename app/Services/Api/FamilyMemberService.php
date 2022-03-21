@@ -12,16 +12,16 @@ class FamilyMemberService
     public function listPatient($request, $id)
     {
         if ($id) {
-            $patient=Helper::entity('patient',$id);
-            $notAccess=Helper::haveAccess($patient);
-            if(!$notAccess){
+            $patient = Helper::entity('patient', $id);
+            $notAccess = Helper::haveAccess($patient);
+            if (!$notAccess) {
                 $data = PatientFamilyMember::whereHas('patients')->where([['patientId', $patient], ['userId', auth()->user()->id]])->first();
                 return fractal()->item($data->patients)->transformWith(new PatientTransformer(true))->toArray();
             }
         } elseif (!$id) {
-            $data=Patient::whereHas('family',function($query){
-                $query->where('userId',auth()->user()->id);
-            })->orderBy('firstName','ASC')->orderBy('lastName','ASC')->get();
+            $data = Patient::whereHas('family', function ($query) {
+                $query->where('userId', auth()->user()->id);
+            })->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
             return fractal()->collection($data)->transformWith(new PatientTransformer(true))->toArray();
         } else {
             return response()->json(['message' => trans('messages.unauthenticated')], 401);

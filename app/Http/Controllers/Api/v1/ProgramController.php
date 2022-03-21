@@ -8,14 +8,14 @@ use App\Services\Api\ProgramService;
 
 class ProgramController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function listProgram(Request $request,$id = null)
+  /**
+   * Create a new controller instance.
+   *
+   * @return void
+   */
+  public function listProgram(Request $request, $id = null)
   {
-    return (new ProgramService)->programList($request,$id);
+    return (new ProgramService)->programList($request, $id);
   }
 
   public function createProgram(Request $request)
@@ -23,9 +23,9 @@ class ProgramController extends Controller
     return (new ProgramService)->createProgram($request);
   }
 
-  public function updateProgram(Request $request,$id)
+  public function updateProgram(Request $request, $id)
   {
-    return (new ProgramService)->updateProgram($request,$id);
+    return (new ProgramService)->updateProgram($request, $id);
   }
 
   // public function editProgram(Request $request,$id)
@@ -33,10 +33,8 @@ class ProgramController extends Controller
   //   return (new ProgramService)->editProgram($request,$id);
   // }
 
-  public function deleteProgram(Request $request,$id)
+  public function deleteProgram(Request $request, $id)
   {
-    return (new ProgramService)->deleteProgram($request,$id);
+    return (new ProgramService)->deleteProgram($request, $id);
   }
-
-   
 }

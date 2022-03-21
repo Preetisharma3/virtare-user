@@ -38,13 +38,13 @@ class GeneralParameterService
                 $genralParameter = GeneralParameterGroup::where('udid', $id)->first();
                 $parameter = $request->input('parameter');
                 foreach ($parameter as $value) {
-                    if(!empty($value['parameterId'])){
+                    if (!empty($value['parameterId'])) {
 
                         $input = [
                             'highLimit' => $value['highLimit'], 'lowLimit' => $value['lowLimit'], 'updatedBy' => Auth::id()
                         ];
                         GeneralParameter::where('udid', $value['parameterId'])->update($input);
-                    }else{
+                    } else {
                         $input = [
                             'generalParameterGroupId' => $genralParameter['id'], 'vitalFieldId' => $value['type'],
                             'highLimit' => $value['highLimit'], 'lowLimit' => $value['lowLimit'], 'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
@@ -71,10 +71,10 @@ class GeneralParameterService
         try {
             if (!$id) {
                 if ($request->all) {
-                    $data = GeneralParameterGroup::where('name','LIKE', '%' . $request->search . '%')->with('generalParameter')->orderBy('createdAt', 'DESC')->get();
+                    $data = GeneralParameterGroup::where('name', 'LIKE', '%' . $request->search . '%')->with('generalParameter')->orderBy('createdAt', 'DESC')->get();
                     return fractal()->collection($data)->transformWith(new GeneralParameterGroupTransformer())->toArray();
                 } else {
-                    $data = GeneralParameterGroup::where('name','LIKE', '%' . $request->search . '%')->with('generalParameter')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
+                    $data = GeneralParameterGroup::where('name', 'LIKE', '%' . $request->search . '%')->with('generalParameter')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
                     return fractal()->collection($data)->transformWith(new GeneralParameterGroupTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 }
             } else {

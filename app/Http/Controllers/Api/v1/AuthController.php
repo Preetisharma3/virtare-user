@@ -30,34 +30,34 @@ class AuthController extends Controller
     if ($token = $this->jwt->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
       $deviceToken = $request->deviceToken;
       $deviceType = $request->deviceType;
-      if($request->deviceType == 'ios'){
-          $pushNotification = new PushNotificationService();
-          $deviceToken = $pushNotification->ios_token($deviceToken);
+      if ($request->deviceType == 'ios') {
+        $pushNotification = new PushNotificationService();
+        $deviceToken = $pushNotification->ios_token($deviceToken);
       }
 
 
       User::where('deviceToken', $deviceToken)->update([
-          "deviceToken"=>"",
-          "deviceType"=>""
-        ]);
-        User::where('id', Auth::id())->update([
-          "deviceToken"=>$deviceToken,
-          "deviceType"=>$deviceType,
-          "updatedBy" => Auth::id()
-        ]);
-        $user = User::where('email', $request->email)->with('roles','staff','patient')->firstOrFail();
-        $data = array(
-          'token' => $token,
-          'user' => $user
-        );
-        if($user->roleId == 4){
-          return fractal()->item($data)->transformWith(new LoginPatientTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
-        }else{
-          return fractal()->item($data)->transformWith(new LoginTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
-        }
+        "deviceToken" => "",
+        "deviceType" => ""
+      ]);
+      User::where('id', Auth::id())->update([
+        "deviceToken" => $deviceToken,
+        "deviceType" => $deviceType,
+        "updatedBy" => Auth::id()
+      ]);
+      $user = User::where('email', $request->email)->with('roles', 'staff', 'patient')->firstOrFail();
+      $data = array(
+        'token' => $token,
+        'user' => $user
+      );
+      if ($user->roleId == 4) {
+        return fractal()->item($data)->transformWith(new LoginPatientTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
       } else {
-        return response()->json(['message' => trans('messages.unauthenticated')], 401);
+        return fractal()->item($data)->transformWith(new LoginTransformer)->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
       }
+    } else {
+      return response()->json(['message' => trans('messages.unauthenticated')], 401);
+    }
   }
 
   public function logout(Request $request)
@@ -71,10 +71,11 @@ class AuthController extends Controller
   }
 
 
-  protected function createNewToken($token){
+  protected function createNewToken($token)
+  {
     return response()->json([
-        'token' => $token,
-        'expires_in' => auth()->factory()->getTTL() *100,
+      'token' => $token,
+      'expires_in' => auth()->factory()->getTTL() * 100,
     ]);
-}
+  }
 }
