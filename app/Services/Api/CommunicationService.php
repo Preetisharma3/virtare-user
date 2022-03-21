@@ -106,14 +106,14 @@ class CommunicationService
     //Call Status API's
     public function callStatus()
     {
-        $data = CommunicationCallRecord::with('status')->select('callStatusId', DB::raw('count(*) as count'))->groupBy('callStatusId')->orderBy('createdAt', 'DESC')->get();
+        $data = CommunicationCallRecord::with('status')->select('callStatusId', DB::raw('count(*) as count'))->where('createdAt',Carbon::today())->groupBy('callStatusId')->orderBy('createdAt', 'DESC')->get();
         return fractal()->collection($data)->transformWith(new CallStatusTransformer())->toArray();
     }
 
     // calls Per Staff API
     public function callCountPerStaff()
     {
-        $data = CallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->orderBy('createdAt', 'DESC')->get();
+        $data = CallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->where('createdAt',Carbon::today())->orderBy('createdAt', 'DESC')->get();
         return fractal()->collection($data)->transformWith(new CallRecordTransformer())->toArray();
     }
 

@@ -10,12 +10,13 @@ use App\Models\Note\Note;
 use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
+use App\Library\ErrorLogGenerator;
 use Illuminate\Support\Facades\DB;
+use App\Models\Patient\PatientStaff;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
 use App\Models\Patient\PatientTimeLine;
 use App\Models\Patient\PatientFamilyMember;
-use App\Models\Patient\PatientStaff;
 use App\Transformers\Appointment\AppointmentTransformer;
 use App\Transformers\Appointment\AppointmentDataTransformer;
 use App\Transformers\Appointment\AppointmentListTransformer;
@@ -84,32 +85,52 @@ class AppointmentService
             }
         }
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if (isset(auth()->user()->id)) {
+                $userId = auth()->user()->id;
+            } else {
+                $userId = "";
+            }
+
+            ErrorLogGenerator::createLog($request, $e, $userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
     public function appointmentList($request, $id)
     {
-        if (!$id) {
-            $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('startDateTime', 'ASC')->get();
-            $results = Helper::dateGroup($data, 'startDateTime');
-            return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
-        } elseif ($id) {
-            $patient = Helper::entity('patient', $id);
-            $notAccess = Helper::haveAccess($patient);
-            if (!$notAccess) {
-                if(auth()->user()->roleId==3){
-                    $data = Appointment::where([['staffId',auth()->user()->staff->id],['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('startDateTime', 'ASC')->get();
-                }else{
-                    $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('startDateTime', 'ASC')->get();
-                }
+        try {
+            if (!$id) {
+                $data = Appointment::where([['patientId', auth()->user()->patient->id], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('startDateTime', 'ASC')->get();
                 $results = Helper::dateGroup($data, 'startDateTime');
                 return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
+            } elseif ($id) {
+                $patient = Helper::entity('patient', $id);
+                $notAccess = Helper::haveAccess($patient);
+                if (!$notAccess) {
+                    if(auth()->user()->roleId==3){
+                        $data = Appointment::where([['staffId',auth()->user()->staff->id],['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('startDateTime', 'ASC')->get();
+                    }else{
+                        $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('startDateTime', 'ASC')->get();
+                    }
+                    $results = Helper::dateGroup($data, 'startDateTime');
+                    return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
+                }
             }
-        }
+        } catch (Exception $e) {
+            if (isset(auth()->user()->id)) {
+                $userId = auth()->user()->id;
+            } else {
+                $userId = "";
+            }
+
+            ErrorLogGenerator::createLog($request, $e, $userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
+        }    
     }
 
-    public function newAppointments()
+    public function newAppointments($request)
     {
         try {
             if(auth()->user()->roleId==3){
@@ -119,7 +140,15 @@ class AppointmentService
             }
             return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if (isset(auth()->user()->id)) {
+                $userId = auth()->user()->id;
+            } else {
+                $userId = "";
+            }
+
+            ErrorLogGenerator::createLog($request, $e, $userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -155,7 +184,15 @@ class AppointmentService
             }
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if (isset(auth()->user()->id)) {
+                $userId = auth()->user()->id;
+            } else {
+                $userId = "";
+            }
+
+            ErrorLogGenerator::createLog($request, $e, $userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
@@ -194,55 +231,111 @@ class AppointmentService
             );
             return fractal()->collection($data)->transformWith(new AppointmentSearchTransformer())->toArray();
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
+            if (isset(auth()->user()->id)) {
+                $userId = auth()->user()->id;
+            } else {
+                $userId = "";
+            }
+
+            ErrorLogGenerator::createLog($request, $e, $userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
     public function AppointmentConference($request)
     {
-        if(auth()->user()->roleId==3){
-            $data = Appointment::where('staffId',auth()->user()->staff->id)->whereRaw('conferenceId is not null')->where('startDateTime', '>=', Carbon::now()->subMinute(30))->get();
-        }else{
-            $data = Appointment::whereRaw('conferenceId is not null')->where('startDateTime', '>=', Carbon::now()->subMinute(30))->get();
+        try{
+            if(auth()->user()->roleId==3){
+                $data = Appointment::where('staffId',auth()->user()->staff->id)->whereRaw('conferenceId is not null')->where('startDateTime', '>=', Carbon::now()->subMinute(30))->get();
+            }else{
+                $data = Appointment::whereRaw('conferenceId is not null')->where('startDateTime', '>=', Carbon::now()->subMinute(30))->get();
+            }
+            return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
+        } catch (Exception $e) {
+            if (isset(auth()->user()->id)) {
+                $userId = auth()->user()->id;
+            } else {
+                $userId = "";
+            }
+
+            ErrorLogGenerator::createLog($request, $e, $userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
-        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
     }
 
     public function AppointmentConferenceId($request, $id)
     {
-        if(auth()->user()->roleId==3){
-            $data = Appointment::where([['startDateTime', '>=', Carbon::now()->subMinute(30)], ['conferenceId', $id]],['staffId',auth()->user()->staff->id])->get();
-        }else{
-            $data = Appointment::where([['startDateTime', '>=', Carbon::now()->subMinute(30)], ['conferenceId', $id]])->get();
+        try{
+            if(auth()->user()->roleId==3){
+                $data = Appointment::where([['startDateTime', '>=', Carbon::now()->subMinute(30)], ['conferenceId', $id]],['staffId',auth()->user()->staff->id])->get();
+            }else{
+                $data = Appointment::where([['startDateTime', '>=', Carbon::now()->subMinute(30)], ['conferenceId', $id]])->get();
+            }
+            return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
+        } catch (Exception $e) {
+            if (isset(auth()->user()->id)) {
+                $userId = auth()->user()->id;
+            } else {
+                $userId = "";
+            }
+
+            ErrorLogGenerator::createLog($request, $e, $userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
-        return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
     }
 
     public function appointmentUpdate($request, $id)
     {
-        $appointment = Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->first();
+        try{
+            $appointment = Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->first();
 
-        $existence = DB::select(
-            "CALL appointmentExist('" . $appointment['staffId'] . "','" . Helper::date($request->startDateTime) . "')",
-        );
-        foreach($existence as $exists){
-            if ($exists->isExist == false) {
+            $existence = DB::select(
+                "CALL appointmentExist('" . $appointment['staffId'] . "','" . Helper::date($request->startDateTime) . "')",
+            );
+            foreach($existence as $exists){
+                if ($exists->isExist == false) {
 
-                $input = ['updatedBy' => Auth::id(), 'startDateTime' => Helper::date($request->startDateTime)];
-                Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->update($input);
-                $data = Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->orderBy('startDateTime', 'ASC')->first();
-                return fractal()->item($data)->transformWith(new AppointmentTransformer())->toArray();
-            }else {
-                return response()->json(['message' => 'Appointment already exist!']);
+                    $input = ['updatedBy' => Auth::id(), 'startDateTime' => Helper::date($request->startDateTime)];
+                    Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->update($input);
+                    $data = Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->orderBy('startDateTime', 'ASC')->first();
+                    return fractal()->item($data)->transformWith(new AppointmentTransformer())->toArray();
+                }else {
+                    return response()->json(['message' => 'Appointment already exist!']);
+                }
             }
+        } catch (Exception $e) {
+            if (isset(auth()->user()->id)) {
+                $userId = auth()->user()->id;
+            } else {
+                $userId = "";
+            }
+
+            ErrorLogGenerator::createLog($request, $e, $userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
         }
     }
 
     public function appointmentDelete($request, $id)
     {
-        $input = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
-        Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->update($input);
-        Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id], ['startDateTime', '>=', Carbon::now()->subMinutes(60)]])->delete();
-        return response()->json(['message' => trans('messages.deletedSuccesfully')]);
+        try{
+            $input = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
+            Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->update($input);
+            Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id], ['startDateTime', '>=', Carbon::now()->subMinutes(60)]])->delete();
+            return response()->json(['message' => trans('messages.deletedSuccesfully')]);
+        } catch (Exception $e) {
+            if (isset(auth()->user()->id)) {
+                $userId = auth()->user()->id;
+            } else {
+                $userId = "";
+            }
+
+            ErrorLogGenerator::createLog($request, $e, $userId);
+            $response = ['message' => $e->getMessage()];
+            return response()->json($response,  500);
+        }
     }
 }
