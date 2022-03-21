@@ -15,6 +15,11 @@ class PushNotificationController extends Controller
         return (new PushNotificationService)->showNotification($request);
     }
 
+    public function showUnreadNotification(Request $request)
+    {
+        return (new PushNotificationService)->showUnreadNotification($request);
+    }
+
     public function send(NotificationSendRequest $request){
         
         $data = array(

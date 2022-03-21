@@ -10,6 +10,7 @@ use App\Models\User\User;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notification\Notification;
 use App\Transformers\Notification\NotificationListTransformer;
+use App\Transformers\Notification\UnreadNotificationTransformer;
 
 class PushNotificationService
 {
@@ -57,6 +58,16 @@ class PushNotificationService
             }else{
                 return ['count'=>$notificationUnread];
             }
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()],  500);
+        }
+    }
+
+    public function showUnreadNotification($request)
+    {
+        try {
+            $notification = Notification::where([['userId', Auth::id()],['isRead','0']])->orderBy("id","DESC")->get();
+            return fractal()->collection($notification)->transformWith(new UnreadNotificationTransformer)->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
