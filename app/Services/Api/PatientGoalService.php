@@ -20,6 +20,8 @@ class PatientGoalService
                 $notAccess = Helper::haveAccess($patient);
                 if ($notAccess) {
                     $data = PatientGoal::where([['patientId', $patient], ['udid', $goalId]])->get();
+                }else{
+                    return $notAccess;
                 }
             } elseif (!$goalId) {
                 $data = PatientGoal::where('patientId', $patient)->with('notes', function ($query) {

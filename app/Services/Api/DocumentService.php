@@ -80,6 +80,8 @@ class DocumentService
                         $getDocument = Document::where([['referanceId', $reference], ['entityType', $entity]])->with('documentType', 'tag.tags')->latest()->get();
                         return fractal()->collection($getDocument)->transformWith(new DocumentTransformer())->toArray();
                     }
+                }else{
+                    return $notAccess;
                 }
             } else {
                 if ($documentId) {

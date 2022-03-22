@@ -138,6 +138,8 @@ class AppointmentService
                     }
                     $results = Helper::dateGroup($data, 'startDateTime');
                     return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             }
         } catch (Exception $e) {
