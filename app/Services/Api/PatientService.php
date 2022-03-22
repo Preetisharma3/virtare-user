@@ -2027,8 +2027,8 @@ class PatientService
                     'contactTimeId' => json_encode($request->input('contactTime')), 'genderId' => $request->input('gender'),
                     'updatedBy' => Auth::id(), 'email' => $request->input('emergencyEmail')
                 ];
-                PatientEmergencyContact::where('udid', $request->emergencyId)->update($emergencyContact);
-                $data = PatientEmergencyContact::where('udid', $request->emergencyId)->first();
+                PatientEmergencyContact::where('udid', $emergencyId)->update($emergencyContact);
+                $data = PatientEmergencyContact::where('udid', $emergencyId)->first();
                 $userdata = fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer(false))->toArray();
                 $message = ['message' => trans('messages.updatedSuccesfully')];
             }
