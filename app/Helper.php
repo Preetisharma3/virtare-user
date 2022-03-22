@@ -214,27 +214,27 @@ class Helper
         if ($role == 3) {
             $staff = PatientStaff::where([['staffId', auth()->user()->staff->id], ['patientId', $id]])->first();
             if (empty($staff)) {
-                return response()->json(['message', trans('messages.unauthorized')], 401);
+                return response()->json(['message'=> trans('messages.unauthorized')], 401);
             }
         } elseif ($role == 6) {
             $family = PatientFamilyMember::where([['id', auth()->user()->familyMember->id], ['patientId', $id]])->first();
             if (empty($family)) {
-                return response()->json(['message', trans('messages.unauthorized')], 401);
+                return response()->json(['message'=> trans('messages.unauthorized')], 401);
             }
         } elseif ($role == 4) {
             $patient = Patient::where('id', auth()->user()->patient->id)->first();
             if (empty($patient)) {
-                return response()->json(['message', trans('messages.unauthorized')], 401);
+                return response()->json(['message'=> trans('messages.unauthorized')], 401);
             }
         } elseif ($role == 5) {
             $physician = PatientPhysician::where([['id', auth()->user()->physician->id], ['patientId', $id]])->first();
             if (empty($physician)) {
-                return response()->json(['message', trans('messages.unauthorized')], 401);
+                return response()->json(['message'=> trans('messages.unauthorized')], 401);
             }
         } elseif ($role == 1) {
             $patient = Patient::where('id', $id)->first();
             if (empty($patient)) {
-                return response()->json(['message', trans('messages.unauthorized')], 401);
+                return response()->json(['message'=> trans('messages.unauthorized')], 401);
             }
         }
     }

@@ -331,6 +331,8 @@ class PatientService
                 } elseif ($roleId == 4) {
                     $patient = Patient::where('id', auth()->user()->patient->id)->first();
                     return fractal()->item($patient)->transformWith(new PatientTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             } else {
                 if ($roleId == 3) {
@@ -495,6 +497,8 @@ class PatientService
                 if (!$notAccess) {
                     $getPatient = PatientCondition::where('patientId', $patient)->with('patient', 'condition')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientConditionTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             }
         } catch (Exception $e) {
@@ -565,6 +569,8 @@ class PatientService
                 if (!$notAccess) {
                     $getPatient = PatientReferal::where('patientId', $patient)->with('patient', 'designation')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientReferalTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             }
         } catch (Exception $e) {
@@ -680,6 +686,8 @@ class PatientService
                 if (!$notAccess) {
                     $getPatient = PatientPhysician::where('patientId', $patient)->with('patient', 'designation', 'user')->orderBy('createdAt', 'DESC')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientPhysicianTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             }
         } catch (Exception $e) {
@@ -778,6 +786,8 @@ class PatientService
                 if (!$notAccess) {
                     $getPatient = PatientProgram::where('patientId', $patient)->with('patient', 'program')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientProgramTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             }
         } catch (Exception $e) {
@@ -890,6 +900,8 @@ class PatientService
                 if (!$notAccess) {
                     $getPatient = PatientInventory::where('patientId', $patient)->with('patient', 'inventory', 'deviceTypes')->latest()->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             }
         } catch (Exception $e) {
@@ -1100,8 +1112,8 @@ class PatientService
                     }
                 } elseif (!$id) {
                     $patientIdx = '';
-                } else {
-                    return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                } else{
+                    return $notAccess;
                 }
                 $type = '';
                 $fromDate = '';
@@ -1140,8 +1152,8 @@ class PatientService
                     }
                 } elseif (!$id) {
                     $patientIdx = '';
-                } else {
-                    return response()->json(['message' => trans('messages.unauthenticated')], 401);
+                } else{
+                    return $notAccess;
                 }
                 $type = '';
                 $fromDate = '';
@@ -1196,6 +1208,8 @@ class PatientService
                 "CALL getVitals('" . $patientIdx . "','" . $request->type . "')"
             );
             return fractal()->collection($result)->transformWith(new PatientVitalTransformer())->toArray();
+        }else{
+            return $notAccess;
         }
     }
 
@@ -1295,6 +1309,8 @@ class PatientService
                 if (!$notAccess) {
                     $getPatient = PatientMedicalHistory::where('patientId', $patient)->with('patient')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientMedicalTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             }
         } catch (Exception $e) {
@@ -1393,6 +1409,8 @@ class PatientService
                 if (!$notAccess) {
                     $getPatient = PatientMedicalRoutine::where('patientId', $patient)->with('patient')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientMedicalRoutineTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             }
         } catch (Exception $e) {
@@ -1480,6 +1498,8 @@ class PatientService
                 if (!$notAccess) {
                     $getPatient = PatientInsurance::where('patientId', $patient)->with('patient', 'insuranceName', 'insuranceType')->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientInsuranceTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             }
         } catch (Exception $e) {
@@ -1529,6 +1549,8 @@ class PatientService
             if (!$notAccess) {
                 $getPatient = PatientInventory::where('patientId', $patientId)->with('patient', 'inventory', 'deviceTypes')->where('isActive', '1')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientInventoryTransformer())->toArray();
+            }else{
+                return $notAccess;
             }
         } catch (Exception $e) {
             if (isset(auth()->user()->id)) {
@@ -1675,6 +1697,8 @@ class PatientService
                 $notAccess = Helper::haveAccess($patient);
                 if (!$notAccess) {
                     $getPatient = PatientDevice::where('patientId', $patient)->with('patient')->get();
+                }else{
+                    return $notAccess;
                 }
             }
             return fractal()->collection($getPatient)->transformWith(new PatientDeviceTransformer())->toArray();
@@ -1700,6 +1724,8 @@ class PatientService
             if (!$notAccess) {
                 $getPatient = PatientTimeLine::where('patientId', $patient)->with('patient')->orderBy('id', 'DESC')->get();
                 return fractal()->collection($getPatient)->transformWith(new PatientTimelineTransformer())->toArray();
+            }else{
+                return $notAccess;
             }
         } catch (Exception $e) {
             if (isset(auth()->user()->id)) {
@@ -1757,6 +1783,8 @@ class PatientService
                 if (!$notAccess) {
                     $getPatient = PatientFlag::where('patientId', $patient)->with('flag')->latest()->get();
                     return fractal()->collection($getPatient)->transformWith(new PatientFlagTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             } else {
                 $getPatient = PatientFlag::where('udid', $flagId)->with('flag')->first();
