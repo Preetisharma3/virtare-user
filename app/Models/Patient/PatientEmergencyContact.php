@@ -28,10 +28,10 @@ class PatientEmergencyContact extends Model
         return $this->hasOne(GlobalCode::class, 'id');
     }
 
-    public function user()
-    {
-        return $this->hasOne(User::class, 'id');
-    }
+    // public function user()
+    // {
+    //     return $this->hasOne(User::class, 'id');
+    // }
 
     public function patient()
     {
