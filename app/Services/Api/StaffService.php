@@ -203,8 +203,8 @@ class StaffService
                 $endData = array_merge($message, $resp);
            }else{
                 $rules = [
-                    'startTime' => ['Start time is unique'],
-                    'endDate' => ['End time time is unique'],
+                    'startTime' => ['Start time should be unique'],
+                    'endTime' => ['End time time should be unique'],
                 ];
              return response()->json($rules,422);
            }
