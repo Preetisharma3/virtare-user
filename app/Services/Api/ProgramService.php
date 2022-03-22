@@ -6,6 +6,8 @@ use Exception;
 use App\Models\Program\Program;
 use Illuminate\Support\Str;
 use App\Transformers\Program\ProgramTransformer;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class ProgramService
@@ -69,9 +71,9 @@ class ProgramService
             } else {
                 $program['isActive'] = 1;
             }
-            $program['updatedBy'] =  1;
-
-            if (!empty($program)) {
+            $program['updatedBy'] =  Auth::id();
+            
+            if(!empty($program)){
                 Program::where('udid', $id)->update($program);
             }
             $newData = Program::where('udid', $id)->first();
@@ -88,7 +90,7 @@ class ProgramService
     {
         try {
             $program = Program::where('udid', $id)->first();
-            $input = ['deletedBy' => 1, 'isActive' => 0, 'isDelete' => 1];
+            $input=['deletedBy'=>Auth::id(),'isActive'=>0,'isDelete'=>1];
             Program::where('udid', $id)->update($input);
             Program::where('udid', $id)->delete();
             return response()->json(['message' => "Deleted Successfully"]);
