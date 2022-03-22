@@ -1778,14 +1778,13 @@ class PatientService
     public function listPatientCriticalNote($request, $id)
     {
         try {
-
             $patient = Helper::entity('patient', $id);
-            if (!is_null($request->isRead)) {
-
-                $data = PatientCriticalNote::where([['patientId', $patient], ['isRead', $request->isRead]])->orderBy('id', 'DESC')->get();
+            if(!is_null($request->isRead)){
+                $data = PatientCriticalNote::where([['patientId',$patient],['isRead',$request->isRead]])->orderBy('id', 'DESC')->get();
                 return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
-            } else {
-                $data = PatientCriticalNote::where('patientId', $patient)->orderBy('id', 'DESC')->get();
+            }
+            else{
+                $data = PatientCriticalNote::where('patientId',$patient)->orderBy('id', 'DESC')->get();
                 return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
             }
         } catch (Exception $e) {
@@ -1797,12 +1796,10 @@ class PatientService
     {
         try {
             $patient = Helper::entity('patient', $id);
-            $patientCriticalNote = [
-                'udid' => Str::uuid()->toString(),
-                'criticalNote' => $request->input('criticalNote'),
-                'patientId' => $patient,
-            ];
-            $newData = PatientCriticalNote::create($patientCriticalNote);
+            $udid = Str::uuid()->toString();
+            $criticalNote = $request->input('criticalNote');
+            $patientId =  $patient;
+            DB::select('CALL createPatientCriticalNote("'.$udid.'","'.$patientId.'","'.$criticalNote.'")');
             return response()->json(['message' => trans('messages.createdSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
