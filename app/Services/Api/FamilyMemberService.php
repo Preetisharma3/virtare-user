@@ -22,7 +22,7 @@ class FamilyMemberService
             }
         } elseif (!$id) {
             $data = Patient::whereHas('family', function ($query) {
-                $query->where('id', auth()->user()->familyMember->id);
+                $query->where('userId', auth()->user()->id);
             })->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
             return fractal()->collection($data)->transformWith(new PatientTransformer(true))->toArray();
         } else {

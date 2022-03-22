@@ -217,7 +217,7 @@ class Helper
                 return response()->json(['message'=> trans('messages.unauthorized')], 401);
             }
         } elseif ($role == 6) {
-            $family = PatientFamilyMember::where([['id', auth()->user()->familyMember->id], ['patientId', $id]])->first();
+            $family = PatientFamilyMember::where([['userId', auth()->user()->id], ['patientId', $id]])->first();
             if (empty($family)) {
                 return response()->json(['message'=> trans('messages.unauthorized')], 401);
             }
