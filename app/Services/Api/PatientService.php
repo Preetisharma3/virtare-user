@@ -2017,7 +2017,7 @@ class PatientService
         try {
             if (!$emergencyId) {
                 $patient = Helper::entity('patient', $id);
-                $data = PatientEmergencyContact::where('patientId', $patient)->orderBy('isPrimary', 'DESC')->get();
+                $data = PatientEmergencyContact::where('patientId', $patient)->orderBy('createdAt', 'DESC')->get();
                 return fractal()->collection($data)->transformWith(new PatientFamilyMemberTransformer(false))->toArray();
             } else {
                 $data = PatientEmergencyContact::where('udid', $emergencyId)->first();

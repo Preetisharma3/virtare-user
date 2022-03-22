@@ -11,6 +11,7 @@ use App\Http\Requests\Family\FamilyRequest;
 use App\Http\Requests\Patient\PatientRequest;
 use App\Http\Requests\Patient\PatientProgramRequest;
 use App\Http\Requests\Patient\PatientConditionRequest;
+use App\Http\Requests\Patient\PatientEmergencyRequest;
 use App\Http\Requests\Patient\PatientPhysicianRequest;
 use App\Http\Requests\Patient\PatientFamilymemberRequest;
 use App\Http\Requests\Patient\PatientMedicalHistoryRequest;
@@ -259,7 +260,7 @@ class PatientController extends Controller
     return (new PatientService)->phycisianPatient($request, $id);
   }
 
-  public function addPatientEmergency(Request $request, $id, $emergencyId = null)
+  public function addPatientEmergency(PatientEmergencyRequest $request, $id, $emergencyId = null)
   {
     return (new PatientService)->patientEmergencyAdd($request, $id, $emergencyId);
   }

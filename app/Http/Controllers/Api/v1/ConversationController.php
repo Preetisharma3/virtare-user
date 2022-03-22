@@ -20,7 +20,7 @@ class ConversationController extends Controller
         return (new ConversationService)->allConversation($request, $id);
     }
 
-    public function conversationMessage(SendMessageRequest $request, $id = null)
+    public function conversationMessage(Request $request, $id = null)
     {
         return (new ConversationService)->sendMessage($request, $id);
     }

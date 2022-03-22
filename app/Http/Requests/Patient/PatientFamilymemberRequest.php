@@ -26,6 +26,7 @@ class PatientFamilymemberRequest extends FormRequest
             ];
         } else {
             return [
+                'familyEmail' => 'required',
                 'fullName' => 'required',
                 'familyGender' => 'required',
                 'relation' => 'required',
@@ -36,7 +37,10 @@ class PatientFamilymemberRequest extends FormRequest
     public function messages()
     {
         return [
-            'familyEmail.unique' => 'Family Email must be unique',
+            'familyEmail.unique' => 'Email must be unique',
+            'familyEmail.required' => 'Email must be required',
+            'fullName.required' => 'FullName must be required',
+            'familyGender.required' => 'Gender must be required',
         ];
     }
 }

@@ -132,7 +132,7 @@ class NotificationService
             'CALL appointmentConferenceIdUpdate("' . $fromDate . '")',
         );
 
-         DB::query("UPDATE `communicationCallRecords` SET `callStatusId`='49' WHERE `id` IN ( SELECT `id` FROM `communicationCallRecords` WHERE `referenceId` NOT IN (SELECT `conferenceId` FROM `appointments`) AND `entityType` = 'conferenceCall')");
+         DB::query("UPDATE `communicationCallRecords` SET `callStatusId`='49' WHERE `referenceId` IN ( SELECT concat('CONF',id) FROM appointments where conferenceId IS NULL) AND `entityType` = 'conferenceCall'");
     }
 
     public function removeNewPatientFlag()
