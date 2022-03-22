@@ -7,6 +7,7 @@ use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
 use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
 use App\Models\Communication\CallRecord;
 use App\Models\Notification\Notification;
@@ -15,6 +16,7 @@ use App\Models\Appointment\AppointmentNotification;
 use App\Models\Communication\CommunicationCallRecord;
 use App\Models\Patient\PatientFlag;
 use Carbon\Carbon;
+use GuzzleHttp\Psr7\Request;
 
 class NotificationService
 {
@@ -28,12 +30,12 @@ class NotificationService
 
                 $to_time = strtotime($appointment->startTime);
                 $from_time = time();
-                $minutes =  (int)round(abs($to_time - $from_time) / 60, 0);
+                $minutes =  (int)round(abs($to_time - $from_time) / 60,0);
 
                 $patient = Patient::where('id', $appointment->patientId)->first();
                 $userId = $patient->userId;
                 $notification = Notification::create([
-                    'body' => 'You have a Appointment in ' . $minutes . ' minutes.',
+                    'body' => 'You have a Appointment in '.$minutes.' minutes.',
                     'title' => 'Appointment Reminder',
                     'userId' => $appointment->patientUserId,
                     'isSent' => 0,
@@ -114,7 +116,7 @@ class NotificationService
                         'entityType' => 'conferenceCall'
                     ];
                     $comm = CommunicationCallRecord::create($input);
-                    $call = ['udid' => Str::uuid()->toString(), 'createdBy' => $patient->id, 'communicationCallRecordId' => $comm->id, 'staffId' => $staffId];
+                    $call = ['udid' => Str::uuid()->toString(), 'createdBy' => $patient->userId, 'communicationCallRecordId' => $comm->id, 'staffId' => $staffId];
                     CallRecord::create($call);
                 }
             }
@@ -125,10 +127,12 @@ class NotificationService
 
     public function appointmentConfrenceIdUpdate()
     {
-        $fromDate = date('Y-m-d H:i:s', strtotime('-2 hours'));
-        return DB::select(
+        $fromDate = date('Y-m-d H:i:s', strtotime('-1 hours'));
+         DB::select(
             'CALL appointmentConferenceIdUpdate("' . $fromDate . '")',
         );
+
+         DB::query("UPDATE `communicationCallRecords` SET `callStatusId`='49' WHERE `id` IN ( SELECT `id` FROM `communicationCallRecords` WHERE `referenceId` NOT IN (SELECT `conferenceId` FROM `appointments`) AND `entityType` = 'conferenceCall')");
     }
 
     public function removeNewPatientFlag()
@@ -137,6 +141,6 @@ class NotificationService
             $query->where('createdAt', '>=', Carbon::now()->subDay());
         })->delete();
 
-        return response()->json(['message' => trans('messages.deletedSuccesfully')]);
+        return response()->json(['message'=>trans('messages.deletedSuccesfully')]);
     }
 }

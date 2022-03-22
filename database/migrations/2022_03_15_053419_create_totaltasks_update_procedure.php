@@ -28,7 +28,7 @@ class CreateTotaltasksUpdateProcedure extends Migration
             IF( COUNT(tasks.id) = 0,'#8E60FF','#8E60FF') AS color,
             IF( COUNT(tasks.id) = 0,'Total Tasks','Total Tasks') AS text
             FROM
-            tasks;
+            tasks where tasks.deletedAt IS NULL;
         END;";
         DB::unprepared($procedure);
     }
