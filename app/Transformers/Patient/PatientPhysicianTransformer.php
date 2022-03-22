@@ -23,6 +23,7 @@ class PatientPhysicianTransformer extends TransformerAbstract
             'phoneNumber'=>$data->phoneNumber,
             'fax'=>$data->fax,
             'sameAsReferal'=>$data->sameAsReferal,
+            'email'=>$data->user->email,
             'user' =>$data->user? fractal()->item($data->user)->transformWith(new UserTransformer(false))->toArray():[],
 		];
 	}
