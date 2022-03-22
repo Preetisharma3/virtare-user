@@ -2,7 +2,6 @@
 
 namespace App\Transformers\Patient;
 
-use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\User\UserTransformer;
 
