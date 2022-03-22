@@ -21,14 +21,12 @@ class PatientPhysicianRequest extends FormRequest
                 'email' => 'required|unique:users,email,'.$patient['userId'].'udid',
                 'name' => 'required',
                 'designation' => 'required',
-                'phoneNumber' => 'required',
             ];
         }else{
             return [
                 'email' => 'required|unique:users,email',
                 'name' => 'required',
                 'designation' => 'required',
-                'phoneNumber' => 'required',
             ];
         }
     }
@@ -36,11 +34,10 @@ class PatientPhysicianRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.unique' => 'Patient Email must be unique',
-            'email.required' => 'Patient Email must be required',
+            'email.unique' => 'Email must be unique',
+            'email.required' => 'Email must be required',
             'name.required' => 'Name must be required',
             'designation.required' => 'Designation must be required',
-            'phoneNumber.required' => 'Phone Number must be required',
         ];
     }
 }

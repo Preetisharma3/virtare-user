@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Models\Conversation;
+namespace App\Models\GlobalCode;
 
-use App\Models\Communication\Communication;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ConversationMessage extends Model
+class DurationInterval extends Model
 {
     use SoftDeletes;
     protected $softDelete = true;
@@ -15,11 +14,7 @@ class ConversationMessage extends Model
     const CREATED_AT = 'createdAt';
     const UPDATED_AT = 'updatedAt';
     public $timestamps = false;
-	protected $table = 'messages';
+	protected $table = 'durationIntervals';
     use HasFactory;
 	protected $guarded = [];
-
-    public function communication(){
-        return $this->belongsTo(Communication::class,'communicationId','id');
-    }
 }

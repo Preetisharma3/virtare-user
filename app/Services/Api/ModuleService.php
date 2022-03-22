@@ -16,8 +16,8 @@ class ModuleService
                 'description' => $request->description,
                 'createdBy' => 1
             ];
-             Module::create($module);
-           return response()->json(['message' => trans('messages.createdSuccesfully')],200);
+            Module::create($module);
+            return response()->json(['message' => trans('messages.createdSuccesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

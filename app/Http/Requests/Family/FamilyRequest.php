@@ -46,7 +46,7 @@ class FamilyRequest extends FormRequest
     {
         return [
             'email.required' => 'Patient Email must be required',
-            'email.unique' => 'Email must be required',
+            'email.unique' => 'Email must be unique',
             'name.required' => 'Name must be required',
             'designation.required' => 'Designation must be required',
             'phoneNumber.required' => 'Phone Number must be required',

@@ -30,7 +30,7 @@ class FamilyService
                         'contactTypeId' => $request->input('contactType'), 'contactTimeId' => $request->input('contactTime'),
                         'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'), 'patientId' => $patientId,
                         'createdBy' => Auth::id(), 'userId' => $userData->id, 'udid' => Str::uuid()->toString(),
-                         'vital' => $request->input('vitalAuthorization'), 'messages' => $request->input('messageAuthorization'),'isPrimary'=>0
+                        'vital' => $request->input('vitalAuthorization'), 'messages' => $request->input('messageAuthorization'), 'isPrimary' => 0
                     ];
                 } else {
                     $familyMemberUser = [
@@ -38,14 +38,14 @@ class FamilyService
                         'emailVerify' => 1, 'createdBy' => Auth::id(), 'roleId' => 6
                     ];
                     $fam = User::create($familyMemberUser);
-                    
+
                     //Added Family in patientFamilyMember Table
                     $familyMember = [
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),
                         'contactTypeId' => $request->input('contactType'), 'contactTimeId' => $request->input('contactTime'),
                         'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'), 'patientId' => $patientId,
                         'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(),
-                         'vital' => $request->input('vitalAuthorization'), 'messages' => $request->input('messageAuthorization'),'isPrimary'=>0
+                        'vital' => $request->input('vitalAuthorization'), 'messages' => $request->input('messageAuthorization'), 'isPrimary' => 0
                     ];
                 }
                 $familyData = PatientFamilyMember::create($familyMember);
@@ -65,23 +65,23 @@ class FamilyService
                 $familyMemberUser['updatedBy'] = Auth::id();
 
                 $userData = User::where([['email', $request->input('email')], ['roleId', 6]])->first();
-                if($userData){
+                if ($userData) {
                     //updated Family in patientFamilyMember Table
                     $familyMember = [
-                        'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),'userId'=>$userData->id,
+                        'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'), 'userId' => $userData->id,
                         'contactTypeId' => $request->input('contactType'), 'contactTimeId' => $request->input('contactTime'),
                         'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'),
-                        'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'), 
+                        'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
                         'messages' => $request->input('messageAuthorization'),
                     ];
-                }else{
+                } else {
                     $fam = User::where('id', $usersId)->update($familyMemberUser);
                     //updated Family in patientFamilyMember Table
                     $familyMember = [
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'),
                         'contactTypeId' => $request->input('contactType'), 'contactTimeId' => $request->input('contactTime'),
                         'genderId' => $request->input('gender'), 'relationId' => $request->input('relation'),
-                        'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'), 
+                        'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
                         'messages' => $request->input('messageAuthorization'),
                     ];
                 }

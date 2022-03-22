@@ -116,7 +116,7 @@ class NotificationService
                         'entityType' => 'conferenceCall'
                     ];
                     $comm = CommunicationCallRecord::create($input);
-                    $call = ['udid' => Str::uuid()->toString(), 'createdBy' => $patient->id, 'communicationCallRecordId' => $comm->id, 'staffId' => $staffId];
+                    $call = ['udid' => Str::uuid()->toString(), 'createdBy' => $patient->userId, 'communicationCallRecordId' => $comm->id, 'staffId' => $staffId];
                     CallRecord::create($call);
                 }
             }
@@ -127,10 +127,12 @@ class NotificationService
 
     public function appointmentConfrenceIdUpdate()
     {
-        $fromDate = date('Y-m-d H:i:s', strtotime('-2 hours'));
-        return DB::select(
-            'CALL appointmentConferenceIdUpdate("' . $fromDate . '")',
+        $fromDate = date('Y-m-d H:i:s', strtotime('-1 hours'));
+         DB::select(
+            'CALL appointmentConferenceIdUpdate()',
         );
+
+         DB::query("UPDATE `communicationCallRecords` SET `callStatusId`='49' WHERE `referenceId` IN ( SELECT concat('CONF',id) FROM appointments where conferenceId IS NULL) AND `entityType` = 'conferenceCall'");
     }
 
     public function removeNewPatientFlag()

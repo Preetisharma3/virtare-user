@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Transformers\User\UserTransformer;
 use App\Models\Patient\PatientFamilyMember;
 use App\Transformers\Patient\PatientTransformer;
-use App\Transformers\User\UserPatientTransformer;
 use App\Transformers\Patient\PatientFamilyMemberTransformer;
 
 class UserService
@@ -120,7 +119,7 @@ class UserService
     public function loginFirst(Request $request)
     {
         try {
-            User::where('id',auth()->user()->id)->update(['firstLogin' => 0]);
+            User::where('id', auth()->user()->id)->update(['firstLogin' => 0]);
             return response()->json(['message' => trans('messages.updatedSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -131,15 +130,15 @@ class UserService
     {
         try {
             $post = $request->all();
-            if(isset($post["email"]) && !empty($post["email"])){
+            if (isset($post["email"]) && !empty($post["email"])) {
                 $email = $post["email"];
-            }else{
+            } else {
                 $email = "";
             }
 
-            if(isset($post["phone"]) && !empty($post["phone"])){
+            if (isset($post["phone"]) && !empty($post["phone"])) {
                 $phone = $post["phone"];
-            }else{
+            } else {
                 $phone = "";
             }
 
@@ -153,7 +152,7 @@ class UserService
                     return response()->json(["url" =>$forgotUrl,"code" =>$code,'message' => "Url Generated Successfully."]);
                 }else{
                     return response()->json(['message' => "Invalid Email."], 500);
-                } 
+                }
             }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -163,12 +162,11 @@ class UserService
     public function newPassword(Request $request)
     {
         $get = $request->all();
-        if(isset($get["code"]) && !empty($get["code"]))
-        {
-            $codeObj = explode("##",$get["code"]);
-            if(isset($codeObj[0])){
+        if (isset($get["code"]) && !empty($get["code"])) {
+            $codeObj = explode("##", $get["code"]);
+            if (isset($codeObj[0])) {
                 $email = base64_decode($codeObj[0]);
-            }else{
+            } else {
                 $email = "";
             }
 
@@ -178,10 +176,9 @@ class UserService
                 $udid = "";
             }
 
-            if(isset($get["newPassword"]) && !empty($get["newPassword"]))
-            {
+            if (isset($get["newPassword"]) && !empty($get["newPassword"])) {
                 $newPassword = $get["newPassword"];
-            }else{
+            } else {
                 $newPassword = "";
             }
 
@@ -200,7 +197,7 @@ class UserService
             if($result){
                 User::find($result->id)->update(['password' => Hash::make($newPassword)]);
                 return response()->json(['message' => "Password Changed Successfully."]);
-            }else{
+            } else {
                 return response()->json(['message' => "Invalid code."], 500);
             }
 

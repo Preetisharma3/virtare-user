@@ -6,7 +6,6 @@ use App\Models\Template\Template;
 use App\Transformers\Template\TemplateTransformer;
 use Exception;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\App;
 
 class TemplateService
 {
@@ -35,13 +34,13 @@ class TemplateService
             $message = ['message' => trans('messages.createdSuccesfully')];
             $resp =  fractal()->item($newtemplate)->transformWith(new TemplateTransformer())->toArray();
             $endData = array_merge($message, $resp);
-            return $endData; 
+            return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
 
-    public function updateTemplate($request,$id)
+    public function updateTemplate($request, $id)
     {
         try {
             $template = [
@@ -54,21 +53,21 @@ class TemplateService
             $message = ['message' => trans('messages.updatedSuccesfully')];
             $resp =  fractal()->item($newtemplate)->transformWith(new TemplateTransformer())->toArray();
             $endData = array_merge($message, $resp);
-            return $endData; 
+            return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
 
-    public function deleteTemplate($request,$id)
+    public function deleteTemplate($request, $id)
     {
         try {
             $data = ['deletedBy' => 1, 'isDelete' => 1, 'isActive' => 0];
             Template::find($id)->update($data);
             Template::find($id)->delete();
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
-       } catch (Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
-       }
+        }
     }
 }

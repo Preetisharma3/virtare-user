@@ -10,47 +10,43 @@ use App\Services\Api\ExportReportRequestService;
 
 class GeneralParameterController extends Controller
 {
-    
-    public function addGeneralParameterGroup(Request $request,$id=null)
+
+    public function addGeneralParameterGroup(Request $request, $id = null)
     {
-        return (new GeneralParameterService)->generalParameterAdd($request,$id);
+        return (new GeneralParameterService)->generalParameterAdd($request, $id);
     }
 
-    public function listGeneralParameterGroup(Request $request,$id=null)
+    public function listGeneralParameterGroup(Request $request, $id = null)
     {
-        return (new GeneralParameterService)->generalParameterGroupList($request,$id);
+        return (new GeneralParameterService)->generalParameterGroupList($request, $id);
     }
 
-    public function listGeneralParameter(Request $request,$id)
+    public function listGeneralParameter(Request $request, $id)
     {
-        return (new GeneralParameterService)->generalParameterList($request,$id);
+        return (new GeneralParameterService)->generalParameterList($request, $id);
     }
 
-
-    public function deleteGeneralParameterGroup(Request $request,$id)
+    public function deleteGeneralParameterGroup(Request $request, $id)
     {
-        return (new GeneralParameterService)->generalParameterGroupDelete($request,$id);
+        return (new GeneralParameterService)->generalParameterGroupDelete($request, $id);
     }
 
-    public function deleteGeneralParameter(Request $request,$id)
+    public function deleteGeneralParameter(Request $request, $id)
     {
-        return (new GeneralParameterService)->generalParameterDelete($request,$id);
+        return (new GeneralParameterService)->generalParameterDelete($request, $id);
     }
-    
-    public function generalParameterReport(Request $request,$id)
+
+    public function generalParameterReport(Request $request, $id)
     {
-        if($id)
-        {
+        if ($id) {
             $reportType = "general_parameter_report";
-            $checkReport = ExportReportRequestService::checkReportRequest($id,$reportType);
-            if($checkReport){
+            $checkReport = ExportReportRequestService::checkReportRequest($id, $reportType);
+            if ($checkReport) {
                 ExcelGeneratorService::generalParameterExcelExport($request);
-            }else{
+            } else {
                 return response()->json(['message' => "User not Access to download Report."], 500);
             }
-        }
-        else
-        {
+        } else {
             return response()->json(['message' => "invalid URL."], 500);
         }
     }

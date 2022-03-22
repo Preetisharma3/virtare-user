@@ -16,6 +16,7 @@ use App\Models\Patient\PatientStaff;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
 use App\Models\Patient\PatientTimeLine;
+use App\Models\Notification\Notification;
 use App\Models\Patient\PatientFamilyMember;
 use App\Transformers\Appointment\AppointmentTransformer;
 use App\Transformers\Appointment\AppointmentDataTransformer;
@@ -27,7 +28,7 @@ class AppointmentService
 
     public function addAppointment($request, $id)
     {
-        try {
+        // try {
             $startDateTime = Helper::date($request->input('startDate'));
             $input = [
                 'udid' => Str::uuid()->toString(),
@@ -67,34 +68,56 @@ class AppointmentService
             $existence = DB::select(
                 "CALL appointmentExist('" . $staff . "','" . $startDateTime . "')",
             );
-            foreach($existence as $exists){
-            if ($exists->isExist == false) {
-                $appointment = Appointment::create($data);
-                $note = ['createdBy' => Auth::id(), 'note' => $request->input('note'), 'udid' => Str::uuid()->toString(), 'entityType' => 'appointment', 'referenceId' => $appointment->id];
-                Note::create($note);
-                $patientData = Patient::where('id', $data['patientId'])->first();
-                $staffData = Staff::where('id', $data['staffId'])->first();
-                $timeLine = [
-                    'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for' . ' ' . $patientData->firstName . ' ' . $patientData->lastName . ' ' . 'Added with' . ' ' . $staffData->firstName . ' ' . $staffData->lastName, 'type' => 1,
-                    'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
-                ];
-                PatientTimeLine::create($timeLine);
-                return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
-            } else {
-                return response()->json(['message' => 'Appointment already exist!']);
-            }
-        }
-        } catch (Exception $e) {
-            if (isset(auth()->user()->id)) {
-                $userId = auth()->user()->id;
-            } else {
-                $userId = "";
-            }
+            foreach ($existence as $exists) {
+                if ($exists->isExist == false) {
 
-            ErrorLogGenerator::createLog($request, $e, $userId);
-            $response = ['message' => $e->getMessage()];
-            return response()->json($response,  500);
-        }
+                    $appointment = Appointment::create($data);
+                    if (Auth::user()->patient) {
+                        $staff = Staff::where('udid', $request->staffId)->first();
+                        $userId=$staff->userId;
+                        $firstName=$staff->firstName;
+                        $lastName=$staff->lastName;
+                    } elseif (auth()->user()->staff) {
+                        $patient = Patient::where('udid', $request->patientId)->first();
+                        $userId=$patient->userId;
+                        $firstName=$patient->firstName;
+                        $lastName=$patient->lastName;
+                    }
+                    $notification = Notification::create([
+                        'body' => 'Their is New Appointment for You With'.' '.$firstName.' '.$lastName,
+                        'title' => 'New Appointment',
+                        'userId' => $userId,
+                        'isSent' => 0,
+                        'entity' => 'Appointment',
+                        'referenceId' => $appointment->id,
+                        'createdBy' => Auth::id(),
+                    ]);
+
+                    $note = ['createdBy' => Auth::id(), 'note' => $request->input('note'), 'udid' => Str::uuid()->toString(), 'entityType' => 'appointment', 'referenceId' => $appointment->id];
+                    Note::create($note);
+                    $patientData = Patient::where('id', $data['patientId'])->first();
+                    $staffData = Staff::where('id', $data['staffId'])->first();
+                    $timeLine = [
+                        'patientId' => $patientData->id, 'heading' => 'Appointment', 'title' => 'Appointment for' . ' ' . $patientData->firstName . ' ' . $patientData->lastName . ' ' . 'Added with' . ' ' . $staffData->firstName . ' ' . $staffData->lastName, 'type' => 1,
+                        'createdBy' => Auth::id(), 'udid' => Str::uuid()->toString()
+                    ];
+                    PatientTimeLine::create($timeLine);
+                    return response()->json(['message' => trans('messages.createdSuccesfully')],  200);
+                } else {
+                    return response()->json(['message' => 'Appointment already exist!']);
+                }
+            }
+        // } catch (Exception $e) {
+        //     if (isset(auth()->user()->id)) {
+        //         $userId = auth()->user()->id;
+        //     } else {
+        //         $userId = "";
+        //     }
+
+        //     ErrorLogGenerator::createLog($request, $e, $userId);
+        //     $response = ['message' => $e->getMessage()];
+        //     return response()->json($response,  500);
+        // }
     }
 
     public function appointmentList($request, $id)
@@ -108,13 +131,15 @@ class AppointmentService
                 $patient = Helper::entity('patient', $id);
                 $notAccess = Helper::haveAccess($patient);
                 if (!$notAccess) {
-                    if(auth()->user()->roleId==3){
-                        $data = Appointment::where([['staffId',auth()->user()->staff->id],['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('startDateTime', 'ASC')->get();
-                    }else{
+                    if (auth()->user()->roleId == 3) {
+                        $data = Appointment::where([['staffId', auth()->user()->staff->id], ['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('startDateTime', 'ASC')->get();
+                    } else {
                         $data = Appointment::where([['patientId', $patient], ['startDateTime', '>=', Carbon::now()->subMinute(30)]])->orderBy('startDateTime', 'ASC')->get();
                     }
                     $results = Helper::dateGroup($data, 'startDateTime');
                     return fractal()->collection($results)->transformWith(new AppointmentListTransformer())->toArray();
+                }else{
+                    return $notAccess;
                 }
             }
         } catch (Exception $e) {
@@ -127,16 +152,16 @@ class AppointmentService
             ErrorLogGenerator::createLog($request, $e, $userId);
             $response = ['message' => $e->getMessage()];
             return response()->json($response,  500);
-        }    
+        }
     }
 
     public function newAppointments($request)
     {
         try {
-            if(auth()->user()->roleId==3){
-                $data = Appointment::where('staffId',auth()->user()->staff->id)->with('patient', 'staff', 'appointmentType', 'duration') ->whereRaw('conferenceId != "" OR conferenceId IS NOT NULL')->orderBy('startDateTime', 'ASC')->take(3)->get();
-            }else{
-                $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration') ->whereRaw('conferenceId != "" OR conferenceId IS NOT NULL')->orderBy('startDateTime', 'ASC')->take(3)->get();
+            if (auth()->user()->roleId == 3) {
+                $data = Appointment::where('staffId', auth()->user()->staff->id)->with('patient', 'staff', 'appointmentType', 'duration')->whereRaw('conferenceId != "" OR conferenceId IS NOT NULL')->orderBy('startDateTime', 'ASC')->take(3)->get();
+            } else {
+                $data = Appointment::with('patient', 'staff', 'appointmentType', 'duration')->whereRaw('conferenceId != "" OR conferenceId IS NOT NULL')->orderBy('startDateTime', 'ASC')->take(3)->get();
             }
             return fractal()->collection($data)->transformWith(new AppointmentTransformer())->toArray();
         } catch (Exception $e) {
@@ -220,9 +245,9 @@ class AppointmentService
                     array_push($staff_array, $staff_id);
                 }
                 $staffIdx = json_encode($staff_array);
-            }else{
-                if(auth()->user()->roleId==3){
-                    $staffIdx = auth()->user()->staff->id;  
+            } else {
+                if (auth()->user()->roleId == 3) {
+                    $staffIdx = auth()->user()->staff->id;
                 }
             }
 
@@ -245,10 +270,10 @@ class AppointmentService
 
     public function AppointmentConference($request)
     {
-        try{
-            if(auth()->user()->roleId==3){
-                $data = Appointment::where('staffId',auth()->user()->staff->id)->whereRaw('conferenceId is not null')->where('startDateTime', '>=', Carbon::now()->subMinute(30))->get();
-            }else{
+        try {
+            if (auth()->user()->roleId == 3) {
+                $data = Appointment::where('staffId', auth()->user()->staff->id)->whereRaw('conferenceId is not null')->where('startDateTime', '>=', Carbon::now()->subMinute(30))->get();
+            } else {
                 $data = Appointment::whereRaw('conferenceId is not null')->where('startDateTime', '>=', Carbon::now()->subMinute(30))->get();
             }
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
@@ -267,10 +292,10 @@ class AppointmentService
 
     public function AppointmentConferenceId($request, $id)
     {
-        try{
-            if(auth()->user()->roleId==3){
-                $data = Appointment::where([['startDateTime', '>=', Carbon::now()->subMinute(30)], ['conferenceId', $id]],['staffId',auth()->user()->staff->id])->get();
-            }else{
+        try {
+            if (auth()->user()->roleId == 3) {
+                $data = Appointment::where([['startDateTime', '>=', Carbon::now()->subMinute(30)], ['conferenceId', $id]], ['staffId', auth()->user()->staff->id])->get();
+            } else {
                 $data = Appointment::where([['startDateTime', '>=', Carbon::now()->subMinute(30)], ['conferenceId', $id]])->get();
             }
             return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->toArray();
@@ -289,20 +314,20 @@ class AppointmentService
 
     public function appointmentUpdate($request, $id)
     {
-        try{
+        try {
             $appointment = Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->first();
 
             $existence = DB::select(
                 "CALL appointmentExist('" . $appointment['staffId'] . "','" . Helper::date($request->startDateTime) . "')",
             );
-            foreach($existence as $exists){
+            foreach ($existence as $exists) {
                 if ($exists->isExist == false) {
 
                     $input = ['updatedBy' => Auth::id(), 'startDateTime' => Helper::date($request->startDateTime)];
                     Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->update($input);
                     $data = Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->orderBy('startDateTime', 'ASC')->first();
                     return fractal()->item($data)->transformWith(new AppointmentTransformer())->toArray();
-                }else {
+                } else {
                     return response()->json(['message' => 'Appointment already exist!']);
                 }
             }
@@ -321,7 +346,7 @@ class AppointmentService
 
     public function appointmentDelete($request, $id)
     {
-        try{
+        try {
             $input = ['deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0];
             Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id]])->update($input);
             Appointment::where([['patientId', auth()->user()->patient->id], ['udid', $id], ['startDateTime', '>=', Carbon::now()->subMinutes(60)]])->delete();

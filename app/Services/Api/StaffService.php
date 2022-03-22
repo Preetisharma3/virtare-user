@@ -69,7 +69,7 @@ class StaffService
     {
         if (!$id) {
             if ($request->all) {
-                    $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
+                $data = Staff::where('firstname', 'LIKE', '%' . $request->search . '%')->orWhere('lastName', 'LIKE', '%' . $request->search . '%')->with('roles', 'appointment')->orderBy('firstName', 'ASC')->orderBy('lastName', 'ASC')->get();
                 return fractal()->collection($data)->transformWith(new StaffTransformer())->toArray();
             } else {
                 if (auth()->user()->roleId == 3) {
@@ -115,19 +115,19 @@ class StaffService
     public function addStaffContact($request, $id)
     {
         try {
-                $staff = Staff::where('udid', $id)->first();
-                $udid = Str::uuid()->toString();
-                $firstName = $request->input('firstName');
-                $lastName = $request->input('lastName');
-                $email = $request->input('email');
-                $phoneNumber = $request->input('phoneNumber');
-                $staffId = $staff->id;
-                DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
-                $staffContactData = StaffContact::where('udid', $udid)->first();
-                $message = ["message" => trans('messages.createdSuccesfully')];
-                $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
-                $endData = array_merge($message, $resp);
-                return $endData;
+            $staff = Staff::where('udid', $id)->first();
+            $udid = Str::uuid()->toString();
+            $firstName = $request->input('firstName');
+            $lastName = $request->input('lastName');
+            $email = $request->input('email');
+            $phoneNumber = $request->input('phoneNumber');
+            $staffId = $staff->id;
+            DB::select('CALL createStaffContact("' . $udid . '","' . $firstName . '","' . $lastName . '","' . $email . '","' . $phoneNumber . '","' . $staffId . '")');
+            $staffContactData = StaffContact::where('udid', $udid)->first();
+            $message = ["message" => trans('messages.createdSuccesfully')];
+            $resp =  fractal()->item($staffContactData)->transformWith(new StaffContactTransformer())->toArray();
+            $endData = array_merge($message, $resp);
+            return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -190,17 +190,24 @@ class StaffService
     public function addStaffAvailability($request, $id)
     {
         try {
-            $udid = Str::uuid()->toString();
-            $timeStart = Helper::time($request->input('startTime'));
-            $timeEnd = Helper::time($request->input('endTime'));
-            $startTime = $timeStart;
-            $endTime = $timeEnd;
             $staffId = Helper::entity('staff', $id);
-            DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');
-            $staffAvailability = StaffAvailability::where('udid', $udid)->first();
-            $message = ["message" => trans('messages.createdSuccesfully')];
-            $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
-            $endData = array_merge($message, $resp);
+            $udid = Str::uuid()->toString();
+            $startTime = Helper::time($request->input('startTime'));
+            $endTime = Helper::time($request->input('endTime'));
+            $data = StaffAvailability::where([['staffId', $staffId],['startTime',$startTime],['endTime',$endTime]])->first();
+           if(is_null($data)){
+                DB::select('CALL createStaffAvailability("' . $udid . '","' . $startTime . '","' . $endTime . '","' . $staffId . '")');
+                $staffAvailability = StaffAvailability::where('udid', $udid)->first();
+                $message = ["message" => trans('messages.createdSuccesfully')];
+                $resp =  fractal()->item($staffAvailability)->transformWith(new StaffAvailabilityTransformer())->toArray();
+                $endData = array_merge($message, $resp);
+           }else{
+                $rules = [
+                    'startTime' => ['Start time should be unique'],
+                    'endTime' => ['End time time should be unique'],
+                ];
+             return response()->json($rules,422);
+           }
             return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);

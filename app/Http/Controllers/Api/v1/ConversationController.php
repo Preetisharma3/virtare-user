@@ -10,9 +10,9 @@ use App\Http\Requests\Conversation\ConversationRequest;
 
 class ConversationController extends Controller
 {
-    public function conversation(ConversationRequest $request ,$id = null)
+    public function conversation(ConversationRequest $request, $id = null)
     {
-        return (new ConversationService)->createConversation($request,$id);
+        return (new ConversationService)->createConversation($request, $id);
     }
 
     public function allConversation(request $request, $id = null)
@@ -20,7 +20,7 @@ class ConversationController extends Controller
         return (new ConversationService)->allConversation($request, $id);
     }
 
-    public function conversationMessage(SendMessageRequest $request, $id = null)
+    public function conversationMessage(Request $request, $id = null)
     {
         return (new ConversationService)->sendMessage($request, $id);
     }

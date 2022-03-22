@@ -2,7 +2,6 @@
 
 namespace App\Transformers\Patient;
 
-use Illuminate\Support\Facades\URL;
 use League\Fractal\TransformerAbstract;
 use App\Transformers\User\UserTransformer;
 
@@ -23,6 +22,7 @@ class PatientPhysicianTransformer extends TransformerAbstract
             'phoneNumber'=>$data->phoneNumber,
             'fax'=>$data->fax,
             'sameAsReferal'=>$data->sameAsReferal,
+            'email'=>$data->user->email,
             'user' =>$data->user? fractal()->item($data->user)->transformWith(new UserTransformer(false))->toArray():[],
 		];
 	}

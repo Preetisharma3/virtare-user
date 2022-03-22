@@ -11,18 +11,17 @@ use App\Transformers\Inventory\InventoryTransformer;
 use App\Transformers\Inventory\InventoryListTransformer;
 
 
-
 class InventoryService
 {
     public function store($request)
     {
         try {
-            $isActive=$request->isActive;
+            $isActive = $request->isActive;
             $input = $request->only(['deviceModelId', 'serialNumber', 'macAddress', 'isActive']);
             $otherData = [
                 'udid' => Str::uuid()->toString(),
                 'createdBy' => 1,
-                'isActive'=>$isActive==true?1:0
+                'isActive' => $isActive == true ? 1 : 0
             ];
             $data = json_encode(array_merge($input, $otherData));
             DB::select(
@@ -52,21 +51,18 @@ class InventoryService
     {
         try {
             // $deviceType = $request->deviceType;
-            if($request->inventoryStatus){
+            if ($request->inventoryStatus) {
                 $isActive = "";
-               
-                if ($request->isActive == "true")
-                {
+
+                if ($request->isActive == "true") {
                     $isActive = 1;
-                }
-                else
-                {
-                    $isActive =0;
+                } else {
+                    $isActive = 0;
                 }
                 Inventory::where('id', $id)->update(["isActive" => $isActive]);
                 $newData = Inventory::where('id', $id)->first();
                 $message  = ['message' => trans('messages.updatedSuccesfully')];
-            }else{
+            } else {
                 $deviceModelId = $request->deviceModelId;
                 $serialNumber = $request->serialNumber;
                 $macAddress = $request->macAddress;
@@ -107,21 +103,17 @@ class InventoryService
 
     public function geVentoryById($id)
     {
-        if($id)
-        {
+        if ($id) {
             $data = array();
             $newData = array();
             $newData = Inventory::where('id', $id)->first();
-            if(!empty($newData)){
+            if (!empty($newData)) {
                 $data =  fractal()->item($newData)->transformWith(new InventoryTransformer())->toArray();
             }
-            
+
             return $data;
-        }
-        else
-        {
+        } else {
             return response()->json(['message' => "id is Required"], 500);
         }
-
     }
 }

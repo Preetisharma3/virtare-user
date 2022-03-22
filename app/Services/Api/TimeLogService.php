@@ -8,7 +8,6 @@ use App\Models\Note\Note;
 use Illuminate\Support\Str;
 use App\Models\CPTCode\CPTCode;
 use App\Models\Patient\Patient;
-use App\Models\TimeLog\TimeLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Patient\PatientTimeLog;
@@ -212,11 +211,11 @@ class TimeLogService
 
     // Change Audit Time Log
 
-    public function auditLogChange($request,$id)
+    public function auditLogChange($request, $id)
     {
         try {
-            $patientTimeLogId=PatientTimeLog::where('udid',$id)->first();
-            $data=ChangeAuditLog::where('patientTimeLogId',$patientTimeLogId->id)->get();
+            $patientTimeLogId = PatientTimeLog::where('udid', $id)->first();
+            $data = ChangeAuditLog::where('patientTimeLogId', $patientTimeLogId->id)->get();
             return fractal()->collection($data)->transformWith(new AuditTimeLogTransformer())->toArray();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);

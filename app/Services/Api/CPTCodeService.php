@@ -20,22 +20,22 @@ class CPTCodeService
                 $data = CPTCode::with('provider', 'service', 'duration')->where("udid", $id)->orderBy('createdAt', 'DESC')->first();
                 return fractal()->item($data)->transformWith(new CPTCodeTransformer())->toArray();
             } else {
-                if($request->all){
-                    if($request->active){
+                if ($request->all) {
+                    if ($request->active) {
                         $data = CPTCode::with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->get();
-                    }else{
-                    $data = CPTCode::where('isActive',1)->with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->get();
+                    } else {
+                        $data = CPTCode::where('isActive', 1)->with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->get();
                     }
                     return fractal()->collection($data)->transformWith(new CPTCodeTransformer())->toArray();
-                }else{
-                    if($request->active){
+                } else {
+                    if ($request->active) {
                         $data = CPTCode::with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
-                    }else{
-                        $data = CPTCode::where('isActive',1)->with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
+                    } else {
+                        $data = CPTCode::where('isActive', 1)->with('provider', 'service', 'duration')->orderBy('createdAt', 'DESC')->paginate(env('PER_PAGE', 20));
                     }
                     return fractal()->collection($data)->transformWith(new CPTCodeTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
                 }
-                }
+            }
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -68,57 +68,57 @@ class CPTCodeService
     {
         try {
 
-        $CPTCode = array();
-        if (!empty($request->input('serviceId'))) {
-            $udid = $request->input('serviceId');
-            $service = Helper::tableName('App\Models\CPTCode\Service', $udid);
-            $CPTCode['serviceId'] =  $service;
-        }
-        if (!empty($request->input('providerId'))) {
-            $CPTCode['providerId'] =  $request->input('providerId');
-        }
-        if (!empty($request->input('name'))) {
-            $CPTCode['name'] =  $request->input('name');
-        }
-        if (!empty($request->input('billingAmout'))) {
-            $CPTCode['billingAmout'] =  $request->input('billingAmout');
-        }
-        if (!empty($request->input('description'))) {
-            $CPTCode['description'] =  $request->input('description');
-        }
-        if (!empty($request->input('durationId'))) {
-            $CPTCode['durationId'] =  $request->input('durationId');
-        }
-        if (empty($request->input('status'))) {
-            $CPTCode['isActive'] =  0;
-        }else{
-            $CPTCode['isActive']=1;
-        }
-        $CPTCode['updatedBy'] =  Auth::id();
+            $CPTCode = array();
+            if (!empty($request->input('serviceId'))) {
+                $udid = $request->input('serviceId');
+                $service = Helper::tableName('App\Models\CPTCode\Service', $udid);
+                $CPTCode['serviceId'] =  $service;
+            }
+            if (!empty($request->input('providerId'))) {
+                $CPTCode['providerId'] =  $request->input('providerId');
+            }
+            if (!empty($request->input('name'))) {
+                $CPTCode['name'] =  $request->input('name');
+            }
+            if (!empty($request->input('billingAmout'))) {
+                $CPTCode['billingAmout'] =  $request->input('billingAmout');
+            }
+            if (!empty($request->input('description'))) {
+                $CPTCode['description'] =  $request->input('description');
+            }
+            if (!empty($request->input('durationId'))) {
+                $CPTCode['durationId'] =  $request->input('durationId');
+            }
+            if (empty($request->input('status'))) {
+                $CPTCode['isActive'] =  0;
+            } else {
+                $CPTCode['isActive'] = 1;
+            }
+            $CPTCode['updatedBy'] =  Auth::id();
 
-        if (!empty($CPTCode)) {
-            CPTCode::where('udid', $id)->update($CPTCode);
-        }
-        $cptCodeData = CPTCode::where('udid', $id)->first();
-        $message = ['message' => trans('messages.updatedSuccesfully')];
-        $resp =  fractal()->item($cptCodeData)->transformWith(new CPTCodeTransformer())->toArray();
-        $endData = array_merge($message, $resp);
-        return $endData;
+            if (!empty($CPTCode)) {
+                CPTCode::where('udid', $id)->update($CPTCode);
+            }
+            $cptCodeData = CPTCode::where('udid', $id)->first();
+            $message = ['message' => trans('messages.updatedSuccesfully')];
+            $resp =  fractal()->item($cptCodeData)->transformWith(new CPTCodeTransformer())->toArray();
+            $endData = array_merge($message, $resp);
+            return $endData;
 
-        // $serviceId = $request->input('serviceId');
-        // $providerId = $request->input('providerId');
-        // $name = $request->input('name');
-        // $billingAmout = $request->input('billingAmout');
-        // $description = $request->input('description');
-        // $durationId = $request->input('durationId');
-        // $updatedBy = 1;
-        // $isActive = 1;
-        // DB::select('CALL updateCPTCode("' . $id . '","' . $serviceId . '","' . $providerId . '","' . $name . '","' . $billingAmout . '","' . $description . '","' . $durationId . '","' . $updatedBy . '","' . $isActive . '")');
-        // $cptCodeData = CPTCode::where('id', $id)->first();
-        // $message = ['message' => trans('messages.updatedSuccesfully')];
-        // $resp =  fractal()->item($cptCodeData)->transformWith(new CPTCodeTransformer())->toArray();
-        // $endData = array_merge($message, $resp);
-        // return $endData;
+            // $serviceId = $request->input('serviceId');
+            // $providerId = $request->input('providerId');
+            // $name = $request->input('name');
+            // $billingAmout = $request->input('billingAmout');
+            // $description = $request->input('description');
+            // $durationId = $request->input('durationId');
+            // $updatedBy = 1;
+            // $isActive = 1;
+            // DB::select('CALL updateCPTCode("' . $id . '","' . $serviceId . '","' . $providerId . '","' . $name . '","' . $billingAmout . '","' . $description . '","' . $durationId . '","' . $updatedBy . '","' . $isActive . '")');
+            // $cptCodeData = CPTCode::where('id', $id)->first();
+            // $message = ['message' => trans('messages.updatedSuccesfully')];
+            // $resp =  fractal()->item($cptCodeData)->transformWith(new CPTCodeTransformer())->toArray();
+            // $endData = array_merge($message, $resp);
+            // return $endData;
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

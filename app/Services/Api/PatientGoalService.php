@@ -20,11 +20,13 @@ class PatientGoalService
                 $notAccess = Helper::haveAccess($patient);
                 if ($notAccess) {
                     $data = PatientGoal::where([['patientId', $patient], ['udid', $goalId]])->get();
+                }else{
+                    return $notAccess;
                 }
             } elseif (!$goalId) {
-                $data = PatientGoal::where('patientId', $patient)->with('notes',function($query){
-                    $query->where('entityType','patientGoal');
-                })->orderBy('createdAt','DESC')->get();
+                $data = PatientGoal::where('patientId', $patient)->with('notes', function ($query) {
+                    $query->where('entityType', 'patientGoal');
+                })->orderBy('createdAt', 'DESC')->get();
             } else {
                 return response()->json(['message' => trans('messages.unauthenticated')], 401);
             }
@@ -44,17 +46,17 @@ class PatientGoalService
     {
         try {
             $patient = Helper::entity('patient', $id);
-            $startDate=Helper::dateOnly($request->input('startDate'));
-            $endDate=Helper::dateOnly($request->input('endDate'));
+            $startDate = Helper::dateOnly($request->input('startDate'));
+            $endDate = Helper::dateOnly($request->input('endDate'));
             $input = [
-                'lowValue' => $request->input('lowValue'), 'highValue' => $request->input('highValue'),'vitalFieldId'=>$request->input('vitalField'),
-                'startDate'=>$startDate,'endDate'=>$endDate,'frequency'=>$request->input('frequency'),
-                'frequencyTypeId'=>$request->input('frequencyType'),'deviceTypeId'=>$request->input('deviceType'),
+                'lowValue' => $request->input('lowValue'), 'highValue' => $request->input('highValue'), 'vitalFieldId' => $request->input('vitalField'),
+                'startDate' => $startDate, 'endDate' => $endDate, 'frequency' => $request->input('frequency'),
+                'frequencyTypeId' => $request->input('frequencyType'), 'deviceTypeId' => $request->input('deviceType'),
                 'createdBy' => Auth::id(), 'patientId' => $patient, 'udid' => Str::uuid()->toString()
             ];
-           $goal= PatientGoal::create($input);
-           $note=['udid'=>Str::uuid()->toString(),'referenceId'=>$goal->id,'entityType'=>'patientGoal','note'=>$request->input('note')];
-           Note::create($note);
+            $goal = PatientGoal::create($input);
+            $note = ['udid' => Str::uuid()->toString(), 'referenceId' => $goal->id, 'entityType' => 'patientGoal', 'note' => $request->input('note')];
+            Note::create($note);
             return response()->json(['message' => trans('messages.createdSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
@@ -65,10 +67,10 @@ class PatientGoalService
     {
         try {
             $input = [
-                'deletedBy' => Auth::id(), 'isDelete' => 1,'isActive' => 0
+                'deletedBy' => Auth::id(), 'isDelete' => 1, 'isActive' => 0
             ];
-            PatientGoal::where('udid',$goalId)->update($input);
-            PatientGoal::where('udid',$goalId)->delete();
+            PatientGoal::where('udid', $goalId)->update($input);
+            PatientGoal::where('udid', $goalId)->delete();
             return response()->json(['message' => trans('messages.deletedSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);

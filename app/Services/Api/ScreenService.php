@@ -17,8 +17,8 @@ class ScreenService
                 'moduleId' => $request->moduleId,
                 'createdBy' => Auth::id()
             ];
-             Screen::create($screen);
-           return response()->json(['message' => trans('messages.createdSuccesfully')],200);
+            Screen::create($screen);
+            return response()->json(['message' => trans('messages.createdSuccesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
