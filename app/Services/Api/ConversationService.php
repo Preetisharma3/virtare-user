@@ -3,10 +3,14 @@
 namespace App\Services\Api;
 
 use Exception;
+use App\Models\Staff\Staff;
 use Illuminate\Support\Str;
+use App\Models\Patient\Patient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notification\Notification;
 use App\Models\Communication\Communication;
+use App\Models\Conversation\Conversation;
 use App\Models\Patient\PatientFamilyMember;
 use App\Models\Conversation\ConversationMessage;
 use App\Transformers\Conversation\ConversationTransformer;
@@ -87,7 +91,7 @@ class ConversationService
 
     public function sendMessage($request, $id)
     {
-        try {
+        // try {
             if (!$id) {
                 $familyMember = PatientFamilyMember::where([['userId', auth()->user()->id], ['isPrimary', 1]])->exists();
                 if ($familyMember == true) {
@@ -114,13 +118,43 @@ class ConversationService
                 'type' => $request->type,
                 "createdBy" => Auth::id(),
             );
-            ConversationMessage::create($input);
+            $conversation=ConversationMessage::create($input);
+
+            if (Auth::user()->patient) {
+                $con=ConversationMessage::where('communicationId',$request->conversationId)->first();
+                $userId=$con->communication->referenceId;
+                $firstName=$con->communication->receiver->staff->firstName;
+                $lastName=$con->communication->receiver->staff->lastName;
+            } elseif (auth()->user()->staff) {
+                $con=ConversationMessage::where('communicationId',$request->conversationId)->first();
+                $userId=$con->communication->referenceId;
+                if($con->communication->receiver->patient){
+                    $firstName=$con->communication->receiver->patient->firstName;
+                    $lastName=$con->communication->receiver->patient->lastName;
+                }else{
+                    $firstName=$con->communication->receiver->staff->firstName;
+                    $lastName=$con->communication->receiver->staff->lastName;
+                }
+            }
+            $notification = Notification::create([
+                'body' => 'Their is New Appointment for You With'.' '.$firstName.' '.$lastName,
+                'title' => 'New Appointment',
+                'userId' => $userId,
+                'isSent' => 0,
+                'entity' => 'Conversation',
+                'referenceId' => $conversation->id,
+                'createdBy' => Auth::id(),
+            ]);
+
+
+
+
             return response()->json([
                 'message' => trans('messages.message_sent')
             ]);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
-        }
+        // } catch (Exception $e) {
+        //     return response()->json(['message' => $e->getMessage()],  500);
+        // }
     }
 
     public function showConversation($request, $id)

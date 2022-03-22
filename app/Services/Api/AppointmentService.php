@@ -16,6 +16,7 @@ use App\Models\Patient\PatientStaff;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment\Appointment;
 use App\Models\Patient\PatientTimeLine;
+use App\Models\Notification\Notification;
 use App\Models\Patient\PatientFamilyMember;
 use App\Transformers\Appointment\AppointmentTransformer;
 use App\Transformers\Appointment\AppointmentDataTransformer;
@@ -27,7 +28,7 @@ class AppointmentService
 
     public function addAppointment($request, $id)
     {
-        try {
+        // try {
             $startDateTime = Helper::date($request->input('startDate'));
             $input = [
                 'udid' => Str::uuid()->toString(),
@@ -69,7 +70,29 @@ class AppointmentService
             );
             foreach ($existence as $exists) {
                 if ($exists->isExist == false) {
+
                     $appointment = Appointment::create($data);
+                    if (Auth::user()->patient) {
+                        $staff = Staff::where('udid', $request->staffId)->first();
+                        $userId=$staff->userId;
+                        $firstName=$staff->firstName;
+                        $lastName=$staff->lastName;
+                    } elseif (auth()->user()->staff) {
+                        $patient = Patient::where('udid', $request->patientId)->first();
+                        $userId=$patient->userId;
+                        $firstName=$patient->firstName;
+                        $lastName=$patient->lastName;
+                    }
+                    $notification = Notification::create([
+                        'body' => 'Their is New Appointment for You With'.' '.$firstName.' '.$lastName,
+                        'title' => 'New Appointment',
+                        'userId' => $userId,
+                        'isSent' => 0,
+                        'entity' => 'Appointment',
+                        'referenceId' => $appointment->id,
+                        'createdBy' => Auth::id(),
+                    ]);
+
                     $note = ['createdBy' => Auth::id(), 'note' => $request->input('note'), 'udid' => Str::uuid()->toString(), 'entityType' => 'appointment', 'referenceId' => $appointment->id];
                     Note::create($note);
                     $patientData = Patient::where('id', $data['patientId'])->first();
@@ -84,17 +107,17 @@ class AppointmentService
                     return response()->json(['message' => 'Appointment already exist!']);
                 }
             }
-        } catch (Exception $e) {
-            if (isset(auth()->user()->id)) {
-                $userId = auth()->user()->id;
-            } else {
-                $userId = "";
-            }
+        // } catch (Exception $e) {
+        //     if (isset(auth()->user()->id)) {
+        //         $userId = auth()->user()->id;
+        //     } else {
+        //         $userId = "";
+        //     }
 
-            ErrorLogGenerator::createLog($request, $e, $userId);
-            $response = ['message' => $e->getMessage()];
-            return response()->json($response,  500);
-        }
+        //     ErrorLogGenerator::createLog($request, $e, $userId);
+        //     $response = ['message' => $e->getMessage()];
+        //     return response()->json($response,  500);
+        // }
     }
 
     public function appointmentList($request, $id)
