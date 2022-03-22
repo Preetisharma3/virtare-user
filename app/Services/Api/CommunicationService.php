@@ -113,7 +113,7 @@ class CommunicationService
     // calls Per Staff API
     public function callCountPerStaff()
     {
-        $data = CallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->whereBetween('createdAt', [date("Y-m-d").' 00:00:00',date("Y-m-d").' 23:59:59'])->orderBy('createdAt', 'DESC')->get();
+        $data = CallRecord::select('staffId', DB::raw('count(*) as count'))->groupBy('staffId')->whereBetween('createdAt', [date("Y-m-d H:i:s"),date("Y-m-d H:i:s")])->orderBy('createdAt', 'DESC')->get();
         return fractal()->collection($data)->transformWith(new CallRecordTransformer())->toArray();
     }
 
@@ -129,10 +129,9 @@ class CommunicationService
     public function communicationCount($request)
     {
         try {
-            $date2 = Carbon::parse($request->date)->setTimezone('UTC');
-
-            $todayFrom = strtotime($request->date." 00:00:00");
-            $todayTo = strtotime($request->date." 23:59:59");
+           
+            $todayFrom = $request->fromDate;
+            $todayTo = $request->toDate;
             $yesterdayFrom = strtotime("- 24 hours",$todayFrom);
             $yesterdayTo = strtotime("- 24 hours",$todayTo);
             $tommorrowFrom = strtotime("+ 24 hours",$todayFrom);
