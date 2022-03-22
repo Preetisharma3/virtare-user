@@ -14,21 +14,32 @@ class PatientEmergencyRequest extends FormRequest
 
     public function rules()
     {
+        $emg_udid = request()->segment(4);
 
-        $family = PatientEmergencyContact::where('email', request()->emergencyEmail)->first();
-        if ($family) {
+        $emg = PatientEmergencyContact::where('udid', $emg_udid)->first();
+        if($emg){
             return [
-                'emergencyEmail' => 'required|unique:patientEmergencyContacts,email',
+                'emergencyEmail' => 'required|unique:patientEmergencyContacts,email,'. $emg['id'],
                 'fullName' => 'required',
                 'gender' => 'required',
             ];
-        } else {
-            return [
-                'emergencyEmail' => 'required',
-                'fullName' => 'required',
-                'gender' => 'required',
-            ];
+        }else{
+            $family = PatientEmergencyContact::where('email', request()->emergencyEmail)->first();
+            if ($family) {
+                return [
+                    'emergencyEmail' => 'required|unique:patientEmergencyContacts,email',
+                    'fullName' => 'required',
+                    'gender' => 'required',
+                ];
+            } else {
+                return [
+                    'emergencyEmail' => 'required',
+                    'fullName' => 'required',
+                    'gender' => 'required',
+                ];
+            }
         }
+        
     }
 
     public function messages()
