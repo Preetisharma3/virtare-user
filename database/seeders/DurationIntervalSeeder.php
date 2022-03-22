@@ -36,27 +36,27 @@ class DurationIntervalSeeder extends Seeder
 
         DurationInterval::create([
             'durationId' =>'56',
-            'minutes'=>'1 HOUR',
+            'minutes'=>'60 HOUR',
         ]);
 
         DurationInterval::create([
             'durationId' =>'57',
-            'minutes'=>'2 HOUR',
+            'minutes'=>'120 HOUR',
         ]);
 
         DurationInterval::create([
             'durationId' =>'58',
-            'minutes'=>'3 HOUR',
+            'minutes'=>'180 HOUR',
         ]);
 
         DurationInterval::create([
             'durationId' =>'59',
-            'minutes'=>'4 HOUR',
+            'minutes'=>'240 HOUR',
         ]);
 
         DurationInterval::create([
             'durationId' =>'60',
-            'minutes'=>'24 HOUR',
+            'minutes'=>'1440 HOUR',
         ]);
     }
 }
