@@ -129,7 +129,7 @@ class NotificationService
     {
         $fromDate = date('Y-m-d H:i:s', strtotime('-1 hours'));
          DB::select(
-            'CALL appointmentConferenceIdUpdate("' . $fromDate . '")',
+            'CALL appointmentConferenceIdUpdate()',
         );
 
          DB::query("UPDATE `communicationCallRecords` SET `callStatusId`='49' WHERE `referenceId` IN ( SELECT concat('CONF',id) FROM appointments where conferenceId IS NULL) AND `entityType` = 'conferenceCall'");
