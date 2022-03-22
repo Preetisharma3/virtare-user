@@ -127,10 +127,12 @@ class NotificationService
 
     public function appointmentConfrenceIdUpdate()
     {
-        $fromDate = date('Y-m-d H:i:s', strtotime('-2 hours'));
-        return DB::select(
+        $fromDate = date('Y-m-d H:i:s', strtotime('-1 hours'));
+         DB::select(
             'CALL appointmentConferenceIdUpdate("' . $fromDate . '")',
         );
+
+         DB::query("UPDATE `communicationCallRecords` SET `callStatusId`='49' WHERE `id` IN ( SELECT `id` FROM `communicationCallRecords` WHERE `referenceId` NOT IN (SELECT `conferenceId` FROM `appointments`) AND `entityType` = 'conferenceCall')");
     }
 
     public function removeNewPatientFlag()
