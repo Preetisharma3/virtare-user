@@ -1778,14 +1778,13 @@ class PatientService
     public function listPatientCriticalNote($request, $id)
     {
         try {
-
             $patient = Helper::entity('patient', $id);
-            if (!is_null($request->isRead)) {
-
-                $data = PatientCriticalNote::where([['patientId', $patient], ['isRead', $request->isRead]])->orderBy('id', 'DESC')->get();
+            if(!is_null($request->isRead)){
+                $data = PatientCriticalNote::where([['patientId',$patient],['isRead',$request->isRead]])->orderBy('id', 'DESC')->get();
                 return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
-            } else {
-                $data = PatientCriticalNote::where('patientId', $patient)->orderBy('id', 'DESC')->get();
+            }
+            else{
+                $data = PatientCriticalNote::where('patientId',$patient)->orderBy('id', 'DESC')->get();
                 return fractal()->collection($data)->transformWith(new PatientPatientCriticalNoteTransformer())->toArray();
             }
         } catch (Exception $e) {
@@ -1797,12 +1796,10 @@ class PatientService
     {
         try {
             $patient = Helper::entity('patient', $id);
-            $patientCriticalNote = [
-                'udid' => Str::uuid()->toString(),
-                'criticalNote' => $request->input('criticalNote'),
-                'patientId' => $patient,
-            ];
-            $newData = PatientCriticalNote::create($patientCriticalNote);
+            $udid = Str::uuid()->toString();
+            $criticalNote = $request->input('criticalNote');
+            $patientId =  $patient;
+            DB::select('CALL createPatientCriticalNote("'.$udid.'","'.$patientId.'","'.$criticalNote.'")');
             return response()->json(['message' => trans('messages.createdSuccesfully')]);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()],  500);
@@ -1857,7 +1854,7 @@ class PatientService
     // add patient family member
     public function patientFamilyAdd($request, $id, $familyId)
     {
-        try {
+        // try {
             $patient = Helper::entity('patient', $id);
             if (!$familyId) {
                 $userData = User::where([['email', $request->input('familyEmail')], ['roleId', 6]])->first();
@@ -1866,14 +1863,13 @@ class PatientService
                     PatientFamilyMember::where('patientId', $patient)->update(['isPrimary' => 0]);
                     $familyMember = [
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
-                        'contactTypeId' => $request->input('familyContactType'), 'contactTimeId' => $request->input('familyContactTime'),
+                        'contactTypeId' =>json_encode($request->input('familyContactType')) , 'contactTimeId' => json_encode($request->input('familyContactTime')),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $patient, 'vital' => 1,
                         'messages' => 1,
                         'createdBy' => Auth::id(), 'userId' => $userEmail, 'udid' => Str::uuid()->toString(), 'isPrimary' => 1
                     ];
                     $data = PatientFamilyMember::create($familyMember);
                 } else {
-
                     // Added family in user Table
                     $familyMemberUser = [
                         'password' => Hash::make('password'), 'udid' => Str::uuid()->toString(), 'email' => $request->input('familyEmail'),
@@ -1885,11 +1881,12 @@ class PatientService
                     PatientFamilyMember::where('patientId', $patient)->update(['isPrimary' => 0]);
                     $familyMember = [
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
-                        'contactTypeId' => $request->input('familyContactType'), 'contactTimeId' => $request->input('familyContactTime'),
+                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => json_encode($request->input('familyContactTime')),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'patientId' => $patient,
                         'createdBy' => Auth::id(), 'userId' => $fam->id, 'udid' => Str::uuid()->toString(), 'vital' => 1,
                         'messages' => 1, 'isPrimary' => 1
                     ];
+
                     $data = PatientFamilyMember::create($familyMember);
                 }
                 $userdata = fractal()->item($data)->transformWith(new PatientFamilyMemberTransformer())->toArray();
@@ -1907,7 +1904,7 @@ class PatientService
 
                     $familyMember = [
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
-                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => json_encode($request->input('familyContactTime')),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'), 'userId' => $userData->id,
                         'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
                         'messages' => $request->input('messageAuthorization'), 'isPrimary' => $isPrimary
@@ -1921,7 +1918,7 @@ class PatientService
                     $fam = User::where('id', $family->userId)->update($familyMemberUser);
                     $familyMember = [
                         'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('familyPhoneNumber'),
-                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => $request->input('familyContactTime'),
+                        'contactTypeId' => json_encode($request->input('familyContactType')), 'contactTimeId' => json_encode($request->input('familyContactTime')),
                         'genderId' => $request->input('familyGender'), 'relationId' => $request->input('relation'),
                         'updatedBy' => Auth::id(), 'vital' => $request->input('vitalAuthorization'),
                         'messages' => $request->input('messageAuthorization'), 'isPrimary' => $isPrimary
@@ -1934,9 +1931,9 @@ class PatientService
             }
             $endData = array_merge($message, $userdata);
             return $endData;
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()],  500);
-        }
+        // } catch (Exception $e) {
+        //     return response()->json(['message' => $e->getMessage()],  500);
+        // }
     }
 
     // list patient family member
@@ -1988,8 +1985,8 @@ class PatientService
             if (!$emergencyId) {
                 $patient = Helper::entity('patient', $id);
                 $emergencyContact = [
-                    'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'), 'contactTypeId' => $request->input('contactType'),
-                    'contactTimeId' => $request->input('contactTime'), 'genderId' => $request->input('gender'), 'patientId' => $patient,
+                    'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'), 'contactTypeId' => json_encode($request->input('contactType')),
+                    'contactTimeId' => json_encode($request->input('contactTime')), 'genderId' => $request->input('gender'), 'patientId' => $patient,
                     'createdBy' => Auth::id(), 'email' => $request->input('emergencyEmail'), 'udid' => Str::uuid()->toString()
                 ];
                 $emergency = PatientEmergencyContact::create($emergencyContact);
@@ -1998,8 +1995,8 @@ class PatientService
                 $message = ['message' => trans('messages.createdSuccesfully')];
             } else {
                 $emergencyContact = [
-                    'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'), 'contactTypeId' => $request->input('contactType'),
-                    'contactTimeId' => $request->input('contactTime'), 'genderId' => $request->input('gender'),
+                    'fullName' => $request->input('fullName'), 'phoneNumber' => $request->input('phoneNumber'), 'contactTypeId' => json_encode($request->input('contactType')),
+                    'contactTimeId' => json_encode($request->input('contactTime')), 'genderId' => $request->input('gender'),
                     'updatedBy' => Auth::id(), 'email' => $request->input('emergencyEmail')
                 ];
                 PatientEmergencyContact::where('udid', $request->emergencyId)->update($emergencyContact);
