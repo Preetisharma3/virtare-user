@@ -62,4 +62,29 @@ class DashboardService
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
+    public function staffSpecializationNew($request)
+    {
+        try {
+            $timelineId = $request->timelineId;
+            $startEndDate = DB::select('CALL getGlobalStartEndDate(' . $timelineId . ')');
+            if($startEndDate[0]){
+                $startEndDate = $startEndDate[0];
+                if($startEndDate->conditions == "-"){
+                    $timelineStartDate = strtotime($startEndDate->endDate);
+                    $timelineEndDate = strtotime($startEndDate->startDate);
+                }else{
+                    echo "+++++++";
+                    $timelineStartDate = strtotime($startEndDate->startDate);
+                    $timelineEndDate = strtotime($startEndDate->endDate);
+                }
+            }
+            $data = DB::select(
+                'CALL getStaffSpecializationCountNew(' . $timelineStartDate . ',' . $timelineEndDate . ')',
+            );
+            return fractal()->item($data)->transformWith(new PatientCountTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
 }

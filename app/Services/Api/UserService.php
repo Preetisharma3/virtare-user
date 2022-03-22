@@ -144,7 +144,7 @@ class UserService
             }
 
             if(empty($email) && empty($phone)){
-                return response()->json(['message' => "Invalid Email"], 500);
+                return response()->json(['message' => "Required Email"], 500);
             }else{
                 $result = User::where('email',$email)->first();
                 if($result){
@@ -173,7 +173,7 @@ class UserService
             }
 
             if(isset($codeObj[1])){
-                $udid = base64_decode($codeObj[1]);
+                $udid = $codeObj[1];
             }else{
                 $udid = "";
             }
@@ -185,9 +185,18 @@ class UserService
                 $newPassword = "";
             }
 
+            if(isset($get["confirmNewPassword"]) && !empty($get["confirmNewPassword"]))
+            {
+                $confirmNewPassword = $get["confirmNewPassword"];
+            }else{
+                $confirmNewPassword = "";
+            }       
+            
+            if($confirmNewPassword != $newPassword){
+                return response()->json(['message' => "New Password and Confirm Password must be match."], 500);
+            }
 
-            $result = User::where('email',$email)
-                        ->where('udid',$udid)->first();
+            $result = User::where('email',$email)->where('udid',$udid)->first();
             if($result){
                 User::find($result->id)->update(['password' => Hash::make($newPassword)]);
                 return response()->json(['message' => "Password Changed Successfully."]);
@@ -196,7 +205,7 @@ class UserService
             }
 
         }else{
-            return response()->json(['message' => "Invalid code."], 500);
+            return response()->json(['message' => "Required code."], 500);
         }
     }
 }
