@@ -9,6 +9,7 @@ use App\Models\GlobalCode\GlobalCode;
 use App\Models\GlobalCode\GlobalCodeCategory;
 use App\Transformers\GlobalCode\GlobalCodeTransformer;
 use App\Transformers\GlobalCode\GlobalCodeCategoryTransformer;
+use App\Transformers\GlobalCode\GlobalStartEndDateTransformer;
 
 class GlobalCodeService
 {
@@ -112,8 +113,13 @@ class GlobalCodeService
      {
           if ($globalCodeId) {
                $data = DB::select('CALL getGlobalStartEndDate(' . $globalCodeId . ')');
-               return fractal()->item($data)->transformWith(new GlobalCodeTransformer())->toArray();
-          } else {
+               if($data[0]){
+                    $data = $data[0];
+               }
+               return fractal()->item($data)->transformWith(new GlobalStartEndDateTransformer())->toArray();
+          }
+          else
+          {
                return response()->json(['message' => "globalCodeId required"],  500);
           }
      }
