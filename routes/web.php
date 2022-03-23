@@ -236,7 +236,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     // $router->get('patient/vital', 'Api\v1\PatientController@listPatientVital');
 
     // Export Excel Report Routes
-    $router->get('globalstartEnd/date/{id}', 'Api\v1\GlobalCodeController@globalStartEndDate');
+    $router->get('globalstartEnd/date', 'Api\v1\GlobalCodeController@globalStartEndDate');
     $router->post('export/report/request', 'Api\v1\ExportReportRequestController@addExportRequest');
 
     // appointment Routes

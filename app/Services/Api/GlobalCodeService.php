@@ -109,10 +109,11 @@ class GlobalCodeService
           }
      }
 
-     public function getGlobalStartEndDate($request, $globalCodeId)
+     public function getGlobalStartEndDate($request)
      {
-          if ($globalCodeId) {
-               $data = DB::select('CALL getGlobalStartEndDate(' . $globalCodeId . ')');
+          if ($request) {
+               $timelineId = $request->timelineId;
+               $data = DB::select('CALL getGlobalStartEndDate(' . $timelineId . ')');
                if($data[0]){
                     $data = $data[0];
                }
