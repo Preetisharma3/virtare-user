@@ -414,7 +414,8 @@ class StaffService
         } else {
             $patientId = auth()->user()->patient->id;
         }
-        $data = Appointment::where('patientId', $patientId)->whereDate('startDateTime', '=', Carbon::today())->paginate(5);
+        $data = Appointment::where([['patientId', $patientId],['startDateTime', '>=', Carbon::today()]])->paginate(5);
+
         return fractal()->collection($data)->transformWith(new AppointmentDataTransformer())->paginateWith(new IlluminatePaginatorAdapter($data))->toArray();
     }
 }

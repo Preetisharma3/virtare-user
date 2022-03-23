@@ -18,6 +18,8 @@ class ProgramTransformer extends TransformerAbstract
 			'name'=>$data->name,
             'description'=>$data->description,
             'type'=>$data->type->name,
+			'typeId' => $data->typeId,
+			'status' =>$data->isActive,
 		];
 	}
 }

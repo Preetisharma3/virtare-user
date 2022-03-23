@@ -126,4 +126,29 @@ class GeneralParameterService
             return response()->json(['message' => $e->getMessage()],  500);
         }
     }
+
+
+
+    public function generalParameterSearch($request)
+    {
+        DB::beginTransaction();
+        try {
+        $input = GeneralParameter::where('vitalFieldId')->first();
+        $result = GeneralParameter::table('name', 'LIKE', '%'. $name. '%')->get();
+
+        if(count($result)){
+         return Response()->json($result);
+        }
+        else
+        {
+        
+        return response()->json(['Result' => 'No Data not found'], 404);
+      }
+      DB::commit();
+    } catch (Exception $e) {
+      DB::rollback();
+      return response()->json(['message' => $e->getMessage()],  500);
+        }
+    
+    }
 }

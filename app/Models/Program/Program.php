@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Program extends Model
 {
     use SoftDeletes;
-    protected $softDelete = true;
+     protected $softDelete = true;
     const DELETED_AT = 'deletedAt';
     const CREATED_AT = 'createdAt';
     const UPDATED_AT = 'updatedAt';

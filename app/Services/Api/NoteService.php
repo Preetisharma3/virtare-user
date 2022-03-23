@@ -43,4 +43,14 @@ class NoteService
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
+    public function note($request)
+    {
+        try {
+            $note = Note::where([['referenceId',auth()->user()->patient->id],['entityType','patient']])->get();
+            return fractal()->collection($note)->transformWith(new NoteTransformer())->toArray();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
 }

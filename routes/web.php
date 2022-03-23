@@ -239,10 +239,14 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     $router->put('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@addGeneralParameterGroup');
     $router->delete('generalParameterGroup/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameterGroup');
     $router->delete('generalParameter/{id}', 'Api\v1\GeneralParameterController@deleteGeneralParameter');
+    // dummy search
+    $router->get('generalParameterSearch', 'Api\v1\GeneralParameterController@generalParameterSearch');
 
     // Note Routes
     $router->post('{entity}/{id}/notes', 'Api\v1\NoteController@addNote');
     $router->get('{entity}/{id}/notes[/{noteId}]', 'Api\v1\NoteController@listNote');
+    
+    $router->get('notes', 'Api\v1\NoteController@Note');
 
 
     // Document Routes
@@ -352,3 +356,9 @@ $router->delete('template/{id}', 'Api\v1\TemplateController@deleteTemplate');
 $router->post('program', 'Api\v1\ProgramController@createProgram');
 $router->put('program/{id}', 'Api\v1\ProgramController@updateProgram');
 $router->delete('program/{id}', 'Api\v1\ProgramController@deleteProgram');
+
+
+
+ $router->get('patient/{id}/appointment', 'Api\v1\StaffPatientController@patientAppointment');
+ 
+

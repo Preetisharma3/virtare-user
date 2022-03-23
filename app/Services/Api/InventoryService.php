@@ -70,7 +70,7 @@ class InventoryService
     public function destroy($id)
     {
         try {
-            DB::select('CALL deleteInventory(' . $id . ')');
+            DB::select('CALL deleteInventory(' . $id . ','.$deletedAt.')');
             return response()->json(['message' => trans('messages.deletedSuccesfully')], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);

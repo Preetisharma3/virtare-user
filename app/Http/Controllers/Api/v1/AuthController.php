@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\Login\LoginTransformer;
 use App\Services\Api\PushNotificationService;
+use App\Services\Api\NoteService;
 use App\Transformers\Login\LoginPatientTransformer;
 
 class AuthController extends Controller

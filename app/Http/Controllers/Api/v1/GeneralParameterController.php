@@ -35,4 +35,9 @@ class GeneralParameterController extends Controller
         return (new GeneralParameterService)->generalParameterDelete($request,$id);
     }
     
+    public function generalParameterSearch(Request $request)
+    {
+         return (new GeneralParameterService)->generalParameterSearch($request);
+    }
+
 }
